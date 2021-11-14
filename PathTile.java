@@ -7,12 +7,15 @@ import java.util.HashMap;
  *
  */
 public class PathTile extends Tile {
-
-	private Direction[] directions = new Direction[2]; //Directions to other tiles
 	
-	/**
-	 * Will go through list of rats on tile and tell the rat class where to go and tile class which rats are going to it and from what direction
+	/** Pick definition
+	 * Will go through list of rats on tile and tell the rat class where to go
+	 *  and tile class which rats are going to it and from what direction
+	 *  
+	 * Tells rats on this tile which direction to go and other tile 
+	 * 	class which rats are going to it and from what direction
 	 */
+	@Override
 	public void getNextDirection() {
 		for (Direction prevDirection : currBlock.keySet()) {			
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
@@ -25,8 +28,7 @@ public class PathTile extends Tile {
 					goTo = directions[0];
 				}
 		
-				//Number of rats that can keep going onwards
-				int ratsGetThrough;
+				int ratsGetThrough; //Number of rats that can keep going onwards
 				if (neighbourTiles.get(goTo).isTileBlocked()) {
 					ratsGetThrough = damageStopSign(currBlock.get(prevDirection).size());
 				} else {
@@ -51,8 +53,8 @@ public class PathTile extends Tile {
 	
 	/**
 	 * Add rat from other tile to this tile
-	 * @param r
-	 * @param d
+	 * @param r rat to be added to this Tile
+	 * @param d direction the rat came from
 	 */
 	public void addRat(Rat r, Direction d) {
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
