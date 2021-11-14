@@ -1,3 +1,5 @@
+import javafx.application.Application;
+
 /**
  * Test class for Map.java
  * @author 2010573
@@ -5,9 +7,20 @@
  */
 public class MainMapTester {
 
-	static String map1 = "GGGGGPPGGGGG"; // 4 3
+	//static String map1 = "GGGGGPPGGGGG"; // 4 3
+	
+	//31 16
+	//static String map2 = "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGPPPPPPJPPPPPPPGGGGPPPPPPPPPPPGGPGGGGGPGGGGGGPGGGGPGGGGGGGGGPGGPGGGGGPGGGGGGPGGGGPGGGGGGGGGPGGPGGGGGPGGGGGGPPPPPJGGGGGGGGGPGGJPPPGGPGGGGGGGGGGGPGGGGGGGGGPGGPGGPGGPGGGGGGGGGGGPGGGGGGGGGPGGPGGPGGPGGGGPPPPPPPJPPPPPPPPPJGGPPPPPPPGGGGPGGGGGGPGGGGGGGGGPGGPGGGGGGGGGGPGGGGGGPGGGGGGGGGPGGPGGGGGGGGGGPGGGGGGPGGGGGGGGGPGGPPPPPPPPPPPPGGGGGGPPPPPPPPPPPG";
+	
+	//17 11
+	static String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+	
 	public static void main(String[] args) {
-		print2dArray(create2dArray(map1, 4, 3));
+		//print2dArray(create2dArray(map1, 4, 3));
+		//print2dArray(create2dArray(map2, 31, 12));
+		create2dArray(properMap1, 17, 11);
+		Output.main(args);
+		//Application.launch(args);
 		
 		//How to show graph??
 	}
@@ -24,6 +37,8 @@ public class MainMapTester {
 					System.out.print("P");
 				} else if (tileX instanceof JunctionTile) {
 					System.out.print("B");
+				} else if (tileX instanceof TunnelTile) {
+					System.out.print("T");
 				} else {
 					System.out.print("G");
 				}

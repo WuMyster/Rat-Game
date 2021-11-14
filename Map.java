@@ -24,7 +24,7 @@ public class Map {
 	/**
 	 * The 2d array of the map.
 	 */
-	private Tile[][] board;
+	static private Tile[][] board;
 	
 	//? Is final in the correct place? Should this be public?
 	/**
@@ -59,13 +59,13 @@ public class Map {
 		this.mapDesign = mapDesign;
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
-		this.board = new Tile[yHeight][xHeight];
+		Map.board = new Tile[yHeight][xHeight];
 		createBoard();
 		createGraph();
 	}
 	
 	//For debug only
-	public Tile[][] getBoard() {
+	public static Tile[][] getBoard() {
 		return board;
 	}
 	
