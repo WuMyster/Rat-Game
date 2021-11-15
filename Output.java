@@ -1,9 +1,12 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -17,7 +20,7 @@ import javafx.stage.Stage;
 public class Output extends Application {
 	// The dimensions of the window
 	private static final int WINDOW_WIDTH = 960;
-	private static final int WINDOW_HEIGHT = 600;
+	private static final int WINDOW_HEIGHT = 569; //Nice
 
 	// The dimensions of the canvas
 	private static final int CANVAS_WIDTH = 850;
@@ -33,6 +36,11 @@ public class Output extends Application {
 	//public static final int 
 	
 
+	// private Image playerImage;
+	public static Image GRASS_IMAGE;
+	public static Image TILE_IMAGE;
+	// private String start = "C:\\Users\\jsgu1\\eclipse-workspace\\CS230CW1\\";
+
 	private Canvas mapCanvas;
 	private Canvas ratCanvas;
 
@@ -41,16 +49,17 @@ public class Output extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		GRASS_IMAGE = new Image("Grass.png");
+		TILE_IMAGE = new Image("Tile.png");
+		
+		
 		BorderPane root = createGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		/*
-		 * canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT); root.setCenter(canvas);
-		 */
 
 		// Display the scene on the stage
 		drawMap();
 		drawGame();
+		//drawRat();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -58,29 +67,36 @@ public class Output extends Application {
 	public BorderPane createGUI() {
 		BorderPane root = new BorderPane();
 
-		root.setCenter(center());
+		root.setCenter(createCenterMap());
 
 		root.setTop(createTopMenu());
 
 		root.setRight(createRightMenu());
-
+		
+		Pane empty = new Pane();
+		empty.setMinSize(0, 0);
+		empty.prefHeight(0);
+		root.setBottom(empty);
+			
 		return root;
 	}
 	
-	//GridPane?
-	public Pane center() {
+	//GridPane? Might help with "snapping" item to correct Tile place
+	public Pane createCenterMap() {
 		Pane root = new Pane();
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		root.getChildren().add(mapCanvas);
 		root.getChildren().add(ratCanvas);
+		BorderPane.setAlignment(root, Pos.BOTTOM_LEFT);	
 		return root;
 	}
 
 	public HBox createTopMenu() {
 		HBox root = new HBox();
 		root.setSpacing(10);
-		root.setPadding(new Insets(10, 10, 10, 10));
+		root.setPadding(new Insets(10, 10, 10, 10));;
+		
 		return root;
 	}
 
@@ -91,22 +107,24 @@ public class Output extends Application {
 
 		currPoints.setFont(new Font(20));
 		root.getChildren().add(currPoints);
+		root.maxHeight(10);
+		root.prefHeight(10);
 		// toolbar.getChildren().add(resetPlayerLocationButton);
 
 		return root;
 	}
 	
-	/**
-	 * Should draw the position of rats and item on top of map
-	 */
+	//int x, int y, Direction d
 	public void drawGame() {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, 10, 10);//mapCanvas.getWidth(), mapCanvas.getHeight());
 		
 		Image ratImage = new Image("Rat.png");
-		gc.drawImage(ratImage, 360, 350, 30, 45);
 		
 		gc.drawImage(ratImage, 10, 0, 30, 45);
+		gc.drawImage(ratImage, 360, 350, 30, 45);
+		gc.drawImage(ratImage, 410, 250, 30, 45);
+		gc.drawImage(ratImage, 760, 450, 30, 45);
 	}
 
 	/**
@@ -119,20 +137,16 @@ public class Output extends Application {
 		// Clear canvas
 		gc.clearRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
 
-		// Set the background to gray.
-		//gc.setFill(Color.GRAY);
-		//gc.fillRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
-
-		
-		Image grassImage = new Image("Grass.png");
-		for (int y = 0; y < GRID_HEIGHT_NUMBER; y++) {
-			for (int x = y % 2; x < GRID_WIDTH_NUMBER; x += 2) {
-				gc.drawImage(grassImage, x * 50, y * 50, 50, 50);
+		try {
+			Map.drawMap(gc);
+		} catch (NullPointerException e) {
+			Image grassImage = new Image("Grass.png");
+			for (int y = 0; y < GRID_HEIGHT_NUMBER; y++) {
+				for (int x = y % 2; x < GRID_WIDTH_NUMBER; x += 2) {
+					gc.drawImage(grassImage, x * 50, y * 50, 50, 50);
+				}
 			}
 		}
-		
-		
-		//Map.drawGame(gc);
 	}
 
 	public static void main(String[] args) {
