@@ -23,18 +23,15 @@ public class Output extends Application {
 	private static final int CANVAS_HEIGHT = 550;
 
 	// The width and height (in pixels) of each cell that makes up the game.
-	private static final int GRID_CELL_WIDTH = 50;
-	private static final int GRID_CELL_HEIGHT = 50;
+	//private static final int GRID_CELL_WIDTH = 50;
+	//private static final int GRID_CELL_HEIGHT = 50;
 
 	// The width of the grid in number of cells.
 	private static final int GRID_WIDTH = 17;
 	private static final int GRID_HEIGHT = 11;
-	// private Image playerImage;
-	private Image grassImage;
-	private Image tileImage;
-	// private String start = "C:\\Users\\jsgu1\\eclipse-workspace\\CS230CW1\\";
+	
 
-	private Canvas canvas;
+	private Canvas mapCanvas;
 
 	Label currLevel = new Label("Level xx");
 	Label currPoints = new Label("Points xx");
@@ -44,8 +41,6 @@ public class Output extends Application {
 		BorderPane root = createGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-		grassImage = new Image(/* start + */"Grass.png");
-		tileImage = new Image(/* start + */"Tile.png");
 		/*
 		 * canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT); root.setCenter(canvas);
 		 */
@@ -59,8 +54,8 @@ public class Output extends Application {
 	public BorderPane createGUI() {
 		BorderPane root = new BorderPane();
 
-		canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		root.setCenter(canvas);
+		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		root.setCenter(mapCanvas);
 
 		HBox topMenu = createTopMenu();
 		root.setTop(topMenu);
@@ -92,37 +87,24 @@ public class Output extends Application {
 
 	public void drawGame() {
 		// Get the Graphic Context of the canvas. This is what we draw on.
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 
 		// Clear canvas
-		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		gc.clearRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
 
 		// Set the background to gray.
 		gc.setFill(Color.GRAY);
-		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		gc.fillRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
 
+		
+		Image grassImage = new Image(/* start + */"Grass.png");
 		for (int y = 0; y < GRID_HEIGHT; y++) {
 			for (int x = y % 2; x < GRID_WIDTH; x += 2) {
 				gc.drawImage(grassImage, x * 50, y * 50, 50, 50);
 			}
 		}
-
-		/*
-		Tile[][] board = Map.getBoard();
-		int x = 0;
-		int y = 0;
-		for (Tile[] a : board) {
-			for (Tile b : a) {
-				if (b == null) {
-					gc.drawImage(grassImage, x++ * 50, y * 50, 50, 50);
-				} else {
-					gc.drawImage(tileImage, x++ * 50, y * 50, 50, 50);
-				}
-			}
-			x = 0;
-			y++;
-		}
-		 */
+		
+		//Map.drawGame(gc);
 	}
 
 	public static void main(String[] args) {

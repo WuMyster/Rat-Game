@@ -19,7 +19,7 @@ public class MainMapTester {
 		//print2dArray(create2dArray(map1, 4, 3));
 		//print2dArray(create2dArray(map2, 31, 12));
 		create2dArray(properMap1, 17, 11);
-		Output.main(args);
+		Output.main(null);
 		//Application.launch(args);
 		
 		//How to show graph??
