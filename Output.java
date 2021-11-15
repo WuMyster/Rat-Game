@@ -22,13 +22,14 @@ public class Output extends Application {
 	private static final int CANVAS_WIDTH = 850;
 	private static final int CANVAS_HEIGHT = 550;
 
-	// The width and height (in pixels) of each cell that makes up the game.
-	//private static final int GRID_CELL_WIDTH = 50;
-	//private static final int GRID_CELL_HEIGHT = 50;
-
-	// The width of the grid in number of cells.
-	private static final int GRID_WIDTH = 17;
-	private static final int GRID_HEIGHT = 11;
+	// The number of the grid in number of cells.
+	private static final int GRID_WIDTH_NUMBER = 17;
+	private static final int GRID_HEIGHT_NUMBER = 11;
+	
+	public static final int TILE_SIZE = 50;
+	
+	//The width and height of tiles
+	//public static final int 
 	
 
 	private Canvas mapCanvas;
@@ -46,7 +47,7 @@ public class Output extends Application {
 		 */
 
 		// Display the scene on the stage
-		drawGame();
+		drawMap();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -84,8 +85,18 @@ public class Output extends Application {
 
 		return root;
 	}
-
+	
+	/**
+	 * Should draw the position of rats and item on top of map
+	 */
 	public void drawGame() {
+		
+	}
+
+	/**
+	 * Should be run once at the beginning of the game to create the map.
+	 */
+	public void drawMap() {
 		// Get the Graphic Context of the canvas. This is what we draw on.
 		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 
@@ -93,13 +104,13 @@ public class Output extends Application {
 		gc.clearRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
 
 		// Set the background to gray.
-		gc.setFill(Color.GRAY);
-		gc.fillRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
+		//gc.setFill(Color.GRAY);
+		//gc.fillRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
 
 		
 		Image grassImage = new Image(/* start + */"Grass.png");
-		for (int y = 0; y < GRID_HEIGHT; y++) {
-			for (int x = y % 2; x < GRID_WIDTH; x += 2) {
+		for (int y = 0; y < GRID_HEIGHT_NUMBER; y++) {
+			for (int x = y % 2; x < GRID_WIDTH_NUMBER; x += 2) {
 				gc.drawImage(grassImage, x * 50, y * 50, 50, 50);
 			}
 		}

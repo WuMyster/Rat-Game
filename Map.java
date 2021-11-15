@@ -51,8 +51,8 @@ public class Map {
 	private final static char TUNNEL_TILE = 'T';
 
 	// private Image playerImage;
-	private Image grassImage = new Image("Grass.png");
-	private Image tileImage = new Image("Tile.png");
+	private static Image grassImage = new Image("Grass.png");
+	private static Image tileImage = new Image("Tile.png");
 	// private String start = "C:\\Users\\jsgu1\\eclipse-workspace\\CS230CW1\\";
 
 	/**
@@ -86,9 +86,11 @@ public class Map {
 		for (Tile[] a : board) {
 			for (Tile b : a) {
 				if (b == null) {
-					gc.drawImage(grassImage, x++ * 50, y * 50, 50, 50);
+					gc.drawImage(grassImage, x++ * Output.TILE_SIZE, 
+							y * Output.TILE_SIZE, Output.TILE_SIZE, Output.TILE_SIZE);
 				} else {
-					gc.drawImage(tileImage, x++ * 50, y * 50, 50, 50);
+					gc.drawImage(tileImage, x++ * Output.TILE_SIZE, 
+							y * Output.TILE_SIZE, Output.TILE_SIZE, Output.TILE_SIZE);
 				}
 			}
 			x = 0;
