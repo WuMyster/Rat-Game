@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -15,12 +16,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class Output extends Application {
 	// The dimensions of the window
 	private static final int WINDOW_WIDTH = 960;
-	private static final int WINDOW_HEIGHT = 569; //Nice
+	private static final int WINDOW_HEIGHT = 600;
 
 	// The dimensions of the canvas
 	private static final int CANVAS_WIDTH = 850;
@@ -29,12 +31,11 @@ public class Output extends Application {
 	// The number of the grid in number of cells.
 	private static final int GRID_WIDTH_NUMBER = 17;
 	private static final int GRID_HEIGHT_NUMBER = 11;
-	
+
 	public static final int TILE_SIZE = 50;
-	
-	//The width and height of tiles
-	//public static final int 
-	
+
+	// The width and height of tiles
+	// public static final int
 
 	// private Image playerImage;
 	public static Image GRASS_IMAGE;
@@ -44,22 +45,23 @@ public class Output extends Application {
 	private Canvas mapCanvas;
 	private Canvas ratCanvas;
 
-	Label currLevel = new Label("Level xx");
-	Label currPoints = new Label("Points xx");
+	Label currLevel;
+	Label currPoints;
+	
+	public Label name;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		GRASS_IMAGE = new Image("Grass.png");
 		TILE_IMAGE = new Image("Tile.png");
-		
-		
+
 		BorderPane root = createGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		// Display the scene on the stage
 		drawMap();
 		drawGame();
-		//drawRat();
+		// drawRat();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -72,31 +74,57 @@ public class Output extends Application {
 		root.setTop(createTopMenu());
 
 		root.setRight(createRightMenu());
-		
+
 		Pane empty = new Pane();
 		empty.setMinSize(0, 0);
 		empty.prefHeight(0);
 		root.setBottom(empty);
-			
+
 		return root;
 	}
-	
-	//GridPane? Might help with "snapping" item to correct Tile place
+
+	// GridPane? Might help with "snapping" item to correct Tile place
 	public Pane createCenterMap() {
 		Pane root = new Pane();
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		root.getChildren().add(mapCanvas);
 		root.getChildren().add(ratCanvas);
-		BorderPane.setAlignment(root, Pos.BOTTOM_LEFT);	
+		BorderPane.setAlignment(root, Pos.BOTTOM_LEFT);
 		return root;
 	}
 
 	public HBox createTopMenu() {
 		HBox root = new HBox();
 		root.setSpacing(10);
-		root.setPadding(new Insets(10, 10, 10, 10));;
+		root.setPadding(new Insets(10, 10, 10, 10));
+
+		MenuBar menuBar = new MenuBar();
 		
+		name = new Label("asdf");
+		name.setFont(new Font("Verdana Bold", 20));
+	
+		
+		Menu menuFile = new Menu("File");
+		
+		
+		MenuItem add = new MenuItem("Shuffle"); 
+		menuFile.getItems().add(add);
+		
+		/*
+		 * ,
+	            new ImageView(new Image("menusample/new.png")));
+	        add.setOnAction((ActionEvent t) -> {
+	            shuffle();
+	            vbox.setVisible(true);
+	        }
+		 */
+		
+		Menu optionFile = new Menu("Option");
+
+		menuBar.getMenus().addAll(menuFile, optionFile);
+		root.getChildren().addAll(menuBar);
+
 		return root;
 	}
 
@@ -105,22 +133,29 @@ public class Output extends Application {
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
 
+		currLevel = new Label("Level xx");
+		currLevel.setFont(new Font(20));
+		currLevel.setTextAlignment(TextAlignment.CENTER);
+		root.getChildren().add(currLevel);
+		
+		currPoints = new Label("Points xx");
 		currPoints.setFont(new Font(20));
 		root.getChildren().add(currPoints);
+		
 		root.maxHeight(10);
 		root.prefHeight(10);
 		// toolbar.getChildren().add(resetPlayerLocationButton);
 
 		return root;
 	}
-	
-	//int x, int y, Direction d
+
+	// int x, int y, Direction d
 	public void drawGame() {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, 10, 10);//mapCanvas.getWidth(), mapCanvas.getHeight());
-		
+		gc.clearRect(0, 0, 10, 10);// mapCanvas.getWidth(), mapCanvas.getHeight());
+
 		Image ratImage = new Image("Rat.png");
-		
+
 		gc.drawImage(ratImage, 10, 0, 30, 45);
 		gc.drawImage(ratImage, 360, 350, 30, 45);
 		gc.drawImage(ratImage, 410, 250, 30, 45);
