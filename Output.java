@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -33,6 +34,7 @@ public class Output extends Application {
 	
 
 	private Canvas mapCanvas;
+	private Canvas ratCanvas;
 
 	Label currLevel = new Label("Level xx");
 	Label currPoints = new Label("Points xx");
@@ -48,6 +50,7 @@ public class Output extends Application {
 
 		// Display the scene on the stage
 		drawMap();
+		drawGame();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -55,15 +58,22 @@ public class Output extends Application {
 	public BorderPane createGUI() {
 		BorderPane root = new BorderPane();
 
+		root.setCenter(center());
+
+		root.setTop(createTopMenu());
+
+		root.setRight(createRightMenu());
+
+		return root;
+	}
+	
+	//GridPane?
+	public Pane center() {
+		Pane root = new Pane();
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		root.setCenter(mapCanvas);
-
-		HBox topMenu = createTopMenu();
-		root.setTop(topMenu);
-
-		VBox playerInteraction = createRightMenu();
-		root.setRight(playerInteraction);
-
+		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		root.getChildren().add(mapCanvas);
+		root.getChildren().add(ratCanvas);
 		return root;
 	}
 
@@ -90,7 +100,13 @@ public class Output extends Application {
 	 * Should draw the position of rats and item on top of map
 	 */
 	public void drawGame() {
+		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, 10, 10);//mapCanvas.getWidth(), mapCanvas.getHeight());
 		
+		Image ratImage = new Image("Rat.png");
+		gc.drawImage(ratImage, 360, 350, 30, 45);
+		
+		gc.drawImage(ratImage, 10, 0, 30, 45);
 	}
 
 	/**
@@ -108,12 +124,13 @@ public class Output extends Application {
 		//gc.fillRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
 
 		
-		Image grassImage = new Image(/* start + */"Grass.png");
+		Image grassImage = new Image("Grass.png");
 		for (int y = 0; y < GRID_HEIGHT_NUMBER; y++) {
 			for (int x = y % 2; x < GRID_WIDTH_NUMBER; x += 2) {
 				gc.drawImage(grassImage, x * 50, y * 50, 50, 50);
 			}
 		}
+		
 		
 		//Map.drawGame(gc);
 	}

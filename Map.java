@@ -26,7 +26,7 @@ public class Map {
 	/**
 	 * The 2d array of the map. Static so other classes can access this
 	 */
-	private Tile[][] board;
+	private static Tile[][] board;
 
 	// ? Is final in the correct place? Should this be public?
 	/**
@@ -80,7 +80,7 @@ public class Map {
 	 * Will draw the map onto gc
 	 * @param gc Canvas to draw the map on
 	 */
-	public void drawMap(GraphicsContext gc) {
+	public static void drawMap(GraphicsContext gc) {
 		int x = 0;
 		int y = 0;
 		for (Tile[] a : board) {
