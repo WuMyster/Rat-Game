@@ -1,5 +1,7 @@
 package src;
-
+/*
+@author Salim
+ */
 public class SexChange extends Item {
     /* @param rat a.getSex() takes as input the sex of the rat
      *if rat is not male and thus female, then make rat male. Otherwise keep male. Subtract one from item count
