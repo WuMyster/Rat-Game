@@ -148,12 +148,12 @@ public class Board {
 	}
 
 	//Debug
-	public void placeRat() {
-		board[1][1].addRat(new Rat(), Direction.NORTH);
-		// placeRatAA(new ArrayList<>(Arrays.asList(new Rat())), new
-		// ArrayList<>(Arrays.asList(Direction.NORTH)), new
-		// ArrayList<>(Arrays.asList(new int[] {1,2})));
-	}
+//	public void placeRat() {
+//		board[1][1].addRat(new Rat(), Direction.NORTH);
+//		// placeRatAA(new ArrayList<>(Arrays.asList(new Rat())), new
+//		// ArrayList<>(Arrays.asList(Direction.NORTH)), new
+//		// ArrayList<>(Arrays.asList(new int[] {1,2})));
+//	}
 
 	/**
 	 * Put Rat onto game canvas.
@@ -161,6 +161,7 @@ public class Board {
 	 * @param dir	direction the rat is facing
 	 * @param x		x start position of the rat
 	 * @param y		y start position of the rat
+	 * 
 	 */
 	public void placeRatA(Rat rats, Direction dir, int x, int y) {
 		board[x][y].addRat(rats, dir);

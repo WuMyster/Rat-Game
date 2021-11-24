@@ -127,8 +127,8 @@ public class Output extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.getBoard()[2][1].addRat(new Rat(), Direction.SOUTH);
-		m.placeRatA(new Rat(), Direction.NORTH, 1, 1);
+		//m.getBoard()[2][1].addRat(new Rat(true, 20), Direction.SOUTH);
+		//m.placeRatA(new Rat(), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		//a.setCycleCount(1);
 		// a.setCycleCount(10);
