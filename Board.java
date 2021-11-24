@@ -57,7 +57,7 @@ public class Board {
 	 */
 	private final static char TUNNEL_TILE = 'T';
 	
-	private final static int EXTRA_PADDING = 1;
+	private final static int EXTRA_PADDING = 2;
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -135,16 +135,16 @@ public class Board {
 		int x = 0;
 		int y = 0;
 		
-
-
-		for(int i = 0; i < yHeight; i += EXTRA_PADDING) {
-			for (int j = 0; j < xHeight; j += EXTRA_PADDING) {
+		for(int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				if (board[i][j] == null) {
-					gc.drawImage(Output.GRASS_IMAGE, j * Output.TILE_SIZE, i * Output.TILE_SIZE);
+					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE);
 				} else {
-					gc.drawImage(Output.TILE_IMAGE, j * Output.TILE_SIZE, i * Output.TILE_SIZE);
+					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE);
 				}
 			}
+			x = 0;
+			y++;
 		}
 	}
 
@@ -185,8 +185,8 @@ public class Board {
 	 */
 	private void createBoard() {
 		int counter = 0;
-		for (int i = 0; i < yHeight; i++) {
-			for (int j = 0; j < xHeight; j++) {
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				switch (mapDesign.charAt(counter++)) {
 				case GRASS_TILE -> board[i][j] = null;
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
@@ -194,6 +194,11 @@ public class Board {
 				//case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
 				default -> System.out.println("Map error!");
 				}
+				board[i][j + 1] = new LightTile(i, j + 1);
+			}
+			i++;
+			for (int k = 0; k < xHeight * EXTRA_PADDING; k++) {
+				board[i][k] = new LightTile(i, k);
 			}
 		}
 	}

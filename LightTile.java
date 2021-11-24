@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class LightTile extends TileType {
 
-	public LightTile(int[] xyPos) {
-		super(xyPos);
+	public LightTile(int x, int y) {
+		super(new int[] {x, y});
 		// TODO Auto-generated constructor stub
 	}
 
