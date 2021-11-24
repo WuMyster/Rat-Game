@@ -51,4 +51,10 @@ public class JunctionTile extends TileType {
 		return directions[num];
 	}
 
+	@Override
+	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
+		// TODO Auto-generated method stud
+		System.out.println("Junction Tile speed not implemented yet");
+	}
+
 }

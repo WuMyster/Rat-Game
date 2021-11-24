@@ -69,6 +69,11 @@ public abstract class TileType {
 	 * are going to it and from what direction
 	 */
 	public abstract void getNextDirection();
+	
+	/**
+	 * To skip past any lightTiles. (Speed 2, for baby rats)
+	 */
+	public abstract void getAcceleratedDirection(Rat r, Direction prevDirection);
 
 	/**
 	 * Constructor for most normal tiles.
@@ -115,6 +120,8 @@ public abstract class TileType {
 		}
 		this.directions = direction;
 	}
+	
+	//public void set
 
 	/**
 	 * Switches out old list of Rats the tile was working with, with the list the
