@@ -1,3 +1,5 @@
 *.class
 *Tester.java
 /bin/
+*.classpath
+*.project
