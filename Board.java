@@ -56,6 +56,8 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile. XX
 	 */
 	private final static char TUNNEL_TILE = 'T';
+	
+	private final static int EXTRA_PADDING = 1;
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -69,7 +71,7 @@ public class Board {
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
 		try {
-			this.board = new TileType[yHeight][xHeight];
+			this.board = new TileType[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,7 +86,7 @@ public class Board {
 	}
 	
 	public boolean addStopSign(int x, int y) {
-		TileType t = board[y][x];
+		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (t == null) {
 			return false;
 		} //else if (board[y][x] instanceof tunnelTile) {
@@ -95,8 +97,8 @@ public class Board {
 	}
 	
 	public boolean addBomb(int x, int y) {
-		int startY = y;
-		int startX = x;
+		int startY = y * EXTRA_PADDING;
+		int startX = x * EXTRA_PADDING;
 		
 		TileType t = board[startY][startX];
 		while (t != null) {
@@ -132,18 +134,17 @@ public class Board {
 	public void drawBoard(GraphicsContext gc) {
 		int x = 0;
 		int y = 0;
-		for (TileType[] a : board) {
-			for (TileType b : a) {
-				if (b == null) {
-					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
-							Output.TILE_SIZE);
+		
+
+
+		for(int i = 0; i < yHeight; i += EXTRA_PADDING) {
+			for (int j = 0; j < xHeight; j += EXTRA_PADDING) {
+				if (board[i][j] == null) {
+					gc.drawImage(Output.GRASS_IMAGE, j * Output.TILE_SIZE, i * Output.TILE_SIZE);
 				} else {
-					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
-							Output.TILE_SIZE);
+					gc.drawImage(Output.TILE_IMAGE, j * Output.TILE_SIZE, i * Output.TILE_SIZE);
 				}
 			}
-			x = 0;
-			y++;
 		}
 	}
 
@@ -219,8 +220,8 @@ public class Board {
 	 * Converts the 2d array of the map into a graph.
 	 */
 	private void createGraph() {
-		for (int i = 0; i < yHeight; i++) {
-			for (int j = 0; j < xHeight; j++) {
+		for (int i = 0; i < yHeight; i += EXTRA_PADDING) {
+			for (int j = 0; j < xHeight; j += EXTRA_PADDING) {
 
 				if (board[i][j] != null) {
 					allTiles.add(board[i][j]);
