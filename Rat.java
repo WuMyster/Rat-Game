@@ -91,6 +91,15 @@ public class Rat {
 	public int getAge() {
 		return age;
 	}
+	public boolean isChild() {
+		if(age<50) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	
 	public void damageRat(int damage) {
 		health -= damage;
