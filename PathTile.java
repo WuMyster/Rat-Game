@@ -48,6 +48,8 @@ public class PathTile extends TileType {
 					for (; i < ratsGoForward; i++) {
 						Output.addCurrMovement(X_Y_POS, ratList.get(i).isChild(), goTo);
 						tile.addRat(ratList.get(i), goTo.opposite());
+						timeTravel(ratList.get(i));
+						System.out.println(ratList.get(i).isChild());
 					}
 					
 					Direction tmp = goTo;
@@ -57,6 +59,15 @@ public class PathTile extends TileType {
 				}
 			}
 		}
+	}
+	
+	//Speeds up aging speed
+	private void timeTravel(Rat r) {
+		for(int i = 0; i < 45; i++) {
+			r.incrementAge();
+		}
+		
+		
 	}
 
 	@Override

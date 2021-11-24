@@ -164,7 +164,7 @@ public class Output extends Application {
 	 */
 	public void moveRat() {
 		tickTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
-		tickTimeline.setCycleCount(50);
+		tickTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step / i[2], 30, 45);
+						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step * i[2], 30, 45);
 			}
 		}
 
@@ -189,7 +189,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET + step / i[2], i[0] * TILE_SIZE, 30, 45);
+						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * TILE_SIZE, 30, 45);
 			}
 		}
 
@@ -197,7 +197,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step / i[2], 30, 45);
+						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step * i[2], 30, 45);
 			}
 		}
 
@@ -205,7 +205,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET - step / i[2], i[0] * TILE_SIZE, 30, 45);
+						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * TILE_SIZE, 30, 45);
 			}
 		}
 
@@ -220,7 +220,7 @@ public class Output extends Application {
 	public static void addCurrMovement(int[] pos, boolean extra, Direction dir) {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
 		
-		int a = extra ? 1 : 2; //CHILD TODO
+		int a = extra ? 2 : 1; //CHILD TODO
 		currMovement.get(dir).add(new int[] {pos[0], pos[1], a});
 		// currMovement.get(dir).add(pos);
 	}
