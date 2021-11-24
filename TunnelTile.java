@@ -1,9 +1,9 @@
 
 /**
  * Limit TunnelTile to be PathTile? Item not placeable!
- * @author 2010573
+ * @author Jing Shiang Gu
  *
  */
-public class TunnelTile extends PathTile {
-
+public class TunnelTile {
+	
 }
