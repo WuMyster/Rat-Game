@@ -31,7 +31,7 @@ public class JunctionTile extends TileType {
 					// Tell that Tile the direction the rat came from using prevDirection.opposite()
 				}
 				// Prev direction so it keeps going onwards??
-				Output.addCurrMovement(X_Y_POS, goTo);
+				Output.addCurrMovement(X_Y_POS, false, goTo);
 			}
 		}
 	}

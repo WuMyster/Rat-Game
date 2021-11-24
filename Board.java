@@ -163,7 +163,7 @@ public class Board {
 	 * @param y		y start position of the rat
 	 * 
 	 */
-	public void placeRatA(Rat rats, Direction dir, int x, int y) {
+	public void placeRat(Rat rats, Direction dir, int x, int y) {
 		board[x][y].addRat(rats, dir);
 	}
 

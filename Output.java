@@ -128,7 +128,7 @@ public class Output extends Application {
 		primaryStage.show();
 
 		//m.getBoard()[2][1].addRat(new Rat(true, 20), Direction.SOUTH);
-		//m.placeRatA(new Rat(), Direction.NORTH, 1, 1);
+		m.placeRat(new Rat(true, 20), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		//a.setCycleCount(1);
 		// a.setCycleCount(10);
@@ -137,6 +137,7 @@ public class Output extends Application {
 	}
 
 	/**
+	 * IMPORTANT
 	 * This method will run in a cycle indefinitely until stopped, currently allows
 	 * rats to move around.
 	 */
@@ -170,32 +171,36 @@ public class Output extends Application {
 		step += 1;
 
 		// List of rat positions and direction
-		ArrayList<int[]> a;
-		a = currMovement.get(Direction.NORTH);
-		if (a != null) {
-			for (int[] i : a) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step, 30, 45);
+		ArrayList<int[]> currDirection;
+		currDirection = currMovement.get(Direction.NORTH);
+		if (currDirection != null) {
+			for (int[] i : currDirection) {
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step * i[2], 30, 45);
 			}
 		}
 
-		a = currMovement.get(Direction.EAST);
-		if (a != null) {
-			for (int[] i : a) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + TILE_SIZE_WIDTH_OFFSET + step, i[0] * TILE_SIZE, 30, 45);
+		currDirection = currMovement.get(Direction.EAST);
+		if (currDirection != null) {
+			for (int[] i : currDirection) {
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * TILE_SIZE, 30, 45);
 			}
 		}
 
-		a = currMovement.get(Direction.SOUTH);
-		if (a != null) {
-			for (int[] i : a) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step, 30, 45);
+		currDirection = currMovement.get(Direction.SOUTH);
+		if (currDirection != null) {
+			for (int[] i : currDirection) {
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step * i[2], 30, 45);
 			}
 		}
 
-		a = currMovement.get(Direction.WEST);
-		if (a != null) {
-			for (int[] i : a) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + TILE_SIZE_WIDTH_OFFSET - step, i[0] * TILE_SIZE, 30, 45);
+		currDirection = currMovement.get(Direction.WEST);
+		if (currDirection != null) {
+			for (int[] i : currDirection) {
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * TILE_SIZE, 30, 45);
 			}
 		}
 
@@ -207,9 +212,11 @@ public class Output extends Application {
 	 * @param pos xy position of the rat
 	 * @param dir direction it's facing
 	 */
-	public static void addCurrMovement(int[] pos, Direction dir) {
+	public static void addCurrMovement(int[] pos, boolean extra, Direction dir) {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
-		currMovement.get(dir).add(pos);
+		int a = extra ? 1 : 2;
+		currMovement.get(dir).add(new int[] {pos[0], pos[1], a});
+		// currMovement.get(dir).add(pos);
 	}
 
 	/**

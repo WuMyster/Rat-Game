@@ -30,15 +30,11 @@ public class PathTile extends TileType {
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 			
-			if (!ratList.isEmpty()) { //Need to change to while i != (ratList.size())
+			if (!ratList.isEmpty()) { 
 				int i = 0;
-				Direction goTo = directions[0] == prevDirection ? directions[0] : directions[1];
+				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				int ratsGoForward; // Number of rats that can keep going onwards
-				if (directions[0] == prevDirection) {
-					goTo = directions[1];
-				} else {
-					goTo = directions[0];
-				}
+				
 				while (i != ratList.size()) {	
 							
 					TileType a = neighbourTiles.get(goTo);
@@ -50,7 +46,7 @@ public class PathTile extends TileType {
 					
 					TileType tile = neighbourTiles.get(goTo);
 					for (; i < ratsGoForward; i++) {
-						Output.addCurrMovement(X_Y_POS, goTo);
+						Output.addCurrMovement(X_Y_POS, ratList.get(i).isChild(), goTo);
 						tile.addRat(ratList.get(i), goTo.opposite());
 					}
 					
