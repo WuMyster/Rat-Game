@@ -31,6 +31,7 @@ public class PathTile extends TileType {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 			
 			if (!ratList.isEmpty()) { 
+				System.out.println(X_Y_POS[0] + " " + X_Y_POS[1]);
 				int i = 0;
 				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				int ratsGoForward; // Number of rats that can keep going onwards

@@ -71,7 +71,8 @@ public class Board {
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
 		try {
-			this.board = new TileType[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
+			this.board = new TileType[yHeight * EXTRA_PADDING]
+					[xHeight * EXTRA_PADDING];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,7 +166,7 @@ public class Board {
 	 * 
 	 */
 	public void placeRat(Rat rats, Direction dir, int x, int y) {
-		board[x][y].addRat(rats, dir);
+		board[EXTRA_PADDING * x][EXTRA_PADDING * y].addRat(rats, dir);
 	}
 
 	/**
@@ -202,6 +203,42 @@ public class Board {
 			}
 		}
 	}
+	
+	public void eliminateBadInvisTiles() {
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+				if (board[i][j] instanceof LightTile) {
+					int counter = 0;
+					if (i != 0) {
+						counter += check(board[i - 1][j]) ? 1 : 0;
+					} else if (i != yHeight * EXTRA_PADDING - 1) {
+						counter += check(board[i + 1][j]) ? 1 : 0;
+					}
+					
+					if (j != 0) {
+						counter += check(board[i][j - 1]) ? 1 : 0;
+					} else if (j != xHeight * EXTRA_PADDING - 1) {
+						counter += check(board[i][j + 1]) ? 1 : 0;
+					}
+					
+					if (counter < 2) {
+						board[i][j] = null;
+					}
+				}
+			}
+		}
+	}
+	
+	public boolean check(TileType t) {
+		if (t == null) {
+			return false;
+		} else if (t instanceof LightTile) {
+			return false;
+		}
+		
+		
+		return true;
+	}
 
 	/**
 	 * Goes through each Tile and moves the rat to the next tile before getting the tiles new list.
@@ -225,8 +262,8 @@ public class Board {
 	 * Converts the 2d array of the map into a graph.
 	 */
 	private void createGraph() {
-		for (int i = 0; i < yHeight; i += EXTRA_PADDING) {
-			for (int j = 0; j < xHeight; j += EXTRA_PADDING) {
+		for (int i = 0; i < yHeight; i++) {
+			for (int j = 0; j < xHeight; j++) {
 
 				if (board[i][j] != null) {
 					allTiles.add(board[i][j]);

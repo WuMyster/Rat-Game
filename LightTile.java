@@ -13,6 +13,7 @@ public class LightTile extends TileType {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 			
 			if (!ratList.isEmpty()) { 
+				System.out.println("Invisible");
 				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {

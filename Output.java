@@ -71,6 +71,8 @@ public class Output extends Application {
 	 */
 	public static final int TILE_SIZE = 50;
 	
+	public static final int SOME_NUMBER = 25;
+	
 	/**
 	 * 
 	 */
@@ -135,7 +137,7 @@ public class Output extends Application {
 		//m.getBoard()[2][1].addRat(new Rat(true, 20), Direction.SOUTH);
 		m.placeRat(new Rat(true, 20), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
-		//a.setCycleCount(1);
+		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		a.setCycleCount(Animation.INDEFINITE);
 		a.play();
@@ -180,32 +182,32 @@ public class Output extends Application {
 		currDirection = currMovement.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER - step * i[2], 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * TILE_SIZE, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * SOME_NUMBER, 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER + step * i[2], 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * TILE_SIZE, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * SOME_NUMBER, 30, 45);
 			}
 		}
 
