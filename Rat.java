@@ -15,17 +15,12 @@ public class Rat {
 	private int health;
 	private int pointsUponDeath;
 	
-	private int xPosition;
-	private int yPosition;
-	private int direction;
+
 	
 	//Constructs a baby rat
-	public Rat(boolean male, int health, int xPos, int yPos, int direction) {
+	public Rat(boolean male, int health) {
 		this.isMale = male;
 		this.health = health;
-		this.xPosition = xPos;
-		this.yPosition = yPos;
-		this.direction = direction;
 		isBreeding = false;
 		isPregnant = false;
 		isDeathRat = false;
@@ -35,12 +30,9 @@ public class Rat {
 	}
 
 	//constructs a rat from a save file
-	public Rat(int age, boolean male, int xPos, int yPos, int direction, boolean pregnant, int hp, boolean sterile, boolean breeding, boolean deathRat) {
+	public Rat(int age, boolean male, boolean pregnant, int hp, boolean sterile, boolean breeding, boolean deathRat) {
 		this.isMale = male;
 		this.health = hp;
-		this.xPosition = xPos;
-		this.yPosition = yPos;
-		this.direction = direction;
 		isBreeding = breeding;
 		isPregnant = pregnant;
 		isDeathRat = deathRat;
@@ -91,6 +83,15 @@ public class Rat {
 	public int getAge() {
 		return age;
 	}
+	public boolean isChild() {
+		if(age<50) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	
 	public void damageRat(int damage) {
 		health -= damage;
