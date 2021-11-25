@@ -110,15 +110,9 @@ public class Output extends Application {
 
 		BorderPane root = createGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		// Display the scene on the stage
-		////////////////////////////////
-		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		
+		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
 		m = new Board(properMap1, 17, 11);
-		// m.placeRatAA(new ArrayList<>(Arrays.asList(new Rat())), new
-		// ArrayList<>(Arrays.asList(Direction.NORTH)), new
-		// ArrayList<>(Arrays.asList(new int[] {1,2})));
-		////////////////////////////
 		stopSignPlace = new ArrayList<>();
 		
 		drawMap();
@@ -127,7 +121,6 @@ public class Output extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		//m.getBoard()[2][1].addRat(new Rat(true, 20), Direction.SOUTH);
 		m.placeRat(new Rat(true, 20), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		//a.setCycleCount(1);
@@ -214,7 +207,7 @@ public class Output extends Application {
 	 */
 	public static void addCurrMovement(int[] pos, boolean extra, Direction dir) {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
-		int a = extra ? 1 : 2;
+		int a = extra ? 2 : 1;
 		currMovement.get(dir).add(new int[] {pos[0], pos[1], a});
 		// currMovement.get(dir).add(pos);
 	}
