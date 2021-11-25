@@ -141,7 +141,7 @@ public class Output extends Application {
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		a.setCycleCount(Animation.INDEFINITE);
-		// a.play();
+		a.play();
 	}
 
 	/**
@@ -338,9 +338,9 @@ public class Output extends Application {
 		root.getChildren().addAll(startTickTimelineButton);
 
 		// Setup the behaviour of the buttons.
-		startTickTimelineButton.setOnAction(e -> {
-			runCycle();
-		});
+//		startTickTimelineButton.setOnAction(e -> {
+//			runCycle();
+//		});
 
 		return root;
 	}
