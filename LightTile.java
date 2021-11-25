@@ -1,11 +1,17 @@
 
 import java.util.ArrayList;
 
+/**
+ * Tile to go in between main, visible tiles, this is to allow interaction 
+ * between rats (and death rats) outside of normal tiles.
+ * Will only need to deal with some items: death rat(if item), bomb.
+ * @author 2010573
+ *
+ */
 public class LightTile extends TileType {
 
 	public LightTile(int x, int y) {
 		super(new int[] {x, y});
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -14,8 +20,8 @@ public class LightTile extends TileType {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 			
 			if (!ratList.isEmpty()) { 
-				System.out.println("Invisible");
-				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+				//System.out.println("Invisible");
+				Direction goTo = prevDirection.opposite(); //This can be opposite due to nature of tile
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
 					Output.addCurrMovement(X_Y_POS, false, goTo);
@@ -31,30 +37,4 @@ public class LightTile extends TileType {
 		tile.getAcceleratedDirection(r, prevDirection.opposite());
 		//System.out.println("Light: " + X_Y_POS[0] + " " + X_Y_POS[1]);
 	}
-
-//	@Override
-//	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-//		//Is this really needed?
-//		//System.out.println("ERROR: LightTile accelerated direction has been sparked");
-//		/*
-//		Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-//		int i = 0;
-//		while (i != 1) {	
-//			TileType a = neighbourTiles.get(goTo);
-//			i = a.damageStopSign(1);
-//			Direction tmp = goTo;
-//			goTo = prevDirection;
-//			prevDirection = tmp;
-//		}
-//		
-//		TileType tile = neighbourTiles.get(goTo);
-//		Output.addCurrMovement(X_Y_POS, true, goTo);
-//		tile.addRat(r, goTo.opposite());
-//		*/
-//		//Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-//		TileType tile = neighbourTiles.get(prevDirection.opposite());
-//		tile.getAcceleratedDirection(r, prevDirection.opposite());
-//		System.out.println("Light: " + X_Y_POS[0] + " " + X_Y_POS[1]);
-//	}
-
 }

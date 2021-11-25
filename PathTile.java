@@ -20,16 +20,16 @@ public class PathTile extends TileType {
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
-	 * where to go and tile class which rats are going to it and from what direction
+	 * where to go and tile class which rats are going to it and from what direction.
 	 * 
 	 * Tells rats on this tile which direction to go and other tile class which rats
-	 * are going to it and from what direction
+	 * are going to it and from what direction.
 	 */
 	@Override
 	public void getNextDirection() {
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
-			//TODO System.out.println(ratList.size());
+			// System.out.println(ratList.size());
 			
 			if (!ratList.isEmpty()) { 
 				//TODO System.out.println(X_Y_POS[0] + " " + X_Y_POS[1]);
@@ -39,14 +39,10 @@ public class PathTile extends TileType {
 				
 				while (i != ratList.size()) {	
 							
-					TileType tile = neighbourTiles.get(goTo);
 					//TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
-					System.out.println(tile.isBlocked);
-					if (tile.isTileBlocked()) {
-						ratsGoForward = tile.damageStopSign(ratList.size());
-					} else {
-						ratsGoForward = ratList.size();
-					}
+					// System.out.println(tile.isBlocked);
+					TileType tile = neighbourTiles.get(goTo);
+					ratsGoForward = tile.damageStopSign(ratList.size());
 					
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
@@ -63,13 +59,12 @@ public class PathTile extends TileType {
 					Direction tmp = goTo;
 					goTo = prevDirection;
 					prevDirection = tmp;
-				// Prev direction so it keeps going onwards??
 				}
 			}
 		}
 	}
 	
-	//Speeds up aging speed
+	//Debug Speeds up aging
 	private void timeTravel(Rat r) {
 		for(int i = 0; i < 45; i++) {
 			r.incrementAge();

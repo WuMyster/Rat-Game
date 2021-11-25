@@ -31,7 +31,7 @@ public class JunctionTile extends TileType {
 
 					ratsGoForward = tile.damageStopSign(ratList.size());
 			
-					for (; i < ratList.size(); i++) {
+					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
 							Output.addCurrMovement(X_Y_POS, true, goTo);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
@@ -65,11 +65,10 @@ public class JunctionTile extends TileType {
 
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-		// TODO Auto-generated method stud
 		System.out.println("Junction Tile speed not implemented yet");
 
-		Direction goTo = getADirection(prevDirection.opposite());
-		this.addRat(r, goTo.opposite());
-
+		//Maybe try inserting .opposite to fix turn around issues
+		Direction goTo = getADirection(prevDirection);
+		this.addRat(r, goTo);
 	}
 }
