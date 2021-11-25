@@ -56,8 +56,6 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile. XX
 	 */
 	private final static char TUNNEL_TILE = 'T';
-	
-	private final static int EXTRA_PADDING = 2;
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -71,14 +69,12 @@ public class Board {
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
 		try {
-			this.board = new TileType[yHeight * EXTRA_PADDING]
-					[xHeight * EXTRA_PADDING];
+			this.board = new TileType[yHeight][xHeight];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		allTiles = new ArrayList<>();
 		createBoard();
-		eliminateBadInvisTiles();
 		createGraph();
 	}
 
@@ -88,7 +84,7 @@ public class Board {
 	}
 	
 	public boolean addStopSign(int x, int y) {
-		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+		TileType t = board[y][x];
 		if (t == null) {
 			return false;
 		} //else if (board[y][x] instanceof tunnelTile) {
@@ -99,8 +95,8 @@ public class Board {
 	}
 	
 	public boolean addBomb(int x, int y) {
-		int startY = y * EXTRA_PADDING;
-		int startX = x * EXTRA_PADDING;
+		int startY = y;
+		int startX = x;
 		
 		TileType t = board[startY][startX];
 		while (t != null) {
@@ -136,13 +132,14 @@ public class Board {
 	public void drawBoard(GraphicsContext gc) {
 		int x = 0;
 		int y = 0;
-		
-		for(int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
-			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
-				if (board[i][j] == null) {
-					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE);
+		for (TileType[] a : board) {
+			for (TileType b : a) {
+				if (b == null) {
+					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
+							Output.TILE_SIZE);
 				} else {
-					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE);
+					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
+							Output.TILE_SIZE);
 				}
 			}
 			x = 0;
@@ -167,7 +164,7 @@ public class Board {
 	 * 
 	 */
 	public void placeRat(Rat rats, Direction dir, int x, int y) {
-		board[EXTRA_PADDING * x][EXTRA_PADDING * y].addRat(rats, dir);
+		board[x][y].addRat(rats, dir);
 	}
 
 	/**
@@ -187,8 +184,8 @@ public class Board {
 	 */
 	private void createBoard() {
 		int counter = 0;
-		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
-			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
+		for (int i = 0; i < yHeight; i++) {
+			for (int j = 0; j < xHeight; j++) {
 				switch (mapDesign.charAt(counter++)) {
 				case GRASS_TILE -> board[i][j] = null;
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
@@ -196,51 +193,8 @@ public class Board {
 				//case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
 				default -> System.out.println("Map error!");
 				}
-				board[i][j + 1] = new LightTile(i, j + 1);
-			}
-			i++;
-			for (int k = 0; k < xHeight * EXTRA_PADDING; k++) {
-				board[i][k] = new LightTile(i, k);
 			}
 		}
-	}
-	
-	public void eliminateBadInvisTiles() {
-		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
-			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
-				if (board[i][j] instanceof LightTile) {
-					int counter = 0;
-					if (i != 0) {
-						counter += check(board[i - 1][j]) ? 1 : 0;
-					} 
-					if (i != yHeight * EXTRA_PADDING - 1) {
-						counter += check(board[i + 1][j]) ? 1 : 0;
-					}
-					
-					if (j != 0) {
-						counter += check(board[i][j - 1]) ? 1 : 0;
-					} 
-					if (j != xHeight * EXTRA_PADDING - 1) {
-						counter += check(board[i][j + 1]) ? 1 : 0;
-					}
-					
-					if (counter < 2) {
-						board[i][j] = null;
-					}
-				}
-			}
-		}
-	}
-	
-	public boolean check(TileType t) {
-		if (t == null) {
-			return false;
-		} else if (t instanceof LightTile) {
-			return false;
-		}
-		
-		
-		return true;
 	}
 
 	/**

@@ -12,7 +12,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -71,13 +70,6 @@ public class Output extends Application {
 	 * Height and width of Tile.
 	 */
 	public static final int TILE_SIZE = 50;
-	
-	public static final int SOME_NUMBER = 25;
-	
-	/**
-	 * 
-	 */
-	public static final int NORMAL_RAT_SPEED = 25;
 	
 	/**
 	 * Offset needed to center the Rat along the x axis.
@@ -138,7 +130,7 @@ public class Output extends Application {
 		//m.getBoard()[2][1].addRat(new Rat(true, 20), Direction.SOUTH);
 		m.placeRat(new Rat(true, 20), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
-		// a.setCycleCount(1);
+		//a.setCycleCount(1);
 		// a.setCycleCount(10);
 		a.setCycleCount(Animation.INDEFINITE);
 		a.play();
@@ -166,8 +158,8 @@ public class Output extends Application {
 	 * Criteria for Rat movements.
 	 */
 	public void moveRat() {
-		tickTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> drawRat()));
-		tickTimeline.setCycleCount(NORMAL_RAT_SPEED);
+		tickTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
+		tickTimeline.setCycleCount(50);
 	}
 
 	/**
@@ -183,32 +175,32 @@ public class Output extends Application {
 		currDirection = currMovement.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER - step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step * i[2], 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * SOME_NUMBER, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * TILE_SIZE, 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER + step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step * i[2], 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * SOME_NUMBER, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
+						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * TILE_SIZE, 30, 45);
 			}
 		}
 
@@ -222,8 +214,7 @@ public class Output extends Application {
 	 */
 	public static void addCurrMovement(int[] pos, boolean extra, Direction dir) {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
-		
-		int a = extra ? 2 : 1; //CHILD TODO
+		int a = extra ? 1 : 2;
 		currMovement.get(dir).add(new int[] {pos[0], pos[1], a});
 		// currMovement.get(dir).add(pos);
 	}
@@ -332,15 +323,6 @@ public class Output extends Application {
 
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
-		
-		Button startTickTimelineButton = new Button("Start Ticks");
-		// We add both buttons at the same time to the timeline (we could have done this in two steps).
-		root.getChildren().addAll(startTickTimelineButton);
-
-		// Setup the behaviour of the buttons.
-//		startTickTimelineButton.setOnAction(e -> {
-//			runCycle();
-//		});
 
 		return root;
 	}

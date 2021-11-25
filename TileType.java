@@ -69,11 +69,6 @@ public abstract class TileType {
 	 * are going to it and from what direction
 	 */
 	public abstract void getNextDirection();
-	
-	/**
-	 * To skip past any lightTiles. (Speed 2, for baby rats)
-	 */
-	public abstract void getAcceleratedDirection(Rat r, Direction prevDirection);
 
 	/**
 	 * Constructor for most normal tiles.
@@ -188,7 +183,7 @@ public abstract class TileType {
 	 * @param d direction the rat came from
 	 */
 	public void addRat(Rat r, Direction d) {
-		System.out.println("Trying to place");
+		//TODO System.out.println("Trying to place");
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
 		nextBlock.get(d).add(r);
 	}
