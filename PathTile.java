@@ -48,11 +48,6 @@ public class PathTile extends TileType {
 						ratsGoForward = ratList.size();
 					}
 					
-//					for (; i < ratsGoForward; i++) {
-//						Output.addCurrMovement(X_Y_POS, false, goTo);
-//						tile.addRat(ratList.get(i), goTo.opposite());
-//					}
-					
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
 							Output.addCurrMovement(X_Y_POS, true, goTo);
