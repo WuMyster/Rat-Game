@@ -216,7 +216,6 @@ public class Output extends Application {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
 		int a = extra ? 2 : 1;
 		currMovement.get(dir).add(new int[] {pos[0], pos[1], a});
-		// currMovement.get(dir).add(pos);
 	}
 
 	/**
