@@ -77,7 +77,7 @@ public class Board {
 		}
 		allTiles = new ArrayList<>();
 		createBoard();
-		createGraph();
+		//createGraph();
 	}
 
 	// For debug only
@@ -192,7 +192,7 @@ public class Board {
 	private void createBoard() {
 		int counter = 0;
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
-			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j += 2) {
 				switch (mapDesign.charAt(counter++)) {
 				case GRASS_TILE -> board[i][j] = null;
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
@@ -200,6 +200,11 @@ public class Board {
 				//case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
 				default -> System.out.println("Map error!");
 				}
+				board[i][j + 1] = new LightTile(i, j + 1);
+			}
+			i++;
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+				board[i][j] = new LightTile(i, j);
 			}
 		}
 	}
