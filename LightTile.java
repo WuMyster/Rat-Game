@@ -24,6 +24,13 @@ public class LightTile extends TileType {
 			}
 		}
 	}
+	
+	@Override
+	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
+		TileType tile = neighbourTiles.get(prevDirection.opposite());
+		tile.getAcceleratedDirection(r, prevDirection.opposite());
+		//System.out.println("Light: " + X_Y_POS[0] + " " + X_Y_POS[1]);
+	}
 
 //	@Override
 //	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
