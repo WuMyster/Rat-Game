@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -140,7 +141,7 @@ public class Output extends Application {
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		a.setCycleCount(Animation.INDEFINITE);
-		a.play();
+		// a.play();
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class Output extends Application {
 	 * Criteria for Rat movements.
 	 */
 	public void moveRat() {
-		tickTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
+		tickTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> drawRat()));
 		tickTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
@@ -331,6 +332,15 @@ public class Output extends Application {
 
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
+		
+		Button startTickTimelineButton = new Button("Start Ticks");
+		// We add both buttons at the same time to the timeline (we could have done this in two steps).
+		root.getChildren().addAll(startTickTimelineButton);
+
+		// Setup the behaviour of the buttons.
+		startTickTimelineButton.setOnAction(e -> {
+			runCycle();
+		});
 
 		return root;
 	}
