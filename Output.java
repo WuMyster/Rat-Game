@@ -71,6 +71,13 @@ public class Output extends Application {
 	 */
 	public static final int TILE_SIZE = 50;
 	
+	public static final int SOME_NUMBER = 25;
+	
+	/**
+	 * 
+	 */
+	public static final int NORMAL_RAT_SPEED = 25;
+	
 	/**
 	 * Offset needed to center the Rat along the x axis.
 	 */
@@ -152,7 +159,7 @@ public class Output extends Application {
 	 */
 	public void moveRat() {
 		tickTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
-		tickTimeline.setCycleCount(50);
+		tickTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
 	/**
@@ -168,32 +175,32 @@ public class Output extends Application {
 		currDirection = currMovement.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE - step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER - step * i[2], 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * TILE_SIZE, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * SOME_NUMBER, 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * TILE_SIZE + step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER + step * i[2], 30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * TILE_SIZE + 
-						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * TILE_SIZE, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
+						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * SOME_NUMBER, 30, 45);
 			}
 		}
 
