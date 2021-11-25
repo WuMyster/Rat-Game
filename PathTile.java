@@ -38,12 +38,11 @@ public class PathTile extends TileType {
 				int ratsGoForward; // Number of rats that can keep going onwards
 				
 				while (i != ratList.size()) {	
-							
-					//TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
-					// System.out.println(tile.isBlocked);
 					TileType tile = neighbourTiles.get(goTo);
-					ratsGoForward = tile.damageStopSign(this, ratList.size());
+					//TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
 					
+					ratsGoForward = tile.damageStopSign(this, ratList.size());
+					//System.out.println("PathTile not stopped: " + ratsGoForward + "\n");
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
 							Output.addCurrMovement(X_Y_POS, true, goTo);

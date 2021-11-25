@@ -52,9 +52,11 @@ public class LightTile extends TileType {
 	@Override
 	public Boolean isTileBlocked() {
 		try {
+			System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + surrounding[0].X_Y_POS[1]);
 			return surrounding[0].isTileBlocked() || surrounding[1].isTileBlocked();
 		} catch (NullPointerException e) {
 			setTileNeighbours();
+			System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + surrounding[0].X_Y_POS[1]);
 			return surrounding[0].isTileBlocked() || surrounding[1].isTileBlocked();
 		}
 	}
@@ -62,6 +64,7 @@ public class LightTile extends TileType {
 	@Override
 	public int damageStopSign(TileType t, int n) {
 		try {
+			//System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + " " + surrounding[0].X_Y_POS[1]);
 			if (t == surrounding[0]) {
 				return surrounding[0].damageStopSign(null, n);
 			} else {
@@ -69,7 +72,8 @@ public class LightTile extends TileType {
 			}
 		} catch (NullPointerException e) {
 			setTileNeighbours();
-			if (t == surrounding[0]) {
+			//System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + " " + surrounding[0].X_Y_POS[1]);
+			if (t != surrounding[0]) {
 				return surrounding[0].damageStopSign(null, n);
 			} else {
 				return surrounding[1].damageStopSign(null, n);

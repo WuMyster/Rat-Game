@@ -157,7 +157,8 @@ public abstract class TileType {
 		if (itemHP > 0) {
 			return 0;
 		}
-		Output.removeStopSign(X_Y_POS);
+		Output.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+				X_Y_POS[1] / Board.EXTRA_PADDING});
 		isBlocked = false;
 		return Math.abs(itemHP);
 	}
