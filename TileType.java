@@ -94,18 +94,6 @@ public abstract class TileType {
 	}
 
 	/**
-	 * For Tiles that used by Rat but cannot be placed.
-	 * 
-	 * @param xyPos       The position on the board where this Tile is
-	 * @param isPlaceable False if item is not placeable on tile, {@code true} by
-	 *                    default
-	 */
-	public TileType(int[] xyPos, boolean isPlaceable) {
-		this(xyPos);
-		this.isBlocked = isPlaceable;
-	}
-
-	/**
 	 * For graph, this {@code Tile} will know about the {@code Tile} and
 	 * {@code Direction} of other {@code Tile} classes.
 	 * 
