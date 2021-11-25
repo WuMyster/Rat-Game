@@ -56,7 +56,7 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile. XX
 	 */
 	private final static char TUNNEL_TILE = 'T';
-	
+
 	private final static int EXTRA_PADDING = 2;
 
 	/**
@@ -77,47 +77,47 @@ public class Board {
 		}
 		allTiles = new ArrayList<>();
 		createBoard();
-		//createGraph();
+		// createGraph();
 	}
 
 	// For debug only
 	public TileType[][] getBoard() {
 		return board;
 	}
-	
+
 	public boolean addStopSign(int x, int y) {
 		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (t == null) {
 			return false;
-		} //else if (board[y][x] instanceof tunnelTile) {
-		
+		} // else if (board[y][x] instanceof tunnelTile) {
+
 		t.placeStopSign();
-		
+
 		return true;
 	}
-	
+
 	public boolean addBomb(int x, int y) {
 		int startY = y * EXTRA_PADDING;
 		int startX = x * EXTRA_PADDING;
-		
+
 		TileType t = board[startY][startX];
 		while (t != null) {
 			t.blowUp();
 			t = board[y--][x];
 		}
-		
+
 		t = board[startY][startX];
 		while (t != null) {
 			t.blowUp();
 			t = board[y++][x];
 		}
-		
+
 		t = board[startY][startX];
 		while (t != null) {
 			t.blowUp();
 			t = board[y][x--];
 		}
-		
+
 		t = board[startY][startX];
 		while (t != null) {
 			t.blowUp();
@@ -137,11 +137,11 @@ public class Board {
 		for (TileType[] a : board) {
 			for (TileType b : a) {
 				if (b == null) {
-					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE,
-							y * Output.TILE_SIZE, Output.TILE_SIZE,	Output.TILE_SIZE);
+					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
+							Output.TILE_SIZE);
 				} else {
-					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE,
-							y * Output.TILE_SIZE, Output.TILE_SIZE,	Output.TILE_SIZE);
+					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
+							Output.TILE_SIZE);
 				}
 			}
 			x = 0;
@@ -149,7 +149,7 @@ public class Board {
 		}
 	}
 
-	//Debug
+	// Debug
 //	public void placeRat() {
 //		board[1][1].addRat(new Rat(), Direction.NORTH);
 //		// placeRatAA(new ArrayList<>(Arrays.asList(new Rat())), new
@@ -159,23 +159,25 @@ public class Board {
 
 	/**
 	 * Put Rat onto game canvas.
-	 * @param rats 	the rat that's going to the next tile
-	 * @param dir	direction the rat is facing
-	 * @param x		x start position of the rat
-	 * @param y		y start position of the rat
+	 * 
+	 * @param rats the rat that's going to the next tile
+	 * @param dir  direction the rat is facing
+	 * @param x    x start position of the rat
+	 * @param y    y start position of the rat
 	 * 
 	 */
 	public void placeRat(Rat rats, Direction dir, int x, int y) {
 		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rats, dir);
 	}
-	
+
 	/**
-	 * Goes through each Tile and moves the rat to the next tile before getting the tiles new list.
+	 * Goes through each Tile and moves the rat to the next tile before getting the
+	 * tiles new list.
 	 */
 	public void runAllTiles() {
-		//Send item to Rat make sure to have boolean to know if it is dead or not
-		
-		//Movement
+		// Send item to Rat make sure to have boolean to know if it is dead or not
+
+		// Movement
 		for (TileType t : allTiles) {
 			t.setCurrRat();
 		}
@@ -183,8 +185,6 @@ public class Board {
 			t.getNextDirection();
 		}
 	}
-	
-
 
 	/**
 	 * Creates 2d array of the map.
@@ -192,23 +192,59 @@ public class Board {
 	private void createBoard() {
 		int counter = 0;
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
-			for (int j = 0; j < xHeight * EXTRA_PADDING; j += 2) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 				switch (mapDesign.charAt(counter++)) {
 				case GRASS_TILE -> board[i][j] = null;
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
 				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
-				//case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
+				// case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
 				default -> System.out.println("Map error!");
 				}
-				board[i][j + 1] = new LightTile(i, j + 1);
+				board[i][++j] = new LightTile(i, j);
 			}
 			i++;
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 				board[i][j] = new LightTile(i, j);
 			}
 		}
+
 	}
-	
+
+	public void eliminateEmpties() {
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+				if (board[i][j] instanceof LightTile) {
+					int counter = 0;
+					if (i != 0) {
+						counter += check(board[i - 1][j]) ? 1 : 0;
+					}
+					if (i != yHeight * EXTRA_PADDING - 1) {
+						counter += check(board[i + 1][j]) ? 1 : 0;
+					}
+
+					if (j != 0) {
+						counter += check(board[i][j - 1]) ? 1 : 0;
+					}
+					if (j != xHeight * EXTRA_PADDING - 1) {
+						counter += check(board[i][j + 1]) ? 1 : 0;
+					}
+
+					if (counter < 2) {
+						board[i][j] = null;
+					}
+				}
+			}
+		}
+	}
+
+	private boolean check(TileType t) {
+		if (t == null) {
+			return false;
+		} else if (t instanceof LightTile) {
+			return false;
+		}
+		return true;
+	}
 
 	// Possible to implement the gui part too!
 	/**
@@ -254,8 +290,7 @@ public class Board {
 							direction.add(Direction.WEST);
 						}
 					}
-					board[i][j].setNeighbourTiles(tiles.toArray(new TileType[2]),
-							direction.toArray(new Direction[2]));
+					board[i][j].setNeighbourTiles(tiles.toArray(new TileType[2]), direction.toArray(new Direction[2]));
 				}
 			}
 		}
