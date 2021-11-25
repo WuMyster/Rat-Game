@@ -78,6 +78,7 @@ public class Board {
 		}
 		allTiles = new ArrayList<>();
 		createBoard();
+		eliminateBadInvisTiles();
 		createGraph();
 	}
 
@@ -211,13 +212,15 @@ public class Board {
 					int counter = 0;
 					if (i != 0) {
 						counter += check(board[i - 1][j]) ? 1 : 0;
-					} else if (i != yHeight * EXTRA_PADDING - 1) {
+					} 
+					if (i != yHeight * EXTRA_PADDING - 1) {
 						counter += check(board[i + 1][j]) ? 1 : 0;
 					}
 					
 					if (j != 0) {
 						counter += check(board[i][j - 1]) ? 1 : 0;
-					} else if (j != xHeight * EXTRA_PADDING - 1) {
+					} 
+					if (j != xHeight * EXTRA_PADDING - 1) {
 						counter += check(board[i][j + 1]) ? 1 : 0;
 					}
 					

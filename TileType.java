@@ -188,7 +188,7 @@ public abstract class TileType {
 	 * @param d direction the rat came from
 	 */
 	public void addRat(Rat r, Direction d) {
-		//System.out.println("Trying to place");
+		System.out.println("Trying to place");
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
 		nextBlock.get(d).add(r);
 	}

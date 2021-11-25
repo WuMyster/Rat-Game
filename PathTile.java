@@ -29,6 +29,7 @@ public class PathTile extends TileType {
 	public void getNextDirection() {
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
+			System.out.println(ratList.size());
 			
 			if (!ratList.isEmpty()) { 
 				System.out.println(X_Y_POS[0] + " " + X_Y_POS[1]);
@@ -47,10 +48,14 @@ public class PathTile extends TileType {
 					
 					TileType tile = neighbourTiles.get(goTo);
 					for (; i < ratsGoForward; i++) {
-						Output.addCurrMovement(X_Y_POS, ratList.get(i).isChild(), goTo);
-						tile.addRat(ratList.get(i), goTo.opposite());
-						timeTravel(ratList.get(i));
-						System.out.println(ratList.get(i).isChild());
+						if (ratList.get(i).isChild()) {
+							Output.addCurrMovement(X_Y_POS, true, goTo);
+							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
+							timeTravel(ratList.get(i));
+						} else {
+							Output.addCurrMovement(X_Y_POS, false, goTo);
+							tile.addRat(ratList.get(i), goTo.opposite());
+						}
 					}
 					
 					Direction tmp = goTo;
