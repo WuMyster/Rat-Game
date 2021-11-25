@@ -84,15 +84,8 @@ public class PathTile extends TileType {
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-		int i = 0;
-		while (i != 1) {	
-			TileType a = neighbourTiles.get(goTo);
-			i = a.damageStopSign(1);
-			Direction tmp = goTo;
-			goTo = prevDirection;
-			prevDirection = tmp;
-		}
-		this.addRat(r, goTo.opposite());
+		
+		this.addRat(r, goTo);
 		//TODO System.out.println("PathTile accel: " + X_Y_POS[0] + " " + X_Y_POS[1]);
 	}
 }
