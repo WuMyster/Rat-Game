@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -70,14 +71,14 @@ public class Output extends Application {
 	 * Height and width of Tile.
 	 */
 	public static final int TILE_SIZE = 50;
-	
+
 	public static final int SOME_NUMBER = 25;
-	
+
 	/**
 	 * 
 	 */
 	public static final int NORMAL_RAT_SPEED = 25;
-	
+
 	/**
 	 * Offset needed to center the Rat along the x axis.
 	 */
@@ -90,17 +91,17 @@ public class Output extends Application {
 	public static Image STOP_SIGN;
 	private Board m;
 	ImageView draggableStop = new ImageView();
-	
+
 	private Canvas mapCanvas;
 	private Canvas ratCanvas;
 	private Canvas itemCanvas;
 
 	Label currLevel;
 	Label currPoints;
-	
-	//Should eventually turn to HashMap to store all item position
+
+	// Should eventually turn to HashMap to store all item position
 	private static ArrayList<int[]> stopSignPlace;
-	
+
 	/**
 	 * The Rats in the game window which needs to move.
 	 */
@@ -117,11 +118,11 @@ public class Output extends Application {
 
 		BorderPane root = createGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-		
+
 		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
 		m = new Board(properMap1, 17, 11);
 		stopSignPlace = new ArrayList<>();
-		
+
 		drawMap();
 		moveRat();
 
@@ -130,16 +131,15 @@ public class Output extends Application {
 
 		m.placeRat(new Rat(true, 20), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
-		//a.setCycleCount(1);
+		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		a.setCycleCount(Animation.INDEFINITE);
 		a.play();
 	}
 
 	/**
-	 * IMPORTANT
-	 * This method will run in a cycle indefinitely until stopped, currently allows
-	 * rats to move around.
+	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
+	 * currently allows rats to move around.
 	 */
 	public void runCycle() {
 		currMovement = new HashMap<>();
@@ -147,11 +147,11 @@ public class Output extends Application {
 		// m.getBoard()[1][1].blowUp();
 		m.runAllTiles();
 		// addCurrMovement(new int[] {1,2}, Direction.NORTH);
-		
+
 		tickTimeline.play();
 		drawItems();
-		//m.addBomb(1, 1);
-		
+		// m.addBomb(1, 1);
+
 	}
 
 	/**
@@ -175,32 +175,32 @@ public class Output extends Application {
 		currDirection = currMovement.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER - step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER - step * i[2],
+						30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * SOME_NUMBER, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * SOME_NUMBER,
+						30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER + step * i[2], 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER + step * i[2],
+						30, 45);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + 
-						TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * SOME_NUMBER, 30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * SOME_NUMBER,
+						30, 45);
 			}
 		}
 
@@ -215,7 +215,7 @@ public class Output extends Application {
 	public static void addCurrMovement(int[] pos, boolean extra, Direction dir) {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
 		int a = extra ? 2 : 1;
-		currMovement.get(dir).add(new int[] {pos[0], pos[1], a});
+		currMovement.get(dir).add(new int[] { pos[0], pos[1], a });
 	}
 
 	/**
@@ -240,7 +240,6 @@ public class Output extends Application {
 		return root;
 	}
 
-	// GridPane? Might help with "snapping" item to correct Tile place
 	/**
 	 * Creates the game canvas in window. Will have the Board, Rats and Items.
 	 * 
@@ -259,25 +258,21 @@ public class Output extends Application {
 
 		return root;
 	}
-	
+
 	public static void removeStopSign(int[] pos) {
-		
 		int[] a = null;
-		for(int[] i : stopSignPlace) {
+		for (int[] i : stopSignPlace) {
 			if (Arrays.equals(i, pos)) {
 				a = i;
 			}
 		}
 		System.out.println("Removed: " + stopSignPlace.remove(a));
-		
-		//stopSignPlace.remove(pos);
-		//drawItems();
 	}
-	
+
 	public void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		for(int[] i : stopSignPlace) {
+		for (int[] i : stopSignPlace) {
 			gc.drawImage(STOP_SIGN, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 	}
@@ -291,9 +286,9 @@ public class Output extends Application {
 	public void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
-		
-		stopSignPlace.add(new int[] {(int) y, (int) x});
-		stopSignPlace.add(new int[] {50, 50});
+
+		stopSignPlace.add(new int[] { (int) y, (int) x });
+		stopSignPlace.add(new int[] { 50, 50 });
 		m.addStopSign((int) x, (int) y);
 
 		// Draw an icon at the dropped location.
@@ -322,6 +317,17 @@ public class Output extends Application {
 
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
+
+		// Tick Timeline buttons
+		Button startTickTimelineButton = new Button("Start Ticks");
+		// We add both buttons at the same time to the timeline (we could have done this
+		// in two steps).
+		root.getChildren().addAll(startTickTimelineButton);
+		// Setup the behaviour of the buttons.
+		startTickTimelineButton.setOnAction(e -> {
+			// Start the tick timeline and enable/disable buttons as appropriate.
+			runCycle();
+		});
 
 		return root;
 	}

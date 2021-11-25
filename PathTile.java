@@ -39,7 +39,6 @@ public class PathTile extends TileType {
 				
 				while (i != ratList.size()) {	
 					TileType tile = neighbourTiles.get(goTo);
-					//TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
 					
 					ratsGoForward = tile.damageStopSign(this, ratList.size());
 					//System.out.println("PathTile not stopped: " + ratsGoForward + "\n");
@@ -49,7 +48,6 @@ public class PathTile extends TileType {
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							//timeTravel(ratList.get(i));
 						} else {
-							//TODO System.out.println("NOT CHILD");
 							Output.addCurrMovement(X_Y_POS, false, goTo);
 							tile.addRat(ratList.get(i), goTo.opposite());
 						}
@@ -73,8 +71,6 @@ public class PathTile extends TileType {
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-		
 		this.addRat(r, goTo);
-		//TODO System.out.println("PathTile accel: " + X_Y_POS[0] + " " + X_Y_POS[1]);
 	}
 }

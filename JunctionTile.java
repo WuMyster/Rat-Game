@@ -27,7 +27,7 @@ public class JunctionTile extends TileType {
 					Direction goTo = getADirection(prevDirection);
 					TileType tile = neighbourTiles.get(goTo);
 					// TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
-					System.out.println(tile.isBlocked);
+					//System.out.println(tile.isBlocked);
 
 					ratsGoForward = tile.damageStopSign(this, ratList.size());
 			

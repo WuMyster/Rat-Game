@@ -57,7 +57,7 @@ public class Board {
 	 */
 	private final static char TUNNEL_TILE = 'T';
 
-	private final static int EXTRA_PADDING = 2;
+	public final static int EXTRA_PADDING = 2;
 
 	/**
 	 * Constructs a {@code Board} from input string.

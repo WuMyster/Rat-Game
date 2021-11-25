@@ -27,7 +27,6 @@ public class LightTile extends TileType {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 
 			if (!ratList.isEmpty()) {
-				// System.out.println("Invisible");
 				Direction goTo = prevDirection.opposite(); // This can be opposite due to nature of tile
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
@@ -38,6 +37,9 @@ public class LightTile extends TileType {
 		}
 	}
 
+	/**
+	 * Light tile won't decide where it goes, already predetermined by previous tile
+	 */
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		TileType tile = neighbourTiles.get(prevDirection.opposite());
@@ -51,21 +53,15 @@ public class LightTile extends TileType {
 	 */
 	@Override
 	public Boolean isTileBlocked() {
-		try {
-			System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + surrounding[0].X_Y_POS[1]);
-			return surrounding[0].isTileBlocked() || surrounding[1].isTileBlocked();
-		} catch (NullPointerException e) {
-			setTileNeighbours();
-			System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + surrounding[0].X_Y_POS[1]);
-			return surrounding[0].isTileBlocked() || surrounding[1].isTileBlocked();
-		}
+		System.out.println("DON'T CALL ME");
+		return null;
 	}
 
 	@Override
 	public int damageStopSign(TileType t, int n) {
 		try {
 			//System.out.println("LightTile: " + surrounding[0].X_Y_POS[0] + " " + surrounding[0].X_Y_POS[1]);
-			if (t == surrounding[0]) {
+			if (t != surrounding[0]) {
 				return surrounding[0].damageStopSign(null, n);
 			} else {
 				return surrounding[1].damageStopSign(null, n);
