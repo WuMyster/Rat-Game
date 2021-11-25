@@ -77,7 +77,8 @@ public class Board {
 		}
 		allTiles = new ArrayList<>();
 		createBoard();
-		// createGraph();
+		eliminateEmpties();
+			createGraph();
 	}
 
 	// For debug only
@@ -134,9 +135,10 @@ public class Board {
 	public void drawBoard(GraphicsContext gc) {
 		int x = 0;
 		int y = 0;
-		for (TileType[] a : board) {
-			for (TileType b : a) {
-				if (b == null) {
+		
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
+				if (board[i][j] == null) {
 					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
 							Output.TILE_SIZE);
 				} else {
@@ -148,14 +150,6 @@ public class Board {
 			y++;
 		}
 	}
-
-	// Debug
-//	public void placeRat() {
-//		board[1][1].addRat(new Rat(), Direction.NORTH);
-//		// placeRatAA(new ArrayList<>(Arrays.asList(new Rat())), new
-//		// ArrayList<>(Arrays.asList(Direction.NORTH)), new
-//		// ArrayList<>(Arrays.asList(new int[] {1,2})));
-//	}
 
 	/**
 	 * Put Rat onto game canvas.
@@ -268,7 +262,7 @@ public class Board {
 					}
 
 					// Check East
-					if (j != xHeight - 1) {
+					if (j != xHeight * EXTRA_PADDING - 1) {
 						if (board[i][j + 1] != null) {
 							tiles.add(board[i][j + 1]);
 							direction.add(Direction.EAST);
@@ -276,7 +270,7 @@ public class Board {
 					}
 
 					// Check South
-					if (i != yHeight - 1) {
+					if (i != yHeight * EXTRA_PADDING - 1) {
 						if (board[i + 1][j] != null) {
 							tiles.add(board[i + 1][j]);
 							direction.add(Direction.SOUTH);
@@ -290,7 +284,8 @@ public class Board {
 							direction.add(Direction.WEST);
 						}
 					}
-					board[i][j].setNeighbourTiles(tiles.toArray(new TileType[2]), direction.toArray(new Direction[2]));
+					board[i][j].setNeighbourTiles(tiles.toArray(
+							new TileType[2]), direction.toArray(new Direction[2]));
 				}
 			}
 		}

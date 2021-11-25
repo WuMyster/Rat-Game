@@ -21,21 +21,12 @@ public class MainBoardTester {
 	public static Output BBOAD;
 
 	public static void main(String[] args) {
-//		System.out.println("Creating board!");
-//		Board m = new Board(properMap1, 17, 11);
-//		System.out.println(m.getBoard()[2][1].neighbourTiles.get(Direction.NORTH));
-//		System.out.println(m.getBoard()[1][2].neighbourTiles.get(Direction.WEST));
-//		System.out.println(m.getBoard()[2][1].directions[0]);
-//		System.out.println(m.getBoard()[2][1].directions[1]);
-		
-		String fake = "GGGGPGGPGGGG"; //3, 4
-		String fake2 = "GPP";
-		String fake3 = "PP";
 		Board m = new Board(properMap1, 17, 11);
-		print2dArray(m.getBoard());
-		System.out.println();
-		m.eliminateEmpties();
-		print2dArray(m.getBoard());
+		//print2dArray(m.getBoard());
+		//System.out.println();
+		//m.eliminateEmpties();
+		//print2dArray(m.getBoard());
+		System.out.println("Done!");
 	}
 
 	public static TileType[][] create2dArray(String map, int x, int y) {
