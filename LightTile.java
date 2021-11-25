@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * between rats (and death rats) outside of normal tiles. Will only need to deal
  * with some items: death rat(if item), bomb.
  * 
- * @author 2010573
+ * @author Jing Shiang Gu
  *
  */
 public class LightTile extends TileType {
