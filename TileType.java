@@ -108,8 +108,6 @@ public abstract class TileType {
 		}
 		this.directions = direction;
 	}
-	
-	//public void set
 
 	/**
 	 * Switches out old list of Rats the tile was working with, with the list the
@@ -119,12 +117,42 @@ public abstract class TileType {
 		currBlock = nextBlock;
 		nextBlock = new HashMap<>();
 	}
+	
+	/**
+	 * Returns true if rat dies after being given item
+	 * @param r the rat recieving the item
+	 * @return {@code true} if rat dies after being given item
+	 */
+	protected boolean giveRatItem(Rat r) {
+		if (itemOnTile == null) {
+			return false;
+		}
+		//Check item damage type and remove health as necessary
+		if (itemHP == 0) {
+			//Run method to do something if needed e.g. bomb
+			itemOnTile = null;
+		}
+		
+		//Method to give item away
+		
+		return true;
+	}
+	
+	//??????? TODO
+	protected boolean setTileItem(Item i, int x, int y) {
+		if (i instanceof StopSign) {
+			//itemHP = StopSign. HEALTH
+			isBlocked = true;
+			//itemOnTile = new StopSign()?
+		}
+		return true;
+	}
 
 	/**
-	 * Returns true if {@code Tile} cannot be accessed. XX
+	 * Returns {@code true} if {@code Tile} cannot be accessed. XX
 	 * In future, should be removed to just call damageStopSign. TODO
-	 * 
 	 * @return {@code true} if this tile cannot be accessed to
+	 * @deprecated
 	 */
 	public Boolean isTileBlocked() {
 		return isBlocked;
@@ -168,7 +196,7 @@ public abstract class TileType {
 	}
 	
 	public void placeBomb() {
-		blowUp();
+		itemOnTile = new Bomb();
 	}
 
 	/**
@@ -178,7 +206,7 @@ public abstract class TileType {
 	 * @param d direction the rat came from
 	 */
 	public void addRat(Rat r, Direction d) {
-		//TODO System.out.println("Trying to place");
+		// System.out.println("Trying to place");
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
 		nextBlock.get(d).add(r);
 	}
