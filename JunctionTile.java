@@ -20,18 +20,30 @@ public class JunctionTile extends TileType {
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 			if (!ratList.isEmpty()) {
+				int ratsGoForward;
+				int i = 0;
+				while (i != ratList.size()) {
 
-				// Keep in mind stop signs!! Currently not implemented
-				Direction goTo = getADirection(prevDirection);
+					Direction goTo = getADirection(prevDirection);
+					TileType tile = neighbourTiles.get(goTo);
+					// TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
+					System.out.println(tile.isBlocked);
 
-				int i;
-				for (i = 0; i < ratList.size(); i++) {
-					neighbourTiles.get(goTo).addRat(ratList.get(i), goTo.opposite());
-					// Tell rat to go to previous direction
-					// Tell that Tile the direction the rat came from using prevDirection.opposite()
+					ratsGoForward = tile.damageStopSign(ratList.size());
+			
+					for (; i < ratList.size(); i++) {
+						if (ratList.get(i).isChild()) {
+							Output.addCurrMovement(X_Y_POS, true, goTo);
+							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
+							//timeTravel(ratList.get(i));
+						} else {
+							//TODO System.out.println("NOT CHILD");
+							Output.addCurrMovement(X_Y_POS, false, goTo);
+							tile.addRat(ratList.get(i), goTo.opposite());
+						}
+					}
+					prevDirection = goTo;
 				}
-				// Prev direction so it keeps going onwards??
-				Output.addCurrMovement(X_Y_POS, false, goTo);
 			}
 		}
 	}
@@ -50,14 +62,14 @@ public class JunctionTile extends TileType {
 		}
 		return directions[num];
 	}
-	
+
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		// TODO Auto-generated method stud
 		System.out.println("Junction Tile speed not implemented yet");
-		
+
 		Direction goTo = getADirection(prevDirection.opposite());
 		this.addRat(r, goTo.opposite());
-		
+
 	}
 }
