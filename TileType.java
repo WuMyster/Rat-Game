@@ -143,12 +143,13 @@ public abstract class TileType {
 	}
 
 	/**
-	 * Damages stop sign with the number of rats bouncing off it. XX
+	 * Damages stop sign with the number of rats bouncing off it.
 	 * 
+	 * @param t the tile that is requesting the information
 	 * @param n number of rats
 	 * @return the number of rats that can pass through it
 	 */
-	public int damageStopSign(int n) {
+	public int damageStopSign(TileType t, int n) {
 		if (!isBlocked) {
 			return n;
 		}

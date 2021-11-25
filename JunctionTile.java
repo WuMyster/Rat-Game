@@ -29,7 +29,7 @@ public class JunctionTile extends TileType {
 					// TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
 					System.out.println(tile.isBlocked);
 
-					ratsGoForward = tile.damageStopSign(ratList.size());
+					ratsGoForward = tile.damageStopSign(this, ratList.size());
 			
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
@@ -65,7 +65,7 @@ public class JunctionTile extends TileType {
 
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-		System.out.println("Junction Tile speed not implemented yet");
+		//System.out.println("Junction Tile speed not implemented yet");
 
 		//Maybe try inserting .opposite to fix turn around issues
 		Direction goTo = getADirection(prevDirection);

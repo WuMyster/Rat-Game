@@ -42,7 +42,7 @@ public class PathTile extends TileType {
 					//TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
 					// System.out.println(tile.isBlocked);
 					TileType tile = neighbourTiles.get(goTo);
-					ratsGoForward = tile.damageStopSign(ratList.size());
+					ratsGoForward = tile.damageStopSign(this, ratList.size());
 					
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
