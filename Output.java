@@ -72,7 +72,7 @@ public class Output extends Application {
 	 */
 	public static final int TILE_SIZE = 50;
 
-	public static final int SOME_NUMBER = 25;
+	public static final int RAT_POSITION = 25;
 
 	/**
 	 * 
@@ -82,7 +82,7 @@ public class Output extends Application {
 	/**
 	 * Offset needed to center the Rat along the x axis.
 	 */
-	public static final int TILE_SIZE_WIDTH_OFFSET = 10;
+	public static final int TILE_WIDTH_OFFSET = 10;
 
 	// private Image playerImage;
 	public static Image GRASS_IMAGE;
@@ -91,6 +91,8 @@ public class Output extends Application {
 	public static Image STOP_SIGN;
 	private Board m;
 	ImageView draggableStop = new ImageView();
+	public static int RAT_WIDTH;
+	public static int RAT_HEIGHT;
 
 	private Canvas mapCanvas;
 	private Canvas ratCanvas;
@@ -115,8 +117,10 @@ public class Output extends Application {
 		TILE_IMAGE = new Image("Tile.png");
 		RAT_IMAGE = new Image("Rat.png");
 		STOP_SIGN = new Image("Stop_Sign.png");
+		RAT_WIDTH = 30;
+		RAT_HEIGHT = 45;
 
-		BorderPane root = createGUI();
+		BorderPane root = createGameGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
@@ -144,14 +148,13 @@ public class Output extends Application {
 	public void runCycle() {
 		currMovement = new HashMap<>();
 		step = 0;
-		// m.getBoard()[1][1].blowUp();
 		m.runAllTiles();
-		// addCurrMovement(new int[] {1,2}, Direction.NORTH);
 
 		tickTimeline.play();
+		
+		//Set points
+		
 		drawItems();
-		// m.addBomb(1, 1);
-
 	}
 
 	/**
@@ -167,7 +170,7 @@ public class Output extends Application {
 	 */
 	public void drawRat() {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
 
 		// List of rat positions and direction
@@ -175,67 +178,65 @@ public class Output extends Application {
 		currDirection = currMovement.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER - step * i[2],
-						30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+						TILE_WIDTH_OFFSET, i[0] * RAT_POSITION - step * i[2],
+						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET + step * i[2], i[0] * SOME_NUMBER,
-						30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+						TILE_WIDTH_OFFSET + step * i[2], i[0] * RAT_POSITION,
+						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET, i[0] * SOME_NUMBER + step * i[2],
-						30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+						TILE_WIDTH_OFFSET, i[0] * RAT_POSITION + step * i[2],
+						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
 
 		currDirection = currMovement.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * SOME_NUMBER + TILE_SIZE_WIDTH_OFFSET - step * i[2], i[0] * SOME_NUMBER,
-						30, 45);
+				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+						TILE_WIDTH_OFFSET - step * i[2], i[0] * RAT_POSITION,
+						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
 
 	}
 
 	/**
-	 * Adds to list of Rat movements on the game canvas
+	 * Adds to list of Rat movements on the game canvas.
 	 * 
 	 * @param pos xy position of the rat
+	 * @param extraSpeed {@code true} if rat is baby
 	 * @param dir direction it's facing
 	 */
-	public static void addCurrMovement(int[] pos, boolean extra, Direction dir) {
+	public static void addCurrMovement(int[] pos, boolean extraSpeed, Direction dir) {
 		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
-		int a = extra ? 2 : 1;
-		currMovement.get(dir).add(new int[] { pos[0], pos[1], a });
+		int speed = extraSpeed ? 2 : 1;
+		currMovement.get(dir).add(new int[] { pos[0], pos[1], speed});
 	}
 
 	/**
-	 * Creates GUI for the window
+	 * Creates game GUI.
 	 * 
 	 * @return the GUI
 	 */
-	public BorderPane createGUI() {
+	public BorderPane createGameGUI() {
 		BorderPane root = new BorderPane();
-
+		
 		root.setCenter(createCenterMap());
-
 		root.setTop(createTopMenu());
-
 		root.setRight(createRightMenu());
-
-		Pane empty = new Pane();
-		empty.setMinSize(0, 0);
-		empty.prefHeight(0);
-		root.setBottom(empty);
 
 		return root;
 	}
@@ -247,18 +248,24 @@ public class Output extends Application {
 	 */
 	public Pane createCenterMap() {
 		Pane root = new Pane();
+		//Creating canvases
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		
+		//Adding canvas to pane
 		root.getChildren().add(mapCanvas);
 		root.getChildren().add(ratCanvas);
-		BorderPane.setAlignment(root, Pos.BOTTOM_LEFT);
-
-		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		root.getChildren().add(itemCanvas);
 
 		return root;
 	}
 
+	/**
+	 * Remove stop sign from board.
+	 * TODO Hopefully can be upgraded to remove all items.
+	 * @param pos position where the stop sign is
+	 */
 	public static void removeStopSign(int[] pos) {
 		int[] a = null;
 		for (int[] i : stopSignPlace) {
@@ -266,9 +273,13 @@ public class Output extends Application {
 				a = i;
 			}
 		}
-		System.out.println("Removed: " + stopSignPlace.remove(a));
+		stopSignPlace.remove(a);
 	}
 
+	/**
+	 * Redraws all stop signs onto the map.
+	 * TODO Hopefully can be upgraded to draw all items.
+	 */
 	public void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -282,6 +293,8 @@ public class Output extends Application {
 	 * 
 	 * @param event The drag event itself which contains data about the drag that
 	 *              occurred.
+	 * @author Liam O'Reilly
+	 * @author Jing Shiang Gu
 	 */
 	public void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
@@ -318,22 +331,12 @@ public class Output extends Application {
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
 
-		// Tick Timeline buttons
-		Button startTickTimelineButton = new Button("Start Ticks");
-		// We add both buttons at the same time to the timeline (we could have done this
-		// in two steps).
-		root.getChildren().addAll(startTickTimelineButton);
-		// Setup the behaviour of the buttons.
-		startTickTimelineButton.setOnAction(e -> {
-			// Start the tick timeline and enable/disable buttons as appropriate.
-			runCycle();
-		});
-
 		return root;
 	}
 
 	/**
-	 * Creates the right menu - will contain a number of items that will be listed.
+	 * Creates the right menu - will contain level, points
+	 * and number of items.
 	 * 
 	 * @return the right menu
 	 */
@@ -351,10 +354,6 @@ public class Output extends Application {
 		currPoints.setFont(new Font(20));
 		root.getChildren().add(currPoints);
 
-//		root.maxHeight(10);
-//		root.prefHeight(10);
-		// toolbar.getChildren().add(resetPlayerLocationButton);
-
 		// Setup a draggable image.
 		draggableStop.setImage(STOP_SIGN);
 		root.getChildren().add(draggableStop);
@@ -362,6 +361,9 @@ public class Output extends Application {
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
+		/**
+		 * @author Liam O'Reilly
+		 */
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				// Mark the drag as started.
@@ -383,6 +385,9 @@ public class Output extends Application {
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
+		/**
+		 * @author Liam O'Reilly
+		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
 				// Mark the drag as acceptable if the source was the draggable image.
@@ -401,6 +406,9 @@ public class Output extends Application {
 		// dropped.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
+		/**
+		 * @author Liam O'Reilly
+		 */
 		itemCanvas.setOnDragDropped(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
 				// We call this method which is where the bulk of the behaviour takes place.
@@ -409,7 +417,6 @@ public class Output extends Application {
 				event.consume();
 			}
 		});
-
 		return root;
 	}
 
@@ -421,29 +428,14 @@ public class Output extends Application {
 		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 
 		// Clear canvas
-		gc.clearRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-		try {
-			m.drawBoard(gc);
-		} catch (NullPointerException e) {
-			Image grassImage = new Image("Grass.png");
-			for (int y = 0; y < GRID_HEIGHT_NUMBER; y++) {
-				for (int x = y % 2; x < GRID_WIDTH_NUMBER; x += 2) {
-					gc.drawImage(grassImage, x * 50, y * 50, 50, 50);
-				}
-			}
-		}
+		m.drawBoard(gc);
 	}
 
-	// args will be filename of file to read?
 	public static void main(String[] args) {
 		System.out.println("Start");
-
-		try {
-			launch(args);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		launch(args);
 		System.out.println("End");
 	}
 }
