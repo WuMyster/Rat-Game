@@ -53,7 +53,7 @@ public class Board {
 	private final static char JUNCTION_TILE = 'J';
 
 	/**
-	 * Constants of Tile letters from string to Tunnel Tile. XX
+	 * Constants of Tile letters from string to Tunnel Tile. TODO
 	 */
 	private final static char TUNNEL_TILE = 'T';
 
@@ -86,6 +86,12 @@ public class Board {
 		return board;
 	}
 
+	/**
+	 * Adds effect of stop sign to tile
+	 * @param x x position of tile on map
+	 * @param y y position of tile on map
+	 * @return {@code true} if stop sign can be placed
+	 */
 	public boolean addStopSign(int x, int y) {
 		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (t == null) {
@@ -97,6 +103,14 @@ public class Board {
 		return true;
 	}
 
+	/**
+	 * TODO
+	 * Adds effect of bomb to tile.
+	 * Currently instantly blows up, will implement time thing.
+	 * @param x x position of tile on map
+	 * @param y y position of tile on map
+	 * @return {@code true} if bomb can be placed at that location.
+	 */
 	public boolean addBomb(int x, int y) {
 		int startY = y * EXTRA_PADDING;
 		int startX = x * EXTRA_PADDING;
@@ -204,7 +218,7 @@ public class Board {
 
 	}
 
-	public void eliminateEmpties() {
+	private void eliminateEmpties() {
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 				if (board[i][j] instanceof LightTile) {

@@ -134,7 +134,7 @@ public abstract class TileType {
 	/**
 	 * Place stop sign on tile. XX
 	 */
-	public void placeStopSign() {
+	protected void placeStopSign() {
 		itemHP = 3; // Should call Item class go get health of stop sign
 		isBlocked = true;
 	}

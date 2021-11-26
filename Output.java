@@ -327,6 +327,7 @@ public class Output extends Application {
 	 *              occurred.
 	 * @author Liam O'Reilly
 	 * @author Jing Shiang Gu
+	 * TODO: Check if coordinate is already in list and say no
 	 */
 	private void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
@@ -334,7 +335,7 @@ public class Output extends Application {
 
 		stopSignPlace.add(new int[] { (int) y, (int) x });
 		stopSignPlace.add(new int[] { 50, 50 });
-		m.addStopSign((int) x, (int) y);
+		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
 
 		// Draw an icon at the dropped location.
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
