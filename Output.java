@@ -113,22 +113,8 @@ public class Output extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		GRASS_IMAGE = new Image("Grass.png");
-		TILE_IMAGE = new Image("Tile.png");
-		RAT_IMAGE = new Image("Rat.png");
-		STOP_SIGN = new Image("Stop_Sign.png");
-		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;
-
 		BorderPane root = createGameGUI();
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
-		m = new Board(properMap1, 17, 11);
-		stopSignPlace = new ArrayList<>();
-
-		drawMap();
-		moveRat();
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -232,11 +218,23 @@ public class Output extends Application {
 	 * @return the GUI
 	 */
 	public BorderPane createGameGUI() {
-		BorderPane root = new BorderPane();
+		GRASS_IMAGE = new Image("Grass.png");
+		TILE_IMAGE = new Image("Tile.png");
+		RAT_IMAGE = new Image("Rat.png");
+		STOP_SIGN = new Image("Stop_Sign.png");
+		RAT_WIDTH = 30;
+		RAT_HEIGHT = 45;
+		stopSignPlace = new ArrayList<>();
 		
+		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
+		
+		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		m = new Board(properMap1, 17, 11);
+		drawMap();
+		moveRat();
 
 		return root;
 	}
@@ -435,7 +433,11 @@ public class Output extends Application {
 
 	public static void main(String[] args) {
 		System.out.println("Start");
-		launch(args);
+		try {
+			launch(args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println("End");
 	}
 }
