@@ -59,43 +59,68 @@ public class Output extends Application {
 	private static final int CANVAS_HEIGHT = 550;
 
 	/**
-	 * Number of tiles in the x axis.
-	 */
-	private static final int GRID_WIDTH_NUMBER = 17;
-	/**
-	 * Number of tiles in the y axis.
-	 */
-	private static final int GRID_HEIGHT_NUMBER = 11;
-
-	/**
-	 * Height and width of Tile.
+	 * Height and width of a Tile.
 	 */
 	public static final int TILE_SIZE = 50;
 
+	/**
+	 * Position multiplier of where rat is.
+	 */
 	public static final int RAT_POSITION = 25;
 
 	/**
-	 * 
+	 * Speed of adult rat. Baby rats are 2x.
 	 */
 	public static final int NORMAL_RAT_SPEED = 25;
 
 	/**
 	 * Offset needed to center the Rat along the x axis.
 	 */
-	public static final int TILE_WIDTH_OFFSET = 10;
+	public static final int TILE_X_OFFSET = 10;
 
-	// private Image playerImage;
+	/**
+	 * Images of map items.
+	 */
 	public static Image GRASS_IMAGE;
 	public static Image TILE_IMAGE;
-	public static Image RAT_IMAGE; // Change to ImageView
-	public static Image STOP_SIGN;
-	private Board m;
+	
+	/**
+	 * Image of rat
+	 */
+	private static Image RAT_IMAGE; // Change to ImageView to allow rotatation
+	
+	/**
+	 * Image of Stop sign
+	 */
+	private static Image STOP_SIGN;
+	
+	/**
+	 * Draggable image for stop sign.
+	 */
 	ImageView draggableStop = new ImageView();
+	
+	/**
+	 * Board of the game
+	 */
+	private Board m;
+	
+	/**
+	 * Width of rat, baby rat is half. TODO
+	 */
 	public static int RAT_WIDTH;
 	public static int RAT_HEIGHT;
 
+	/**
+	 * Canvas of map
+	 */
 	private Canvas mapCanvas;
+	/**
+	 * Canvas for all rat classes + death rat.
+	 */
 	private Canvas ratCanvas;
+	/**
+	 * Canvas for all items not including death rat.
+	 */
 	private Canvas itemCanvas;
 
 	Label currLevel;
@@ -108,8 +133,17 @@ public class Output extends Application {
 	 * The Rats in the game window which needs to move.
 	 */
 	private static HashMap<Direction, ArrayList<int[]>> currMovement;
-	private Timeline tickTimeline;
-	int step;
+	
+	/**
+	 * Iterating over moving the rat.
+	 */
+	private Timeline ratMoveTimeline;
+	
+	/**
+	 * Number of steps rat has taken during current iteration of rat movement.
+	 * 2x for baby rats.
+	 */
+	private int step;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -131,12 +165,12 @@ public class Output extends Application {
 	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
 	 * currently allows rats to move around.
 	 */
-	public void runCycle() {
+	private void runCycle() {
 		currMovement = new HashMap<>();
 		step = 0;
 		m.runAllTiles();
 
-		tickTimeline.play();
+		ratMoveTimeline.play();
 		
 		//Set points
 		
@@ -146,15 +180,15 @@ public class Output extends Application {
 	/**
 	 * Criteria for Rat movements.
 	 */
-	public void moveRat() {
-		tickTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
-		tickTimeline.setCycleCount(NORMAL_RAT_SPEED);
+	private void moveRat() {
+		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
+		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
 	/**
 	 * Draws the rats onto the game canvas.
 	 */
-	public void drawRat() {
+	private void drawRat() {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
@@ -165,7 +199,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
-						TILE_WIDTH_OFFSET, i[0] * RAT_POSITION - step * i[2],
+						TILE_X_OFFSET, i[0] * RAT_POSITION - step * i[2],
 						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
@@ -174,7 +208,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
-						TILE_WIDTH_OFFSET + step * i[2], i[0] * RAT_POSITION,
+						TILE_X_OFFSET + step * i[2], i[0] * RAT_POSITION,
 						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
@@ -183,7 +217,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
-						TILE_WIDTH_OFFSET, i[0] * RAT_POSITION + step * i[2],
+						TILE_X_OFFSET, i[0] * RAT_POSITION + step * i[2],
 						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
@@ -192,7 +226,7 @@ public class Output extends Application {
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
-						TILE_WIDTH_OFFSET - step * i[2], i[0] * RAT_POSITION,
+						TILE_X_OFFSET - step * i[2], i[0] * RAT_POSITION,
 						RAT_WIDTH, RAT_HEIGHT);
 			}
 		}
@@ -217,7 +251,7 @@ public class Output extends Application {
 	 * 
 	 * @return the GUI
 	 */
-	public BorderPane createGameGUI() {
+	private BorderPane createGameGUI() {
 		GRASS_IMAGE = new Image("Grass.png");
 		TILE_IMAGE = new Image("Tile.png");
 		RAT_IMAGE = new Image("Rat.png");
@@ -244,7 +278,7 @@ public class Output extends Application {
 	 * 
 	 * @return Game canvas
 	 */
-	public Pane createCenterMap() {
+	private Pane createCenterMap() {
 		Pane root = new Pane();
 		//Creating canvases
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -278,7 +312,7 @@ public class Output extends Application {
 	 * Redraws all stop signs onto the map.
 	 * TODO Hopefully can be upgraded to draw all items.
 	 */
-	public void drawItems() {
+	private void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		for (int[] i : stopSignPlace) {
@@ -294,7 +328,7 @@ public class Output extends Application {
 	 * @author Liam O'Reilly
 	 * @author Jing Shiang Gu
 	 */
-	public void placeStopSign(DragEvent event) {
+	private void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -312,7 +346,7 @@ public class Output extends Application {
 	 * 
 	 * @return the menu
 	 */
-	public HBox createTopMenu() {
+	private HBox createTopMenu() {
 		HBox root = new HBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
@@ -338,7 +372,7 @@ public class Output extends Application {
 	 * 
 	 * @return the right menu
 	 */
-	public VBox createRightMenu() {
+	private VBox createRightMenu() {
 		VBox root = new VBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
@@ -421,7 +455,7 @@ public class Output extends Application {
 	/**
 	 * Draws map onto screen
 	 */
-	public void drawMap() {
+	private void drawMap() {
 		// Get the Graphic Context of the canvas. This is what we draw on.
 		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 
