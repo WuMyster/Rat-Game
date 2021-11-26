@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 
+ * Superclass of all tile types.
  * @author Jing Shiang Gu
- *
+ * 
  */
 public abstract class TileType {
 
@@ -84,14 +84,6 @@ public abstract class TileType {
 		this.X_Y_POS = xyPos;
 		resetTile();
 	}
-	
-	private void resetTile() {
-		itemOnTile = null;
-		itemHP = 0;
-		itemDamageType = null;
-		isBlocked = false;
-		nextBlock =  new HashMap<>();	
-	}
 
 	/**
 	 * For graph, this {@code Tile} will know about the {@code Tile} and
@@ -109,15 +101,6 @@ public abstract class TileType {
 		this.directions = direction;
 	}
 
-	/**
-	 * Switches out old list of Rats the tile was working with, with the list the
-	 * Tile is going to be working on now
-	 */
-	public void setCurrRat() {
-		currBlock = nextBlock;
-		nextBlock = new HashMap<>();
-	}
-	
 	/**
 	 * Returns true if rat dies after being given item
 	 * @param r the rat recieving the item
@@ -138,7 +121,7 @@ public abstract class TileType {
 		return true;
 	}
 	
-	//??????? TODO
+	//??????? TODO }Item{
 	protected boolean setTileItem(Item i, int x, int y) {
 		if (i instanceof StopSign) {
 			//itemHP = StopSign. HEALTH
@@ -149,23 +132,21 @@ public abstract class TileType {
 	}
 
 	/**
-	 * Returns {@code true} if {@code Tile} cannot be accessed. XX
-	 * In future, should be removed to just call damageStopSign. TODO
-	 * @return {@code true} if this tile cannot be accessed to
-	 * @deprecated
+	 * Place stop sign on tile. XX
 	 */
-	public Boolean isTileBlocked() {
-		return isBlocked;
+	public void placeStopSign() {
+		itemHP = 3; // Should call Item class go get health of stop sign
+		isBlocked = true;
 	}
 
 	/**
-	 * Damages stop sign with the number of rats bouncing off it.
+	 * Returns number of rats that can go onto this tile.
 	 * 
 	 * @param t the tile that is requesting the information
 	 * @param n number of rats
 	 * @return the number of rats that can pass through it
 	 */
-	public int damageStopSign(TileType t, int n) {
+	public int numsRatsCanEnter(TileType t, int n) {
 		if (!isBlocked) {
 			return n;
 		}
@@ -178,36 +159,52 @@ public abstract class TileType {
 		isBlocked = false;
 		return Math.abs(itemHP);
 	}
-
+	
 	/**
-	 * Place stop sign on tile. XX
+	 * Add bomb item onto Tile??.
 	 */
-	public void placeStopSign() {
-		itemHP = 3; // Should call Item class go get health of stop sign
-		isBlocked = true;
-		// GUI
+	public void placeBomb() {
+		itemOnTile = new Bomb();
 	}
 	
+	/**
+	 * Blow up this tile??.
+	 */
 	public void blowUp() {
 		//Item delete
 		//Rat delete, rat tell rat controller
 		resetTile();
 		System.out.println("BLOWN UP");
 	}
-	
-	public void placeBomb() {
-		itemOnTile = new Bomb();
-	}
 
 	/**
-	 * Add rat from other tile to this tile
+	 * Add rat that is going to this tile.
 	 * 
 	 * @param r rat to be added to this Tile
 	 * @param d direction the rat came from
 	 */
 	public void addRat(Rat r, Direction d) {
-		// System.out.println("Trying to place");
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
 		nextBlock.get(d).add(r);
 	}
+
+	/**
+	 * Sets list of rats the tile is currently dealing with
+	 */
+	public void setCurrRat() {
+		currBlock = nextBlock;
+		nextBlock = new HashMap<>();
+	}
+	
+	/**
+	 * Empties tile of all attributes/ things on tile.
+	 */
+	private void resetTile() {
+		itemOnTile = null;
+		itemHP = 0;
+		itemDamageType = null;
+		isBlocked = false;
+		nextBlock =  new HashMap<>();	
+	}
+	
 }
