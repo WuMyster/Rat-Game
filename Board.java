@@ -153,11 +153,11 @@ public class Board {
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				if (board[i][j] == null) {
-					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
-							Output.TILE_SIZE);
+					gc.drawImage(Main.GRASS_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+							Main.TILE_SIZE);
 				} else {
-					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
-							Output.TILE_SIZE);
+					gc.drawImage(Main.TILE_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+							Main.TILE_SIZE);
 				}
 			}
 			x = 0;

@@ -123,7 +123,7 @@ public abstract class TileType {
 	
 	//??????? TODO }Item{
 	protected boolean setTileItem(Item i, int x, int y) {
-		if (i instanceof StopSign) {
+		if (i instanceof Item) { //StopSign
 			//itemHP = StopSign. HEALTH
 			isBlocked = true;
 			//itemOnTile = new StopSign()?
@@ -154,7 +154,7 @@ public abstract class TileType {
 		if (itemHP > 0) {
 			return 0;
 		}
-		Output.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+		Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
 				X_Y_POS[1] / Board.EXTRA_PADDING});
 		isBlocked = false;
 		return Math.abs(itemHP);
@@ -164,7 +164,7 @@ public abstract class TileType {
 	 * Add bomb item onto Tile??.
 	 */
 	public void placeBomb() {
-		itemOnTile = new Bomb();
+		//itemOnTile = new Bomb();
 	}
 	
 	/**

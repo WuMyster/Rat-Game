@@ -44,7 +44,7 @@ public class LightTile extends TileType {
 				Direction goTo = prevDirection.opposite(); // This can be opposite due to nature of tile
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
-					Output.addCurrMovement(X_Y_POS, false, goTo);
+					Main.addCurrMovement(X_Y_POS, false, goTo);
 					tile.addRat(ratList.get(i), prevDirection);
 				}
 			}

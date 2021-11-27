@@ -39,7 +39,7 @@ import javafx.util.Duration;
  * @author Jing Shiang Gu
  *
  */
-public class Output extends Application {
+public class Main extends Application {
 	/**
 	 * Width of the window.
 	 */
