@@ -2,3 +2,9 @@
 /bin/
 *.classpath
 *.project
+CS230_Rats.iml
+.idea/vcs.xml
+.idea/runConfigurations.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/checkstyle-idea.xml
