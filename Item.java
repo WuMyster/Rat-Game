@@ -3,6 +3,7 @@
  * @author 
  *
  */
-public class Item {
+abstract class Item {
+    public abstract void itemAction(Rat rat);
 
 }
