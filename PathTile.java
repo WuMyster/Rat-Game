@@ -58,16 +58,16 @@ public class PathTile extends TileType {
 		}
 	}
 	
+	@Override
+	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
+		//Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+		this.addRat(r, prevDirection.opposite());
+	}
+	
 	//Debug Speeds up aging
 	private void timeTravel(Rat r) {
 		for(int i = 0; i < 45; i++) {
 			r.incrementAge();
 		}
 	} 	
-	
-	@Override
-	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-		Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-		this.addRat(r, goTo);
-	}
 }

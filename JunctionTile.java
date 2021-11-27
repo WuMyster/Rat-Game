@@ -74,7 +74,7 @@ public class JunctionTile extends TileType {
 		//System.out.println("Junction Tile speed not implemented yet");
 
 		//Maybe try inserting .opposite to fix turn around issues
-		Direction goTo = getADirection(prevDirection);
-		this.addRat(r, goTo);
+		//Direction goTo = getADirection(prevDirection);
+		this.addRat(r, prevDirection.opposite());
 	}
 }
