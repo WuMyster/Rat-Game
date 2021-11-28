@@ -37,10 +37,11 @@ public class LightTile extends TileType {
 
 	@Override
 	public void getNextDirection() {
-		for (Direction goTo : currBlock.keySet()) {
-			ArrayList<Rat> ratList = currBlock.get(goTo);
+		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 
 			if (!ratList.isEmpty()) {
+				Direction goTo = prevDirection.opposite();
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
 					Main.addCurrMovement(X_Y_POS, false, goTo);
