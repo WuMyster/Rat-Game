@@ -64,7 +64,7 @@ public class LightTile extends TileType {
 	 * This tile will not have any stop sign, so it will return 
 	 * number of rats for the next tile
 	 * @param t the tile that is requesting how many rats can go through
-	 * @param n number of rats that tile has
+	 * @param n number of rats that tile the other tile has
 	 */
 	@Override
 	public int numsRatsCanEnter(TileType t, int n) {
