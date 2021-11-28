@@ -153,7 +153,8 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true, 20), Direction.NORTH, 1, 1);
+		m.placeRat(new Rat(true, 20), Direction.SOUTH, 1, 1);
+		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.NORTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
