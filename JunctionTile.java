@@ -39,12 +39,13 @@ public class JunctionTile extends TileType {
 			
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
-							Main.addCurrMovement(X_Y_POS, true, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							//timeTravel(ratList.get(i));
 						} else {
 							//TODO System.out.println("NOT CHILD");
-							Main.addCurrMovement(X_Y_POS, false, goTo);
+							RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
+							Main.addCurrMovement(X_Y_POS, goTo, gen);
 							tile.addRat(ratList.get(i), goTo.opposite());
 						}
 					}
