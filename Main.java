@@ -86,8 +86,11 @@ public class Main extends Application {
 	
 	/**
 	 * Image of rat
-	 */
-	private static Image RAT_IMAGE; // Change to ImageView to allow rotatation
+	 */// Change to ImageView to allow rotatation
+	private static Image BABY_RAT;
+	private static Image MALE_RAT;
+	private static Image FEMALE_RAT;
+	private static Image DEATH_RAT;
 	
 	/**
 	 * Image of Stop sign
@@ -199,7 +202,7 @@ public class Main extends Application {
 		currDirection = currMovement.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+				gc.drawImage(BABY_RAT, i[1] * RAT_POSITION + 
 						TILE_X_OFFSET, i[0] * RAT_POSITION - step * i[2],
 						RAT_WIDTH, RAT_HEIGHT);
 			}
@@ -208,7 +211,7 @@ public class Main extends Application {
 		currDirection = currMovement.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+				gc.drawImage(MALE_RAT, i[1] * RAT_POSITION + 
 						TILE_X_OFFSET + step * i[2], i[0] * RAT_POSITION,
 						RAT_WIDTH, RAT_HEIGHT);
 			}
@@ -217,7 +220,7 @@ public class Main extends Application {
 		currDirection = currMovement.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+				gc.drawImage(FEMALE_RAT, i[1] * RAT_POSITION + 
 						TILE_X_OFFSET, i[0] * RAT_POSITION + step * i[2],
 						RAT_WIDTH, RAT_HEIGHT);
 			}
@@ -226,7 +229,7 @@ public class Main extends Application {
 		currDirection = currMovement.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
-				gc.drawImage(RAT_IMAGE, i[1] * RAT_POSITION + 
+				gc.drawImage(DEATH_RAT, i[1] * RAT_POSITION + 
 						TILE_X_OFFSET - step * i[2], i[0] * RAT_POSITION,
 						RAT_WIDTH, RAT_HEIGHT);
 			}
@@ -255,7 +258,14 @@ public class Main extends Application {
 	private BorderPane createGameGUI() {
 		GRASS_IMAGE = new Image("Grass.png");
 		TILE_IMAGE = new Image("Tile.png");
-		RAT_IMAGE = new Image("Rat.png");
+		
+		//TODO
+		
+		BABY_RAT = new Image("BabyRat.png");
+		MALE_RAT = new Image("MaleRat.png");
+		FEMALE_RAT = new Image("FemaleRat.png");
+		DEATH_RAT = new Image("DeathRat.png");
+		
 		STOP_SIGN = new Image("Stop_Sign.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
