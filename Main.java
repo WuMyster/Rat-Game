@@ -157,7 +157,8 @@ public class Main extends Application {
 		primaryStage.show();
 
 		m.placeRat(new Rat(true, 20), Direction.SOUTH, 1, 1);
-		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.NORTH, 1, 1);
+		m.placeRat(new Rat(true, 20), Direction.SOUTH, 5, 1);
+		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.SOUTH, 1, 1);
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
@@ -193,10 +194,17 @@ public class Main extends Application {
 	 * Goes through each type of rats to draw them onto canvas
 	 */
 	private void goThroughRat() {
-		drawRat(currMovement.get(RatType.DEATH), DEATH_RAT, 2, 1);
-		drawRat(currMovement.get(RatType.MALE), MALE_RAT, 1, 1);
-		drawRat(currMovement.get(RatType.FEMALE), FEMALE_RAT, 1, 1);
-		drawRat(currMovement.get(RatType.BABY), BABY_RAT, 2, 2);
+		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		step += 1;
+		RatType[] rts = RatType.values();
+		Image[] ris = new Image[] {DEATH_RAT, MALE_RAT, FEMALE_RAT, BABY_RAT};
+		int[] speed = new int[] {1, 1, 1, 2}; //Bigger is faster
+		int[] size = new int[] {1, 1, 1, 2}; //Bigger is smaller
+		
+		for (int i = 0; i < 4; i++) {
+			drawRat(currMovement.get(rts[i]), ris[i], speed[i], size[i]);
+		}
 	}
 	/**
 	 * Draws the rats onto the game canvas.
@@ -204,45 +212,50 @@ public class Main extends Application {
 	 * @param ratImage image of rat
 	 */
 	private void drawRat(HashMap<Direction, ArrayList<int[]>> smallerList, Image ratImage, int speed, int size) {
-		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		step += 1;
 
-		// List of rat positions and direction
-		ArrayList<int[]> currDirection;
-		currDirection = smallerList.get(Direction.NORTH);
-		if (currDirection != null) {
-			for (int[] i : currDirection) {
-				gc.drawImage(BABY_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET, i[0] * RAT_POSITION - step * speed,
-						RAT_WIDTH / size, RAT_HEIGHT / size);
+		if (smallerList != null) {
+			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+	
+			// List of rat positions and direction
+			ArrayList<int[]> currDirection;
+			currDirection = smallerList.get(Direction.NORTH);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					gc.drawImage(ratImage, 
+							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+							i[0] * RAT_POSITION - step * speed + (12.5 * (speed - 1)),
+							RAT_WIDTH / size, RAT_HEIGHT / size);
+				}
 			}
-		}
-
-		currDirection = smallerList.get(Direction.EAST);
-		if (currDirection != null) {
-			for (int[] i : currDirection) {
-				gc.drawImage(MALE_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET + step * speed, i[0] * RAT_POSITION,
-						RAT_WIDTH / size, RAT_HEIGHT / size);
+	
+			currDirection = smallerList.get(Direction.EAST);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
+							(TILE_X_OFFSET * size) + step * speed, 
+							i[0] * RAT_POSITION + (12.5 * (speed - 1)),
+							RAT_WIDTH / size, RAT_HEIGHT / size);
+				}
 			}
-		}
-
-		currDirection = smallerList.get(Direction.SOUTH);
-		if (currDirection != null) {
-			for (int[] i : currDirection) {
-				gc.drawImage(FEMALE_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET, i[0] * RAT_POSITION + step * speed,
-						RAT_WIDTH / size, RAT_HEIGHT / size);
+	
+			currDirection = smallerList.get(Direction.SOUTH);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					gc.drawImage(ratImage, 
+							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+							i[0] * RAT_POSITION + step * speed + (12.5 * (speed - 1)),
+							RAT_WIDTH / size, RAT_HEIGHT / size);
+				}
 			}
-		}
-
-		currDirection = smallerList.get(Direction.WEST);
-		if (currDirection != null) {
-			for (int[] i : currDirection) {
-				gc.drawImage(DEATH_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET - step * speed, i[0] * RAT_POSITION,
-						RAT_WIDTH / size, RAT_HEIGHT / size);
+	
+			currDirection = smallerList.get(Direction.WEST);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					gc.drawImage(ratImage, 
+							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
+							i[0] * RAT_POSITION + (12.5 * (speed - 1)),
+							RAT_WIDTH / size, RAT_HEIGHT / size);
+				}
 			}
 		}
 	}
@@ -256,6 +269,7 @@ public class Main extends Application {
 	 */
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
+		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
 		currMovement.get(rt).get(dir).add(pos);
 	}
 
