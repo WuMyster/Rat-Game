@@ -16,6 +16,6 @@ class Poison extends Item {
     }
 
     private void itemUsed () {
-        this.itemHP =- 1;
+        this.itemHP -= 1;
     }
 }
