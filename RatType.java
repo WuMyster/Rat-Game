@@ -1,4 +1,4 @@
 
 public enum RatType {
-	BABY, MALE, FEMALE, DEATH
+	DEATH, MALE, FEMALE, BABY
 }
