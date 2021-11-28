@@ -135,7 +135,7 @@ public class Main extends Application {
 	/**
 	 * The Rats in the game window which needs to move.
 	 */
-	private static HashMap<Direction, ArrayList<int[]>> currMovement;
+	private static HashMap<RatType, HashMap<Direction, ArrayList<int[]>>> currMovement;
 	
 	/**
 	 * Iterating over moving the rat.
@@ -185,56 +185,66 @@ public class Main extends Application {
 	 * Criteria for Rat movements.
 	 */
 	private void moveRat() {
-		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
+		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> goThroughRat()));
 		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
 	/**
-	 * Draws the rats onto the game canvas.
+	 * Goes through each type of rats to draw them onto canvas
 	 */
-	private void drawRat() {
+	private void goThroughRat() {
+		drawRat(currMovement.get(RatType.DEATH), DEATH_RAT, 2, 1);
+		drawRat(currMovement.get(RatType.MALE), MALE_RAT, 1, 1);
+		drawRat(currMovement.get(RatType.FEMALE), FEMALE_RAT, 1, 1);
+		drawRat(currMovement.get(RatType.BABY), BABY_RAT, 2, 2);
+	}
+	/**
+	 * Draws the rats onto the game canvas.
+	 * @param smallerList type of rat you're dealing with
+	 * @param ratImage image of rat
+	 */
+	private void drawRat(HashMap<Direction, ArrayList<int[]>> smallerList, Image ratImage, int speed, int size) {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
 
 		// List of rat positions and direction
 		ArrayList<int[]> currDirection;
-		currDirection = currMovement.get(Direction.NORTH);
+		currDirection = smallerList.get(Direction.NORTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(BABY_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET, i[0] * RAT_POSITION - step * i[2],
-						RAT_WIDTH, RAT_HEIGHT);
+						TILE_X_OFFSET, i[0] * RAT_POSITION - step * speed,
+						RAT_WIDTH / size, RAT_HEIGHT / size);
 			}
 		}
 
-		currDirection = currMovement.get(Direction.EAST);
+		currDirection = smallerList.get(Direction.EAST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(MALE_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET + step * i[2], i[0] * RAT_POSITION,
-						RAT_WIDTH, RAT_HEIGHT);
+						TILE_X_OFFSET + step * speed, i[0] * RAT_POSITION,
+						RAT_WIDTH / size, RAT_HEIGHT / size);
 			}
 		}
 
-		currDirection = currMovement.get(Direction.SOUTH);
+		currDirection = smallerList.get(Direction.SOUTH);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(FEMALE_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET, i[0] * RAT_POSITION + step * i[2],
-						RAT_WIDTH, RAT_HEIGHT);
+						TILE_X_OFFSET, i[0] * RAT_POSITION + step * speed,
+						RAT_WIDTH / size, RAT_HEIGHT / size);
 			}
 		}
 
-		currDirection = currMovement.get(Direction.WEST);
+		currDirection = smallerList.get(Direction.WEST);
 		if (currDirection != null) {
 			for (int[] i : currDirection) {
 				gc.drawImage(DEATH_RAT, i[1] * RAT_POSITION + 
-						TILE_X_OFFSET - step * i[2], i[0] * RAT_POSITION,
-						RAT_WIDTH, RAT_HEIGHT);
+						TILE_X_OFFSET - step * speed, i[0] * RAT_POSITION,
+						RAT_WIDTH / size, RAT_HEIGHT / size);
 			}
 		}
-
 	}
 
 	/**
@@ -244,10 +254,9 @@ public class Main extends Application {
 	 * @param extraSpeed {@code true} if rat is baby
 	 * @param dir direction it's facing
 	 */
-	public static void addCurrMovement(int[] pos, boolean extraSpeed, Direction dir) {
-		currMovement.putIfAbsent(dir, new ArrayList<int[]>());
-		int speed = extraSpeed ? 2 : 1;
-		currMovement.get(dir).add(new int[] { pos[0], pos[1], speed});
+	public static void addCurrMovement(int[] pos, Direction dir, RatType rt) {
+		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
+		currMovement.get(rt).get(dir).add(pos);
 	}
 
 	/**
@@ -258,9 +267,6 @@ public class Main extends Application {
 	private BorderPane createGameGUI() {
 		GRASS_IMAGE = new Image("Grass.png");
 		TILE_IMAGE = new Image("Tile.png");
-		
-		//TODO
-		
 		BABY_RAT = new Image("BabyRat.png");
 		MALE_RAT = new Image("MaleRat.png");
 		FEMALE_RAT = new Image("FemaleRat.png");
