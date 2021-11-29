@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -126,17 +128,53 @@ public class Board {
 	 * @param gc Canvas to draw the board on
 	 */
 	public void drawBoard(GraphicsContext gc) {
+		
+		Image grassImage = new Image("Grass.png");
+		//Image tileImage = new Image("Tile.png");
+		Image[] tunnelImages = new Image[4];
+		for(int i = 0; i < 4; i++) {
+			tunnelImages[i] = new Image("Tunnel" + i + ".png");
+		}
+		
 		int x = 0;
 		int y = 0;
 		
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				if (board[i][j] == null) {
-					gc.drawImage(Main.GRASS_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+					gc.drawImage(grassImage, 
+							x++ * Main.TILE_SIZE, 
+							y * Main.TILE_SIZE, 
+							Main.TILE_SIZE,
+							Main.TILE_SIZE);
+				} else if (board[i][j] instanceof TunnelTile) {
+					Image t = grassImage;
+					
+					if (board[i - EXTRA_PADDING][j] != null &&
+							!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
+						t = tunnelImages[0];
+					} else if (board[i][j + EXTRA_PADDING] != null &&
+							!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
+						t = tunnelImages[1];
+					} else if (board[i + EXTRA_PADDING][j] != null &&
+							!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
+						t = tunnelImages[2];
+					} else if (board[i][j - EXTRA_PADDING] != null &&
+							!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
+						t = tunnelImages[3];
+					} 
+					gc.drawImage(t, 
+							x++ * Main.TILE_SIZE, 
+							y * Main.TILE_SIZE, 
+							Main.TILE_SIZE,
 							Main.TILE_SIZE);
 				} else {
-					gc.drawImage(Main.TILE_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
-							Main.TILE_SIZE);
+					x++;
+//					gc.drawImage(tileImage, 
+//							x++ * Main.TILE_SIZE, 
+//							y * Main.TILE_SIZE, 
+//							Main.TILE_SIZE,
+//							Main.TILE_SIZE);
 				}
 			}
 			x = 0;
@@ -184,7 +222,7 @@ public class Board {
 				case GRASS_TILE -> board[i][j] = null;
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
 				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
-				// case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
+				case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
 				default -> System.out.println("Map error!");
 				}
 				board[i][++j] = new LightTile(i, j);
@@ -212,6 +250,7 @@ public class Board {
 					if (j != 0) {
 						counter += check(board[i][j - 1]) ? 1 : 0;
 					}
+					
 					if (j != xHeight * EXTRA_PADDING - 1) {
 						counter += check(board[i][j + 1]) ? 1 : 0;
 					}

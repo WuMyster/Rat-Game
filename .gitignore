@@ -17,6 +17,9 @@ out/production/CS230_Rats/README.md
 out/production/CS230_Rats/Stop_Sign.png
 out/production/CS230_Rats/Tile.png
 
+# Ignore javadoc files
+Docs/
+Legal/
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij

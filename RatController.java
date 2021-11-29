@@ -15,6 +15,10 @@ public class RatController {
 		
 	}
 	
+	//give item to rat and return boolean of death
 	
+	//isDeath rats -> kill
+	
+	//give list of rats -> rat interact with rat
 	
 }

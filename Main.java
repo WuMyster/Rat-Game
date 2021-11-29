@@ -28,6 +28,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -41,25 +42,27 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 	/**
-	 * Width of the window.
+	 * Width of the window in pixels.
 	 */
 	private static final int WINDOW_WIDTH = 960;
+	
 	/**
-	 * Height of the window.
+	 * Height of the window in pixels.
 	 */
 	private static final int WINDOW_HEIGHT = 600;
 
 	/**
-	 * Width of the game canvas.
+	 * Width of the game canvas in pixels.
 	 */
 	private static final int CANVAS_WIDTH = 850;
+	
 	/**
-	 * Height of the game canvas.
+	 * Height of the game canvas in pixels.
 	 */
 	private static final int CANVAS_HEIGHT = 550;
 
 	/**
-	 * Height and width of a Tile.
+	 * Height and width of a Tile in pixels.
 	 */
 	public static final int TILE_SIZE = 50;
 
@@ -74,26 +77,17 @@ public class Main extends Application {
 	public static final int NORMAL_RAT_SPEED = 25;
 
 	/**
-	 * Offset needed to center the Rat along the x axis.
+	 * Offset needed to center the Rat along the x axis in pixels.
 	 */
 	public static final int TILE_X_OFFSET = 10;
-
+	
 	/**
-	 * Images of map items.
+	 * Offset needed to center the Rat along the y axis in pixels.
 	 */
-	public static Image GRASS_IMAGE;
-	public static Image TILE_IMAGE;
+	private static final int TILE_Y_OFFSET = 10;
 	
 	/**
-	 * Image of rat
-	 */// Change to ImageView to allow rotatation
-	private static Image BABY_RAT;
-	private static Image MALE_RAT;
-	private static Image FEMALE_RAT;
-	private static Image DEATH_RAT;
-	
-	/**
-	 * Image of Stop sign
+	 * Image of Stop sign.
 	 */
 	private static Image STOP_SIGN;
 
@@ -118,29 +112,53 @@ public class Main extends Application {
 	private Board m;
 	
 	/**
-	 * Width of rat, baby rat is half. TODO
+	 * Width of the rat in pixels.
 	 */
 	public static int RAT_WIDTH;
+	
+	/**
+	 * Height of the rat in pixels.
+	 */
 	public static int RAT_HEIGHT;
 
 	/**
-	 * Canvas of map
+	 * Canvas of map tiles.
 	 */
 	private Canvas mapCanvas;
+	
+	/**
+	 * Grey background. TODO
+	 */
+	private Canvas baseCanvas;
+	
 	/**
 	 * Canvas for all rat classes + death rat.
 	 */
 	private Canvas ratCanvas;
+	
 	/**
 	 * Canvas for all items not including death rat.
 	 */
 	private Canvas itemCanvas;
 
-	Label currLevel;
-	Label currPoints;
+	/**
+	 * Level number of current level.
+	 */
+	private Label currLevel;
+	
+	/**
+	 * Number of points accumlated in level so far.
+	 */
+	private Label currPoints;
 
-	// Should eventually turn to HashMap to store all item position
+	/**
+	 * x y coordinates of all stop signs
+	 */
 	private static ArrayList<int[]> stopSignPlace;
+	
+	/**
+	 * x y coordinates of all bomb placements
+	 */
     private static ArrayList<int[]> bombPlace;
 
 	/**
@@ -155,7 +173,7 @@ public class Main extends Application {
 	
 	/**
 	 * Number of steps rat has taken during current iteration of rat movement.
-	 * 2x for baby rats.
+	 * 2x for baby rats and death rats.
 	 */
 	private int step;
 
@@ -192,6 +210,8 @@ public class Main extends Application {
 		//Set points
 		
 		drawItems();
+		
+		//Game end?
 	}
 
 	/**
@@ -209,64 +229,67 @@ public class Main extends Application {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
-		RatType[] rts = RatType.values();
-		Image[] ris = new Image[] {DEATH_RAT, MALE_RAT, FEMALE_RAT, BABY_RAT};
-		int[] speed = new int[] {2, 1, 1, 2}; //Bigger is faster
-		int[] size = new int[] {1, 1, 1, 2}; //Bigger is smaller
 		
-		for (int i = 0; i < 4; i++) {
-			drawRat(currMovement.get(rts[i]), ris[i], speed[i], size[i]);
+		for (RatType rt : RatType.values()) {
+			drawRat(rt);
 		}
 	}
+	
 	/**
 	 * Draws the rats onto the game canvas.
 	 * @param smallerList type of rat you're dealing with
 	 * @param ratImage image of rat
 	 */
-	private void drawRat(HashMap<Direction, ArrayList<int[]>> smallerList, Image ratImage, int speed, int size) {
-
+	private void drawRat(RatType rt) {
+		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
 		if (smallerList != null) {
 			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+			
+			Image[] ratImage = rt.getImage();
+			int size = rt.getSize();
+			int width = RAT_WIDTH / size;
+			int height = RAT_HEIGHT / size;
+			int speed = rt.getSpeed();
 	
 			// List of rat positions and direction
 			ArrayList<int[]> currDirection;
 			currDirection = smallerList.get(Direction.NORTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
+					gc.drawImage(ratImage[0],
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION - step * speed + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
+							width, height);
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.EAST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
-							(TILE_X_OFFSET * size) + step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+					gc.drawImage(ratImage[1], 
+							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) + step * speed, 
+							i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+							height, width);
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.SOUTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
+					gc.drawImage(ratImage[2], 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION + step * speed + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
+							width, height);
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.WEST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
+					gc.drawImage(ratImage[3], 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+							height, width);
 				}
 			}
 		}
@@ -291,12 +314,6 @@ public class Main extends Application {
 	 * @return the GUI
 	 */
 	private BorderPane createGameGUI() {
-		GRASS_IMAGE = new Image("Grass.png");
-		TILE_IMAGE = new Image("Tile.png");
-		BABY_RAT = new Image("BabyRat.png");
-		MALE_RAT = new Image("MaleRat.png");
-		FEMALE_RAT = new Image("FemaleRat.png");
-		DEATH_RAT = new Image("DeathRat.png");
 		
 		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
@@ -310,7 +327,15 @@ public class Main extends Application {
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
 		
-		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		String properMap1;
+		int tunnel = 3;
+		if (tunnel == 0) {
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
+		} else if (tunnel == 1){
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		} else {// if (tunnel == 2) {
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		}
 		m = new Board(properMap1, 17, 11);
 		drawMap();
 		moveRat();
@@ -326,14 +351,21 @@ public class Main extends Application {
 	private Pane createCenterMap() {
 		Pane root = new Pane();
 		//Creating canvases
+		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		
 		//Adding canvas to pane
-		root.getChildren().add(mapCanvas);
+		root.getChildren().add(baseCanvas);
 		root.getChildren().add(ratCanvas);
+		root.getChildren().add(mapCanvas);
 		root.getChildren().add(itemCanvas);
+		
+		
+		GraphicsContext gc = baseCanvas.getGraphicsContext2D();
+		gc.setFill(Color.GRAY);
+		gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 		return root;
 	}
@@ -382,7 +414,6 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		stopSignPlace.add(new int[] { (int) y, (int) x });
-		stopSignPlace.add(new int[] { 50, 50 });
 		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
 
 		// Draw an icon at the dropped location.
@@ -395,7 +426,6 @@ public class Main extends Application {
         double y = Math.floor(event.getY() / TILE_SIZE);
 
         bombPlace.add(new int[] { (int) y, (int) x });
-        bombPlace.add(new int[] { 50, 50 });
         m.addBomb((int) x, (int) y); //Will return boolean if bomb can be placed
 
         // Draw an icon at the dropped location.

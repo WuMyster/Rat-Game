@@ -46,11 +46,12 @@ public class JunctionTile extends TileType {
 						} else {
 							if (ratList.get(i).getDeathRat()) {
 								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH);
+								tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							} else {
 								RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
 								Main.addCurrMovement(X_Y_POS, goTo, gen);
+								tile.addRat(ratList.get(i), goTo.opposite());
 							}
-							tile.addRat(ratList.get(i), goTo.opposite());
 						}
 					}
 					prevDirection = goTo;
