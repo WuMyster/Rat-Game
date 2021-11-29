@@ -64,34 +64,4 @@ public class Bomb {
         }
         return true;
     }
-
-
-
-
-
-
-
-
-    /*
-    public boolean itemAction (int x, int y) {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("test");
-            }
-        }, 5 * 1000);
-    }
-
-    public void run() {
-
-    }
-
-
-    class Detonate extends TimerTask {
-        public void run () {
-            // Figure out how to traverse path and kill all rats
-        }
-    }
-     */
 }
