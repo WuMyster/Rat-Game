@@ -183,16 +183,19 @@ public class Board {
 				} else if (board[i][j] instanceof TunnelTile) {
 					Image t = grassImage;
 					
-					if (board[i - 1][j] != null) {
+					if (board[i - EXTRA_PADDING][j] != null &&
+							!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
 						t = tunnelImages[0];
-					} else if (board[i][j + 1] != null) {
+					} else if (board[i][j + EXTRA_PADDING] != null &&
+							!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
 						t = tunnelImages[1];
-					} else if (board[i + 1][j] != null) {
+					} else if (board[i + EXTRA_PADDING][j] != null &&
+							!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
 						t = tunnelImages[2];
-					} else if (board[i][j - 1] != null) {
+					} else if (board[i][j - EXTRA_PADDING] != null &&
+							!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
 						t = tunnelImages[3];
-					}
-					
+					} 
 					gc.drawImage(t, 
 							x++ * Main.TILE_SIZE, 
 							y * Main.TILE_SIZE, 
