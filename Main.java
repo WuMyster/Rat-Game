@@ -199,6 +199,8 @@ public class Main extends Application {
 		//Set points
 		
 		drawItems();
+		
+		//Game end?
 	}
 
 	/**
@@ -244,7 +246,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage,
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION - step * speed + (12.5 * (size - 1)),
+							i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
 							width, height);
 				}
 			}
@@ -254,7 +256,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
 							(TILE_X_OFFSET * size) + step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (size - 1)),
+							i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
 							width, height);
 				}
 			}
@@ -264,7 +266,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION + step * speed + (12.5 * (size - 1)),
+							i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
 							width, height);
 				}
 			}
@@ -274,7 +276,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (size - 1)),
+							i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
 							width, height);
 				}
 			}
