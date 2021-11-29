@@ -121,26 +121,34 @@ public class Board {
 
 		TileType t = board[startY][startX];
 		while (t != null) {
+			System.out.println(t.X_Y_POS[0] + " 0 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y--][x];
+			System.out.println(t);
 		}
 
 		t = board[startY][startX];
 		while (t != null) {
+			System.out.println(t.X_Y_POS[0] + " 1 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y++][x];
+			System.out.println(t);
 		}
 
 		t = board[startY][startX];
 		while (t != null) {
+			System.out.println(t.X_Y_POS[0] + " 2 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y][x--];
+			System.out.println(t);
 		}
 
 		t = board[startY][startX];
 		while (t != null) {
+			System.out.println(t.X_Y_POS[0] + " 3 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y][x++];
+			System.out.println(t);
 		}
 		return true;
 	}
