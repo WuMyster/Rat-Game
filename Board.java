@@ -57,6 +57,9 @@ public class Board {
 	 */
 	private final static char TUNNEL_TILE = 'T';
 
+	/**
+	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
+	 */
 	public final static int EXTRA_PADDING = 2;
 
 	/**
