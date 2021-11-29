@@ -44,6 +44,7 @@ public class Main extends Application {
 	 * Width of the window.
 	 */
 	private static final int WINDOW_WIDTH = 960;
+	
 	/**
 	 * Height of the window.
 	 */
@@ -79,17 +80,32 @@ public class Main extends Application {
 	public static final int TILE_X_OFFSET = 10;
 
 	/**
-	 * Images of map items.
+	 * For board, image of grass.
 	 */
 	public static Image GRASS_IMAGE;
+	/**
+	 * For board, image of tile.
+	 */
 	public static Image TILE_IMAGE;
 	
 	/**
-	 * Image of rat
-	 */// Change to ImageView to allow rotatation
+	 * Image of baby rat.
+	 */
 	private static Image BABY_RAT;
+	
+	/**
+	 * Image of male adult rat.
+	 */
 	private static Image MALE_RAT;
+	
+	/**
+	 * Image of female adult rat.
+	 */
 	private static Image FEMALE_RAT;
+	
+	/**
+	 * Image of death rat.
+	 */
 	private static Image DEATH_RAT;
 	
 	/**
@@ -127,20 +143,35 @@ public class Main extends Application {
 	 * Canvas of map
 	 */
 	private Canvas mapCanvas;
+	
 	/**
 	 * Canvas for all rat classes + death rat.
 	 */
 	private Canvas ratCanvas;
+	
 	/**
 	 * Canvas for all items not including death rat.
 	 */
 	private Canvas itemCanvas;
 
-	Label currLevel;
-	Label currPoints;
+	/**
+	 * Level number of current level.
+	 */
+	private Label currLevel;
+	
+	/**
+	 * Number of points accumlated in level so far.
+	 */
+	private Label currPoints;
 
 	// Should eventually turn to HashMap to store all item position
+	/**
+	 * x y coordinates of all stop signs
+	 */
 	private static ArrayList<int[]> stopSignPlace;
+	/**
+	 * x y coordinates of all bomb placements
+	 */
     private static ArrayList<int[]> bombPlace;
 
 	/**
@@ -155,7 +186,7 @@ public class Main extends Application {
 	
 	/**
 	 * Number of steps rat has taken during current iteration of rat movement.
-	 * 2x for baby rats.
+	 * 2x for baby rats and death rats.
 	 */
 	private int step;
 
