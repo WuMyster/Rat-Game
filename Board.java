@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -159,16 +160,26 @@ public class Board {
 	 * @param gc Canvas to draw the board on
 	 */
 	public void drawBoard(GraphicsContext gc) {
+
+		Image grassImage = new Image("Grass.png");
+		Image tileImage = new Image("Tile.png");
+		
 		int x = 0;
 		int y = 0;
 		
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				if (board[i][j] == null) {
-					gc.drawImage(Main.GRASS_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+					gc.drawImage(grassImage, 
+							x++ * Main.TILE_SIZE, 
+							y * Main.TILE_SIZE, 
+							Main.TILE_SIZE,
 							Main.TILE_SIZE);
 				} else {
-					gc.drawImage(Main.TILE_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+					gc.drawImage(tileImage, 
+							x++ * Main.TILE_SIZE, 
+							y * Main.TILE_SIZE, 
+							Main.TILE_SIZE,
 							Main.TILE_SIZE);
 				}
 			}

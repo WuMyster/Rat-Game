@@ -41,26 +41,27 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 	/**
-	 * Width of the window.
+	 * Width of the window in pixels.
 	 */
 	private static final int WINDOW_WIDTH = 960;
 	
 	/**
-	 * Height of the window.
+	 * Height of the window in pixels.
 	 */
 	private static final int WINDOW_HEIGHT = 600;
 
 	/**
-	 * Width of the game canvas.
+	 * Width of the game canvas in pixels.
 	 */
 	private static final int CANVAS_WIDTH = 850;
+	
 	/**
-	 * Height of the game canvas.
+	 * Height of the game canvas in pixels.
 	 */
 	private static final int CANVAS_HEIGHT = 550;
 
 	/**
-	 * Height and width of a Tile.
+	 * Height and width of a Tile in pixels.
 	 */
 	public static final int TILE_SIZE = 50;
 
@@ -75,41 +76,12 @@ public class Main extends Application {
 	public static final int NORMAL_RAT_SPEED = 25;
 
 	/**
-	 * Offset needed to center the Rat along the x axis.
+	 * Offset needed to center the Rat along the x axis in pixels.
 	 */
 	public static final int TILE_X_OFFSET = 10;
-
-	/**
-	 * For board, image of grass.
-	 */
-	public static Image GRASS_IMAGE;
-	/**
-	 * For board, image of tile.
-	 */
-	public static Image TILE_IMAGE;
 	
 	/**
-	 * Image of baby rat.
-	 */
-	private static Image BABY_RAT;
-	
-	/**
-	 * Image of male adult rat.
-	 */
-	private static Image MALE_RAT;
-	
-	/**
-	 * Image of female adult rat.
-	 */
-	private static Image FEMALE_RAT;
-	
-	/**
-	 * Image of death rat.
-	 */
-	private static Image DEATH_RAT;
-	
-	/**
-	 * Image of Stop sign
+	 * Image of Stop sign.
 	 */
 	private static Image STOP_SIGN;
 
@@ -134,13 +106,17 @@ public class Main extends Application {
 	private Board m;
 	
 	/**
-	 * Width of rat, baby rat is half. TODO
+	 * Width of the rat in pixels.
 	 */
 	public static int RAT_WIDTH;
+	
+	/**
+	 * Height of the rat in pixels.
+	 */
 	public static int RAT_HEIGHT;
 
 	/**
-	 * Canvas of map
+	 * Canvas of map.
 	 */
 	private Canvas mapCanvas;
 	
@@ -164,11 +140,11 @@ public class Main extends Application {
 	 */
 	private Label currPoints;
 
-	// Should eventually turn to HashMap to store all item position
 	/**
 	 * x y coordinates of all stop signs
 	 */
 	private static ArrayList<int[]> stopSignPlace;
+	
 	/**
 	 * x y coordinates of all bomb placements
 	 */
@@ -324,12 +300,6 @@ public class Main extends Application {
 	 * @return the GUI
 	 */
 	private BorderPane createGameGUI() {
-		GRASS_IMAGE = new Image("Grass.png");
-		TILE_IMAGE = new Image("Tile.png");
-		RatType.BABY.setImage(new Image("BabyRat.png"));
-		RatType.MALE.setImage(new Image("MaleRat.png"));
-		RatType.FEMALE.setImage(new Image("FemaleRat.png"));
-		RatType.DEATH.setImage(new Image("DeathRat.png"));
 		
 		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
