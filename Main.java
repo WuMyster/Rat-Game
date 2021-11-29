@@ -156,9 +156,10 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true, 20), Direction.SOUTH, 1, 1);
-		m.placeRat(new Rat(true, 20), Direction.SOUTH, 5, 1);
-		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.SOUTH, 1, 1);
+		m.placeRat(new Rat(true, 20), Direction.SOUTH, 1, 1); //Baby rat
+		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.SOUTH, 2, 1); //Death Rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
+		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
 		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
@@ -199,7 +200,7 @@ public class Main extends Application {
 		step += 1;
 		RatType[] rts = RatType.values();
 		Image[] ris = new Image[] {DEATH_RAT, MALE_RAT, FEMALE_RAT, BABY_RAT};
-		int[] speed = new int[] {1, 1, 1, 2}; //Bigger is faster
+		int[] speed = new int[] {2, 1, 1, 2}; //Bigger is faster
 		int[] size = new int[] {1, 1, 1, 2}; //Bigger is smaller
 		
 		for (int i = 0; i < 4; i++) {
@@ -223,7 +224,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION - step * speed + (12.5 * (speed - 1)),
+							i[0] * RAT_POSITION - step * speed + (12.5 * (size - 1)),
 							RAT_WIDTH / size, RAT_HEIGHT / size);
 				}
 			}
@@ -233,7 +234,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
 							(TILE_X_OFFSET * size) + step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (speed - 1)),
+							i[0] * RAT_POSITION + (12.5 * (size - 1)),
 							RAT_WIDTH / size, RAT_HEIGHT / size);
 				}
 			}
@@ -243,7 +244,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION + step * speed + (12.5 * (speed - 1)),
+							i[0] * RAT_POSITION + step * speed + (12.5 * (size - 1)),
 							RAT_WIDTH / size, RAT_HEIGHT / size);
 				}
 			}
@@ -253,7 +254,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (speed - 1)),
+							i[0] * RAT_POSITION + (12.5 * (size - 1)),
 							RAT_WIDTH / size, RAT_HEIGHT / size);
 				}
 			}
