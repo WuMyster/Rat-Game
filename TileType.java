@@ -173,6 +173,7 @@ public abstract class TileType {
 	public void blowUp() {
 		//Item delete
 		//Rat delete, rat tell rat controller
+		
 		resetTile();
 		System.out.println("BLOWN UP");
 	}

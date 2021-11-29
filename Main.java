@@ -196,9 +196,10 @@ public class Main extends Application {
 		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> drawRat()));
 		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
-
-	/**
+	/*
 	 * Draws the rats onto the game canvas.
+	 * @param smallerList type of rat you're dealing with
+	 * @param ratImage image of rat
 	 */
 	private void drawRat() {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
@@ -393,6 +394,16 @@ public class Main extends Application {
 
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
+		
+		// Tick Timeline buttons
+		Button startTickTimelineButton = new Button("Blow up");
+		// We add both buttons at the same time to the timeline (we could have done this in two steps).
+		root.getChildren().addAll(startTickTimelineButton);
+
+		// Setup the behaviour of the buttons.
+		startTickTimelineButton.setOnAction(e -> {
+			m.addBomb(5, 8);
+		});
 
 		return root;
 	}
