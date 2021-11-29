@@ -1,3 +1,4 @@
+import javafx.scene.image.Image;
 
 /**
  * 
@@ -12,6 +13,7 @@ public enum RatType {
 	
 	private final int size;
 	private final int speed;
+	private Image art;
 	
 	/**
 	 * Returns size of rat. Bigger is smaller.
@@ -28,6 +30,15 @@ public enum RatType {
 	public int getSpeed() {
 		return speed;
 	}
+	
+	public Image getImage() {
+		return art;
+	}
+	
+	public void setImage(Image art) {
+		this.art = art;
+	}
+	
 	
 	/**
 	 * Set values of each type of rat.
