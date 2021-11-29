@@ -82,6 +82,11 @@ public class Main extends Application {
 	public static final int TILE_X_OFFSET = 10;
 	
 	/**
+	 * Offset needed to center the Rat along the y axis in pixels.
+	 */
+	private static final int TILE_Y_OFFSET = 10;
+	
+	/**
 	 * Image of Stop sign.
 	 */
 	private static Image STOP_SIGN;
@@ -240,7 +245,7 @@ public class Main extends Application {
 		if (smallerList != null) {
 			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 			
-			Image ratImage = rt.getImage();
+			Image[] ratImage = rt.getImage();
 			int size = rt.getSize();
 			int width = RAT_WIDTH / size;
 			int height = RAT_HEIGHT / size;
@@ -251,7 +256,7 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.NORTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage,
+					gc.drawImage(ratImage[0],
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 							i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
 							width, height);
@@ -261,17 +266,17 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.EAST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
-							(TILE_X_OFFSET * size) + step * speed, 
-							i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
-							width, height);
+					gc.drawImage(ratImage[1], 
+							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) + step * speed, 
+							i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+							height, width);
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.SOUTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
+					gc.drawImage(ratImage[2], 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 							i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
 							width, height);
@@ -281,10 +286,10 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.WEST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
+					gc.drawImage(ratImage[3], 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
-							i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
-							width, height);
+							i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+							height, width);
 				}
 			}
 		}

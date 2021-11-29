@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
  *
  */
 public enum RatType {
-	DEATH (1, 2, "DeathRat.png"), 
-	MALE (1, 1, "MaleRat.png"), 
-	FEMALE(1, 1, "FemaleRat.png"), 
-	BABY(2, 2, "BabyRat.png");
+	DEATH (1, 2, "DeathRat"), 
+	MALE (1, 1, "MaleRat"), 
+	FEMALE(1, 1, "FemaleRat"), 
+	BABY(2, 2, "BabyRat");
 	
 	/**
 	 * Size multiplier of rat. Bigger is smaller
@@ -24,7 +24,7 @@ public enum RatType {
 	/**
 	 * Image of rat.
 	 */
-	private Image image;
+	private Image[] image = new Image[4];
 	
 	/**
 	 * Returns size of rat. Bigger is smaller.
@@ -46,7 +46,7 @@ public enum RatType {
 	 * Returns image of rat.
 	 * @return image of rat
 	 */
-	public Image getImage() {
+	public Image[] getImage() {
 		return image;
 	}	
 	
@@ -58,6 +58,13 @@ public enum RatType {
 	private RatType(int size, int speed, String imageLoc) {
 		this.size = size;
 		this.speed = speed;
-		this.image = new Image(imageLoc);
+		try {
+			for(int i = 0; i < 4; i++) {
+				image[i] = new Image("./img/" + imageLoc + i + ".png");
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Image not found: " + imageLoc);
+			System.exit(0);
+		}
 	}
 }
