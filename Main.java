@@ -400,7 +400,6 @@ public class Main extends Application {
         double y = Math.floor(event.getY() / TILE_SIZE);
 
         bombPlace.add(new int[] { (int) y, (int) x });
-        bombPlace.add(new int[] { 50, 50 });
         m.addBomb((int) x, (int) y); //Will return boolean if bomb can be placed
 
         // Draw an icon at the dropped location.
