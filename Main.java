@@ -161,6 +161,11 @@ public class Main extends Application {
 	 */
     private static ArrayList<int[]> bombPlace;
 
+    // Wu test
+    public static ArrayList<int[]> getBombPlace () {
+        return bombPlace;
+    }
+
 	/**
 	 * The Rats in the game window which needs to move.
 	 */
@@ -425,7 +430,8 @@ public class Main extends Application {
         double x = Math.floor(event.getX() / TILE_SIZE);
         double y = Math.floor(event.getY() / TILE_SIZE);
 
-        bombPlace.add(new int[] { (int) y, (int) x });
+        bombPlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
+        // code
         m.addBomb((int) x, (int) y); //Will return boolean if bomb can be placed
 
         // Draw an icon at the dropped location.

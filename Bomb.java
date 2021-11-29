@@ -1,22 +1,20 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Bomb {
-    final int COUNTDOWN = 3; // 3 for the time being. Number denotes seconds.
+    final int COUNTDOWN = 1;
     final int COUNTDOWN_IN_MS = COUNTDOWN * 1000;
-    int x;
-    int y;
     Timer timer = new Timer();
 
     public boolean itemAction(int x, int y) {
-        this.x = x;
-        this.y = y;
-
+        timer.cancel();
         this.timer = new Timer();
 
         TimerTask task = new TimerTask() {
             public void run() {
-                detonate();
+                detonate(x, y);
             }
         };
 
@@ -26,7 +24,9 @@ public class Bomb {
     }
 
 
-    public boolean detonate() {
+    public boolean detonate(int x, int y) {
+        int originalY = y;
+        int originalX = x;
         y *= Board.EXTRA_PADDING;
         x *= Board.EXTRA_PADDING;
         int startY = y;
@@ -62,6 +62,26 @@ public class Bomb {
             t.blowUp();
             t = board[y][x++];
         }
+
+        itemUsed(new int[] {originalY, originalX});
         return true;
+    }
+
+    private void itemUsed(int[] pos) {
+        int[] a = null;
+        for (int[] i : Main.getBombPlace()) {
+            if (Arrays.equals(i, pos)) {
+                a = i;
+            }
+        }
+        Main.getBombPlace().remove(a);
+    }
+
+    /**
+     * Debug
+     * @param array
+     */
+    public static void printArray(ArrayList<int[]> array) {
+        for(int[] item : array) System.out.println(Arrays.toString(item));
     }
 }
