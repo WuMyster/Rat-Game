@@ -53,9 +53,14 @@ public class Board {
 	private final static char JUNCTION_TILE = 'J';
 
 	/**
-	 * Constants of Tile letters from string to Tunnel Tile. XX
+	 * Constants of Tile letters from string to Tunnel Tile. TODO
 	 */
 	private final static char TUNNEL_TILE = 'T';
+
+	/**
+	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
+	 */
+	public final static int EXTRA_PADDING = 2;
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -69,54 +74,78 @@ public class Board {
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
 		try {
-			this.board = new TileType[yHeight][xHeight];
+			this.board = new TileType[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		allTiles = new ArrayList<>();
 		createBoard();
-		createGraph();
+		eliminateEmpties();
+			createGraph();
 	}
 
 	// For debug only
 	public TileType[][] getBoard() {
 		return board;
 	}
-	
+
+	/**
+	 * Adds effect of stop sign to tile
+	 * @param x x position of tile on map
+	 * @param y y position of tile on map
+	 * @return {@code true} if stop sign can be placed
+	 */
 	public boolean addStopSign(int x, int y) {
-		TileType t = board[y][x];
+		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (t == null) {
 			return false;
-		} //else if (board[y][x] instanceof tunnelTile) {
-		
+		} // else if (board[y][x] instanceof tunnelTile) {
+
+        //TODO Wu move this to item
 		t.placeStopSign();
-		
+
 		return true;
 	}
-	
+
+	/**
+	 * TODO
+	 * Adds effect of bomb to tile.
+	 * Currently instantly blows up, will implement time thing.
+	 * @param x x position of tile on map
+	 * @param y y position of tile on map
+	 * @return {@code true} if bomb can be placed at that location.
+	 */
 	public boolean addBomb(int x, int y) {
+		y *= EXTRA_PADDING;
+		x *= EXTRA_PADDING;
 		int startY = y;
 		int startX = x;
-		
+
 		TileType t = board[startY][startX];
 		while (t != null) {
 			t.blowUp();
 			t = board[y--][x];
 		}
-		
+
 		t = board[startY][startX];
+		y = startY;
+		x = startX;
 		while (t != null) {
 			t.blowUp();
 			t = board[y++][x];
 		}
-		
+
 		t = board[startY][startX];
+		y = startY;
+		x = startX;
 		while (t != null) {
 			t.blowUp();
 			t = board[y][x--];
 		}
-		
+
 		t = board[startY][startX];
+		y = startY;
+		x = startX;
 		while (t != null) {
 			t.blowUp();
 			t = board[y][x++];
@@ -132,14 +161,15 @@ public class Board {
 	public void drawBoard(GraphicsContext gc) {
 		int x = 0;
 		int y = 0;
-		for (TileType[] a : board) {
-			for (TileType b : a) {
-				if (b == null) {
-					gc.drawImage(Output.GRASS_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
-							Output.TILE_SIZE);
+		
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
+				if (board[i][j] == null) {
+					gc.drawImage(Main.GRASS_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+							Main.TILE_SIZE);
 				} else {
-					gc.drawImage(Output.TILE_IMAGE, x++ * Output.TILE_SIZE, y * Output.TILE_SIZE, Output.TILE_SIZE,
-							Output.TILE_SIZE);
+					gc.drawImage(Main.TILE_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+							Main.TILE_SIZE);
 				}
 			}
 			x = 0;
@@ -147,65 +177,27 @@ public class Board {
 		}
 	}
 
-	//Debug
-//	public void placeRat() {
-//		board[1][1].addRat(new Rat(), Direction.NORTH);
-//		// placeRatAA(new ArrayList<>(Arrays.asList(new Rat())), new
-//		// ArrayList<>(Arrays.asList(Direction.NORTH)), new
-//		// ArrayList<>(Arrays.asList(new int[] {1,2})));
-//	}
-
 	/**
 	 * Put Rat onto game canvas.
-	 * @param rats 	the rat that's going to the next tile
-	 * @param dir	direction the rat is facing
-	 * @param x		x start position of the rat
-	 * @param y		y start position of the rat
+	 * 
+	 * @param rats the rat that's going to the next tile
+	 * @param dir  direction the rat is facing
+	 * @param x    x start position of the rat
+	 * @param y    y start position of the rat
 	 * 
 	 */
-	public void placeRatA(Rat rats, Direction dir, int x, int y) {
-		board[x][y].addRat(rats, dir);
+	public void placeRat(Rat rats, Direction dir, int x, int y) {
+		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rats, dir);
 	}
 
 	/**
-	 * @param rats list of rats to be added in
-	 * @param dir  direction the rat came from
-	 * @param pos  list of position (x, y) from the top left (Might change this)
-	 */
-	public void placeRatAA(ArrayList<Rat> rats, ArrayList<Direction> dir, ArrayList<int[]> pos) {
-		for (int i = 0; i < rats.size(); i++) {
-			//int[] currPos = pos.get(i);
-			//board[currPos[0]][currPos[1]].addRat(rats.get(i), dir.get(i));
-		}
-	}
-
-	/**
-	 * Creates 2d array of the map.
-	 */
-	private void createBoard() {
-		int counter = 0;
-		for (int i = 0; i < yHeight; i++) {
-			for (int j = 0; j < xHeight; j++) {
-				switch (mapDesign.charAt(counter++)) {
-				case GRASS_TILE -> board[i][j] = null;
-				case PATH_TILE -> board[i][j] = new PathTile(i, j);
-				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
-				//case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
-				default -> System.out.println("Map error!");
-				}
-			}
-		}
-	}
-
-	/**
-	 * Goes through each Tile and moves the rat to the next tile before getting the tiles new list.
+	 * Goes through each Tile and moves the rat to the next tile before getting the
+	 * tiles new list.
 	 */
 	public void runAllTiles() {
-		//Send item to Rat make sure to have boolean to know if it is dead or not
-		
-		
-		
-		//Movement
+		// Send item to Rat make sure to have boolean to know if it is dead or not
+
+		// Movement
 		for (TileType t : allTiles) {
 			t.setCurrRat();
 		}
@@ -214,13 +206,73 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Creates 2d array of the map.
+	 */
+	private void createBoard() {
+		int counter = 0;
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+				switch (mapDesign.charAt(counter++)) {
+				case GRASS_TILE -> board[i][j] = null;
+				case PATH_TILE -> board[i][j] = new PathTile(i, j);
+				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
+				// case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
+				default -> System.out.println("Map error!");
+				}
+				board[i][++j] = new LightTile(i, j);
+			}
+			i++;
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+				board[i][j] = new LightTile(i, j);
+			}
+		}
+
+	}
+
+	private void eliminateEmpties() {
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
+				if (board[i][j] instanceof LightTile) {
+					int counter = 0;
+					if (i != 0) {
+						counter += check(board[i - 1][j]) ? 1 : 0;
+					}
+					if (i != yHeight * EXTRA_PADDING - 1) {
+						counter += check(board[i + 1][j]) ? 1 : 0;
+					}
+
+					if (j != 0) {
+						counter += check(board[i][j - 1]) ? 1 : 0;
+					}
+					if (j != xHeight * EXTRA_PADDING - 1) {
+						counter += check(board[i][j + 1]) ? 1 : 0;
+					}
+
+					if (counter < 2) {
+						board[i][j] = null;
+					}
+				}
+			}
+		}
+	}
+
+	private boolean check(TileType t) {
+		if (t == null) {
+			return false;
+		} else if (t instanceof LightTile) {
+			return false;
+		}
+		return true;
+	}
+
 	// Possible to implement the gui part too!
 	/**
 	 * Converts the 2d array of the map into a graph.
 	 */
 	private void createGraph() {
-		for (int i = 0; i < yHeight; i++) {
-			for (int j = 0; j < xHeight; j++) {
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 
 				if (board[i][j] != null) {
 					allTiles.add(board[i][j]);
@@ -236,7 +288,7 @@ public class Board {
 					}
 
 					// Check East
-					if (j != xHeight - 1) {
+					if (j != xHeight * EXTRA_PADDING - 1) {
 						if (board[i][j + 1] != null) {
 							tiles.add(board[i][j + 1]);
 							direction.add(Direction.EAST);
@@ -244,7 +296,7 @@ public class Board {
 					}
 
 					// Check South
-					if (i != yHeight - 1) {
+					if (i != yHeight * EXTRA_PADDING - 1) {
 						if (board[i + 1][j] != null) {
 							tiles.add(board[i + 1][j]);
 							direction.add(Direction.SOUTH);
@@ -258,8 +310,8 @@ public class Board {
 							direction.add(Direction.WEST);
 						}
 					}
-					board[i][j].setNeighbourTiles(tiles.toArray(new TileType[2]),
-							direction.toArray(new Direction[2]));
+					board[i][j].setNeighbourTiles(tiles.toArray(
+							new TileType[2]), direction.toArray(new Direction[2]));
 				}
 			}
 		}

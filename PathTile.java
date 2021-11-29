@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 
+ * A standard tile that has at most 2 tiles connected to it.
  * @author Jing Shiang Gu
  *
  */
@@ -20,47 +20,62 @@ public class PathTile extends TileType {
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
-	 * where to go and tile class which rats are going to it and from what direction
+	 * where to go and tile class which rats are going to it and from what direction.
 	 * 
 	 * Tells rats on this tile which direction to go and other tile class which rats
-	 * are going to it and from what direction
+	 * are going to it and from what direction.
 	 */
 	@Override
 	public void getNextDirection() {
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 			
-			if (!ratList.isEmpty()) { //Need to change to while i != (ratList.size())
-				int i = 0;
-				Direction goTo = directions[0] == prevDirection ? directions[0] : directions[1];
-				int ratsGoForward; // Number of rats that can keep going onwards
-				if (directions[0] == prevDirection) {
-					goTo = directions[1];
-				} else {
-					goTo = directions[0];
-				}
+			if (!ratList.isEmpty()) { 
+				int i = giveRatItem(ratList.get(0)) ? 1 : 0;
+				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+				int ratsGoForward; // Number of rats that can keep go in current direction
+				
 				while (i != ratList.size()) {	
-							
-					TileType a = neighbourTiles.get(goTo);
-					if (a.isTileBlocked()) {
-						ratsGoForward = a.damageStopSign(ratList.size());
-					} else {
-						ratsGoForward = ratList.size();
-					}
-					
 					TileType tile = neighbourTiles.get(goTo);
+					
+					ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
 					for (; i < ratsGoForward; i++) {
-						Output.addCurrMovement(X_Y_POS, goTo);
-						tile.addRat(ratList.get(i), goTo.opposite());
+						//Future want this to be a switch case statement ratList.get(i).getStatus() should return a RatType
+						if (ratList.get(i).isChild()) {
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY);
+							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
+							//timeTravel(ratList.get(i)); //Speeds up aging of rat
+						} else {
+							if (ratList.get(i).getDeathRat()) {
+								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH);
+								tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
+							} else {
+								RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
+								Main.addCurrMovement(X_Y_POS, goTo, gen);
+								tile.addRat(ratList.get(i), goTo.opposite());
+							}
+							
+						}
 					}
 					
 					Direction tmp = goTo;
 					goTo = prevDirection;
 					prevDirection = tmp;
-				// Prev direction so it keeps going onwards??
 				}
 			}
 		}
 	}
-
+	
+	@Override
+	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
+		//Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+		this.addRat(r, prevDirection.opposite());
+	}
+	
+	//Debug Speeds up aging
+	private void timeTravel(Rat r) {
+		for(int i = 0; i < 45; i++) {
+			r.incrementAge();
+		}
+	} 	
 }

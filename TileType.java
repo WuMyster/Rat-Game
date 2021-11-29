@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 
+ * Superclass of all tile types.
  * @author Jing Shiang Gu
- *
+ * 
  */
 public abstract class TileType {
 
@@ -69,6 +69,11 @@ public abstract class TileType {
 	 * are going to it and from what direction
 	 */
 	public abstract void getNextDirection();
+	
+	/**
+	 * To skip past any lightTiles. (Speed 2, for baby rats)
+	 */
+	public abstract void getAcceleratedDirection(Rat r, Direction prevDirection);
 
 	/**
 	 * Constructor for most normal tiles.
@@ -78,26 +83,6 @@ public abstract class TileType {
 	public TileType(int[] xyPos) {
 		this.X_Y_POS = xyPos;
 		resetTile();
-	}
-	
-	private void resetTile() {
-		itemOnTile = null;
-		itemHP = 0;
-		itemDamageType = null;
-		isBlocked = false;
-		nextBlock =  new HashMap<>();	
-	}
-
-	/**
-	 * For Tiles that used by Rat but cannot be placed.
-	 * 
-	 * @param xyPos       The position on the board where this Tile is
-	 * @param isPlaceable False if item is not placeable on tile, {@code true} by
-	 *                    default
-	 */
-	public TileType(int[] xyPos, boolean isPlaceable) {
-		this(xyPos);
-		this.isBlocked = isPlaceable;
 	}
 
 	/**
@@ -117,31 +102,51 @@ public abstract class TileType {
 	}
 
 	/**
-	 * Switches out old list of Rats the tile was working with, with the list the
-	 * Tile is going to be working on now
+	 * Returns true if rat dies after being given item
+	 * @param r the rat recieving the item
+	 * @return {@code true} if rat dies after being given item
 	 */
-	public void setCurrRat() {
-		currBlock = nextBlock;
-		nextBlock = new HashMap<>();
+	protected boolean giveRatItem(Rat r) {
+		if (itemOnTile == null) {
+			return false;
+		}
+		//Check item damage type and remove health as necessary
+		if (itemHP == 0) {
+			//Run method to do something if needed e.g. bomb
+			itemOnTile = null;
+		}
+		
+		//Method to give item away
+		
+		return true;
+	}
+	
+	//??????? TODO }Item{
+	protected boolean setTileItem(Item i, int x, int y) {
+		if (i instanceof Item) { //StopSign
+			//itemHP = StopSign. HEALTH
+			isBlocked = true;
+			//itemOnTile = new StopSign()?
+		}
+		return true;
 	}
 
 	/**
-	 * Returns true if {@code Tile} cannot be accessed. XX
-	 * In future, should be removed to just call damageStopSign. TODO
-	 * 
-	 * @return {@code true} if this tile cannot be accessed to
+	 * Place stop sign on tile. XX
 	 */
-	public Boolean isTileBlocked() {
-		return isBlocked;
+	protected void placeStopSign() {
+		itemHP = 3; // Should call Item class go get health of stop sign
+		isBlocked = true;
 	}
 
 	/**
-	 * Damages stop sign with the number of rats bouncing off it. XX
+	 * Returns number of rats that can go onto this tile.
 	 * 
+	 * @param t the tile that is requesting the information
 	 * @param n number of rats
 	 * @return the number of rats that can pass through it
 	 */
-	public int damageStopSign(int n) {
+	public int numsRatsCanEnter(TileType t, int n) {
 		if (!isBlocked) {
 			return n;
 		}
@@ -149,40 +154,58 @@ public abstract class TileType {
 		if (itemHP > 0) {
 			return 0;
 		}
-		Output.removeStopSign(X_Y_POS);
+		Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+				X_Y_POS[1] / Board.EXTRA_PADDING});
 		isBlocked = false;
 		return Math.abs(itemHP);
 	}
-
+	
 	/**
-	 * Place stop sign on tile. XX
+	 * Add bomb item onto Tile??.
 	 */
-	public void placeStopSign() {
-		itemHP = 3; // Should call Item class go get health of stop sign
-		isBlocked = true;
-		// GUI
+	public void placeBomb() {
+		//itemOnTile = new Bomb();
 	}
 	
+	/**
+	 * Blow up this tile??.
+	 */
 	public void blowUp() {
 		//Item delete
 		//Rat delete, rat tell rat controller
+		
 		resetTile();
 		System.out.println("BLOWN UP");
 	}
-	
-	public void placeBomb() {
-		blowUp();
-	}
 
 	/**
-	 * Add rat from other tile to this tile
+	 * Add rat that is going to this tile.
 	 * 
 	 * @param r rat to be added to this Tile
 	 * @param d direction the rat came from
 	 */
 	public void addRat(Rat r, Direction d) {
-		//System.out.println("Trying to place");
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
 		nextBlock.get(d).add(r);
 	}
+
+	/**
+	 * Sets list of rats the tile is currently dealing with
+	 */
+	public void setCurrRat() {
+		currBlock = nextBlock;
+		nextBlock = new HashMap<>();
+	}
+	
+	/**
+	 * Empties tile of all attributes/ things on tile.
+	 */
+	private void resetTile() {
+		itemOnTile = null;
+		itemHP = 0;
+		itemDamageType = null;
+		isBlocked = false;
+		nextBlock =  new HashMap<>();	
+	}
+	
 }
