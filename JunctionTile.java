@@ -38,13 +38,18 @@ public class JunctionTile extends TileType {
 					ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
 			
 					for (; i < ratsGoForward; i++) {
+						//Future want this to be a switch case statement ratList.get(i).getStatus() should return a RatType
 						if (ratList.get(i).isChild()) {
-							Main.addCurrMovement(X_Y_POS, true, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							//timeTravel(ratList.get(i));
 						} else {
-							//TODO System.out.println("NOT CHILD");
-							Main.addCurrMovement(X_Y_POS, false, goTo);
+							if (ratList.get(i).getDeathRat()) {
+								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH);
+							} else {
+								RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
+								Main.addCurrMovement(X_Y_POS, goTo, gen);
+							}
 							tile.addRat(ratList.get(i), goTo.opposite());
 						}
 					}
@@ -77,4 +82,11 @@ public class JunctionTile extends TileType {
 		//Direction goTo = getADirection(prevDirection);
 		this.addRat(r, prevDirection.opposite());
 	}
+	
+	//Debug Speeds up aging
+		private void timeTravel(Rat r) {
+			for(int i = 0; i < 45; i++) {
+				r.incrementAge();
+			}
+		} 
 }
