@@ -240,13 +240,9 @@ public class Main extends Application {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
-		RatType[] rts = RatType.values();
-		Image[] ris = new Image[] {DEATH_RAT, MALE_RAT, FEMALE_RAT, BABY_RAT};
-		int[] speed = new int[] {2, 1, 1, 2}; //Bigger is faster
-		int[] size = new int[] {1, 1, 1, 2}; //Bigger is smaller
 		
-		for (int i = 0; i < 4; i++) {
-			drawRat(currMovement.get(rts[i]), ris[i], speed[i], size[i]);
+		for (RatType rt : RatType.values()) {
+			drawRat(rt);
 		}
 	}
 	/**
@@ -254,20 +250,26 @@ public class Main extends Application {
 	 * @param smallerList type of rat you're dealing with
 	 * @param ratImage image of rat
 	 */
-	private void drawRat(HashMap<Direction, ArrayList<int[]>> smallerList, Image ratImage, int speed, int size) {
-
+	private void drawRat(RatType rt) {
+		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
 		if (smallerList != null) {
 			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+			
+			Image ratImage = rt.getImage();
+			int size = rt.getSize();
+			int width = RAT_WIDTH / size;
+			int height = RAT_HEIGHT / size;
+			int speed = rt.getSpeed();
 	
 			// List of rat positions and direction
 			ArrayList<int[]> currDirection;
 			currDirection = smallerList.get(Direction.NORTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
+					gc.drawImage(ratImage,
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 							i[0] * RAT_POSITION - step * speed + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							width, height);
 				}
 			}
 	
@@ -277,7 +279,7 @@ public class Main extends Application {
 					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
 							(TILE_X_OFFSET * size) + step * speed, 
 							i[0] * RAT_POSITION + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							width, height);
 				}
 			}
 	
@@ -287,7 +289,7 @@ public class Main extends Application {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 							i[0] * RAT_POSITION + step * speed + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							width, height);
 				}
 			}
 	
@@ -297,7 +299,7 @@ public class Main extends Application {
 					gc.drawImage(ratImage, 
 							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
 							i[0] * RAT_POSITION + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+							width, height);
 				}
 			}
 		}
@@ -324,10 +326,10 @@ public class Main extends Application {
 	private BorderPane createGameGUI() {
 		GRASS_IMAGE = new Image("Grass.png");
 		TILE_IMAGE = new Image("Tile.png");
-		BABY_RAT = new Image("BabyRat.png");
-		MALE_RAT = new Image("MaleRat.png");
-		FEMALE_RAT = new Image("FemaleRat.png");
-		DEATH_RAT = new Image("DeathRat.png");
+		RatType.BABY.setImage(new Image("BabyRat.png"));
+		RatType.MALE.setImage(new Image("MaleRat.png"));
+		RatType.FEMALE.setImage(new Image("FemaleRat.png"));
+		RatType.DEATH.setImage(new Image("DeathRat.png"));
 		
 		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
