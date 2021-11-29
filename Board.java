@@ -116,39 +116,39 @@ public class Board {
 	 * @return {@code true} if bomb can be placed at that location.
 	 */
 	public boolean addBomb(int x, int y) {
-		int startY = y * EXTRA_PADDING;
-		int startX = x * EXTRA_PADDING;
+		y *= EXTRA_PADDING;
+		x *= EXTRA_PADDING;
+		int startY = y;
+		int startX = x;
 
 		TileType t = board[startY][startX];
 		while (t != null) {
-			System.out.println(t.X_Y_POS[0] + " 0 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y--][x];
-			System.out.println(t);
 		}
 
 		t = board[startY][startX];
+		y = startY;
+		x = startX;
 		while (t != null) {
-			System.out.println(t.X_Y_POS[0] + " 1 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y++][x];
-			System.out.println(t);
 		}
 
 		t = board[startY][startX];
+		y = startY;
+		x = startX;
 		while (t != null) {
-			System.out.println(t.X_Y_POS[0] + " 2 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y][x--];
-			System.out.println(t);
 		}
 
 		t = board[startY][startX];
+		y = startY;
+		x = startX;
 		while (t != null) {
-			System.out.println(t.X_Y_POS[0] + " 3 " + t.X_Y_POS[1]);
 			t.blowUp();
 			t = board[y][x++];
-			System.out.println(t);
 		}
 		return true;
 	}
