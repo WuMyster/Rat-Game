@@ -223,6 +223,7 @@ public class Main extends Application {
 			drawRat(rt);
 		}
 	}
+	
 	/**
 	 * Draws the rats onto the game canvas.
 	 * @param smallerList type of rat you're dealing with
@@ -387,7 +388,6 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		stopSignPlace.add(new int[] { (int) y, (int) x });
-		stopSignPlace.add(new int[] { 50, 50 });
 		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
 
 		// Draw an icon at the dropped location.
