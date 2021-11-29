@@ -28,6 +28,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -116,9 +117,14 @@ public class Main extends Application {
 	public static int RAT_HEIGHT;
 
 	/**
-	 * Canvas of map.
+	 * Canvas of map tiles.
 	 */
 	private Canvas mapCanvas;
+	
+	/**
+	 * Grey background. TODO
+	 */
+	private Canvas baseCanvas;
 	
 	/**
 	 * Canvas for all rat classes + death rat.
@@ -316,7 +322,13 @@ public class Main extends Application {
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
 		
-		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		String properMap1;
+		Boolean tunnel = true;
+		if (tunnel) {
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
+		} else {
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		}
 		m = new Board(properMap1, 17, 11);
 		drawMap();
 		moveRat();
@@ -332,14 +344,21 @@ public class Main extends Application {
 	private Pane createCenterMap() {
 		Pane root = new Pane();
 		//Creating canvases
+		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		
 		//Adding canvas to pane
-		root.getChildren().add(mapCanvas);
+		root.getChildren().add(baseCanvas);
 		root.getChildren().add(ratCanvas);
+		root.getChildren().add(mapCanvas);
 		root.getChildren().add(itemCanvas);
+		
+		
+		GraphicsContext gc = baseCanvas.getGraphicsContext2D();
+		gc.setFill(Color.GRAY);
+		gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 		return root;
 	}
