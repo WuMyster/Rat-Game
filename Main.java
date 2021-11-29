@@ -432,7 +432,7 @@ public class Main extends Application {
 
 		// Setup the behaviour of the buttons.
 		startTickTimelineButton.setOnAction(e -> {
-			m.addBomb(5, 8);
+			m.addBomb(8, 5);
 		});
 
 		return root;
