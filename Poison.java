@@ -5,11 +5,10 @@ class Poison extends Item {
     private int itemHP = 1;
 
     public void itemAction (Rat rat) {
+        // Waiting for ratcontroller kill() to be implemented
         //RatController rc = new RatController();
         //rc.killRat(rat);
 
-        //Test
-        System.out.println("Poison");
         itemUsed();
     }
 

@@ -121,7 +121,6 @@ public class Board {
         return bomb.itemAction(x, y);
 	}
 
-
     public void addPoison(int x, int y) {
         TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 

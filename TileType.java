@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -118,6 +119,8 @@ public abstract class TileType {
 
         if (itemHP == 1) {
             itemOnTile.itemAction(r);
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
         }
 		
@@ -137,13 +140,33 @@ public abstract class TileType {
          */
 
         if (i instanceof Poison) {
-            System.out.println("Poison set on tile"); // Testing purposes
             itemOnTile = i;
-            itemHP = 1;
+            itemHP = ((Poison) i).getItemHP();
         }
 
 		return true;
 	}
+
+    /**
+     * When item is given to rat and used, item is removed from its Arraylist and subsequently
+     * removed from screen.
+     * @param pos
+     */
+    private void itemUsed(int[] pos) {
+        ArrayList<int[]> arr = null;        
+        
+        if (itemOnTile instanceof Poison) {
+            arr = Main.getPoisonPlace();
+        }
+
+        int[] a = null;
+        for (int[] i : arr) {
+            if (Arrays.equals(i, pos)) {
+                a = i;
+            }
+        }
+        arr.remove(a);
+    }
 
 	/**
 	 * Place stop sign on tile. XX

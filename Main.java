@@ -176,7 +176,6 @@ public class Main extends Application {
 	 */
     private static ArrayList<int[]> bombPlace;
 
-    // Wu test
     public static ArrayList<int[]> getBombPlace () {
         return bombPlace;
     }
@@ -185,6 +184,10 @@ public class Main extends Application {
      * x y coordinates of all poison placements
      */
     private static ArrayList<int[]> poisonPlace;
+
+    public static ArrayList<int[]> getPoisonPlace() {
+        return poisonPlace;
+    }
 
 	/**
 	 * The Rats in the game window which needs to move.
