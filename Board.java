@@ -30,7 +30,7 @@ public class Board {
 	/**
 	 * The 2d array of the map. Static so other classes can access this
 	 */
-	private TileType[][] board;
+	private static TileType[][] board;
 
 	/**
 	 * List of all tiles on board.
@@ -87,7 +87,7 @@ public class Board {
 	}
 
 	// For debug only
-	public TileType[][] getBoard() {
+	public static TileType[][] getBoard() {
 		return board;
 	}
 
@@ -118,41 +118,8 @@ public class Board {
 	 * @return {@code true} if bomb can be placed at that location.
 	 */
 	public boolean addBomb(int x, int y) {
-		y *= EXTRA_PADDING;
-		x *= EXTRA_PADDING;
-		int startY = y;
-		int startX = x;
-
-		TileType t = board[startY][startX];
-		while (t != null) {
-			t.blowUp();
-			t = board[y--][x];
-		}
-
-		t = board[startY][startX];
-		y = startY;
-		x = startX;
-		while (t != null) {
-			t.blowUp();
-			t = board[y++][x];
-		}
-
-		t = board[startY][startX];
-		y = startY;
-		x = startX;
-		while (t != null) {
-			t.blowUp();
-			t = board[y][x--];
-		}
-
-		t = board[startY][startX];
-		y = startY;
-		x = startX;
-		while (t != null) {
-			t.blowUp();
-			t = board[y][x++];
-		}
-		return true;
+        Bomb bomb = new Bomb();
+        return bomb.itemAction(x, y);
 	}
 
 	/**
