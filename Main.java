@@ -70,6 +70,11 @@ public class Main extends Application {
 	 * Position multiplier of where rat is.
 	 */
 	public static final int RAT_POSITION = 25;
+	
+	/**
+	 * Time in miliseconds between steps.
+	 */
+	public static final int TIME_BETWEEN_STEPS = 10;
 
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
@@ -164,7 +169,8 @@ public class Main extends Application {
 	/**
 	 * The Rats in the game window which needs to move.
 	 */
-	private static HashMap<RatType, HashMap<Direction, ArrayList<int[]>>> currMovement;
+	private static HashMap<RatType, 
+		HashMap<Direction, ArrayList<int[]>>> currMovement;
 	
 	/**
 	 * Iterating over moving the rat.
@@ -189,11 +195,11 @@ public class Main extends Application {
 		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.SOUTH, 2, 1); //Death Rat
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
-		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
+		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
-		a.setCycleCount(Animation.INDEFINITE);
-		a.play();
+		cycler.setCycleCount(Animation.INDEFINITE);
+		cycler.play();
 	}
 
 	/**
@@ -218,7 +224,9 @@ public class Main extends Application {
 	 * Criteria for Rat movements.
 	 */
 	private void moveRat() {
-		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> goThroughRat()));
+		ratMoveTimeline = new Timeline(
+				new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), 
+						event -> goThroughRat()));
 		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
