@@ -116,7 +116,10 @@ public abstract class TileType {
 			itemOnTile = null;
 		}
 
-        itemOnTile.itemAction(r);
+        if (itemHP == 1) {
+            itemOnTile.itemAction(r);
+            itemOnTile = null;
+        }
 		
 		//Method to give item away
 		
@@ -136,7 +139,7 @@ public abstract class TileType {
         if (i instanceof Poison) {
             System.out.println("Poison set on tile"); // Testing purposes
             itemOnTile = i;
-
+            itemHP = 1;
         }
 
 		return true;
