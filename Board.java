@@ -112,7 +112,6 @@ public class Board {
 	/**
 	 * TODO
 	 * Adds effect of bomb to tile.
-	 * Currently instantly blows up, will implement time thing.
 	 * @param x x position of tile on map
 	 * @param y y position of tile on map
 	 * @return {@code true} if bomb can be placed at that location.
@@ -121,6 +120,16 @@ public class Board {
         Bomb bomb = new Bomb();
         return bomb.itemAction(x, y);
 	}
+
+
+    public void addPoison(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+
+        Poison p = new Poison();
+        t.setTileItem(p, x, y);
+        }
+
+
 
 	/**
 	 * Draws board onto game window.

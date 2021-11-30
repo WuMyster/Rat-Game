@@ -8,6 +8,8 @@ class Poison extends Item {
         RatController rc = new RatController();
         rc.killRat(rat);
 
+        //Test
+        System.out.println("Poison");
         itemUsed();
     }
 

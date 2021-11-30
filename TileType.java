@@ -115,6 +115,8 @@ public abstract class TileType {
 			//Run method to do something if needed e.g. bomb
 			itemOnTile = null;
 		}
+        
+        itemOnTile.itemAction(r);
 		
 		//Method to give item away
 		
@@ -123,11 +125,18 @@ public abstract class TileType {
 	
 	//??????? TODO }Item{
 	protected boolean setTileItem(Item i, int x, int y) {
-//		if (i instanceof Item) { //StopSign
-//			//itemHP = StopSign. HEALTH
-//			isBlocked = true;
-//			//itemOnTile = new StopSign()?
-//		}
+        /*
+		if (i instanceof Item) { //StopSign
+			//itemHP = StopSign. HEALTH
+			isBlocked = true;
+			//itemOnTile = new StopSign()?
+	    }
+         */
+
+        if (i instanceof Poison) {
+            System.out.println("Poison set on tile"); // Testing purposes
+        }
+
 		return true;
 	}
 

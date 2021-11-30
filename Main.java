@@ -110,6 +110,16 @@ public class Main extends Application {
      * Draggable image for bomb.
      */
     ImageView draggableBomb = new ImageView();
+
+    /**
+     * Image of Poison
+     */
+    private static Image POISON;
+
+    /**
+     * Draggable image for poison.
+     */
+    ImageView draggablePoison = new ImageView();
 	
 	/**
 	 * Board of the game
@@ -170,6 +180,11 @@ public class Main extends Application {
     public static ArrayList<int[]> getBombPlace () {
         return bombPlace;
     }
+
+    /**
+     * x y coordinates of all poison placements
+     */
+    private static ArrayList<int[]> poisonPlace;
 
 	/**
 	 * The Rats in the game window which needs to move.
@@ -330,10 +345,12 @@ public class Main extends Application {
 		
 		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
+        POISON = new Image("Poison.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
 		stopSignPlace = new ArrayList<>();
         bombPlace = new ArrayList<>();
+        poisonPlace = new ArrayList<>();
 		
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
@@ -411,6 +428,9 @@ public class Main extends Application {
         for (int[] i : bombPlace) {
             gc.drawImage(BOMB, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
+        for (int[] i : poisonPlace) {
+            gc.drawImage(POISON, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
 	}
 
 	/**
@@ -445,6 +465,19 @@ public class Main extends Application {
         // Draw an icon at the dropped location.
         GraphicsContext gc = itemCanvas.getGraphicsContext2D();
         gc.drawImage(BOMB, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
+    private void placePoison(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        poisonPlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
+        // code
+        m.addPoison((int) x, (int) y); //Will return boolean if bomb can be placed
+
+        // Draw an icon at the dropped location.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(POISON, x * TILE_SIZE, y * TILE_SIZE);
     }
 
 	/**
@@ -509,6 +542,9 @@ public class Main extends Application {
         draggableBomb.setImage(BOMB);
         root.getChildren().add(draggableBomb);
 
+        draggablePoison.setImage(POISON);
+        root.getChildren().add(draggablePoison);
+
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -554,6 +590,24 @@ public class Main extends Application {
             }
         });
 
+        draggablePoison.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggablePoison.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -572,6 +626,12 @@ public class Main extends Application {
 					event.consume();
 				}
                 if (event.getGestureSource() == draggableBomb) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+                if (event.getGestureSource() == draggablePoison) {
                     // Mark the drag event as acceptable by the canvas.
                     event.acceptTransferModes(TransferMode.ANY);
                     // Consume the event. This means we mark it as dealt with.
@@ -609,6 +669,9 @@ public class Main extends Application {
         }
         if (event.getGestureSource() == draggableBomb) {
             placeBomb(event);
+        }
+        if (event.getGestureSource() == draggablePoison) {
+            placePoison(event);
         }
     }
 
