@@ -86,7 +86,6 @@ public class Board {
 			createGraph();
 	}
 
-	// For debug only
 	public static TileType[][] getBoard() {
 		return board;
 	}
@@ -123,12 +122,17 @@ public class Board {
 
     public void addPoison(int x, int y) {
         TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-
         Poison p = new Poison();
+
         t.setTileItem(p, x, y);
         }
 
+    public void addSexToFemale(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        SexChangeToFemale toFemale = new SexChangeToFemale();
 
+        t.setTileItem(toFemale, x, y);
+    }
 
 	/**
 	 * Draws board onto game window.

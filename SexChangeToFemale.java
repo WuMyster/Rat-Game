@@ -13,6 +13,6 @@ public class SexChangeToFemale extends Item {
 
 
         // Need to see how inventory is implemented to implement this properly
-        count -=1;
+        //count -=1;
     }
 }

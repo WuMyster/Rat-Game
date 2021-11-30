@@ -117,16 +117,26 @@ public abstract class TileType {
 			itemOnTile = null;
 		}
 
-        if (itemHP == 1) {
+        if (itemOnTile instanceof Poison) {
             itemOnTile.itemAction(r);
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
                     X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
+            return true;
         }
+
+        if (itemOnTile instanceof SexChangeToFemale) {
+            itemOnTile.itemAction(r);
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemOnTile = null;
+            return false;
+        }
+
 		
 		//Method to give item away
 		
-		return true;
+		return false;
 	}
 	
 	//??????? TODO }Item{
@@ -138,10 +148,11 @@ public abstract class TileType {
 			//itemOnTile = new StopSign()?
 	    }
          */
+        itemOnTile = i;
 
         if (i instanceof Poison) {
-            itemOnTile = i;
             itemHP = ((Poison) i).getItemHP();
+            return true;
         }
 
 		return true;
@@ -153,7 +164,7 @@ public abstract class TileType {
      * @param pos
      */
     private void itemUsed(int[] pos) {
-        ArrayList<int[]> arr = null;        
+        ArrayList<int[]> arr = null;
         
         if (itemOnTile instanceof Poison) {
             arr = Main.getPoisonPlace();

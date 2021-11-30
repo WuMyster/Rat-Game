@@ -111,6 +111,9 @@ public class Main extends Application {
      */
     ImageView draggableBomb = new ImageView();
 
+    private static Image SEX_TO_FEMALE;
+    ImageView draggableSexToFemale = new ImageView();
+
     /**
      * Image of Poison
      */
@@ -188,6 +191,8 @@ public class Main extends Application {
     public static ArrayList<int[]> getPoisonPlace() {
         return poisonPlace;
     }
+
+    private static ArrayList<int[]> sexToFemalePlace;
 
 	/**
 	 * The Rats in the game window which needs to move.
@@ -349,11 +354,13 @@ public class Main extends Application {
 		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
         POISON = new Image("Poison.png");
+        SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
 		stopSignPlace = new ArrayList<>();
         bombPlace = new ArrayList<>();
         poisonPlace = new ArrayList<>();
+        sexToFemalePlace = new ArrayList<>();
 		
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
@@ -483,6 +490,19 @@ public class Main extends Application {
         gc.drawImage(POISON, x * TILE_SIZE, y * TILE_SIZE);
     }
 
+    private void placeSexToFemale(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        sexToFemalePlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
+        // code
+        m.addSexToFemale((int) x, (int) y); //Will return boolean if sex change can be placed
+
+        // Draw an icon at the dropped location.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
 	/**
 	 * Creates the top menu bar. Contains menu options.
 	 * 
@@ -548,6 +568,9 @@ public class Main extends Application {
         draggablePoison.setImage(POISON);
         root.getChildren().add(draggablePoison);
 
+        draggableSexToFemale.setImage(SEX_TO_FEMALE);
+        root.getChildren().add(draggableSexToFemale);
+
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -611,6 +634,24 @@ public class Main extends Application {
             }
         });
 
+        draggableSexToFemale.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggableSexToFemale.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -635,6 +676,13 @@ public class Main extends Application {
                     event.consume();
                 }
                 if (event.getGestureSource() == draggablePoison) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+
+                if (event.getGestureSource() == draggableSexToFemale) {
                     // Mark the drag event as acceptable by the canvas.
                     event.acceptTransferModes(TransferMode.ANY);
                     // Consume the event. This means we mark it as dealt with.
@@ -675,6 +723,9 @@ public class Main extends Application {
         }
         if (event.getGestureSource() == draggablePoison) {
             placePoison(event);
+        }
+        if (event.getGestureSource() == draggableSexToFemale) {
+            placeSexToFemale(event);
         }
     }
 
