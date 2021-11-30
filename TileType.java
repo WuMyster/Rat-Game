@@ -115,7 +115,7 @@ public abstract class TileType {
 			//Run method to do something if needed e.g. bomb
 			itemOnTile = null;
 		}
-        
+
         itemOnTile.itemAction(r);
 		
 		//Method to give item away
@@ -135,6 +135,8 @@ public abstract class TileType {
 
         if (i instanceof Poison) {
             System.out.println("Poison set on tile"); // Testing purposes
+            itemOnTile = i;
+
         }
 
 		return true;

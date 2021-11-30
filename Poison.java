@@ -5,8 +5,8 @@ class Poison extends Item {
     private int itemHP = 1;
 
     public void itemAction (Rat rat) {
-        RatController rc = new RatController();
-        rc.killRat(rat);
+        //RatController rc = new RatController();
+        //rc.killRat(rat);
 
         //Test
         System.out.println("Poison");
