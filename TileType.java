@@ -103,7 +103,7 @@ public abstract class TileType {
 
 	/**
 	 * Returns true if rat dies after being given item
-	 * @param r the rat recieving the item
+	 * @param r the rat receiving the item
 	 * @return {@code true} if rat dies after being given item
 	 */
 	protected boolean giveRatItem(Rat r) {
@@ -123,11 +123,11 @@ public abstract class TileType {
 	
 	//??????? TODO }Item{
 	protected boolean setTileItem(Item i, int x, int y) {
-		if (i instanceof Item) { //StopSign
-			//itemHP = StopSign. HEALTH
-			isBlocked = true;
-			//itemOnTile = new StopSign()?
-		}
+//		if (i instanceof Item) { //StopSign
+//			//itemHP = StopSign. HEALTH
+//			isBlocked = true;
+//			//itemOnTile = new StopSign()?
+//		}
 		return true;
 	}
 
@@ -168,12 +168,16 @@ public abstract class TileType {
 	}
 	
 	/**
+	 * TODO -> Andrew
 	 * Blow up this tile??.
 	 */
 	public void blowUp() {
 		//Item delete
 		//Rat delete, rat tell rat controller
-		
+		if (itemOnTile != null) {
+//			Main.removeBomb(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+//					X_Y_POS[1] / Board.EXTRA_PADDING});
+		}
 		resetTile();
 		System.out.println("BLOWN UP");
 	}
