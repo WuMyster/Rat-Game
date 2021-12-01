@@ -114,9 +114,6 @@ public class Main extends Application {
     private static Image SEX_TO_FEMALE;
     ImageView draggableSexToFemale = new ImageView();
 
-    private static Image SEX_TO_MALE;
-    ImageView draggableSexToMale = new ImageView();
-
     /**
      * Image of Poison
      */
@@ -195,9 +192,7 @@ public class Main extends Application {
         return poisonPlace;
     }
 
-    // TODO Wu I don't think I actually need this
     private static ArrayList<int[]> sexToFemalePlace;
-    private static ArrayList<int[]> sexToMalePlace;
 
 	/**
 	 * The Rats in the game window which needs to move.
@@ -360,14 +355,12 @@ public class Main extends Application {
         BOMB = new Image("Bomb.png");
         POISON = new Image("Poison.png");
         SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
-        SEX_TO_MALE = new Image("SexChangeToMale.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
 		stopSignPlace = new ArrayList<>();
         bombPlace = new ArrayList<>();
         poisonPlace = new ArrayList<>();
         sexToFemalePlace = new ArrayList<>();
-        sexToMalePlace = new ArrayList<>();
 		
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
@@ -505,23 +498,9 @@ public class Main extends Application {
         // code
         m.addSexToFemale((int) x, (int) y); //Will return boolean if sex change can be placed
 
-        // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
-        //GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-        //gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
-    }
-
-    private void placeSexToMale(DragEvent event) {
-        double x = Math.floor(event.getX() / TILE_SIZE);
-        double y = Math.floor(event.getY() / TILE_SIZE);
-
-        sexToMalePlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in
-        // rest of
-        // code
-        m.addSexToMale((int) x, (int) y); //Will return boolean if sex change can be placed
-
-        // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
-        //GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-        //gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+        // Draw an icon at the dropped location.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
     }
 
 	/**
@@ -591,9 +570,6 @@ public class Main extends Application {
 
         draggableSexToFemale.setImage(SEX_TO_FEMALE);
         root.getChildren().add(draggableSexToFemale);
-
-        draggableSexToMale.setImage(SEX_TO_MALE);
-        root.getChildren().add(draggableSexToMale);
 
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
@@ -676,29 +652,10 @@ public class Main extends Application {
             }
         });
 
-        draggableSexToMale.setOnDragDetected(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                // Mark the drag as started.
-                // We do not use the transfer mode (this can be used to indicate different forms
-                // of drags operations, for example, moving files or copying files).
-                Dragboard db = draggableSexToMale.startDragAndDrop(TransferMode.ANY);
-
-                // We have to put some content in the clipboard of the drag event.
-                // We do not use this, but we could use it to store extra data if we wished.
-                ClipboardContent content = new ClipboardContent();
-                content.putString("Hello");
-                db.setContent(content);
-
-                // Consume the event. This means we mark it as dealt with.
-                event.consume();
-            }
-        });
-
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
 		/**
-         * TODO Wu probably change to switch
 		 * @author Liam O'Reilly
 		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
@@ -731,12 +688,6 @@ public class Main extends Application {
                     // Consume the event. This means we mark it as dealt with.
                     event.consume();
                 }
-                if (event.getGestureSource() == draggableSexToMale) {
-                    // Mark the drag event as acceptable by the canvas.
-                    event.acceptTransferModes(TransferMode.ANY);
-                    // Consume the event. This means we mark it as dealt with.
-                    event.consume();
-                }
 			}
 		});
 
@@ -760,7 +711,6 @@ public class Main extends Application {
 	}
 
     /**
-     * TODO Again probably change to switch
      * Reacts to item that is dragged onto canvas.
      * @param event The drag event itself which contains data about the drag that occured.
      */
@@ -776,9 +726,6 @@ public class Main extends Application {
         }
         if (event.getGestureSource() == draggableSexToFemale) {
             placeSexToFemale(event);
-        }
-        if (event.getGestureSource() == draggableSexToMale) {
-            placeSexToMale(event);
         }
     }
 

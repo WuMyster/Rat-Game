@@ -117,7 +117,6 @@ public abstract class TileType {
 			itemOnTile = null;
 		}
 
-        // TODO Wu Maybe switch will be better
         if (itemOnTile instanceof Poison) {
             itemOnTile.itemAction(r);
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
@@ -125,17 +124,11 @@ public abstract class TileType {
             itemOnTile = null;
             return true;
         }
+
         if (itemOnTile instanceof SexChangeToFemale) {
             itemOnTile.itemAction(r);
-            //itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                   // X_Y_POS[1] / Board.EXTRA_PADDING});
-            itemOnTile = null;
-            return false;
-        }
-        if (itemOnTile instanceof SexChangeToMale) {
-            itemOnTile.itemAction(r);
-            //itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-            // X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
             return false;
         }
@@ -161,14 +154,6 @@ public abstract class TileType {
             itemHP = ((Poison) i).getItemHP();
             return true;
         }
-        if (i instanceof SexChangeToFemale) {
-            itemHP = 1;
-            return true;
-        }
-        if (i instanceof SexChangeToMale) {
-            itemHP = 1;
-            return true;
-        }
 
 		return true;
 	}
@@ -183,9 +168,6 @@ public abstract class TileType {
         
         if (itemOnTile instanceof Poison) {
             arr = Main.getPoisonPlace();
-        }
-        if (itemOnTile instanceof SexChangeToFemale) {
-
         }
 
         int[] a = null;

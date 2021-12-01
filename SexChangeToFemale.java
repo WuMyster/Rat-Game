@@ -9,7 +9,6 @@ public class SexChangeToFemale extends Item {
     public void itemAction(Rat a) {
         if (a.getIsMale() == true) {
             a.setIsMale(false);
-            System.out.println("Male to female");
         }
 
 

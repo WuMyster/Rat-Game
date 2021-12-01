@@ -134,13 +134,6 @@ public class Board {
         t.setTileItem(toFemale, x, y);
     }
 
-    public void addSexToMale(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        SexChangeToMale toMale = new SexChangeToMale();
-
-        t.setTileItem(toMale, x, y);
-    }
-
 	/**
 	 * Draws board onto game window.
 	 * 
