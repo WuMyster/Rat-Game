@@ -26,12 +26,12 @@ public class PathTile extends TileType {
 		for (Direction prevDirection : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(prevDirection));
 		}
-		// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
-		for (Direction prevDirection : currDeath.keySet()) {
-			for (DeathRat dr : currDeath.get(prevDirection)) {
-				// aliveRats = dr.rats(aliveRats);
-			}
-		}
+		// Pass in ArrayList of Rats to DeathRats ArrayList of rats still alive
+//		for (Direction prevDirection : currDeath.keySet()) {
+//			for (DeathRat dr : currDeath.get(prevDirection)) {
+//				// aliveRats = dr.rats(aliveRats);
+//			}
+//		}
 		
 		// Now moving death rats
 		for (Direction prevDirection : currDeath.keySet()) {

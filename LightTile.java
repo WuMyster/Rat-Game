@@ -1,7 +1,7 @@
 
 import java.util.ArrayList;
 
-/** 
+/**
  * An invisible tile in between standard tiles, allow interactions between rats
  * and some items (death rat and bomb) outside of the standard tiles
  * 
@@ -17,6 +17,7 @@ public class LightTile extends TileType {
 
 	/**
 	 * Creates a LightTile object storing its position.
+	 * 
 	 * @param x x position on the map
 	 * @param y y position on the map
 	 */
@@ -26,7 +27,8 @@ public class LightTile extends TileType {
 
 	/**
 	 * Will also store tiles around it not caring about direction??.
-	 * @param tiles list of tiles around it
+	 * 
+	 * @param tiles     list of tiles around it
 	 * @param direction list of direction to respective tile in tiles
 	 */
 	@Override
@@ -34,31 +36,35 @@ public class LightTile extends TileType {
 		super.setNeighbourTiles(tiles, direction);
 		this.surrounding = tiles;
 	}
-	
-	// Might need to split up this tile, giveItemsToRat should already have aliveRats list.
-		@Override
-		public void moveDeathRat() {
-			// Pass in ArrayList of rats on this tile.
-			aliveRats = new ArrayList<>();
-			for (Direction prevDirection : currBlock.keySet()) {
-				aliveRats.addAll(currBlock.get(prevDirection));
-			}
-			// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
-			for (Direction prevDirection : currDeath.keySet()) {
-				for (DeathRat dr : currDeath.get(prevDirection)) {
-					// aliveRats = dr.rats(aliveRats);
-				}
-			}
-			
-			// Now moving death rats
-			for (Direction prevDirection : currDeath.keySet()) {
-				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-				for (DeathRat dr : currDeath.get(prevDirection)) {
-					// If dr is alive if (dr.alive){
-					addDeathRat(dr, goTo.opposite());
-				}
+
+	// Might need to split up this tile, giveItemsToRat should already have
+	// aliveRats list.
+	/**
+	 * Test.
+	 */
+	@Override
+	public void moveDeathRat() {
+		// Pass in ArrayList of rats on this tile.
+		aliveRats = new ArrayList<>();
+		for (Direction prevDirection : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(prevDirection));
+		}
+		// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
+		for (Direction prevDirection : currDeath.keySet()) {
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				// aliveRats = dr.rats(aliveRats);
 			}
 		}
+
+		// Now moving death rats
+		for (Direction prevDirection : currDeath.keySet()) {
+			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				// If dr is alive if (dr.alive){
+				addDeathRat(dr, goTo.opposite());
+			}
+		}
+	}
 
 	@Override
 	public void getNextDirection() {
@@ -87,8 +93,9 @@ public class LightTile extends TileType {
 	}
 
 	/**
-	 * This tile will not have any stop sign, so it will return 
-	 * number of rats for the next tile
+	 * This tile will not have any stop sign, so it will return number of rats for
+	 * the next tile
+	 * 
 	 * @param t the tile that is requesting how many rats can go through
 	 * @param n number of rats that tile the other tile has
 	 */

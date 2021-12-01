@@ -11,6 +11,7 @@ public class JunctionTile extends TileType {
 
 	/**
 	 * Creates a JunctionTile object storing its position.
+	 * 
 	 * @param x x position on the map
 	 * @param y y position on the map
 	 */
@@ -33,16 +34,17 @@ public class JunctionTile extends TileType {
 					Direction goTo = getADirection(prevDirection);
 					TileType tile = neighbourTiles.get(goTo);
 					// TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
-					//System.out.println(tile.isBlocked);
+					// System.out.println(tile.isBlocked);
 
 					ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
-			
+
 					for (; i < ratsGoForward; i++) {
-						//Future want this to be a switch case statement ratList.get(i).getStatus() should return a RatType
+						// Future want this to be a switch case statement ratList.get(i).getStatus()
+						// should return a RatType
 						if (ratList.get(i).isChild()) {
 							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
-							//timeTravel(ratList.get(i));
+							// timeTravel(ratList.get(i));
 						} else {
 							if (ratList.get(i).getDeathRat()) {
 								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
@@ -77,23 +79,23 @@ public class JunctionTile extends TileType {
 
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-		//System.out.println("Junction Tile speed not implemented yet");
+		// System.out.println("Junction Tile speed not implemented yet");
 
-		//Maybe try inserting .opposite to fix turn around issues
-		//Direction goTo = getADirection(prevDirection);
+		// Maybe try inserting .opposite to fix turn around issues
+		// Direction goTo = getADirection(prevDirection);
 		this.addRat(r, prevDirection.opposite());
 	}
-	
-	//Debug Speeds up aging
-		private void timeTravel(Rat r) {
-			for(int i = 0; i < 45; i++) {
-				r.incrementAge();
-			}
-		}
 
-		@Override
-		public void moveDeathRat() {
-			// TODO Auto-generated method stub
-			
-		} 
+	// Debug Speeds up aging
+	private void timeTravel(Rat r) {
+		for (int i = 0; i < 45; i++) {
+			r.incrementAge();
+		}
+	}
+
+	@Override
+	public void moveDeathRat() {
+		// TODO Auto-generated method stub
+		System.out.println("Junction death rat movement not done");
+	}
 }
