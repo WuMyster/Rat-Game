@@ -3,14 +3,8 @@
 136 //expected time to eradicate all rats
 75  //points earnt so far in gameplay
 10 //item total cooldown length
-
-GGGGGGGGGGGG //Map, G for grass, P for path, T for tunnel, J for junction
-JPPPTTPPPPPJ
-PGPGGGGGGGGP
-PPJPPTTPPPPJ
-TGPGGGGGPGGP
-JPPPPPPPPPPJ
-GGGGGGGGGGGG
+//Map, G for grass, P for path, T for tunnel, J for junction
+GGGGGGGGGGGGJPPPTTPPPPPJPGPGGGGGGGGPPPJPPTTPPPPJTGPGGGGGPGGPJPPPPPPPPPPJGGGGGGGGGGGG
 //one line for each rat: age, isMale(), position: x,y, direction facing: 0 North, 90 East, isBreeding(), hp, isSterile()
 0 true 1 1 90 false 100 false
 0 true 4 13 0 false 100 false
