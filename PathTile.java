@@ -29,12 +29,13 @@ public class PathTile extends TileType {
 		for (Direction prevDirection : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(prevDirection));
 		}
-		// Pass in ArrayList of Rats to DeathRats ArrayList of rats still alive
-//		for (Direction prevDirection : currDeath.keySet()) {
-//			for (DeathRat dr : currDeath.get(prevDirection)) {
-//				// aliveRats = dr.rats(aliveRats);
-//			}
-//		}
+		// Pass in ArrayList of Rats to DeathRats ArrayList of rats still alive after item on this tile.
+		for (Direction prevDirection : currDeath.keySet()) {
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				aliveRats = dr.killRats(aliveRats);
+				
+			}
+		}
 		
 		// Now moving death rats
 		ArrayList<DeathRat> drs = new ArrayList<>();
@@ -42,23 +43,26 @@ public class PathTile extends TileType {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 			TileType t = neighbourTiles.get(goTo);
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				// If dr is alive if (dr.alive){
-				
-				t.moveDeathRat(dr, goTo.opposite());
-				// Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
-				drs.add(dr);
-				dr.initalMove(X_Y_POS, goTo);
+				if (dr.isAlive()) {
+					t.moveDeathRat(dr, goTo.opposite());
+					// Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
+					drs.add(dr);
+					dr.initalMove(X_Y_POS, goTo);
+				}
 			}
 		}
 		
 		// Remove fallen rats from list
 		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> tmp = new ArrayList<>();
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
-			for(Rat r : rs) {
-				if (!exists(r)) {
-					rs.remove(r);
+			if(rs != null) {
+				for(Rat r : rs) {
+					if (exists(r)) {
+						tmp.add(r);
+					}
 				}
-				// rs.removeIf(n -> (!exists(r)));
+				currBlock.put(prevDirection, tmp);
 			}
 		}
 		return drs;
@@ -67,6 +71,7 @@ public class PathTile extends TileType {
 	private boolean exists(Rat r) {
 		for (Rat rs : aliveRats) {
 			if (rs == r) {
+				
 				// aliveRats.remove(r); //Cut down on costs?
 				return true;
 			}

@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 public class DeathRat {
 	
@@ -6,6 +6,8 @@ public class DeathRat {
 	int[] xyPos;
 	Direction d;
 	int move;
+	
+	int hp = 1; //For now
 	
 	/**
 	 * Constructor for Death Rat with basically garbage args.
@@ -53,9 +55,20 @@ public class DeathRat {
 	public boolean killRat(Rat r, int move) {
 		// If health = 0, don't kill rat, return false
 		// If health = 1, kill rat, set move, return true
+		
 		this.move = move;
 		// Check health
 		return false;
+	}
+	
+	//Need to think of way to prevent being drawn if dead
+	public ArrayList<Rat> killRats(ArrayList<Rat> r) {
+		hp -= r.size();
+		if (hp >= 0) {
+			return new ArrayList<>();
+		}
+		r.subList(r.size() + hp, r.size());
+		return r;
 	}
 	
 	public Rat itemAction() {
