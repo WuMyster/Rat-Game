@@ -141,6 +141,13 @@ public class Board {
         t.setTileItem(toMale, x, y);
     }
 
+    public void addSterilise(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Sterilisation s = new Sterilisation();
+
+        t.setTileItem(s, x, y);
+    }
+
 	/**
 	 * Draws board onto game window.
 	 * 

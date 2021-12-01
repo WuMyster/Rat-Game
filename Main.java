@@ -117,6 +117,9 @@ public class Main extends Application {
     private static Image SEX_TO_MALE;
     ImageView draggableSexToMale = new ImageView();
 
+    private static Image STERILISE;
+    ImageView draggableSterilise = new ImageView();
+
     /**
      * Image of Poison
      */
@@ -195,7 +198,7 @@ public class Main extends Application {
         return poisonPlace;
     }
 
-    // TODO Wu I don't think I actually need this
+    // TODO Wu I won't need these if I don't let the items stay on a tile
     private static ArrayList<int[]> sexToFemalePlace;
     public static ArrayList<int[]> getSexToFemalePlace() {
         return sexToFemalePlace;
@@ -203,6 +206,10 @@ public class Main extends Application {
     private static ArrayList<int[]> sexToMalePlace;
     public static ArrayList<int[]> getSexToMalePlace() {
         return sexToMalePlace;
+    }
+    private static ArrayList<int[]> sterilisePlace;
+    public static ArrayList<int[]> getSterilisePlace() {
+        return sterilisePlace;
     }
 
 	/**
@@ -367,6 +374,7 @@ public class Main extends Application {
         POISON = new Image("Poison.png");
         SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
         SEX_TO_MALE = new Image("SexChangeToMale.png");
+        STERILISE = new Image("img/Sterilise.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
 		stopSignPlace = new ArrayList<>();
@@ -374,6 +382,7 @@ public class Main extends Application {
         poisonPlace = new ArrayList<>();
         sexToFemalePlace = new ArrayList<>();
         sexToMalePlace = new ArrayList<>();
+        sterilisePlace = new ArrayList<>();
 		
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
@@ -460,6 +469,9 @@ public class Main extends Application {
         for (int[] i : sexToMalePlace) {
             gc.drawImage(SEX_TO_MALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
+        for (int[] i : sterilisePlace) {
+            gc.drawImage(STERILISE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
 	}
 
 	/**
@@ -536,6 +548,20 @@ public class Main extends Application {
         gc.drawImage(SEX_TO_MALE, x * TILE_SIZE, y * TILE_SIZE);
     }
 
+    private void placeSterilise(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        sterilisePlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in
+        // rest of
+        // code
+        m.addSterilise((int) x, (int) y); //Will return boolean if sex change can be placed
+
+        // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(STERILISE, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
 	/**
 	 * Creates the top menu bar. Contains menu options.
 	 * 
@@ -607,6 +633,9 @@ public class Main extends Application {
         draggableSexToMale.setImage(SEX_TO_MALE);
         root.getChildren().add(draggableSexToMale);
 
+        draggableSterilise.setImage(STERILISE);
+        root.getChildren().add(draggableSterilise);
+
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -632,6 +661,7 @@ public class Main extends Application {
 		});
 
         /**
+         * TODO Wu find a way to clean this up, reduce repetition
          * @author Liam O'Reilly
          */
         draggableBomb.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -706,6 +736,24 @@ public class Main extends Application {
             }
         });
 
+        draggableSterilise.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggableSterilise.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -744,6 +792,12 @@ public class Main extends Application {
                     event.consume();
                 }
                 if (event.getGestureSource() == draggableSexToMale) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+                if (event.getGestureSource() == draggableSterilise) {
                     // Mark the drag event as acceptable by the canvas.
                     event.acceptTransferModes(TransferMode.ANY);
                     // Consume the event. This means we mark it as dealt with.
@@ -791,6 +845,9 @@ public class Main extends Application {
         }
         if (event.getGestureSource() == draggableSexToMale) {
             placeSexToMale(event);
+        }
+        if (event.getGestureSource() == draggableSterilise) {
+            placeSterilise(event);
         }
     }
 
