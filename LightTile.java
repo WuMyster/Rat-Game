@@ -38,28 +38,44 @@ public class LightTile extends TileType {
 	}
 
 	@Override
-	public void moveDeathRat(DeathRat r, Direction prevDirection) {
+	public void moveDeathRat(DeathRat dr, Direction prevDirection) {
 		
-		// For rats going towards the death rat
+		// For rats going towards the death rat (not including baby rat)
 		ArrayList<Rat> dealing = currBlock.get(prevDirection.opposite());
+		ArrayList<Rat> escaped = new ArrayList<>();
 		if (dealing != null) {
-			while(r.killRat(dealing.get(0), 1) && !dealing.isEmpty()) {
-				dealing.remove(0);
+			for (int i = 0; i < dealing.size(); i++) {
+				if (dr.killRat(dealing.get(i), 1)) {
+					Main.addCurrMovement(X_Y_POS, prevDirection, dealing.get(i).getStatus(), 0);
+				} else {
+					escaped.add(dealing.get(i));
+					System.out.println("ESCAPEED");
+				}
 			}
-			currBlock.put(prevDirection.opposite(), dealing);
+			currBlock.put(prevDirection.opposite(), escaped);
 		}
 		
-		dealing = currBlock.get(prevDirection);
-		if (dealing != null) {
-			while(r.killRat(dealing.get(0), 3) && !dealing.isEmpty()) {
-				dealing.remove(0);
+		// Adult rats going away from death rat (not including baby rat stuff)
+		if (dr.isAlive()) {
+			dealing = currBlock.get(prevDirection);
+			if (dealing != null) {
+				for (int i = 0; i < dealing.size(); i++) {
+					if (dr.killRat(dealing.get(i), 1)) {
+						Main.addCurrMovement(X_Y_POS, 
+								prevDirection.opposite(), 
+								dealing.get(i).getStatus(), 
+								2);
+					} else {
+						escaped.add(dealing.get(i));
+					}
+				}
+				currBlock.put(prevDirection, escaped);
 			}
-			currBlock.put(prevDirection, dealing);
 		}
 		
-		if (r.isAlive()) {
+		if (dr.isAlive()) {
 			TileType t = neighbourTiles.get(prevDirection.opposite());
-			t.addRat(r, prevDirection);
+			t.addRat(dr, prevDirection);
 		}
 	}
 

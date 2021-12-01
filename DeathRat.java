@@ -53,11 +53,11 @@ public class DeathRat {
 	 * @author J
 	 */
 	public boolean killRat(Rat r, int move) {
-		// If health = 0, don't kill rat, return false
-		// If health = 1, kill rat, set move, return true
-		
+		hp -= 1;
+		if (hp >= 0) {
+			return true;
+		}
 		this.move = move;
-		// Check health
 		return false;
 	}
 	
@@ -66,14 +66,12 @@ public class DeathRat {
 		if (r.size() == 0) {
 			return r;
 		}
-		System.out.print(r.size() + " " + hp + " > ");
 		hp -= r.size();
 		if (hp >= 0) {
 			System.out.println();
 			return new ArrayList<>();
 		}
 		this.move = move;
-		System.out.println(r.size() + " " + hp);
 		
 		r.subList(r.size() + hp, r.size());
 		return r;

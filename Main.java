@@ -201,6 +201,7 @@ public class Main extends Application {
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
+		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
 		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
 		// a.setCycleCount(1);
