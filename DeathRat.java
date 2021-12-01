@@ -27,6 +27,11 @@ public class DeathRat {
 		return move;
 	}
 	
+	public boolean isAlive() {
+		// Check hp
+		return true;
+	}
+	
 	/**
 	 * Initial movement parameters for rat.
 	 * @param xyPos xy position it started on
