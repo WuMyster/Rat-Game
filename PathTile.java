@@ -21,6 +21,8 @@ public class PathTile extends TileType {
 	// Might need to split up this tile, giveItemsToRat should already have aliveRats list.
 	@Override
 	public void moveDeathRat() {
+		// Check number of rats and number of lists of rats to just assign it if needed.
+		
 		// Pass in ArrayList of rats on this tile.
 		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
@@ -43,6 +45,7 @@ public class PathTile extends TileType {
 			}
 		}
 		
+		// Remove fallen rats from list
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
 			for(Rat r : rs) {
