@@ -18,7 +18,7 @@ public class PathTile extends TileType {
 		super(new int[] { x, y });
 	}
 	
-	// Might need to split up this tile, giveItemsToRat should already have aliveRats list.
+	// Might need to split up this tile.
 	@Override
 	public void moveDeathRat() {
 		// Pass in ArrayList of rats on this tile.

@@ -37,28 +37,28 @@ public class LightTile extends TileType {
 	
 	// Might need to split up this tile, giveItemsToRat should already have aliveRats list.
 		@Override
-//		public void moveDeathRat() {
-//			// Pass in ArrayList of rats on this tile.
-//			aliveRats = new ArrayList<>();
-//			for (Direction prevDirection : currBlock.keySet()) {
-//				aliveRats.addAll(currBlock.get(prevDirection));
-//			}
-//			// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
-//			for (Direction prevDirection : currDeath.keySet()) {
-//				for (DeathRat dr : currDeath.get(prevDirection)) {
-//					// aliveRats = dr.rats(aliveRats);
-//				}
-//			}
-//			
-//			// Now moving death rats
-//			for (Direction prevDirection : currDeath.keySet()) {
-//				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-//				for (DeathRat dr : currDeath.get(prevDirection)) {
-//					// If dr is alive if (dr.alive){
-//					addDeathRat(dr, goTo.opposite());
-//				}
-//			}
-//		}
+		public void moveDeathRat() {
+			// Pass in ArrayList of rats on this tile.
+			aliveRats = new ArrayList<>();
+			for (Direction prevDirection : currBlock.keySet()) {
+				aliveRats.addAll(currBlock.get(prevDirection));
+			}
+			// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
+			for (Direction prevDirection : currDeath.keySet()) {
+				for (DeathRat dr : currDeath.get(prevDirection)) {
+					// aliveRats = dr.rats(aliveRats);
+				}
+			}
+			
+			// Now moving death rats
+			for (Direction prevDirection : currDeath.keySet()) {
+				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+				for (DeathRat dr : currDeath.get(prevDirection)) {
+					// If dr is alive if (dr.alive){
+					addDeathRat(dr, goTo.opposite());
+				}
+			}
+		}
 
 	@Override
 	public void getNextDirection() {

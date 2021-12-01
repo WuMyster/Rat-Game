@@ -89,5 +89,11 @@ public class JunctionTile extends TileType {
 			for(int i = 0; i < 45; i++) {
 				r.incrementAge();
 			}
+		}
+
+		@Override
+		public void moveDeathRat() {
+			// TODO Auto-generated method stub
+			
 		} 
 }
