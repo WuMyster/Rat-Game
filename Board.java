@@ -217,6 +217,13 @@ public class Board {
 		for (TileType t : allTiles) {
 			t.setCurrRat();
 		}
+		
+		// First move Death rats and any rats in its path
+		for (TileType t : allTiles) {
+			t.moveDeathRat();
+		}
+		
+		// Before moving all other rats
 		for (TileType t : allTiles) {
 			t.getNextDirection();
 		}
