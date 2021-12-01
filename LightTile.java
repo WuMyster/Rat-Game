@@ -37,35 +37,54 @@ public class LightTile extends TileType {
 		this.surrounding = tiles;
 	}
 
+	@Override
+	public void moveDeathRat(DeathRat r, Direction prevDirection) {
+		
+		// For rats going towards the death rat
+		ArrayList<Rat> dealing = currBlock.get(prevDirection.opposite());
+		while(r.killRat(dealing.get(0), 1) && !dealing.isEmpty()) {
+			dealing.remove(0);
+		}
+		currBlock.put(prevDirection.opposite(), dealing);
+	}
+
 	// Might need to split up this tile, giveItemsToRat should already have
 	// aliveRats list.
 	/**
-	 * Test.
+	 * Death Rat should not be on this tile.
 	 */
 	@Override
-	public void getNextDeathRat() {
-		// Pass in ArrayList of rats on this tile.
-		aliveRats = new ArrayList<>();
-		for (Direction prevDirection : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(prevDirection));
-		}
-		// Pass in ArrayList of Rats for each DeathRat -> ArrayList of rats still alive
-		for (Direction prevDirection : currDeath.keySet()) {
-			for (DeathRat dr : currDeath.get(prevDirection)) {
-				// aliveRats = dr.rats(aliveRats);
-			}
-		}
-
-		// Now moving death rats
-		for (Direction prevDirection : currDeath.keySet()) {
-			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-			for (DeathRat dr : currDeath.get(prevDirection)) {
-				// If dr is alive if (dr.alive){
-				addDeathRat(dr, goTo.opposite());
-			}
-		}
+	public ArrayList<DeathRat> getNextDeathRat() {
+//		// Pass in ArrayList of rats on this tile.
+//		aliveRats = new ArrayList<>();
+//		for (Direction prevDirection : currBlock.keySet()) {
+//			aliveRats.addAll(currBlock.get(prevDirection));
+//		}
+//		// Pass in ArrayList of Rats for each DeathRat -> ArrayList of rats still alive
+//		for (Direction prevDirection : currDeath.keySet()) {
+//			for (DeathRat dr : currDeath.get(prevDirection)) {
+//				// aliveRats = dr.rats(aliveRats);
+//			}
+//		}
+//		
+//		ArrayList<DeathRat> drs = new ArrayList<>();
+//		// Now moving death rats
+//		for (Direction prevDirection : currDeath.keySet()) {
+//			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+//			TileType t = neighbourTiles.get(goTo);
+//			for (DeathRat dr : currDeath.get(prevDirection)) {
+//				// If dr is alive if (dr.alive){
+//				
+//				t.moveDeathRat(dr, goTo.opposite());
+//				// Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
+//				drs.add(dr);
+//				dr.initalMove(X_Y_POS, goTo.opposite());
+//			}
+//		}
+		
 		
 		//Since this will deal with all rats on tile, it should set currMovement = new HashMap<>();
+		return null;
 	}
 
 	@Override
@@ -84,6 +103,8 @@ public class LightTile extends TileType {
 			}
 		}
 	}
+	
+	// private buffer
 
 	/**
 	 * Light tile won't decide where it goes, already predetermined by previous tile

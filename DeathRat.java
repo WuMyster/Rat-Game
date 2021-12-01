@@ -41,11 +41,16 @@ public class DeathRat {
 	
 	/**
 	 * Change it's move limit.
+	 * @param r rat to kill
 	 * @param move limit it's going forwards to
 	 * @author J
 	 */
-	public void setMove(int move) {
+	public boolean killRat(Rat r, int move) {
+		// If health = 0, don't kill rat, return false
+		// If health = 1, kill rat, set move, return true
 		this.move = move;
+		// Check health
+		return false;
 	}
 	
 	public Rat itemAction() {
