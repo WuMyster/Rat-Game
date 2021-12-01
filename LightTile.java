@@ -46,7 +46,7 @@ public class LightTile extends TileType {
 		if (dealing != null) {
 			for (int i = 0; i < dealing.size(); i++) {
 				if (dr.killRat(dealing.get(i), 1)) {
-					Main.addCurrMovement(X_Y_POS, prevDirection, dealing.get(i).getStatus(), 0);
+					Main.addCurrMovement(X_Y_POS, prevDirection, dealing.get(i).getStatus(), 3);
 				} else {
 					escaped.add(dealing.get(i));
 					System.out.println("ESCAPEED");

@@ -272,7 +272,12 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.NORTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					if (i[2] == 0 || step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[0],
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					} else if ( step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[0],
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
@@ -284,7 +289,12 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.EAST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					if (i[2] == 0 || step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[1], 
+								i[1] * RAT_POSITION, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[1], 
 								i[1] * RAT_POSITION + step * speed, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
@@ -296,7 +306,12 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.SOUTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					if (i[2] == 0 || step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[2], 
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[2], 
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
@@ -308,7 +323,12 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.WEST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					if (i[2] == 0 || step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[3], 
+								i[1] * RAT_POSITION, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[3], 
 								i[1] * RAT_POSITION - step * speed, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
@@ -330,20 +350,7 @@ public class Main extends Application {
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], 4});
-	}
-	
-	/**
-	 * Changes the movement status of a rat
-	 * @param pos xy position of the rat
-	 * @param dir direction the rat is facing
-	 * @param rt type of rat
-	 * @param move movement status of rat???
-	 * @return
-	 */
-	public static boolean changeCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
-		
-		return true;
+		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move});
 	}
 
 	/**
