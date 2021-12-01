@@ -1,7 +1,7 @@
 
 /**
- * Direction which rat can travel??
- * @author 2010573
+ * Direction the rat can travel
+ * @author Jing Shiang Gu
  *
  */
 public enum Direction {
@@ -12,13 +12,17 @@ public enum Direction {
 	
 	private final int oppo;
 
+	/**
+	 * Sets value for each direction.
+	 * @param oppo number the direction is
+	 */
 	Direction(int oppo) {
 		this.oppo = oppo;
 	}
 	
 	/**
 	 * Returns the opposite direction of current direction
-	 * @return
+	 * @return opposite direction
 	 */
 	Direction opposite() {
 		return Direction.values() [this.oppo];

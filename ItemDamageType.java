@@ -1,6 +1,6 @@
 /**
  * How item loses health
- * @author 2010573
+ * @author Jing Shiang Gu
  *
  */
 public enum ItemDamageType {
