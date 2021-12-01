@@ -186,13 +186,24 @@ public class Board {
 	 * Put Rat onto game canvas.
 	 * 
 	 * @param rats the rat that's going to the next tile
-	 * @param dir  direction the rat is facing
+	 * @param dir  direction the rat is came from
 	 * @param x    x start position of the rat
 	 * @param y    y start position of the rat
 	 * 
 	 */
 	public void placeRat(Rat rats, Direction dir, int x, int y) {
 		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rats, dir);
+	}
+
+	/**
+	 * 
+	 * @param rat death rat to be added to map
+	 * @param dir direction the death rat came from
+	 * @param x x start position of the death rat
+	 * @param y y start position of the death rat
+	 */
+	public void placeRat(DeathRat rat, Direction dir, int x, int y) {
+		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rat, dir);
 	}
 
 	/**
