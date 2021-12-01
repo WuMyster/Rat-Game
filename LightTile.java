@@ -58,7 +58,7 @@ public class LightTile extends TileType {
 		}
 		
 		if (r.isAlive()) {
-			TileType t = neighbourTiles.get(prevDirection);
+			TileType t = neighbourTiles.get(prevDirection.opposite());
 			t.addRat(r, prevDirection);
 		}
 	}
