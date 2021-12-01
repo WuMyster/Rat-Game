@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -115,21 +116,89 @@ public abstract class TileType {
 			//Run method to do something if needed e.g. bomb
 			itemOnTile = null;
 		}
+
+        // TODO Wu Maybe switch will be better
+        if (itemOnTile instanceof Poison) {
+            itemOnTile.itemAction(r);
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemOnTile = null;
+            return true;
+        }
+        if (itemOnTile instanceof SexChangeToFemale) {
+            itemOnTile.itemAction(r);
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemOnTile = null;
+            return false;
+        }
+        if (itemOnTile instanceof SexChangeToMale) {
+            itemOnTile.itemAction(r);
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemOnTile = null;
+            return false;
+        }
+
 		
 		//Method to give item away
 		
-		return true;
+		return false;
 	}
 	
 	//??????? TODO }Item{
 	protected boolean setTileItem(Item i, int x, int y) {
-//		if (i instanceof Item) { //StopSign
-//			//itemHP = StopSign. HEALTH
-//			isBlocked = true;
-//			//itemOnTile = new StopSign()?
-//		}
+        /*
+		if (i instanceof Item) { //StopSign
+			//itemHP = StopSign. HEALTH
+			isBlocked = true;
+			//itemOnTile = new StopSign()?
+	    }
+         */
+        itemOnTile = i;
+
+        if (i instanceof Poison) {
+            itemHP = ((Poison) i).getItemHP();
+            return true;
+        }
+        if (i instanceof SexChangeToFemale) {
+            itemHP = 1;
+            return true;
+        }
+        if (i instanceof SexChangeToMale) {
+            itemHP = 1;
+            return true;
+        }
+
 		return true;
 	}
+
+    /**
+     * When item is given to rat and used, item is removed from its Arraylist and subsequently
+     * removed from screen.
+     * @param pos
+     */
+    private void itemUsed(int[] pos) {
+        ArrayList<int[]> arr = null;
+        
+        if (itemOnTile instanceof Poison) {
+            arr = Main.getPoisonPlace();
+        }
+        if (itemOnTile instanceof SexChangeToFemale) {
+            arr = Main.getSexToFemalePlace();
+        }
+        if (itemOnTile instanceof SexChangeToMale) {
+            arr = Main.getSexToMalePlace();
+        }
+
+        int[] a = null;
+        for (int[] i : arr) {
+            if (Arrays.equals(i, pos)) {
+                a = i;
+            }
+        }
+        arr.remove(a);
+    }
 
 	/**
 	 * Place stop sign on tile. XX

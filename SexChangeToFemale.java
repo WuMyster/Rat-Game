@@ -9,10 +9,11 @@ public class SexChangeToFemale extends Item {
     public void itemAction(Rat a) {
         if (a.getIsMale() == true) {
             a.setIsMale(false);
+            System.out.println("Male to female");
         }
 
 
         // Need to see how inventory is implemented to implement this properly
-        count -=1;
+        //count -=1;
     }
 }
