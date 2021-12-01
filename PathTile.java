@@ -42,16 +42,16 @@ public class PathTile extends TileType {
 					for (; i < ratsGoForward; i++) {
 						//Future want this to be a switch case statement ratList.get(i).getStatus() should return a RatType
 						if (ratList.get(i).isChild()) {
-							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY);
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 1);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							//timeTravel(ratList.get(i)); //Speeds up aging of rat
 						} else {
 							if (ratList.get(i).getDeathRat()) {
-								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH);
+								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 1);
 								tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							} else {
 								RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
-								Main.addCurrMovement(X_Y_POS, goTo, gen);
+								Main.addCurrMovement(X_Y_POS, goTo, gen, 1);
 								tile.addRat(ratList.get(i), goTo.opposite());
 							}
 							

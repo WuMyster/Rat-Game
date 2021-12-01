@@ -312,13 +312,27 @@ public class Main extends Application {
 	 * Adds to list of Rat movements on the game canvas.
 	 * 
 	 * @param pos xy position of the rat
-	 * @param extraSpeed {@code true} if rat is baby
-	 * @param dir direction it's facing
+	 * @param dir direction the rat is facing
+	 * @param rt type of rat
+	 * @param move movement status of rat
 	 */
-	public static void addCurrMovement(int[] pos, Direction dir, RatType rt) {
+	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-		currMovement.get(rt).get(dir).add(pos);
+		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move});
+	}
+	
+	/**
+	 * Changes the movement status of a rat
+	 * @param pos xy position of the rat
+	 * @param dir direction the rat is facing
+	 * @param rt type of rat
+	 * @param move movement status of rat???
+	 * @return
+	 */
+	public static boolean changeCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
+		
+		return true;
 	}
 
 	/**

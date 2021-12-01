@@ -45,7 +45,7 @@ public class LightTile extends TileType {
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
 					RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
-					Main.addCurrMovement(X_Y_POS, goTo, gen);
+					Main.addCurrMovement(X_Y_POS, goTo, gen, 1);
 					tile.addRat(ratList.get(i), goTo.opposite());
 				}
 			}
