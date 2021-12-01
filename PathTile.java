@@ -18,7 +18,7 @@ public class PathTile extends TileType {
 		super(new int[] { x, y });
 	}
 	
-	// Might need to split up this tile.
+	// Might need to split up this tile, giveItemsToRat should already have aliveRats list.
 	@Override
 	public void moveDeathRat() {
 		// Pass in ArrayList of rats on this tile.
@@ -41,6 +41,26 @@ public class PathTile extends TileType {
 				addDeathRat(dr, goTo.opposite());
 			}
 		}
+		
+		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> rs = currBlock.get(prevDirection);
+			for(Rat r : rs) {
+				if (!exists(r)) {
+					rs.remove(r);
+				}
+				// rs.removeIf(n -> (!exists(r)));
+			}
+		}
+	}
+	
+	private boolean exists(Rat r) {
+		for (Rat rs : aliveRats) {
+			if (rs == r) {
+				// aliveRats.remove(r); //Cut down on costs?
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
