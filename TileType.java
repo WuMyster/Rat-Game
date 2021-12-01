@@ -93,7 +93,12 @@ public abstract class TileType {
 	/**
 	 * Will be run 2nd, after items deal with all rats aside from death rat.
 	 */
-	public abstract void moveDeathRat();
+	public abstract void getNextDeathRat();
+	
+	/**
+	 * For now only deals with one moving death rat between 3 tiletypes
+	 */
+	public abstract void moveDeathRat(DeathRat r, Direction prevDirection);
 
 	/**
 	 * Constructor for most normal tiles.

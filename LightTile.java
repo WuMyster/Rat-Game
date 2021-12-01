@@ -43,13 +43,13 @@ public class LightTile extends TileType {
 	 * Test.
 	 */
 	@Override
-	public void moveDeathRat() {
+	public void getNextDeathRat() {
 		// Pass in ArrayList of rats on this tile.
 		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(prevDirection));
 		}
-		// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
+		// Pass in ArrayList of Rats for each DeathRat -> ArrayList of rats still alive
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				// aliveRats = dr.rats(aliveRats);
@@ -64,6 +64,8 @@ public class LightTile extends TileType {
 				addDeathRat(dr, goTo.opposite());
 			}
 		}
+		
+		//Since this will deal with all rats on tile, it should set currMovement = new HashMap<>();
 	}
 
 	@Override

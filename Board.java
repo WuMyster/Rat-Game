@@ -225,7 +225,7 @@ public class Board {
 		
 		// First move Death rats and any rats in its path
 		for (TileType t : allTiles) {
-			t.moveDeathRat();
+			t.getNextDeathRat();
 		}
 		
 		// Before moving all other rats
