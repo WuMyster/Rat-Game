@@ -93,7 +93,7 @@ public abstract class TileType {
 	/**
 	 * Will be run 2nd, after items deal with all rats aside from death rat.
 	 */
-	public abstract void getNextDeathRat();
+	public abstract ArrayList<DeathRat> getNextDeathRat();
 	
 	/**
 	 * For now only deals with one moving death rat between 3 tiletypes

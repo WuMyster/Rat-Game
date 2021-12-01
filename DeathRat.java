@@ -15,6 +15,18 @@ public class DeathRat {
 		rat = new Rat(50, true, true, 20, true, true, true);
 	}
 	
+	public int[] getXyPos() {
+		return xyPos;
+	}
+
+	public Direction getD() {
+		return d;
+	}
+
+	public int getMove() {
+		return move;
+	}
+	
 	/**
 	 * Initial movement parameters for rat.
 	 * @param xyPos xy position it started on
@@ -32,7 +44,7 @@ public class DeathRat {
 	 * @param move limit it's going forwards to
 	 * @author J
 	 */
-	public void changeMove(int move) {
+	public void setMove(int move) {
 		this.move = move;
 	}
 	

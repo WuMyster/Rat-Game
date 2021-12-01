@@ -40,7 +40,7 @@ public class Board {
 	/**
 	 * List of death rats.
 	 */
-	private static ArrayList<DeathRat> deathRatbuffer;
+	private static ArrayList<DeathRat> deathRatBuffer;
 
 	// ? Is final in the correct place? Should this be public?
 	/**
@@ -217,7 +217,7 @@ public class Board {
 	 */
 	public void runAllTiles() {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
-
+		deathRatBuffer = new ArrayList<>();
 		// Movement
 		for (TileType t : allTiles) {
 			t.setCurrRat();
@@ -225,12 +225,17 @@ public class Board {
 		
 		// First move Death rats and any rats in its path
 		for (TileType t : allTiles) {
-			t.getNextDeathRat();
+			deathRatBuffer.addAll(t.getNextDeathRat());
 		}
 		
 		// Before moving all other rats
 		for (TileType t : allTiles) {
 			t.getNextDirection();
+		}
+		
+		// Now adding in death rat movements
+		for (DeathRat dr : deathRatBuffer) {
+			Main.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
 		}
 	}
 

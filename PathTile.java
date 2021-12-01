@@ -21,7 +21,7 @@ public class PathTile extends TileType {
 	// Might need to split up this tile, giveItemsToRat should already have aliveRats list.
 	// Return list of death rats on this tile.
 	@Override
-	public void getNextDeathRat() {
+	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 		
 		// Pass in ArrayList of rats on this tile.
@@ -37,6 +37,7 @@ public class PathTile extends TileType {
 //		}
 		
 		// Now moving death rats
+		ArrayList<DeathRat> drs = new ArrayList<>();
 		for (Direction prevDirection : currDeath.keySet()) {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 			TileType t = neighbourTiles.get(goTo);
@@ -44,8 +45,9 @@ public class PathTile extends TileType {
 				// If dr is alive if (dr.alive){
 				
 				t.moveDeathRat(dr, goTo.opposite());
-				Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
-				// dr.initalMove(X_Y_POS, goTo.opposite());
+				// Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
+				drs.add(dr);
+				dr.initalMove(X_Y_POS, goTo.opposite());
 			}
 		}
 		
@@ -59,6 +61,7 @@ public class PathTile extends TileType {
 				// rs.removeIf(n -> (!exists(r)));
 			}
 		}
+		return drs;
 	}
 	
 	private boolean exists(Rat r) {
