@@ -139,6 +139,13 @@ public abstract class TileType {
             itemOnTile = null;
             return false;
         }
+        if (itemOnTile instanceof Sterilisation) {
+            itemOnTile.itemAction(r);
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemOnTile = null;
+            return false;
+        }
 
 		
 		//Method to give item away
@@ -169,6 +176,10 @@ public abstract class TileType {
             itemHP = 1;
             return true;
         }
+        if (i instanceof Sterilisation) {
+            itemHP = 1;
+            return true;
+        }
 
 		return true;
 	}
@@ -189,6 +200,9 @@ public abstract class TileType {
         }
         if (itemOnTile instanceof SexChangeToMale) {
             arr = Main.getSexToMalePlace();
+        }
+        if (itemOnTile instanceof Sterilisation) {
+            arr = Main.getSterilisePlace();
         }
 
         int[] a = null;
