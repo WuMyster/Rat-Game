@@ -214,6 +214,17 @@ public abstract class TileType {
 	}
 	
 	/** MOVEMENT
+	 * Add death rat to this tile.
+	 * 
+	 * @param r death rat to be added
+	 * @param d direction the death rat came from
+	 */
+	public void addRat(DeathRat r, Direction d) {
+		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
+		nextDeath.get(d).add(r);
+	}
+	
+	/** MOVEMENT
 	 * Might join this method with above, Death Rat will need to extend Rat if so...
 	 * 
 	 * @param dr DeathRat to be added to this Tile
