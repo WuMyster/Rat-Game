@@ -127,15 +127,15 @@ public abstract class TileType {
         }
         if (itemOnTile instanceof SexChangeToFemale) {
             itemOnTile.itemAction(r);
-            //itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                   // X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof SexChangeToMale) {
             itemOnTile.itemAction(r);
-            //itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-            // X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
             return false;
         }
@@ -185,7 +185,10 @@ public abstract class TileType {
             arr = Main.getPoisonPlace();
         }
         if (itemOnTile instanceof SexChangeToFemale) {
-
+            arr = Main.getSexToFemalePlace();
+        }
+        if (itemOnTile instanceof SexChangeToMale) {
+            arr = Main.getSexToMalePlace();
         }
 
         int[] a = null;

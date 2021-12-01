@@ -197,7 +197,13 @@ public class Main extends Application {
 
     // TODO Wu I don't think I actually need this
     private static ArrayList<int[]> sexToFemalePlace;
+    public static ArrayList<int[]> getSexToFemalePlace() {
+        return sexToFemalePlace;
+    }
     private static ArrayList<int[]> sexToMalePlace;
+    public static ArrayList<int[]> getSexToMalePlace() {
+        return sexToMalePlace;
+    }
 
 	/**
 	 * The Rats in the game window which needs to move.
