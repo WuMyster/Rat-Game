@@ -96,6 +96,6 @@ public class JunctionTile extends TileType {
 	@Override
 	public void moveDeathRat() {
 		// TODO Auto-generated method stub
-		System.out.println("Junction death rat movement not done");
+		// System.out.println("Junction death rat movement not done");
 	}
 }

@@ -39,6 +39,7 @@ public class PathTile extends TileType {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				// If dr is alive if (dr.alive){
 				addDeathRat(dr, goTo.opposite());
+				Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
 			}
 		}
 		
