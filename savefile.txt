@@ -1,0 +1,42 @@
+12 7 //width, height
+42 //max number of rats before game lost condition
+136 //expected time to eradicate all rats
+75  //points earnt so far in gameplay
+10 //item total cooldown length
+
+GGGGGGGGGGGG //Map, G for grass, P for path, T for tunnel, J for junction
+JPPPTTPPPPPJ
+PGPGGGGGGGGP
+PPJPPTTPPPPJ
+TGPGGGGGPGGP
+JPPPPPPPPPPJ
+GGGGGGGGGGGG
+//one line for each rat: age, isMale(), position: x,y, direction facing: 0 North, 90 East, isBreeding(), hp, isSterile()
+0 true 1 1 90 false 100 false
+0 true 4 13 0 false 100 false
+0 true 11 3 180 false 100 false
+0 true 6 6 270 false 10 true
+4 false 11 2 0 false 100 false
+20 false 8 1 90 false 20 true
+20 false 3 3 90 false 100 false
+20 false 3 2 180 false 50 false
+5 true 6 9 270 false 100 false
+9 false 5 3 0 false 5 false
+20 true 5 2 90 false 60 false
+20 false 3 3 90 true 100 false
+20 false 8 2 180 false 100 true
+
+17 //current timer of the game
+
+bomb 5 5 2 5 4 // cooldown until item is given, item on the map x,y, hp, countdown timer
+gas 5 1 11 2 6
+poison 5 9 1 1 2
+sterilisation 0 8 3 5 //cooldown until item is given, item on the map x,y, hp
+malesexchange 3 1 1 5
+femalesexchange 5 1 5 5
+noentry 10 8 11 20
+deathrat 10 3 11 80
+noentry 10 4 11 10
+//items currently possessed not on the map, number will indicate quantity
+1 2 0 0 1 1 0 1
+//bomb, gas, poison, sterilisation, malesexchange, femalesexchange, noentry, deathrat
