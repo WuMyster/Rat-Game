@@ -198,6 +198,8 @@ public class Main extends Application {
 
 		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
 		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
 		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
@@ -283,7 +285,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					if (i[2] == 0 || step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[1], 
-								i[1] * RAT_POSITION + (TILE_X_OFFSET * size) + step * speed, 
+								i[1] * RAT_POSITION + step * speed, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
 								height, width);
 					}
@@ -307,7 +309,7 @@ public class Main extends Application {
 				for (int[] i : currDirection) {
 					if (i[2] == 0 || step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[3], 
-								i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
+								i[1] * RAT_POSITION - step * speed, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
 								height, width);
 					}

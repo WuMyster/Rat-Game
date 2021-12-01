@@ -7,7 +7,7 @@ public class DeathRat {
 	Direction d;
 	int move;
 	
-	int hp = 1; //For now
+	int hp = 5; //For now
 	
 	/**
 	 * Constructor for Death Rat with basically garbage args.
@@ -31,7 +31,7 @@ public class DeathRat {
 	
 	public boolean isAlive() {
 		// Check hp
-		return true;
+		return hp > 0;
 	}
 	
 	/**
@@ -63,11 +63,18 @@ public class DeathRat {
 	
 	//Need to think of way to prevent being drawn if dead
 	public ArrayList<Rat> killRats(ArrayList<Rat> r, int move) {
+		if (r.size() == 0) {
+			return r;
+		}
+		System.out.print(r.size() + " " + hp + " > ");
 		hp -= r.size();
 		if (hp >= 0) {
+			System.out.println();
 			return new ArrayList<>();
 		}
 		this.move = move;
+		System.out.println(r.size() + " " + hp);
+		
 		r.subList(r.size() + hp, r.size());
 		return r;
 	}
