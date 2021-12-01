@@ -36,6 +36,11 @@ public class Board {
 	 * List of all tiles on board.
 	 */
 	private static ArrayList<TileType> allTiles;
+	
+	/**
+	 * List of death rats.
+	 */
+	private static ArrayList<DeathRat> deathRatbuffer;
 
 	// ? Is final in the correct place? Should this be public?
 	/**
