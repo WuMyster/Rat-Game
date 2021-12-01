@@ -72,12 +72,12 @@ public class Main extends Application {
 	public static final int RAT_POSITION = 25;
 	
 	/**
-	 * Time in miliseconds between each rat steps.
+	 * Time in miliseconds between each rat steps. 100
 	 */
 	public static final int TIME_BETWEEN_STEPS = 10;
 	
 	/**
-	 * Time between each cycle.
+	 * Time between each cycle. 4
 	 */
 	public static final int CYCLE_TIME = 1;
 
@@ -225,7 +225,6 @@ public class Main extends Application {
 		m.runAllTiles();
 
 		ratMoveTimeline.play();
-		
 		//Set points
 		
 		drawItems();
@@ -282,7 +281,7 @@ public class Main extends Application {
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
 								width, height);
-					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[0],
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
@@ -299,7 +298,7 @@ public class Main extends Application {
 								i[1] * RAT_POSITION, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
 								height, width);
-					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
 						gc.drawImage(ratImage[1], 
 								i[1] * RAT_POSITION + step * speed, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
@@ -316,7 +315,7 @@ public class Main extends Application {
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
 								width, height);
-					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[2], 
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
@@ -333,12 +332,12 @@ public class Main extends Application {
 								i[1] * RAT_POSITION, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
 								height, width);
-					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[3], 
 								i[1] * RAT_POSITION - step * speed, 
 								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
 								height, width);
-					}
+					} 
 				}
 			}
 		}
