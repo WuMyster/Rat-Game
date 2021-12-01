@@ -234,6 +234,7 @@ public abstract class TileType {
 	 * 
 	 * @param dr DeathRat to be added to this Tile
 	 * @param d	direction the DeathRat came from
+	 * @deprecated
 	 */
 	public void addDeathRat(DeathRat dr, Direction d) {
 		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());

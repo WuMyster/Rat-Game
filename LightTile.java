@@ -42,10 +42,25 @@ public class LightTile extends TileType {
 		
 		// For rats going towards the death rat
 		ArrayList<Rat> dealing = currBlock.get(prevDirection.opposite());
-		while(r.killRat(dealing.get(0), 1) && !dealing.isEmpty()) {
-			dealing.remove(0);
+		if (dealing != null) {
+			while(r.killRat(dealing.get(0), 1) && !dealing.isEmpty()) {
+				dealing.remove(0);
+			}
+			currBlock.put(prevDirection.opposite(), dealing);
 		}
-		currBlock.put(prevDirection.opposite(), dealing);
+		
+		dealing = currBlock.get(prevDirection);
+		if (dealing != null) {
+			while(r.killRat(dealing.get(0), 3) && !dealing.isEmpty()) {
+				dealing.remove(0);
+			}
+			currBlock.put(prevDirection, dealing);
+		}
+		
+		if (r.isAlive()) {
+			TileType t = neighbourTiles.get(prevDirection);
+			t.addRat(r, prevDirection);
+		}
 	}
 
 	// Might need to split up this tile, giveItemsToRat should already have
@@ -84,7 +99,7 @@ public class LightTile extends TileType {
 		
 		
 		//Since this will deal with all rats on tile, it should set currMovement = new HashMap<>();
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override

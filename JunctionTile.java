@@ -94,8 +94,15 @@ public class JunctionTile extends TileType {
 	}
 
 	@Override
-	public void getNextDeathRat() {
+	public ArrayList<DeathRat> getNextDeathRat() {
 		// TODO Auto-generated method stub
 		// System.out.println("Junction death rat movement not done");
+		return new ArrayList<>();
+	}
+
+	@Override
+	public void moveDeathRat(DeathRat r, Direction prevDirection) {
+		// TODO Auto-generated method stub
+		
 	}
 }

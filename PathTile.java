@@ -45,9 +45,9 @@ public class PathTile extends TileType {
 				// If dr is alive if (dr.alive){
 				
 				t.moveDeathRat(dr, goTo.opposite());
-				// Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
-				drs.add(dr);
-				dr.initalMove(X_Y_POS, goTo.opposite());
+				Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
+				//drs.add(dr);
+				//dr.initalMove(X_Y_POS, goTo);
 			}
 		}
 		
