@@ -17,6 +17,31 @@ public class PathTile extends TileType {
 	public PathTile(int x, int y) {
 		super(new int[] { x, y });
 	}
+	
+	// Might need to split up this tile.
+	@Override
+	public void moveDeathRat() {
+		// Pass in ArrayList of rats on this tile.
+		aliveRats = new ArrayList<>();
+		for (Direction prevDirection : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(prevDirection));
+		}
+		// Pass in ArrayList of Rats to DeathRats -> ArrayList of rats still alive
+		for (Direction prevDirection : currDeath.keySet()) {
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				// aliveRats = dr.rats(aliveRats);
+			}
+		}
+		
+		// Now moving death rats
+		for (Direction prevDirection : currDeath.keySet()) {
+			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				// If dr is alive if (dr.alive){
+				addDeathRat(dr, goTo.opposite());
+			}
+		}
+	}
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
