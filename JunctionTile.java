@@ -95,14 +95,41 @@ public class JunctionTile extends TileType {
 
 	@Override
 	public ArrayList<DeathRat> getNextDeathRat() {
-		// TODO Auto-generated method stub
-		// System.out.println("Junction death rat movement not done");
-		return new ArrayList<>();
+
+		// Pass in ArrayList of rats on this tile.
+		aliveRats = new ArrayList<>();
+		for (Direction prevDirection : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(prevDirection));
+		}
+
+		for (Direction prevDirection : currDeath.keySet()) {
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				aliveRats = dr.killRats(aliveRats, 0);
+
+			}
+		}
+
+		// Now moving death rats
+		ArrayList<DeathRat> drs = new ArrayList<>();
+		for (Direction prevDirection : currDeath.keySet()) {
+			
+			Direction goTo = getADirection(prevDirection);
+			
+			TileType t = neighbourTiles.get(goTo);
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				if (dr.isAlive()) {
+					t.moveDeathRat(dr, goTo.opposite());
+					drs.add(dr);
+					dr.initalMove(X_Y_POS, goTo);
+				}
+			}
+		}
+		return drs;
 	}
 
 	@Override
 	public void moveDeathRat(DeathRat r, Direction prevDirection) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -62,11 +62,12 @@ public class DeathRat {
 	}
 	
 	//Need to think of way to prevent being drawn if dead
-	public ArrayList<Rat> killRats(ArrayList<Rat> r) {
+	public ArrayList<Rat> killRats(ArrayList<Rat> r, int move) {
 		hp -= r.size();
 		if (hp >= 0) {
 			return new ArrayList<>();
 		}
+		this.move = move;
 		r.subList(r.size() + hp, r.size());
 		return r;
 	}

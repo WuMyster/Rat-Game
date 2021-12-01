@@ -32,7 +32,7 @@ public class PathTile extends TileType {
 		// Pass in ArrayList of Rats to DeathRats ArrayList of rats still alive after item on this tile.
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				aliveRats = dr.killRats(aliveRats);
+				aliveRats = dr.killRats(aliveRats, 0);
 				
 			}
 		}
@@ -45,7 +45,6 @@ public class PathTile extends TileType {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
 					t.moveDeathRat(dr, goTo.opposite());
-					// Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
 					drs.add(dr);
 					dr.initalMove(X_Y_POS, goTo);
 				}
@@ -69,19 +68,20 @@ public class PathTile extends TileType {
 	}
 	
 	private boolean exists(Rat r) {
-		for (Rat rs : aliveRats) {
-			if (rs == r) {
-				
-				// aliveRats.remove(r); //Cut down on costs?
-				return true;
-			}
-		}
-		return false;
+		return aliveRats.remove(r);
 	}
 	
+	//Death rat and stopsign stopping rats from moving away hence moving towards DR
 	@Override
-	public void moveDeathRat(DeathRat r, Direction prevDirection) {
-		this.addRat(r, prevDirection);
+	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
+		Direction prevDirectionR = prevDirectionDR == directions[0] ? directions[1] : directions[0];
+		
+		
+		
+		if (dr.isAlive()) {
+			this.addRat(dr, prevDirectionDR);
+		}
+		//this.addRat(r, prevDirection);
 	} 	
 
 	/**
