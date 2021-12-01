@@ -448,6 +448,12 @@ public class Main extends Application {
         for (int[] i : poisonPlace) {
             gc.drawImage(POISON, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
+        for (int[] i : sexToFemalePlace) {
+            gc.drawImage(SEX_TO_FEMALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
+        for (int[] i : sexToMalePlace) {
+            gc.drawImage(SEX_TO_MALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
 	}
 
 	/**
@@ -506,8 +512,8 @@ public class Main extends Application {
         m.addSexToFemale((int) x, (int) y); //Will return boolean if sex change can be placed
 
         // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
-        //GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-        //gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
     }
 
     private void placeSexToMale(DragEvent event) {
@@ -520,8 +526,8 @@ public class Main extends Application {
         m.addSexToMale((int) x, (int) y); //Will return boolean if sex change can be placed
 
         // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
-        //GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-        //gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(SEX_TO_MALE, x * TILE_SIZE, y * TILE_SIZE);
     }
 
 	/**
