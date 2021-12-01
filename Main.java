@@ -72,9 +72,14 @@ public class Main extends Application {
 	public static final int RAT_POSITION = 25;
 	
 	/**
-	 * Time in miliseconds between steps.
+	 * Time in miliseconds between each rat steps.
 	 */
 	public static final int TIME_BETWEEN_STEPS = 10;
+	
+	/**
+	 * Time between each cycle.
+	 */
+	public static final int CYCLE_TIME = 1;
 
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
@@ -132,7 +137,7 @@ public class Main extends Application {
 	private Canvas mapCanvas;
 	
 	/**
-	 * Grey background. TODO
+	 * Grey background.
 	 */
 	private Canvas baseCanvas;
 	
@@ -152,7 +157,7 @@ public class Main extends Application {
 	private Label currLevel;
 	
 	/**
-	 * Number of points accumlated in level so far.
+	 * Number of points accumulated in level so far.
 	 */
 	private Label currPoints;
 
@@ -203,7 +208,7 @@ public class Main extends Application {
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
-		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
+		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
@@ -277,7 +282,7 @@ public class Main extends Application {
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
 								width, height);
-					} else if ( step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
+					} else if (step <= NORMAL_RAT_SPEED * (i[2] / 4)) {
 						gc.drawImage(ratImage[0],
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
 								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
