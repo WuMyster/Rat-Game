@@ -52,7 +52,7 @@ public abstract class TileType {
 	protected Direction[] directions;
 
 	/**
-	 * Number of neighbouring Tiles and their direction
+	 * Number of neighbouring Tiles.
 	 */
 	protected int limit;
 
