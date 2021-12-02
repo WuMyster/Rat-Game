@@ -115,9 +115,11 @@ public class Board {
 	 * @param y y position of tile on map
 	 * @return {@code true} if bomb can be placed at that location.
 	 */
-	public boolean addBomb(int x, int y) {
+	public void addBomb(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Bomb bomb = new Bomb();
-        return bomb.itemAction(x, y);
+
+        t.setTileItem(bomb, x, y);
 	}
 
     public void addPoison(int x, int y) {

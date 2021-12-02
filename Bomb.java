@@ -11,7 +11,7 @@ import java.util.TimerTask;
  * TODO Wu, maybe move bomb pic and arraylist here?
  * -Maybe
  */
-public class Bomb {
+public class Bomb extends Item {
     final private int COUNTDOWN_IN_MS = 1000;
     Timer timer = new Timer();
 
@@ -37,6 +37,7 @@ public class Bomb {
 
         return true;
     }
+
 
 
     /**

@@ -119,28 +119,28 @@ public abstract class TileType {
 
         // TODO Wu Maybe switch will be better
         if (itemOnTile instanceof Poison) {
-            itemOnTile.itemAction(r);
+            ((Poison) itemOnTile).itemAction(r);
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
                     X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
             return true;
         }
         if (itemOnTile instanceof SexChangeToFemale) {
-            itemOnTile.itemAction(r);
+            ((SexChangeToFemale) itemOnTile).itemAction(r);
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
                     X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof SexChangeToMale) {
-            itemOnTile.itemAction(r);
+            ((SexChangeToMale) itemOnTile).itemAction(r);
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
                     X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof Sterilisation) {
-            itemOnTile.itemAction(r);
+            ((Sterilisation) itemOnTile).itemAction(r);
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
                     X_Y_POS[1] / Board.EXTRA_PADDING});
             itemOnTile = null;
@@ -180,6 +180,11 @@ public abstract class TileType {
             itemHP = 1;
             return true;
         }
+        if (i instanceof Bomb) {
+            itemHP = 1;
+            ((Bomb) i).itemAction(x, y);
+            return true;
+        }
 
 		return true;
 	}
@@ -203,6 +208,10 @@ public abstract class TileType {
         }
         if (itemOnTile instanceof Sterilisation) {
             arr = Main.getSterilisePlace();
+        }
+
+        if (itemOnTile instanceof Bomb) {
+            arr = Main.getBombPlace();
         }
 
         int[] a = null;
@@ -258,6 +267,9 @@ public abstract class TileType {
 		//Item delete
 		//Rat delete, rat tell rat controller
 		if (itemOnTile != null) {
+            if (itemOnTile instanceof Bomb) {
+                ((Bomb) itemOnTile).timer.cancel();
+            }
             itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
                     X_Y_POS[1] / Board.EXTRA_PADDING});
 		}
