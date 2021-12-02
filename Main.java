@@ -202,8 +202,8 @@ public class Main extends Application {
 		primaryStage.show();
 
 		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
-		//chuckEverythingAtDeath();
-		runToLiveAnotherDay();
+		chuckEverythingAtDeath();
+		// runToLiveAnotherDay();
 		// 
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		// One more Test case where _ _ -> D B

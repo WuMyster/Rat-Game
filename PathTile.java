@@ -67,6 +67,7 @@ public class PathTile extends TileType {
 
 		// Remove fallen rats from list.
 		// Will not automatically move the rats in case other death rats come here.
+		// Compare size of lists!
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> tmp = new ArrayList<>();
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
@@ -119,8 +120,8 @@ public class PathTile extends TileType {
 			// Then Death Rats will deal with slower adult rats
 			rs1 = new ArrayList<>();
 			for (Rat r : rs2) {
-				if (dr.killRat(r, 2)) {
-					Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), r.getStatus(), 2);
+				if (dr.killRat(r, 3)) {
+					Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), r.getStatus(), 1);
 				} else {
 					rs1.add(r);
 				}

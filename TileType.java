@@ -101,9 +101,12 @@ public abstract class TileType {
 	
 	// For now only deals with one moving death rat between 3 tiletypes.
 	/**
-	 * 
+	 * Runs if Death Rat is coming to this tile, accelerates all processes. I.e.
+	 * item, rat interactions and movement.
+	 * @param dr Death Rat class coming to this tile
+	 * @param prevDirection direction the Death Rat came from
 	 */
-	public abstract void moveDeathRat(DeathRat r, Direction prevDirection);
+	public abstract void moveDeathRat(DeathRat dr, Direction prevDirection);
 
 	/**
 	 * Constructor for most normal tiles.
