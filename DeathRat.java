@@ -7,7 +7,7 @@ public class DeathRat {
 	Direction d;
 	int move;
 	
-	int hp = 5; //For now
+	int hp = 15; //For now
 	
 	/**
 	 * Constructor for Death Rat with basically garbage args.

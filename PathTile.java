@@ -93,17 +93,19 @@ public class PathTile extends TileType {
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 		System.out.println("ASDF");
-		Direction prevDirectionR = prevDirectionDR == directions[1] ? directions[0] : directions[1];
+		Direction prevDirectionR = prevDirectionDR == directions[0] ? directions[1] : directions[0];
 			ArrayList<Rat> rs1 = currBlock.get(prevDirectionR);
 			ArrayList<Rat> rs2 = new ArrayList<>();
 			if (rs1 != null) {
 				System.out.println("Not null");
+				
+				//Check for stop sign?
 				for(Rat r : rs1) {
 					if (r.getStatus() == RatType.BABY) {
 						if (dr.killRat(r, 2)) {
 							Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), RatType.BABY, 2);
 						} else {
-							// Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), RatType.BABY, 4); Should be moved afterwards if more death rats come
+							// Should be moved afterwards if more death rats come
 							rs2.add(r);
 						}
 					} else {
@@ -116,30 +118,39 @@ public class PathTile extends TileType {
 			rs1 = new ArrayList<>();
 			for(Rat r : rs2) {
 				if (dr.killRat(r, 2)) {
-					Main.addCurrMovement(X_Y_POS, prevDirectionR, r.getStatus(), 3);
+					Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), r.getStatus(), 2);
 				} else {
 					rs1.add(r);
 				}
 			}
 			
 			currBlock.put(prevDirectionR, rs1);
-		} else {
-			System.out.println("NULL");
 		}
 		
-//		if (dr.isAlive()) {
-//			
-//			ArrayList<Rat> ratList = currBlock.get(goTo);
-//			int ratsGoToDeath = 0; 
-//			int i = 0;
+		// Now that all rats going towards DR from this tile are dealt with, deal with any stragglers who
+	    // are bounced back by stop sign IF DR is alive and stop sign is present in next tile
+		if (dr.isAlive()) {
+			Direction goTo = prevDirectionDR == directions[0] ? directions[0] : directions[1];
+			ArrayList<Rat> ratList = currBlock.get(goTo);
+			int ratsGoToDeath = 0; 
+			int i = 0;
 //			while (i != ratList.size()) {	
 //				TileType tile = neighbourTiles.get(goTo);
 //				
 //				ratsGoToDeath = tile.numsRatsCanEnter(this, ratList.size());
 //				i += ratsGoToDeath;
 //			}
-//			ratList = dr.killRats((ArrayList<Rat>) ratList.subList(0, ratsGoToDeath), 3);
-//		}
+			
+			// Only check stop sign forward of rat
+			if (ratList != null) {
+				TileType tile = neighbourTiles.get(goTo);
+				ratsGoToDeath = tile.numsRatsCanEnter(this, ratList.size());
+				if (ratsGoToDeath != 0) {
+					ratList = dr.killRats(((ArrayList<Rat>) ratList.subList(0, ratsGoToDeath)), 3);
+				}
+				// ratList = dr.killRats((ArrayList<Rat>) ratList.subList(0, ratsGoToDeath), 3); //Should all be adult rats
+			}
+		}
 		
 		
 		

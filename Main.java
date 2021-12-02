@@ -201,11 +201,9 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
 		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
-		// m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
-		// m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
+		chuckEverythingAtDeath();
+		// 
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
@@ -214,6 +212,20 @@ public class Main extends Application {
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
 		// cycler.play();
+	}
+	
+	private void chuckEverythingAtDeath() {
+		//Baby
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 4); //Baby rat
+		
+		// Adult
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 2); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 4); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 	}
 
 	/**
