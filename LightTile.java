@@ -34,7 +34,8 @@ public class LightTile extends TileType {
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirection) {
 		
-		// For rats going towards the death rat (not including baby rat)
+		// For rats going towards the death rat (not including baby rat since they shouldn't be
+		// on this tile
 		ArrayList<Rat> dealing = currBlock.get(prevDirection.opposite());
 		ArrayList<Rat> escaped = new ArrayList<>();
 		if (dealing != null) {
@@ -48,7 +49,7 @@ public class LightTile extends TileType {
 			currBlock.put(prevDirection.opposite(), escaped);
 		}
 		
-		// Adult rats going away from death rat (not including baby rat stuff)
+		// Adult rats going away from death rat (not including baby rat)
 		if (dr.isAlive()) {
 			dealing = currBlock.get(prevDirection);
 			if (dealing != null) {
@@ -77,6 +78,9 @@ public class LightTile extends TileType {
 	 */
 	@Override
 	public ArrayList<DeathRat> getNextDeathRat() {
+		if (!currDeath.isEmpty() || !nextDeath.isEmpty()) {
+			System.err.println("Death rat on invalid tile - light tile");
+		}
 		return new ArrayList<>();
 	}
 

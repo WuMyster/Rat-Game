@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -33,27 +34,17 @@ public class JunctionTile extends TileType {
 
 					Direction goTo = getADirection(prevDirection);
 					TileType tile = neighbourTiles.get(goTo);
-					// TODO System.out.println(tile.X_Y_POS[0] + " " + tile.X_Y_POS[1]);
-					// System.out.println(tile.isBlocked);
 
 					ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
 
 					for (; i < ratsGoForward; i++) {
-						// Future want this to be a switch case statement ratList.get(i).getStatus()
-						// should return a RatType
-						if (ratList.get(i).isChild()) {
+						RatType status = ratList.get(i).getStatus();
+						if (status == RatType.BABY) {
 							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
-							// timeTravel(ratList.get(i));
 						} else {
-							if (ratList.get(i).getDeathRat()) {
-								Main.addCurrMovement(X_Y_POS, goTo, RatType.DEATH, 4);
-								tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
-							} else {
-								RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
-								Main.addCurrMovement(X_Y_POS, goTo, gen, 4);
-								tile.addRat(ratList.get(i), goTo.opposite());
-							}
+							Main.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
+							tile.addRat(ratList.get(i), goTo.opposite());
 						}
 					}
 					prevDirection = goTo;
