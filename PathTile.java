@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * A standard tile that has at most 2 tiles connected to it.
@@ -29,21 +28,22 @@ public class PathTile extends TileType {
 		for (Direction prevDirection : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(prevDirection));
 		}
-		// Pass in ArrayList of Rats to DeathRats ArrayList of rats still alive after item on this tile.
+		// Pass in ArrayList of Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				aliveRats = dr.killRats(aliveRats, 0);
+				aliveRats = dr.killRats(aliveRats, -1);
 				
 			}
 		}
 		
-		// Now moving death rats
+		// Now moves death rats
 		ArrayList<DeathRat> drs = new ArrayList<>();
 		for (Direction prevDirection : currDeath.keySet()) {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 			TileType t = neighbourTiles.get(goTo);
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
+					// TODO Will need to check for stop sign
 					t.moveDeathRat(dr, goTo.opposite());
 					drs.add(dr);
 					dr.initalMove(X_Y_POS, goTo);
@@ -51,7 +51,8 @@ public class PathTile extends TileType {
 			}
 		}
 		
-		// Remove fallen rats from list
+		// Remove fallen rats from list.
+		// Will not automatically move the rats in case other death rats come here.
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> tmp = new ArrayList<>();
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
@@ -67,11 +68,16 @@ public class PathTile extends TileType {
 		return drs;
 	}
 	
+	/**
+	 * Returns {@code true} if Rat is in alive rats list.
+	 * @param r the rat to find
+	 * @return {@code true} if rat exists in list
+	 */
 	private boolean exists(Rat r) {
 		return aliveRats.remove(r);
 	}
 	
-	//Death rat and stopsign stopping rats from moving away hence moving towards DR
+	//Death rat and stop sign stopping rats from moving away hence moving towards DR
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 		Direction prevDirectionR = prevDirectionDR == directions[0] ? directions[1] : directions[0];

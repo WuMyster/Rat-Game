@@ -87,16 +87,21 @@ public abstract class TileType {
 	
 	/**
 	 * To skip past any lightTiles. (Speed 2, for baby rats)
+	 * @param r Baby Rat that is skipping past staying on Light Tile
+	 * @param prevDirection direction that Baby Rat from
 	 */
 	public abstract void getAcceleratedDirection(Rat r, Direction prevDirection);
 	
+	// Will be run 2nd, after items deal with all rats aside from death rat.
 	/**
-	 * Will be run 2nd, after items deal with all rats aside from death rat.
+	 * Moves Death Rat allowing it to take down normal rats along the way.
+	 * @return returns list of alive Death Rats on this tile
 	 */
 	public abstract ArrayList<DeathRat> getNextDeathRat();
 	
+	// For now only deals with one moving death rat between 3 tiletypes.
 	/**
-	 * For now only deals with one moving death rat between 3 tiletypes
+	 * 
 	 */
 	public abstract void moveDeathRat(DeathRat r, Direction prevDirection);
 
