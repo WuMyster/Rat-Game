@@ -72,9 +72,14 @@ public class Main extends Application {
 	public static final int RAT_POSITION = 25;
 	
 	/**
-	 * Time in miliseconds between steps.
+	 * Time in miliseconds between each rat steps. 100
 	 */
 	public static final int TIME_BETWEEN_STEPS = 10;
+	
+	/**
+	 * Time between each cycle. 4
+	 */
+	public static final int CYCLE_TIME = 1;
 
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
@@ -151,7 +156,7 @@ public class Main extends Application {
 	private Canvas mapCanvas;
 	
 	/**
-	 * Grey background. TODO
+	 * Grey background.
 	 */
 	private Canvas baseCanvas;
 	
@@ -171,7 +176,7 @@ public class Main extends Application {
 	private Label currLevel;
 	
 	/**
-	 * Number of points accumlated in level so far.
+	 * Number of points accumulated in level so far.
 	 */
 	private Label currPoints;
 
@@ -237,15 +242,45 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true, 20), Direction.SOUTH, 1, 1); //Baby rat
-		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.SOUTH, 2, 1); //Death Rat
+		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
+		chuckEverythingAtDeath();
+		// runToLiveAnotherDay();
+		// 
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
+		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
-		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
+		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
+	}
+	
+	private void runToLiveAnotherDay() {
+		// Baby rat, will need to place stop sign
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3);
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3); 
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 4); 
+		// Adult
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 3); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 4); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 5); 
+	}
+	
+	private void chuckEverythingAtDeath() {
+		//Baby
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 4); //Baby rat
+		
+		// Adult
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 2); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 4); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 	}
 
 	/**
@@ -258,7 +293,6 @@ public class Main extends Application {
 		m.runAllTiles();
 
 		ratMoveTimeline.play();
-		
 		//Set points
 		
 		drawItems();
@@ -310,40 +344,68 @@ public class Main extends Application {
 			currDirection = smallerList.get(Direction.NORTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage[0],
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
-							width, height);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[0],
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[0],
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					}
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.EAST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage[1], 
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) + step * speed, 
-							i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
-							height, width);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[1], 
+								i[1] * RAT_POSITION, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
+						gc.drawImage(ratImage[1], 
+								i[1] * RAT_POSITION + step * speed, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					}
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.SOUTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage[2], 
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
-							width, height);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[2], 
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[2], 
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					}
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.WEST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage[3], 
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
-							i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
-							height, width);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[3], 
+								i[1] * RAT_POSITION, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[3], 
+								i[1] * RAT_POSITION - step * speed, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4), // * (size - 1)
+								height, width);
+					} 
 				}
 			}
 		}
@@ -353,13 +415,14 @@ public class Main extends Application {
 	 * Adds to list of Rat movements on the game canvas.
 	 * 
 	 * @param pos xy position of the rat
-	 * @param extraSpeed {@code true} if rat is baby
-	 * @param dir direction it's facing
+	 * @param dir direction the rat is facing
+	 * @param rt type of rat
+	 * @param move movement status of rat
 	 */
-	public static void addCurrMovement(int[] pos, Direction dir, RatType rt) {
+	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-		currMovement.get(rt).get(dir).add(pos);
+		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move});
 	}
 
 	/**
@@ -585,13 +648,13 @@ public class Main extends Application {
 		root.getChildren().addAll(menuBar);
 		
 		// Tick Timeline buttons
-		Button startTickTimelineButton = new Button("Blow up");
+		Button startTickTimelineButton = new Button("Move rat");
 		// We add both buttons at the same time to the timeline (we could have done this in two steps).
 		root.getChildren().addAll(startTickTimelineButton);
 
 		// Setup the behaviour of the buttons.
 		startTickTimelineButton.setOnAction(e -> {
-			m.addBomb(8, 5);
+			runCycle();
 		});
 
 		return root;

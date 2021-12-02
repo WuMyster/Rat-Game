@@ -36,6 +36,11 @@ public class Board {
 	 * List of all tiles on board.
 	 */
 	private static ArrayList<TileType> allTiles;
+	
+	/**
+	 * List of death rats.
+	 */
+	private static ArrayList<DeathRat> deathRatBuffer;
 
 	// ? Is final in the correct place? Should this be public?
 	/**
@@ -214,7 +219,7 @@ public class Board {
 	 * Put Rat onto game canvas.
 	 * 
 	 * @param rats the rat that's going to the next tile
-	 * @param dir  direction the rat is facing
+	 * @param dir  direction the rat is came from
 	 * @param x    x start position of the rat
 	 * @param y    y start position of the rat
 	 * 
@@ -224,18 +229,41 @@ public class Board {
 	}
 
 	/**
+	 * 
+	 * @param rat death rat to be added to map
+	 * @param dir direction the death rat came from
+	 * @param x x start position of the death rat
+	 * @param y y start position of the death rat
+	 */
+	public void placeRat(DeathRat rat, Direction dir, int x, int y) {
+		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rat, dir);
+	}
+
+	/**
 	 * Goes through each Tile and moves the rat to the next tile before getting the
 	 * tiles new list.
 	 */
 	public void runAllTiles() {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
-
+		deathRatBuffer = new ArrayList<>();
 		// Movement
 		for (TileType t : allTiles) {
 			t.setCurrRat();
 		}
+		
+		// First move Death rats and any rats in its path
+		for (TileType t : allTiles) {
+			deathRatBuffer.addAll(t.getNextDeathRat());
+		}
+		
+		// Before moving all other rats
 		for (TileType t : allTiles) {
 			t.getNextDirection();
+		}
+		
+		// Now adding in death rat movements
+		for (DeathRat dr : deathRatBuffer) {
+			Main.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
 		}
 	}
 

@@ -1,7 +1,7 @@
 
 import java.util.ArrayList;
 
-/** 
+/**
  * An invisible tile in between standard tiles, allow interactions between rats
  * and some items (death rat and bomb) outside of the standard tiles
  * 
@@ -17,6 +17,7 @@ public class LightTile extends TileType {
 
 	/**
 	 * Creates a LightTile object storing its position.
+	 * 
 	 * @param x x position on the map
 	 * @param y y position on the map
 	 */
@@ -24,15 +25,63 @@ public class LightTile extends TileType {
 		super(new int[] { x, y });
 	}
 
-	/**
-	 * Will also store tiles around it not caring about direction??.
-	 * @param tiles list of tiles around it
-	 * @param direction list of direction to respective tile in tiles
-	 */
 	@Override
 	public void setNeighbourTiles(TileType[] tiles, Direction[] direction) {
 		super.setNeighbourTiles(tiles, direction);
 		this.surrounding = tiles;
+	}
+
+	@Override
+	public void moveDeathRat(DeathRat dr, Direction prevDirection) {
+		
+		// For rats going towards the death rat (not including baby rat since they shouldn't be
+		// on this tile
+		ArrayList<Rat> dealing = currBlock.get(prevDirection.opposite());
+		ArrayList<Rat> escaped = new ArrayList<>();
+		if (dealing != null) {
+			for (int i = 0; i < dealing.size(); i++) {
+				if (dr.killRat(dealing.get(i), 1)) {
+					Main.addCurrMovement(X_Y_POS, prevDirection, dealing.get(i).getStatus(), 2);
+				} else {
+					escaped.add(dealing.get(i));
+				}
+			}
+			currBlock.put(prevDirection.opposite(), escaped);
+		}
+		
+		// Adult rats going away from death rat (not including baby rat)
+		if (dr.isAlive()) {
+			dealing = currBlock.get(prevDirection);
+			if (dealing != null) {
+				for (int i = 0; i < dealing.size(); i++) {
+					if (dr.killRat(dealing.get(i), 1)) {
+						Main.addCurrMovement(X_Y_POS, 
+								prevDirection.opposite(), 
+								dealing.get(i).getStatus(), 
+								2);
+					} else {
+						escaped.add(dealing.get(i));
+					}
+				}
+				currBlock.put(prevDirection, escaped);
+			}
+		}
+		
+		if (dr.isAlive()) {
+			TileType t = neighbourTiles.get(prevDirection.opposite());
+			t.moveDeathRat(dr, prevDirection);
+		}
+	}
+	
+	/**
+	 * Death Rat should not be on this tile.
+	 */
+	@Override
+	public ArrayList<DeathRat> getNextDeathRat() {
+		if (!currDeath.isEmpty() || !nextDeath.isEmpty()) {
+			System.err.println("Death rat on invalid tile - light tile");
+		}
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -45,7 +94,7 @@ public class LightTile extends TileType {
 				TileType tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
 					RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
-					Main.addCurrMovement(X_Y_POS, goTo, gen);
+					Main.addCurrMovement(X_Y_POS, goTo, gen, 4);
 					tile.addRat(ratList.get(i), goTo.opposite());
 				}
 			}
@@ -53,7 +102,8 @@ public class LightTile extends TileType {
 	}
 
 	/**
-	 * Light tile won't decide where it goes, already predetermined by previous tile
+	 * Light tile won't decide where it goes, already predetermined by previous tile, 
+	 * will go straight to next tile.
 	 */
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
@@ -62,8 +112,9 @@ public class LightTile extends TileType {
 	}
 
 	/**
-	 * This tile will not have any stop sign, so it will return 
-	 * number of rats for the next tile
+	 * This tile will not have any stop sign, so it will return number of rats for
+	 * the next tile
+	 * 
 	 * @param t the tile that is requesting how many rats can go through
 	 * @param n number of rats that tile the other tile has
 	 */

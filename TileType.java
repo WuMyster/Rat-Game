@@ -34,18 +34,33 @@ public abstract class TileType {
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
 	 */
 	protected HashMap<Direction, TileType> neighbourTiles;
+	
+	/**
+	 * List of Rats that are alive after dealing with any items and Death Rats
+	 */
+	protected ArrayList<Rat> aliveRats;
 
 	/**
 	 * Direction is direction to the previous tile. Rat classes that are arriving to
-	 * the tile in the next block of actions.
+	 * the tile in the next block of actions. Does not include Death Rat.
 	 */
 	protected HashMap<Direction, ArrayList<Rat>> nextBlock = new HashMap<>();
 
 	/**
 	 * Direction is direction to the previous tile Rats that the Tile is currently
-	 * dealing with.
+	 * dealing with. Does not include Death Rat.
 	 */
 	protected HashMap<Direction, ArrayList<Rat>> currBlock;
+	
+	/**
+	 * Death Rat that is arriving to this tile. 
+	 */
+	protected HashMap<Direction, ArrayList<DeathRat>> nextDeath = new HashMap<>();
+	
+	/**
+	 * Death Rats that are currently on tile. Will check if still alive.
+	 */
+	protected HashMap<Direction, ArrayList<DeathRat>> currDeath = new HashMap<>();
 
 	/**
 	 * All directions from this tile to other tiles.
@@ -73,8 +88,26 @@ public abstract class TileType {
 	
 	/**
 	 * To skip past any lightTiles. (Speed 2, for baby rats)
+	 * @param r Baby Rat that is skipping past staying on Light Tile
+	 * @param prevDirection direction that Baby Rat from
 	 */
 	public abstract void getAcceleratedDirection(Rat r, Direction prevDirection);
+	
+	// Will be run 2nd, after items deal with all rats aside from death rat.
+	/**
+	 * Moves Death Rat allowing it to take down normal rats along the way.
+	 * @return returns list of alive Death Rats on this tile
+	 */
+	public abstract ArrayList<DeathRat> getNextDeathRat();
+	
+	// For now only deals with one moving death rat between 3 tiletypes.
+	/**
+	 * Runs if Death Rat is coming to this tile, accelerates all processes. I.e.
+	 * item, rat interactions and movement.
+	 * @param dr Death Rat class coming to this tile
+	 * @param prevDirection direction the Death Rat came from
+	 */
+	public abstract void moveDeathRat(DeathRat dr, Direction prevDirection);
 
 	/**
 	 * Constructor for most normal tiles.
@@ -227,7 +260,7 @@ public abstract class TileType {
 	 * Place stop sign on tile. XX
 	 */
 	protected void placeStopSign() {
-		itemHP = 3; // Should call Item class go get health of stop sign
+		itemHP = 30; // Should call Item class go get health of stop sign
 		isBlocked = true;
 	}
 
@@ -277,7 +310,7 @@ public abstract class TileType {
 		System.out.println("BLOWN UP");
 	}
 
-	/**
+	/** MOVEMENT
 	 * Add rat that is going to this tile.
 	 * 
 	 * @param r rat to be added to this Tile
@@ -287,6 +320,29 @@ public abstract class TileType {
 		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
 		nextBlock.get(d).add(r);
 	}
+	
+	/** MOVEMENT
+	 * Add death rat to this tile.
+	 * 
+	 * @param r death rat to be added
+	 * @param d direction the death rat came from
+	 */
+	public void addRat(DeathRat r, Direction d) {
+		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
+		nextDeath.get(d).add(r);
+	}
+	
+	/** MOVEMENT
+	 * Might join this method with above, Death Rat will need to extend Rat if so...
+	 * 
+	 * @param dr DeathRat to be added to this Tile
+	 * @param d	direction the DeathRat came from
+	 * @deprecated
+	 */
+	public void addDeathRat(DeathRat dr, Direction d) {
+		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
+		nextDeath.get(d).add(dr);
+	}
 
 	/**
 	 * Sets list of rats the tile is currently dealing with
@@ -294,6 +350,9 @@ public abstract class TileType {
 	public void setCurrRat() {
 		currBlock = nextBlock;
 		nextBlock = new HashMap<>();
+		
+		currDeath = nextDeath;
+		nextDeath = new HashMap<>();
 	}
 	
 	/**
