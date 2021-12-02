@@ -202,7 +202,8 @@ public class Main extends Application {
 		primaryStage.show();
 
 		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
-		chuckEverythingAtDeath();
+		//chuckEverythingAtDeath();
+		runToLiveAnotherDay();
 		// 
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		// One more Test case where _ _ -> D B
@@ -211,7 +212,20 @@ public class Main extends Application {
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
-		// cycler.play();
+		cycler.play();
+	}
+	
+	private void runToLiveAnotherDay() {
+		// Baby rat, will need to place stop sign
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3);
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3); 
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 4); 
+		// Adult
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 3); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 4); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 5); 
 	}
 	
 	private void chuckEverythingAtDeath() {

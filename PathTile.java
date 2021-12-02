@@ -146,7 +146,10 @@ public class PathTile extends TileType {
 				TileType tile = neighbourTiles.get(goTo);
 				ratsGoToDeath = tile.numsRatsCanEnter(this, ratList.size());
 				if (ratsGoToDeath != 0) {
-					ratList = dr.killRats(((ArrayList<Rat>) ratList.subList(0, ratsGoToDeath)), 3);
+					System.out.println(ratList);
+					System.out.println(ratsGoToDeath);
+					System.out.println("==");
+					ratList = dr.killRats((new ArrayList<Rat>(ratList.subList(0, ratsGoToDeath))), 3);
 				}
 				// ratList = dr.killRats((ArrayList<Rat>) ratList.subList(0, ratsGoToDeath), 3); //Should all be adult rats
 			}
