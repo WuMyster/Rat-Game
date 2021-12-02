@@ -40,14 +40,26 @@ public class PathTile extends TileType {
 		ArrayList<DeathRat> drs = new ArrayList<>();
 		for (Direction prevDirection : currDeath.keySet()) {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
-			TileType t = neighbourTiles.get(goTo);
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
-					// TODO Will need to check for stop sign
-					t.moveDeathRat(dr, goTo.opposite());
+					
+					TileType t;
+					int i;
+					do {
+						t = neighbourTiles.get(goTo);
+						i = t.numsRatsCanEnter(this, 1);
+						
+						Direction tmp = goTo;
+						goTo = prevDirection;
+						prevDirection = tmp;
+					} while (i == 0);
+					
+					// Need better logic for this
+					t.moveDeathRat(dr, prevDirection.opposite());
 					drs.add(dr);
-					dr.initalMove(X_Y_POS, goTo);
+					dr.initalMove(X_Y_POS, prevDirection);
 				}
+				
 			}
 		}
 		
