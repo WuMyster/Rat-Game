@@ -258,8 +258,8 @@ public abstract class TileType {
 		//Item delete
 		//Rat delete, rat tell rat controller
 		if (itemOnTile != null) {
-//			Main.removeBomb(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-//					X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+                    X_Y_POS[1] / Board.EXTRA_PADDING});
 		}
 		resetTile();
 		System.out.println("BLOWN UP");
