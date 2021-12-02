@@ -130,6 +130,6 @@ public class JunctionTile extends TileType {
 	@Override
 	public void moveDeathRat(DeathRat r, Direction prevDirection) {
 		// TODO Auto-generated method stub
-
+		System.out.println("Death rat movement not yet implemented!");
 	}
 }

@@ -203,8 +203,9 @@ public class Main extends Application {
 
 		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
 		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
+		// m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		// m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
@@ -212,7 +213,7 @@ public class Main extends Application {
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
-		cycler.play();
+		// cycler.play();
 	}
 
 	/**
@@ -335,7 +336,7 @@ public class Main extends Application {
 					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[3], 
 								i[1] * RAT_POSITION - step * speed, 
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4), // * (size - 1)
 								height, width);
 					} 
 				}
@@ -506,13 +507,13 @@ public class Main extends Application {
 		root.getChildren().addAll(menuBar);
 		
 		// Tick Timeline buttons
-		Button startTickTimelineButton = new Button("Blow up");
+		Button startTickTimelineButton = new Button("Move rat");
 		// We add both buttons at the same time to the timeline (we could have done this in two steps).
 		root.getChildren().addAll(startTickTimelineButton);
 
 		// Setup the behaviour of the buttons.
 		startTickTimelineButton.setOnAction(e -> {
-			m.addBomb(8, 5);
+			runCycle();
 		});
 
 		return root;

@@ -92,40 +92,45 @@ public class PathTile extends TileType {
 	//Death rat and stop sign stopping rats from moving away hence moving towards DR
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
-		Direction prevDirectionR = prevDirectionDR == directions[0] ? directions[1] : directions[0];
-		if (prevDirectionR != null) {
+		System.out.println("ASDF");
+		Direction prevDirectionR = prevDirectionDR == directions[1] ? directions[0] : directions[1];
 			ArrayList<Rat> rs1 = currBlock.get(prevDirectionR);
 			ArrayList<Rat> rs2 = new ArrayList<>();
-			
-			for(Rat r : rs1) {
-				if (r.getStatus() == RatType.BABY) {
-					if (dr.killRat(r, 2)) {
-						Main.addCurrMovement(X_Y_POS, prevDirectionR, RatType.BABY, 2);
+			if (rs1 != null) {
+				System.out.println("Not null");
+				for(Rat r : rs1) {
+					if (r.getStatus() == RatType.BABY) {
+						if (dr.killRat(r, 2)) {
+							Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), RatType.BABY, 2);
+						} else {
+							// Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), RatType.BABY, 4); Should be moved afterwards if more death rats come
+							rs2.add(r);
+						}
 					} else {
-						Main.addCurrMovement(X_Y_POS, prevDirectionR, RatType.BABY, 4);
+						rs2.add(r);
 					}
-				} else {
-					rs2.add(r);
 				}
-			}
+			
+			// Have rs2 analysed in terms of movement
 			//kill Rats
+			rs1 = new ArrayList<>();
 			for(Rat r : rs2) {
 				if (dr.killRat(r, 2)) {
 					Main.addCurrMovement(X_Y_POS, prevDirectionR, r.getStatus(), 3);
 				} else {
-					Main.addCurrMovement(X_Y_POS, prevDirectionR, r.getStatus(), 4);
+					rs1.add(r);
 				}
 			}
 			
-			currBlock.put(prevDirectionR, new ArrayList<>());
+			currBlock.put(prevDirectionR, rs1);
+		} else {
+			System.out.println("NULL");
 		}
 		
 //		if (dr.isAlive()) {
-//			//Direction goTo = prevDirectionDR == directions[0] ? directions[1] : directions[0];
-//			Direction goTo = directions[0] == prevDirectionDR ? directions[1] : directions[0];
 //			
 //			ArrayList<Rat> ratList = currBlock.get(goTo);
-//			int ratsGoToDeath = 0; // Number of rats that can keep go in current direction
+//			int ratsGoToDeath = 0; 
 //			int i = 0;
 //			while (i != ratList.size()) {	
 //				TileType tile = neighbourTiles.get(goTo);
@@ -133,9 +138,7 @@ public class PathTile extends TileType {
 //				ratsGoToDeath = tile.numsRatsCanEnter(this, ratList.size());
 //				i += ratsGoToDeath;
 //			}
-//			
 //			ratList = dr.killRats((ArrayList<Rat>) ratList.subList(0, ratsGoToDeath), 3);
-//			
 //		}
 		
 		
@@ -143,7 +146,6 @@ public class PathTile extends TileType {
 		if (dr.isAlive()) {
 			this.addRat(dr, prevDirectionDR);
 		}
-		//this.addRat(r, prevDirection);
 	} 	
 
 	/**
