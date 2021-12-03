@@ -17,6 +17,16 @@ public class DeathRat {
 		rat = new Rat(50, true, true, 20, true, true, true);
 	}
 	
+	/**
+	 * Should be changed!
+	 * @return
+	 */
+	public Rat itemAction() {
+		Rat deathRat = new Rat(true, 10);
+		
+		return deathRat;
+	}
+	
 	public int[] getXyPos() {
 		return xyPos;
 	}
@@ -77,10 +87,7 @@ public class DeathRat {
 		return r;
 	}
 	
-	public Rat itemAction() {
-		Rat deathRat = new Rat(true, 10);
-		deathRat.becomeDeathRat();
-		return deathRat;
-	}
+	// This might not be needed anymore, is item, but should be treated like Rat
+	
 	
 }

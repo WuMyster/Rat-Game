@@ -91,6 +91,11 @@ public class Board {
 			createGraph();
 	}
 
+	/**
+	 * Debug only!!
+	 * @return
+	 * @deprecated
+	 */
 	public static TileType[][] getBoard() {
 		return board;
 	}
@@ -105,7 +110,9 @@ public class Board {
 		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (t == null) {
 			return false;
-		} // else if (board[y][x] instanceof tunnelTile) {
+		}  else if (t instanceof TunnelTile) {
+			return false;
+		}
 
         //TODO Wu move this to item
 		t.placeStopSign();

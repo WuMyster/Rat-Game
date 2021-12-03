@@ -257,8 +257,7 @@ public abstract class TileType {
     }
 
 	/**
-	 * Place stop sign on tile. XX
-	 * @deprecated
+	 * Place stop sign on tile.
 	 */
 	protected void placeStopSign() {
 		itemHP = 30; // Should call Item class go get health of stop sign
