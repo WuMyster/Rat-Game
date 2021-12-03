@@ -34,10 +34,6 @@ public class Rat {
 	 * The amount of health the rat has
 	 */
 	private int health;
-	/**
-	 * The amount of points rewarded when the rat is killed
-	 */
-	private int pointsUponDeath;
 	
 
 	
@@ -54,7 +50,6 @@ public class Rat {
 		isDeathRat = false;
 		isSterile = false;
 		age = 0;
-		pointsUponDeath = 10;
 	}
 
 	/**
@@ -75,10 +70,8 @@ public class Rat {
 		this.isDeathRat = isDeathRat;
 		this.isSterile = isSterile;
 		this.age = age;
-		pointsUponDeath = calculatePointsUponDeath();
 	}
 	
-
 	/**
 	 * Returns rat type
 	 * @return rat type
@@ -112,13 +105,10 @@ public class Rat {
 	public void setPregnancy(boolean newPregnancyState) {
 		isPregnant = newPregnancyState;
 	}
-	public boolean getPregnancy() {
+	public boolean getPregnant() {
 		return isPregnant;
 	}
 	
-	public void becomeDeathRat() {
-		isDeathRat = true;
-	}
 	public boolean getDeathRat() {
 		return isDeathRat;
 	}
@@ -157,12 +147,10 @@ public class Rat {
 	 * @param damage - amount of damage dealt to the rat
 	 * @return a boolean on whether the rat is dead (true = dead)
 	 */
-	public boolean damageRat(int damage) {
+	public void damageRat(int damage) {
 		health -= damage;
 		if(health == 0) {
-			return true;
-		} else {
-			return false;
+			RatController.killRat(this);
 		}
 	}
 	/**
@@ -174,7 +162,7 @@ public class Rat {
 	}
 	
 	public int getPointsUponDeath() {
-		return pointsUponDeath;
+		return calculatePointsUponDeath();
 	}
 	/**
 	 * 
