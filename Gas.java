@@ -28,7 +28,7 @@ public class Gas extends Item {
     int gasSpread = 0;
 
 
-    TileType[][] board = Board.getBoard();
+    Tile[][] board = Board.getBoard();
 
     public void add(int x, int y) {
         new Thread(() -> {
@@ -52,7 +52,7 @@ public class Gas extends Item {
         gasSpread += 1;
         for (int i = -(gasSpread); i <= gasSpread; i++) {
             for (int j = -(gasSpread); j <= gasSpread; j++) {
-                TileType t = board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
+                Tile t = board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
                 Poison gas = new Poison();
 
                 if (Board.isItemPlaceable(x - i, y - j)) {

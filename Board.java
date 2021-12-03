@@ -108,7 +108,7 @@ public class Board {
 	}
 
     public static boolean isItemPlaceable(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         if (t instanceof PathTile && !(t instanceof TunnelTile)) {
             return true;
         }
@@ -180,6 +180,7 @@ public class Board {
         t.setTileItem(s, x, y);
     }
 
+    /*
     public void addGas(int x, int y) {
         TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Gas gas = new Gas();
@@ -187,6 +188,8 @@ public class Board {
         t.setTileItem(gas, x, y);
 
     }
+
+     */
 
 	/**
 	 * Draws board onto game window.
