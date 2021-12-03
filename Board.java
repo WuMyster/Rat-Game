@@ -190,6 +190,7 @@ public class Board {
 				} else if (board[i][j] instanceof TunnelTile) {
 					Image t = grassImage;
 					
+					// Check for NESW entrance
 					if (board[i - EXTRA_PADDING][j] != null &&
 							!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
 						t = tunnelImages[0];
@@ -210,11 +211,6 @@ public class Board {
 							Main.TILE_SIZE);
 				} else {
 					x++;
-//					gc.drawImage(tileImage, 
-//							x++ * Main.TILE_SIZE, 
-//							y * Main.TILE_SIZE, 
-//							Main.TILE_SIZE,
-//							Main.TILE_SIZE);
 				}
 			}
 			x = 0;
@@ -236,6 +232,7 @@ public class Board {
 	}
 
 	/**
+	 * Put Death Rat onto game canvas.
 	 * 
 	 * @param rat death rat to be added to map
 	 * @param dir direction the death rat came from
@@ -257,8 +254,12 @@ public class Board {
 		for (Tile t : allTiles) {
 			t.setCurrRat();
 		}
+		// First give item to rat(s)
+		for (Tile t : allTiles) {
+			t.giveRatItem();
+		}
 		
-		// First move Death rats and any rats in its path
+		// Secondly move Death rats and any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
 		}
