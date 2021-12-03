@@ -30,12 +30,12 @@ public class Board {
 	/**
 	 * The 2d array of the map. Static so other classes can access this
 	 */
-	private static TileType[][] board;
+	private static Tile[][] board;
 
 	/**
 	 * List of all tiles on board.
 	 */
-	private static ArrayList<TileType> allTiles;
+	private static ArrayList<Tile> allTiles;
 	
 	/**
 	 * List of death rats.
@@ -81,7 +81,7 @@ public class Board {
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
 		try {
-			this.board = new TileType[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
+			this.board = new Tile[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -96,7 +96,7 @@ public class Board {
 	 * @return
 	 * @deprecated
 	 */
-	public static TileType[][] getBoard() {
+	public static Tile[][] getBoard() {
 		return board;
 	}
 
@@ -107,7 +107,7 @@ public class Board {
 	 * @return {@code true} if stop sign can be placed
 	 */
 	public boolean addStopSign(int x, int y) {
-		TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (t == null) {
 			return false;
 		}  else if (t instanceof TunnelTile) {
@@ -128,35 +128,35 @@ public class Board {
 	 * @return {@code true} if bomb can be placed at that location.
 	 */
 	public void addBomb(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Bomb bomb = new Bomb();
 
         t.setTileItem(bomb, x, y);
 	}
 
     public void addPoison(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Poison p = new Poison();
 
         t.setTileItem(p, x, y);
         }
 
     public void addSexToFemale(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToFemale toFemale = new SexChangeToFemale();
 
         t.setTileItem(toFemale, x, y);
     }
 
     public void addSexToMale(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToMale toMale = new SexChangeToMale();
 
         t.setTileItem(toMale, x, y);
     }
 
     public void addSterilise(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Sterilisation s = new Sterilisation();
 
         t.setTileItem(s, x, y);
@@ -254,17 +254,17 @@ public class Board {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
 		deathRatBuffer = new ArrayList<>();
 		// Movement
-		for (TileType t : allTiles) {
+		for (Tile t : allTiles) {
 			t.setCurrRat();
 		}
 		
 		// First move Death rats and any rats in its path
-		for (TileType t : allTiles) {
+		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
 		}
 		
 		// Before moving all other rats
-		for (TileType t : allTiles) {
+		for (Tile t : allTiles) {
 			t.getNextDirection();
 		}
 		
@@ -326,7 +326,7 @@ public class Board {
 		}
 	}
 
-	private boolean check(TileType t) {
+	private boolean check(Tile t) {
 		if (t == null) {
 			return false;
 		} else if (t instanceof LightTile) {
@@ -345,7 +345,7 @@ public class Board {
 
 				if (board[i][j] != null) {
 					allTiles.add(board[i][j]);
-					ArrayList<TileType> tiles = new ArrayList<>(4);
+					ArrayList<Tile> tiles = new ArrayList<>(4);
 					ArrayList<Direction> direction = new ArrayList<>(4);
 
 					// Check North
@@ -380,7 +380,7 @@ public class Board {
 						}
 					}
 					board[i][j].setNeighbourTiles(tiles.toArray(
-							new TileType[2]), direction.toArray(new Direction[2]));
+							new Tile[2]), direction.toArray(new Direction[2]));
 				}
 			}
 		}

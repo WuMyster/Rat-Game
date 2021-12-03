@@ -6,7 +6,7 @@ import java.util.Random;
  * 
  * @author Jing Shiang Gu
  */
-public class JunctionTile extends TileType {
+public class JunctionTile extends Tile {
 
 	private Random rand = new Random();
 
@@ -32,7 +32,7 @@ public class JunctionTile extends TileType {
 			if (!ratList.isEmpty()) {
 				for (Rat r : ratList) {
 					Direction goTo = getADirection(prevDirectionRat);
-					TileType tile;
+					Tile tile;
 					int ratsGoForward;
 					do {
 						tile = neighbourTiles.get(goTo);
@@ -98,7 +98,7 @@ public class JunctionTile extends TileType {
 					while (i != ratList.size()) {
 	
 						Direction goTo = getADirection(prevDirection);
-						TileType tile = neighbourTiles.get(goTo);
+						Tile tile = neighbourTiles.get(goTo);
 	
 						int ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
 	
@@ -120,7 +120,7 @@ public class JunctionTile extends TileType {
 			for (Direction goTo : buffer.keySet()) {
 				ArrayList<Rat> ratList = buffer.get(goTo);
 				if (!ratList.isEmpty()) {
-					TileType tile = neighbourTiles.get(goTo);
+					Tile tile = neighbourTiles.get(goTo);
 					for(Rat r : ratList) {
 						RatType status = r.getStatus();
 						if (status == RatType.BABY) {
@@ -191,7 +191,7 @@ public class JunctionTile extends TileType {
 			Direction goTo = getADirection(prevDirection);
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
-					TileType t;
+					Tile t;
 					int i;
 
 					do {

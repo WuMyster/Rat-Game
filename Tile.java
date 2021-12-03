@@ -7,7 +7,7 @@ import java.util.HashMap;
  * @author Jing Shiang Gu
  * 
  */
-public abstract class TileType {
+public abstract class Tile {
 
 	/**
 	 * Type of item on tile, to be given to rat to allow them to interact
@@ -33,7 +33,7 @@ public abstract class TileType {
 	/**
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
 	 */
-	protected HashMap<Direction, TileType> neighbourTiles;
+	protected HashMap<Direction, Tile> neighbourTiles;
 	
 	/**
 	 * List of Rats that are alive after dealing with any items and Death Rats
@@ -114,7 +114,7 @@ public abstract class TileType {
 	 * 
 	 * @param xyPos the position of the Tile
 	 */
-	public TileType(int[] xyPos) {
+	public Tile(int[] xyPos) {
 		this.X_Y_POS = xyPos;
 		resetTile();
 	}
@@ -126,7 +126,7 @@ public abstract class TileType {
 	 * @param tiles     list of tiles that is neighbouring this tile
 	 * @param direction list of directions to neighbouring tiles
 	 */
-	public void setNeighbourTiles(TileType[] tiles, Direction[] direction) {
+	public void setNeighbourTiles(Tile[] tiles, Direction[] direction) {
 		this.limit = tiles.length;
 		this.neighbourTiles = new HashMap<>(limit);
 		for (int i = 0; i < tiles.length; i++) {
@@ -271,7 +271,7 @@ public abstract class TileType {
 	 * @param n number of rats
 	 * @return the number of rats that can pass through it
 	 */
-	public int numsRatsCanEnter(TileType t, int n) {
+	public int numsRatsCanEnter(Tile t, int n) {
 		if (!isBlocked) {
 			return n;
 		}

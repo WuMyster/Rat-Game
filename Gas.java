@@ -22,7 +22,7 @@ public class Gas {
     int xOrigin;
     int yOrigin;
 
-    TileType[][] board = Board.getBoard();
+    Tile[][] board = Board.getBoard();
 
     public void itemAction(int x, int y) {
         xOrigin = x;

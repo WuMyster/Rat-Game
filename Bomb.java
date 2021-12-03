@@ -53,9 +53,9 @@ public class Bomb extends Item {
         x *= Board.EXTRA_PADDING;
         int startY = y;
         int startX = x;
-        TileType[][] board = Board.getBoard();
+        Tile[][] board = Board.getBoard();
 
-        TileType t = board[startY][startX];
+        Tile t = board[startY][startX];
         while (t != null) {
             t.blowUp();
             t = board[y--][x];

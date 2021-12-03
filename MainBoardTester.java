@@ -29,15 +29,15 @@ public class MainBoardTester {
 		System.out.println("Done!");
 	}
 
-	public static TileType[][] create2dArray(String map, int x, int y) {
+	public static Tile[][] create2dArray(String map, int x, int y) {
 		Board m = new Board(map, x, y);
 		//m.eliminateBadInvisTiles();
 		return m.getBoard();
 	}
 
-	public static void print2dArray(TileType[][] tile) {
-		for (TileType[] tileY : tile) {
-			for (TileType tileX : tileY) {
+	public static void print2dArray(Tile[][] tile) {
+		for (Tile[] tileY : tile) {
+			for (Tile tileX : tileY) {
 				if (tileX instanceof PathTile) {
 					System.out.print("P");
 				} else if (tileX instanceof JunctionTile) {

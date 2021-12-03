@@ -8,12 +8,12 @@ import java.util.ArrayList;
  * @author Jing Shiang Gu
  *
  */
-public class LightTile extends TileType {
+public class LightTile extends Tile {
 
 	/**
 	 * List of tiles next to this tile.
 	 */
-	private TileType[] surrounding;
+	private Tile[] surrounding;
 
 	/**
 	 * Creates a LightTile object storing its position.
@@ -26,7 +26,7 @@ public class LightTile extends TileType {
 	}
 
 	@Override
-	public void setNeighbourTiles(TileType[] tiles, Direction[] direction) {
+	public void setNeighbourTiles(Tile[] tiles, Direction[] direction) {
 		super.setNeighbourTiles(tiles, direction);
 		this.surrounding = tiles;
 	}
@@ -68,7 +68,7 @@ public class LightTile extends TileType {
 		}
 		
 		if (dr.isAlive()) {
-			TileType t = neighbourTiles.get(prevDirection.opposite());
+			Tile t = neighbourTiles.get(prevDirection.opposite());
 			t.moveDeathRat(dr, prevDirection);
 		}
 	}
@@ -91,7 +91,7 @@ public class LightTile extends TileType {
 
 			if (!ratList.isEmpty()) {
 				Direction goTo = prevDirection.opposite();
-				TileType tile = neighbourTiles.get(goTo);
+				Tile tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
 					RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
 					Main.addCurrMovement(X_Y_POS, goTo, gen, 4);
@@ -107,7 +107,7 @@ public class LightTile extends TileType {
 	 */
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-		TileType tile = neighbourTiles.get(prevDirection.opposite());
+		Tile tile = neighbourTiles.get(prevDirection.opposite());
 		tile.getAcceleratedDirection(r, prevDirection.opposite());
 	}
 
@@ -119,7 +119,7 @@ public class LightTile extends TileType {
 	 * @param n number of rats that tile the other tile has
 	 */
 	@Override
-	public int numsRatsCanEnter(TileType t, int n) {
+	public int numsRatsCanEnter(Tile t, int n) {
 		if (t != surrounding[0]) {
 			return surrounding[0].numsRatsCanEnter(null, n);
 		} else {

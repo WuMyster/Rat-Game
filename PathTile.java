@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Jing Shiang Gu
  *
  */
-public class PathTile extends TileType {
+public class PathTile extends Tile {
 
 	/**
 	 * Constructor to set its location
@@ -45,7 +45,7 @@ public class PathTile extends TileType {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
 
-					TileType t;
+					Tile t;
 					int i;
 					do {
 						t = neighbourTiles.get(goTo);
@@ -140,7 +140,7 @@ public class PathTile extends TileType {
 
 			// Only check stop sign forward of rat
 			if (ratList != null) {
-				TileType tile = neighbourTiles.get(goTo);
+				Tile tile = neighbourTiles.get(goTo);
 				ratsGoToDeath = tile.numsRatsCanEnter(this, ratList.size());
 				if (ratsGoToDeath != 0) {
 					ratList = dr.killRats((new ArrayList<Rat>(ratList.subList(0, ratsGoToDeath))), 3);
@@ -172,7 +172,7 @@ public class PathTile extends TileType {
 				int ratsGoForward; // Number of rats that can keep go in current direction
 
 				while (i != ratList.size()) {
-					TileType tile = neighbourTiles.get(goTo);
+					Tile tile = neighbourTiles.get(goTo);
 
 					ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
 					for (; i < ratsGoForward; i++) {
