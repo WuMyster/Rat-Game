@@ -25,11 +25,6 @@ public class PathTile extends Tile {
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 
-		// Pass in ArrayList of rats on this tile.
-		aliveRats = new ArrayList<>();
-		for (Direction prevDirection : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(prevDirection));
-		}
 		// Pass in ArrayList of Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {

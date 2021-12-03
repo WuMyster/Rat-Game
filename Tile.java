@@ -16,15 +16,12 @@ public abstract class Tile {
 	protected Item itemOnTile;
 
 	/**
-	 * Health of item.
-	 */
-	protected int itemHP;
-
-	/**
 	 * Stop sign will cause the tile to not be accessed. If false, Rat can enter
 	 * tile, else Rat will have to take another direction.
 	 */
 	protected Boolean isBlocked;
+	
+	protected Boolean isSterile;
 
 	/**
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
@@ -136,50 +133,48 @@ public abstract class Tile {
 	 * @param r the rat receiving the item
 	 * @return {@code true} if rat dies after being given item
 	 */
-	protected boolean giveRatItem(Rat r) {
-		if (itemOnTile == null) {
-			return false;
+	protected void giveRatItem() {
+		// Pass in ArrayList of rats on this tile. MAKE SURE TO GET THIS FROM ALL 3 TILES!!!
+		aliveRats = new ArrayList<>();
+		for (Direction prevDirection : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(prevDirection));
 		}
-		//Check item damage type and remove health as necessary
-		if (itemHP == 0) {
-			//Run method to do something if needed e.g. bomb
-			itemOnTile = null;
+		
+		if (itemOnTile != null) {
+			//Check item damage type and remove health as necessary
+			if (!itemOnTile.isAlive) {
+				//Run method to do something if needed e.g. bomb
+				// itemOnTile.reverseTile() -> Remove images, undo isBlocked and isSterile
+				itemOnTile = null;
+			} else {
+				// TODO Wu Maybe switch will be better
+				// Is (Poison) needed?
+		        if (itemOnTile instanceof Poison) {
+		            ((Poison) itemOnTile).itemAction(aliveRats);
+		            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+		                    X_Y_POS[1] / Board.EXTRA_PADDING});
+		            itemOnTile = null;
+		        }
+		        if (itemOnTile instanceof SexChangeToFemale) {
+		            ((SexChangeToFemale) itemOnTile).itemAction(aliveRats);
+		            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+		                    X_Y_POS[1] / Board.EXTRA_PADDING});
+		            itemOnTile = null;
+		        }
+		        if (itemOnTile instanceof SexChangeToMale) {
+		            ((SexChangeToMale) itemOnTile).itemAction(aliveRats);
+		            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+		                    X_Y_POS[1] / Board.EXTRA_PADDING});
+		            itemOnTile = null;
+		        }
+		        if (itemOnTile instanceof Sterilisation) {
+		            ((Sterilisation) itemOnTile).itemAction(aliveRats);
+		            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+		                    X_Y_POS[1] / Board.EXTRA_PADDING});
+		            itemOnTile = null;
+		        }
+			}
 		}
-
-        // TODO Wu Maybe switch will be better
-        if (itemOnTile instanceof Poison) {
-            ((Poison) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
-            itemOnTile = null;
-            return true;
-        }
-        if (itemOnTile instanceof SexChangeToFemale) {
-            ((SexChangeToFemale) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
-            itemOnTile = null;
-            return false;
-        }
-        if (itemOnTile instanceof SexChangeToMale) {
-            ((SexChangeToMale) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
-            itemOnTile = null;
-            return false;
-        }
-        if (itemOnTile instanceof Sterilisation) {
-            ((Sterilisation) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
-            itemOnTile = null;
-            return false;
-        }
-
-		
-		//Method to give item away
-		
-		return false;
 	}
 	
 	//??????? TODO }Item{

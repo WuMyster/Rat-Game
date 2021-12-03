@@ -1,8 +1,14 @@
+import java.util.ArrayList;
+
 /**
  * 
  * @author 
  *
  */
-class Item {
-
+abstract class Item {
+	//Method
+	boolean isAlive = true;
+	
+	public abstract void itemOnAction(ArrayList<Rat> rs);
+	
 }
