@@ -77,6 +77,9 @@ public abstract class TileType {
 	 */
 	protected final int[] X_Y_POS;
 
+    // @Jing, added this to clean up code below.
+    protected final int[] X_Y_POS_PADDED;
+
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
 	 * where to go and tile class which rats are going to it and from what direction
@@ -116,6 +119,8 @@ public abstract class TileType {
 	 */
 	public TileType(int[] xyPos) {
 		this.X_Y_POS = xyPos;
+        this.X_Y_POS_PADDED = new int[] {X_Y_POS[0] / Board.getExtraPadding(),
+                X_Y_POS[1] / Board.getExtraPadding()};
 		resetTile();
 	}
 
@@ -150,34 +155,36 @@ public abstract class TileType {
 			itemOnTile = null;
 		}
 
-        // TODO Wu Maybe switch will be better
+        // TODO Wu Find out a way to reduce repetition here
         if (itemOnTile instanceof Poison) {
             ((Poison) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            Main.removeItem(Item.Name.POISON, X_Y_POS_PADDED);
             itemOnTile = null;
             return true;
         }
         if (itemOnTile instanceof SexChangeToFemale) {
             ((SexChangeToFemale) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(X_Y_POS_PADDED);
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof SexChangeToMale) {
             ((SexChangeToMale) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(X_Y_POS_PADDED);
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof Sterilisation) {
             ((Sterilisation) itemOnTile).itemAction(r);
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(X_Y_POS_PADDED);
             itemOnTile = null;
             return false;
+        }
+        if (itemOnTile instanceof Gas) {
+            ((Gas) itemOnTile).itemAction(r);
+            itemUsed(X_Y_POS_PADDED);
+            itemOnTile = null;
+            return true;
         }
 
 		
@@ -218,14 +225,20 @@ public abstract class TileType {
             ((Bomb) i).itemAction(x, y);
             return true;
         }
+        if (i instanceof Gas) {
+            itemHP = 1;
+            ((Gas) i).add(x, y);
+            return true;
+        }
 
 		return true;
 	}
 
     /**
+     * TODO Wu, not encapsulated, will look into it if theres time
      * When item is given to rat and used, item is removed from its Arraylist and subsequently
      * removed from screen.
-     * @param pos
+     * @param pos co-ordinates of the current tile.
      */
     private void itemUsed(int[] pos) {
         ArrayList<int[]> arr = null;
@@ -279,9 +292,9 @@ public abstract class TileType {
 		if (itemHP > 0) {
 			return 0;
 		}
-		Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-				X_Y_POS[1] / Board.EXTRA_PADDING});
-		isBlocked = false;
+		//Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+				//X_Y_POS[1] / Board.EXTRA_PADDING});
+		//isBlocked = false;
 		return Math.abs(itemHP);
 	}
 	
@@ -297,14 +310,13 @@ public abstract class TileType {
 	 * Blow up this tile??.
 	 */
 	public void blowUp() {
-		//Item delete
-		//Rat delete, rat tell rat controller
+		//ratcontroller.kill
 		if (itemOnTile != null) {
             if (itemOnTile instanceof Bomb) {
                 ((Bomb) itemOnTile).timer.cancel();
             }
-            itemUsed(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-                    X_Y_POS[1] / Board.EXTRA_PADDING});
+            itemUsed(new int[] {X_Y_POS[0] / Board.getExtraPadding(),
+                    X_Y_POS[1] / Board.getExtraPadding()});
 		}
 		resetTile();
 		System.out.println("BLOWN UP");

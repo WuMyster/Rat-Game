@@ -1,6 +1,6 @@
 /**
  * Item to make rats sterile.
-@author Andrew
+ * @author Andrew Wu
  */
 public class Sterilisation extends Item {
     /**
@@ -8,7 +8,7 @@ public class Sterilisation extends Item {
      * @param rat a Rat Object
      */
     public void itemAction(Rat rat) {
-        if (rat.getSterile() == true) {
+        if (rat.getSterile() == false) {
             rat.sterilise();
             System.out.println("Rat sterilised");
         }

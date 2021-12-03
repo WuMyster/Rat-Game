@@ -1,5 +1,8 @@
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -67,7 +70,11 @@ public class Board {
 	/**
 	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
 	 */
-	public final static int EXTRA_PADDING = 2;
+	private final static int EXTRA_PADDING = 2;
+
+    public static int getExtraPadding() {
+        return EXTRA_PADDING;
+    }
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -92,8 +99,19 @@ public class Board {
 	}
 
 	public static TileType[][] getBoard() {
-		return board;
+        return board;
 	}
+
+    public static boolean isItemPlaceable(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        if (t instanceof PathTile && !(t instanceof TunnelTile)) {
+            return true;
+        }
+        if (t instanceof JunctionTile) {
+            return true;
+        }
+        return false;
+    }
 
 	/**
 	 * Adds effect of stop sign to tile
@@ -122,9 +140,10 @@ public class Board {
 	 */
 	public void addBomb(int x, int y) {
         TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Bomb bomb = new Bomb();
-
-        t.setTileItem(bomb, x, y);
+        if (t != null) {
+            Bomb bomb = new Bomb();
+            t.setTileItem(bomb, x, y);
+        }
 	}
 
     public void addPoison(int x, int y) {
@@ -153,6 +172,14 @@ public class Board {
         Sterilisation s = new Sterilisation();
 
         t.setTileItem(s, x, y);
+    }
+
+    public void addGas(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Gas gas = new Gas();
+
+        t.setTileItem(gas, x, y);
+
     }
 
 	/**
