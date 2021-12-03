@@ -148,7 +148,7 @@ public abstract class Tile {
 		
 		if (itemOnTile != null) {
 			//Check item damage type and remove health as necessary
-			if (!itemOnTile.isAlive) {
+			if (!itemOnTile.isAlive()) {
 				//Run method to do something if needed e.g. bomb
 				// itemOnTile.reverseTile() -> Remove images, undo isBlocked and isSterile
 				itemOnTile = null;
