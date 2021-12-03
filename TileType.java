@@ -297,8 +297,7 @@ public abstract class TileType {
 	 * Blow up this tile??.
 	 */
 	public void blowUp() {
-		//Item delete
-		//Rat delete, rat tell rat controller
+		// Waiting for rat controller kill(). Needs to kill rats so that we can count points.
 		if (itemOnTile != null) {
             if (itemOnTile instanceof Bomb) {
                 ((Bomb) itemOnTile).timer.cancel();
