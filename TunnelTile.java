@@ -1,6 +1,7 @@
 
 /**
- * 
+ * Item not placeable {@code PathTile}, however effects of items
+ * will still happen on this {@code TunnelTile}.
  * @author Jing Shiang Gu
  *
  */

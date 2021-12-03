@@ -77,9 +77,9 @@ public class Main extends Application {
 	public static final int TIME_BETWEEN_STEPS = 10;
 	
 	/**
-	 * Time between each cycle. 4
+	 * Time between each cycle in miliseconds. 4
 	 */
-	public static final int CYCLE_TIME = 1;
+	public static final int CYCLE_TIME = 500;
 
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
@@ -244,12 +244,12 @@ public class Main extends Application {
 
 		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
 		chuckEverythingAtDeath();
-		// runToLiveAnotherDay();
+		runToLiveAnotherDay();
 		// 
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
 		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
-		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(CYCLE_TIME), event -> runCycle()));
+		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
@@ -291,10 +291,8 @@ public class Main extends Application {
 		currMovement = new HashMap<>();
 		step = 0;
 		m.runAllTiles();
-
+		// currPoints.setText(String.valueOf(RatController.getPoints()));
 		ratMoveTimeline.play();
-		
-	
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		
 		drawItems();

@@ -3,7 +3,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Superclass of all tile types.
+ * This class provides a skeltal implementation of the {@code Tile}, it is a
+ * superclass of all {@code Tile}s.
  * @author Jing Shiang Gu
  * 
  */
@@ -18,11 +19,6 @@ public abstract class Tile {
 	 * Health of item.
 	 */
 	protected int itemHP;
-
-	/**
-	 * How the item loses health.
-	 */
-	protected ItemDamageType itemDamageType;
 
 	/**
 	 * Stop sign will cause the tile to not be accessed. If false, Rat can enter
@@ -331,18 +327,6 @@ public abstract class Tile {
 		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
 		nextDeath.get(d).add(r);
 	}
-	
-	/** MOVEMENT
-	 * Might join this method with above, Death Rat will need to extend Rat if so...
-	 * 
-	 * @param dr DeathRat to be added to this Tile
-	 * @param d	direction the DeathRat came from
-	 * @deprecated
-	 */
-	public void addDeathRat(DeathRat dr, Direction d) {
-		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
-		nextDeath.get(d).add(dr);
-	}
 
 	/**
 	 * Sets list of rats the tile is currently dealing with
@@ -360,10 +344,11 @@ public abstract class Tile {
 	 */
 	private void resetTile() {
 		itemOnTile = null;
+		// TODO Remove item from tile.
 		itemHP = 0;
-		itemDamageType = null;
 		isBlocked = false;
 		nextBlock =  new HashMap<>();	
+		nextDeath = new HashMap<>();
 	}
 	
 }
