@@ -78,6 +78,22 @@ public class Rat {
 		pointsUponDeath = calculatePointsUponDeath();
 	}
 	
+
+	/**
+	 * Returns rat type
+	 * @return rat type
+	 * @author J
+	 */
+	public RatType getStatus() {
+		if (isChild()) {
+			return RatType.BABY;
+		} 
+		if (isDeathRat) {
+			return RatType.DEATH;
+		}
+		return isMale ? RatType.MALE : RatType.FEMALE;
+	}
+	
 	/**
 	 * returns whether the rat is male
 	 * @return 

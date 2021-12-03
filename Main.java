@@ -28,6 +28,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -41,25 +42,27 @@ import javafx.util.Duration;
  */
 public class Main extends Application {
 	/**
-	 * Width of the window.
+	 * Width of the window in pixels.
 	 */
 	private static final int WINDOW_WIDTH = 960;
+	
 	/**
-	 * Height of the window.
+	 * Height of the window in pixels.
 	 */
 	private static final int WINDOW_HEIGHT = 600;
 
 	/**
-	 * Width of the game canvas.
+	 * Width of the game canvas in pixels.
 	 */
 	private static final int CANVAS_WIDTH = 850;
+	
 	/**
-	 * Height of the game canvas.
+	 * Height of the game canvas in pixels.
 	 */
 	private static final int CANVAS_HEIGHT = 550;
 
 	/**
-	 * Height and width of a Tile.
+	 * Height and width of a Tile in pixels.
 	 */
 	public static final int TILE_SIZE = 50;
 
@@ -67,6 +70,16 @@ public class Main extends Application {
 	 * Position multiplier of where rat is.
 	 */
 	public static final int RAT_POSITION = 25;
+	
+	/**
+	 * Time in miliseconds between each rat steps. 100
+	 */
+	public static final int TIME_BETWEEN_STEPS = 10;
+	
+	/**
+	 * Time between each cycle. 4
+	 */
+	public static final int CYCLE_TIME = 1;
 
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
@@ -74,26 +87,17 @@ public class Main extends Application {
 	public static final int NORMAL_RAT_SPEED = 25;
 
 	/**
-	 * Offset needed to center the Rat along the x axis.
+	 * Offset needed to center the Rat along the x axis in pixels.
 	 */
 	public static final int TILE_X_OFFSET = 10;
-
+	
 	/**
-	 * Images of map items.
+	 * Offset needed to center the Rat along the y axis in pixels.
 	 */
-	public static Image GRASS_IMAGE;
-	public static Image TILE_IMAGE;
+	private static final int TILE_Y_OFFSET = 10;
 	
 	/**
-	 * Image of rat
-	 */// Change to ImageView to allow rotatation
-	private static Image BABY_RAT;
-	private static Image MALE_RAT;
-	private static Image FEMALE_RAT;
-	private static Image DEATH_RAT;
-	
-	/**
-	 * Image of Stop sign
+	 * Image of Stop sign.
 	 */
 	private static Image STOP_SIGN;
 
@@ -111,6 +115,25 @@ public class Main extends Application {
      * Draggable image for bomb.
      */
     ImageView draggableBomb = new ImageView();
+
+    private static Image SEX_TO_FEMALE;
+    ImageView draggableSexToFemale = new ImageView();
+
+    private static Image SEX_TO_MALE;
+    ImageView draggableSexToMale = new ImageView();
+
+    private static Image STERILISE;
+    ImageView draggableSterilise = new ImageView();
+
+    /**
+     * Image of Poison
+     */
+    private static Image POISON;
+
+    /**
+     * Draggable image for poison.
+     */
+    ImageView draggablePoison = new ImageView();
 	
 	/**
 	 * Board of the game
@@ -118,35 +141,87 @@ public class Main extends Application {
 	private Board m;
 	
 	/**
-	 * Width of rat, baby rat is half. TODO
+	 * Width of the rat in pixels.
 	 */
 	public static int RAT_WIDTH;
+	
+	/**
+	 * Height of the rat in pixels.
+	 */
 	public static int RAT_HEIGHT;
 
 	/**
-	 * Canvas of map
+	 * Canvas of map tiles.
 	 */
 	private Canvas mapCanvas;
+	
+	/**
+	 * Grey background.
+	 */
+	private Canvas baseCanvas;
+	
 	/**
 	 * Canvas for all rat classes + death rat.
 	 */
 	private Canvas ratCanvas;
+	
 	/**
 	 * Canvas for all items not including death rat.
 	 */
 	private Canvas itemCanvas;
 
-	Label currLevel;
-	Label currPoints;
+	/**
+	 * Level number of current level.
+	 */
+	private Label currLevel;
+	
+	/**
+	 * Number of points accumulated in level so far.
+	 */
+	private Label currPoints;
 
-	// Should eventually turn to HashMap to store all item position
+	/**
+	 * x y coordinates of all stop signs
+	 */
 	private static ArrayList<int[]> stopSignPlace;
+	
+	/**
+	 * x y coordinates of all bomb placements
+	 */
     private static ArrayList<int[]> bombPlace;
+
+    public static ArrayList<int[]> getBombPlace () {
+        return bombPlace;
+    }
+
+    /**
+     * x y coordinates of all poison placements
+     */
+    private static ArrayList<int[]> poisonPlace;
+
+    public static ArrayList<int[]> getPoisonPlace() {
+        return poisonPlace;
+    }
+
+    // TODO Wu I won't need these if I don't let the items stay on a tile
+    private static ArrayList<int[]> sexToFemalePlace;
+    public static ArrayList<int[]> getSexToFemalePlace() {
+        return sexToFemalePlace;
+    }
+    private static ArrayList<int[]> sexToMalePlace;
+    public static ArrayList<int[]> getSexToMalePlace() {
+        return sexToMalePlace;
+    }
+    private static ArrayList<int[]> sterilisePlace;
+    public static ArrayList<int[]> getSterilisePlace() {
+        return sterilisePlace;
+    }
 
 	/**
 	 * The Rats in the game window which needs to move.
 	 */
-	private static HashMap<RatType, HashMap<Direction, ArrayList<int[]>>> currMovement;
+	private static HashMap<RatType, 
+		HashMap<Direction, ArrayList<int[]>>> currMovement;
 	
 	/**
 	 * Iterating over moving the rat.
@@ -155,7 +230,7 @@ public class Main extends Application {
 	
 	/**
 	 * Number of steps rat has taken during current iteration of rat movement.
-	 * 2x for baby rats.
+	 * 2x for baby rats and death rats.
 	 */
 	private int step;
 
@@ -167,15 +242,45 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true, 20), Direction.SOUTH, 1, 1); //Baby rat
-		m.placeRat(new Rat(50, true, true, 20, true, true, true), Direction.SOUTH, 2, 1); //Death Rat
+		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
+		chuckEverythingAtDeath();
+		// runToLiveAnotherDay();
+		// 
 		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
+		// One more Test case where _ _ -> D B
 		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
-		Timeline a = new Timeline(new KeyFrame(Duration.seconds(1), event -> runCycle()));
+		Timeline cycler = new Timeline(new KeyFrame(Duration.seconds(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
-		a.setCycleCount(Animation.INDEFINITE);
-		a.play();
+		cycler.setCycleCount(Animation.INDEFINITE);
+		cycler.play();
+	}
+	
+	private void runToLiveAnotherDay() {
+		// Baby rat, will need to place stop sign
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3);
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3); 
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 4); 
+		// Adult
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 3); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 4); 
+		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 5); 
+	}
+	
+	private void chuckEverythingAtDeath() {
+		//Baby
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
+		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 4); //Baby rat
+		
+		// Adult
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 2); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 4); //Female rat
+		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 	}
 
 	/**
@@ -188,17 +293,20 @@ public class Main extends Application {
 		m.runAllTiles();
 
 		ratMoveTimeline.play();
-		
 		//Set points
 		
 		drawItems();
+		
+		//Game end?
 	}
 
 	/**
 	 * Criteria for Rat movements.
 	 */
 	private void moveRat() {
-		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(10), event -> goThroughRat()));
+		ratMoveTimeline = new Timeline(
+				new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), 
+						event -> goThroughRat()));
 		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
@@ -209,64 +317,95 @@ public class Main extends Application {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
-		RatType[] rts = RatType.values();
-		Image[] ris = new Image[] {DEATH_RAT, MALE_RAT, FEMALE_RAT, BABY_RAT};
-		int[] speed = new int[] {2, 1, 1, 2}; //Bigger is faster
-		int[] size = new int[] {1, 1, 1, 2}; //Bigger is smaller
 		
-		for (int i = 0; i < 4; i++) {
-			drawRat(currMovement.get(rts[i]), ris[i], speed[i], size[i]);
+		for (RatType rt : RatType.values()) {
+			drawRat(rt);
 		}
 	}
+	
 	/**
 	 * Draws the rats onto the game canvas.
 	 * @param smallerList type of rat you're dealing with
 	 * @param ratImage image of rat
 	 */
-	private void drawRat(HashMap<Direction, ArrayList<int[]>> smallerList, Image ratImage, int speed, int size) {
-
+	private void drawRat(RatType rt) {
+		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
 		if (smallerList != null) {
 			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+			
+			Image[] ratImage = rt.getImage();
+			int size = rt.getSize();
+			int width = RAT_WIDTH / size;
+			int height = RAT_HEIGHT / size;
+			int speed = rt.getSpeed();
 	
 			// List of rat positions and direction
 			ArrayList<int[]> currDirection;
 			currDirection = smallerList.get(Direction.NORTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION - step * speed + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[0],
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[0],
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					}
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.EAST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, i[1] * RAT_POSITION + 
-							(TILE_X_OFFSET * size) + step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[1], 
+								i[1] * RAT_POSITION, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
+						gc.drawImage(ratImage[1], 
+								i[1] * RAT_POSITION + step * speed, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					}
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.SOUTH);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-							i[0] * RAT_POSITION + step * speed + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[2], 
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[2], 
+								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)),
+								width, height);
+					}
 				}
 			}
 	
 			currDirection = smallerList.get(Direction.WEST);
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
-					gc.drawImage(ratImage, 
-							i[1] * RAT_POSITION + (TILE_X_OFFSET * size) - step * speed, 
-							i[0] * RAT_POSITION + (12.5 * (size - 1)),
-							RAT_WIDTH / size, RAT_HEIGHT / size);
+					if (i[2] == 0) {
+						gc.drawImage(ratImage[3], 
+								i[1] * RAT_POSITION, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+								height, width);
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[3], 
+								i[1] * RAT_POSITION - step * speed, 
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4), // * (size - 1)
+								height, width);
+					} 
 				}
 			}
 		}
@@ -276,13 +415,14 @@ public class Main extends Application {
 	 * Adds to list of Rat movements on the game canvas.
 	 * 
 	 * @param pos xy position of the rat
-	 * @param extraSpeed {@code true} if rat is baby
-	 * @param dir direction it's facing
+	 * @param dir direction the rat is facing
+	 * @param rt type of rat
+	 * @param move movement status of rat
 	 */
-	public static void addCurrMovement(int[] pos, Direction dir, RatType rt) {
+	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-		currMovement.get(rt).get(dir).add(pos);
+		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move});
 	}
 
 	/**
@@ -291,26 +431,36 @@ public class Main extends Application {
 	 * @return the GUI
 	 */
 	private BorderPane createGameGUI() {
-		GRASS_IMAGE = new Image("Grass.png");
-		TILE_IMAGE = new Image("Tile.png");
-		BABY_RAT = new Image("BabyRat.png");
-		MALE_RAT = new Image("MaleRat.png");
-		FEMALE_RAT = new Image("FemaleRat.png");
-		DEATH_RAT = new Image("DeathRat.png");
 		
 		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
+        POISON = new Image("Poison.png");
+        SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
+        SEX_TO_MALE = new Image("SexChangeToMale.png");
+        STERILISE = new Image("img/Sterilise.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
 		stopSignPlace = new ArrayList<>();
         bombPlace = new ArrayList<>();
+        poisonPlace = new ArrayList<>();
+        sexToFemalePlace = new ArrayList<>();
+        sexToMalePlace = new ArrayList<>();
+        sterilisePlace = new ArrayList<>();
 		
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
 		
-		String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		String properMap1;
+		int tunnel = 3;
+		if (tunnel == 0) {
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
+		} else if (tunnel == 1){
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		} else {// if (tunnel == 2) {
+			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+		}
 		m = new Board(properMap1, 17, 11);
 		drawMap();
 		moveRat();
@@ -326,14 +476,21 @@ public class Main extends Application {
 	private Pane createCenterMap() {
 		Pane root = new Pane();
 		//Creating canvases
+		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		
 		//Adding canvas to pane
-		root.getChildren().add(mapCanvas);
+		root.getChildren().add(baseCanvas);
 		root.getChildren().add(ratCanvas);
+		root.getChildren().add(mapCanvas);
 		root.getChildren().add(itemCanvas);
+		
+		
+		GraphicsContext gc = baseCanvas.getGraphicsContext2D();
+		gc.setFill(Color.GRAY);
+		gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 		return root;
 	}
@@ -366,6 +523,18 @@ public class Main extends Application {
         for (int[] i : bombPlace) {
             gc.drawImage(BOMB, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
+        for (int[] i : poisonPlace) {
+            gc.drawImage(POISON, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
+        for (int[] i : sexToFemalePlace) {
+            gc.drawImage(SEX_TO_FEMALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
+        for (int[] i : sexToMalePlace) {
+            gc.drawImage(SEX_TO_MALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
+        for (int[] i : sterilisePlace) {
+            gc.drawImage(STERILISE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+        }
 	}
 
 	/**
@@ -382,7 +551,6 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		stopSignPlace.add(new int[] { (int) y, (int) x });
-		stopSignPlace.add(new int[] { 50, 50 });
 		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
 
 		// Draw an icon at the dropped location.
@@ -394,13 +562,67 @@ public class Main extends Application {
         double x = Math.floor(event.getX() / TILE_SIZE);
         double y = Math.floor(event.getY() / TILE_SIZE);
 
-        bombPlace.add(new int[] { (int) y, (int) x });
-        bombPlace.add(new int[] { 50, 50 });
+        bombPlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
+        // code
         m.addBomb((int) x, (int) y); //Will return boolean if bomb can be placed
 
         // Draw an icon at the dropped location.
         GraphicsContext gc = itemCanvas.getGraphicsContext2D();
         gc.drawImage(BOMB, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
+    private void placePoison(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        poisonPlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
+        // code
+        m.addPoison((int) x, (int) y); //Will return boolean if bomb can be placed
+
+        // Draw an icon at the dropped location.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(POISON, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
+    private void placeSexToFemale(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        sexToFemalePlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
+        // code
+        m.addSexToFemale((int) x, (int) y); //Will return boolean if sex change can be placed
+
+        // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
+    private void placeSexToMale(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        sexToMalePlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in
+        // rest of
+        // code
+        m.addSexToMale((int) x, (int) y); //Will return boolean if sex change can be placed
+
+        // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(SEX_TO_MALE, x * TILE_SIZE, y * TILE_SIZE);
+    }
+
+    private void placeSterilise(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        sterilisePlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in
+        // rest of
+        // code
+        m.addSterilise((int) x, (int) y); //Will return boolean if sex change can be placed
+
+        // Draw an icon at the dropped location. MAY NOT NEED THIS TBH.
+        GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+        gc.drawImage(STERILISE, x * TILE_SIZE, y * TILE_SIZE);
     }
 
 	/**
@@ -426,13 +648,13 @@ public class Main extends Application {
 		root.getChildren().addAll(menuBar);
 		
 		// Tick Timeline buttons
-		Button startTickTimelineButton = new Button("Blow up");
+		Button startTickTimelineButton = new Button("Move rat");
 		// We add both buttons at the same time to the timeline (we could have done this in two steps).
 		root.getChildren().addAll(startTickTimelineButton);
 
 		// Setup the behaviour of the buttons.
 		startTickTimelineButton.setOnAction(e -> {
-			m.addBomb(8, 5);
+			runCycle();
 		});
 
 		return root;
@@ -465,6 +687,18 @@ public class Main extends Application {
         draggableBomb.setImage(BOMB);
         root.getChildren().add(draggableBomb);
 
+        draggablePoison.setImage(POISON);
+        root.getChildren().add(draggablePoison);
+
+        draggableSexToFemale.setImage(SEX_TO_FEMALE);
+        root.getChildren().add(draggableSexToFemale);
+
+        draggableSexToMale.setImage(SEX_TO_MALE);
+        root.getChildren().add(draggableSexToMale);
+
+        draggableSterilise.setImage(STERILISE);
+        root.getChildren().add(draggableSterilise);
+
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -490,6 +724,7 @@ public class Main extends Application {
 		});
 
         /**
+         * TODO Wu find a way to clean this up, reduce repetition
          * @author Liam O'Reilly
          */
         draggableBomb.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -510,10 +745,83 @@ public class Main extends Application {
             }
         });
 
+        draggablePoison.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggablePoison.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
+        draggableSexToFemale.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggableSexToFemale.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
+        draggableSexToMale.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggableSexToMale.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
+        draggableSterilise.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggableSterilise.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
 		/**
+         * TODO Wu probably change to switch
 		 * @author Liam O'Reilly
 		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
@@ -528,6 +836,31 @@ public class Main extends Application {
 					event.consume();
 				}
                 if (event.getGestureSource() == draggableBomb) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+                if (event.getGestureSource() == draggablePoison) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+
+                if (event.getGestureSource() == draggableSexToFemale) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+                if (event.getGestureSource() == draggableSexToMale) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
+                if (event.getGestureSource() == draggableSterilise) {
                     // Mark the drag event as acceptable by the canvas.
                     event.acceptTransferModes(TransferMode.ANY);
                     // Consume the event. This means we mark it as dealt with.
@@ -556,6 +889,7 @@ public class Main extends Application {
 	}
 
     /**
+     * TODO Again probably change to switch
      * Reacts to item that is dragged onto canvas.
      * @param event The drag event itself which contains data about the drag that occured.
      */
@@ -565,6 +899,18 @@ public class Main extends Application {
         }
         if (event.getGestureSource() == draggableBomb) {
             placeBomb(event);
+        }
+        if (event.getGestureSource() == draggablePoison) {
+            placePoison(event);
+        }
+        if (event.getGestureSource() == draggableSexToFemale) {
+            placeSexToFemale(event);
+        }
+        if (event.getGestureSource() == draggableSexToMale) {
+            placeSexToMale(event);
+        }
+        if (event.getGestureSource() == draggableSterilise) {
+            placeSterilise(event);
         }
     }
 

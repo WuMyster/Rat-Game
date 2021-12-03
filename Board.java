@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -28,12 +30,17 @@ public class Board {
 	/**
 	 * The 2d array of the map. Static so other classes can access this
 	 */
-	private TileType[][] board;
+	private static TileType[][] board;
 
 	/**
 	 * List of all tiles on board.
 	 */
 	private static ArrayList<TileType> allTiles;
+	
+	/**
+	 * List of death rats.
+	 */
+	private static ArrayList<DeathRat> deathRatBuffer;
 
 	// ? Is final in the correct place? Should this be public?
 	/**
@@ -84,8 +91,7 @@ public class Board {
 			createGraph();
 	}
 
-	// For debug only
-	public TileType[][] getBoard() {
+	public static TileType[][] getBoard() {
 		return board;
 	}
 
@@ -110,48 +116,44 @@ public class Board {
 	/**
 	 * TODO
 	 * Adds effect of bomb to tile.
-	 * Currently instantly blows up, will implement time thing.
 	 * @param x x position of tile on map
 	 * @param y y position of tile on map
 	 * @return {@code true} if bomb can be placed at that location.
 	 */
-	public boolean addBomb(int x, int y) {
-		y *= EXTRA_PADDING;
-		x *= EXTRA_PADDING;
-		int startY = y;
-		int startX = x;
+	public void addBomb(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Bomb bomb = new Bomb();
 
-		TileType t = board[startY][startX];
-		while (t != null) {
-			t.blowUp();
-			t = board[y--][x];
-		}
-
-		t = board[startY][startX];
-		y = startY;
-		x = startX;
-		while (t != null) {
-			t.blowUp();
-			t = board[y++][x];
-		}
-
-		t = board[startY][startX];
-		y = startY;
-		x = startX;
-		while (t != null) {
-			t.blowUp();
-			t = board[y][x--];
-		}
-
-		t = board[startY][startX];
-		y = startY;
-		x = startX;
-		while (t != null) {
-			t.blowUp();
-			t = board[y][x++];
-		}
-		return true;
+        t.setTileItem(bomb, x, y);
 	}
+
+    public void addPoison(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Poison p = new Poison();
+
+        t.setTileItem(p, x, y);
+        }
+
+    public void addSexToFemale(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        SexChangeToFemale toFemale = new SexChangeToFemale();
+
+        t.setTileItem(toFemale, x, y);
+    }
+
+    public void addSexToMale(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        SexChangeToMale toMale = new SexChangeToMale();
+
+        t.setTileItem(toMale, x, y);
+    }
+
+    public void addSterilise(int x, int y) {
+        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Sterilisation s = new Sterilisation();
+
+        t.setTileItem(s, x, y);
+    }
 
 	/**
 	 * Draws board onto game window.
@@ -159,17 +161,53 @@ public class Board {
 	 * @param gc Canvas to draw the board on
 	 */
 	public void drawBoard(GraphicsContext gc) {
+		
+		Image grassImage = new Image("Grass.png");
+		//Image tileImage = new Image("Tile.png");
+		Image[] tunnelImages = new Image[4];
+		for(int i = 0; i < 4; i++) {
+			tunnelImages[i] = new Image("Tunnel" + i + ".png");
+		}
+		
 		int x = 0;
 		int y = 0;
 		
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				if (board[i][j] == null) {
-					gc.drawImage(Main.GRASS_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
+					gc.drawImage(grassImage, 
+							x++ * Main.TILE_SIZE, 
+							y * Main.TILE_SIZE, 
+							Main.TILE_SIZE,
+							Main.TILE_SIZE);
+				} else if (board[i][j] instanceof TunnelTile) {
+					Image t = grassImage;
+					
+					if (board[i - EXTRA_PADDING][j] != null &&
+							!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
+						t = tunnelImages[0];
+					} else if (board[i][j + EXTRA_PADDING] != null &&
+							!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
+						t = tunnelImages[1];
+					} else if (board[i + EXTRA_PADDING][j] != null &&
+							!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
+						t = tunnelImages[2];
+					} else if (board[i][j - EXTRA_PADDING] != null &&
+							!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
+						t = tunnelImages[3];
+					} 
+					gc.drawImage(t, 
+							x++ * Main.TILE_SIZE, 
+							y * Main.TILE_SIZE, 
+							Main.TILE_SIZE,
 							Main.TILE_SIZE);
 				} else {
-					gc.drawImage(Main.TILE_IMAGE, x++ * Main.TILE_SIZE, y * Main.TILE_SIZE, Main.TILE_SIZE,
-							Main.TILE_SIZE);
+					x++;
+//					gc.drawImage(tileImage, 
+//							x++ * Main.TILE_SIZE, 
+//							y * Main.TILE_SIZE, 
+//							Main.TILE_SIZE,
+//							Main.TILE_SIZE);
 				}
 			}
 			x = 0;
@@ -181,7 +219,7 @@ public class Board {
 	 * Put Rat onto game canvas.
 	 * 
 	 * @param rats the rat that's going to the next tile
-	 * @param dir  direction the rat is facing
+	 * @param dir  direction the rat is came from
 	 * @param x    x start position of the rat
 	 * @param y    y start position of the rat
 	 * 
@@ -191,18 +229,41 @@ public class Board {
 	}
 
 	/**
+	 * 
+	 * @param rat death rat to be added to map
+	 * @param dir direction the death rat came from
+	 * @param x x start position of the death rat
+	 * @param y y start position of the death rat
+	 */
+	public void placeRat(DeathRat rat, Direction dir, int x, int y) {
+		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rat, dir);
+	}
+
+	/**
 	 * Goes through each Tile and moves the rat to the next tile before getting the
 	 * tiles new list.
 	 */
 	public void runAllTiles() {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
-
+		deathRatBuffer = new ArrayList<>();
 		// Movement
 		for (TileType t : allTiles) {
 			t.setCurrRat();
 		}
+		
+		// First move Death rats and any rats in its path
+		for (TileType t : allTiles) {
+			deathRatBuffer.addAll(t.getNextDeathRat());
+		}
+		
+		// Before moving all other rats
 		for (TileType t : allTiles) {
 			t.getNextDirection();
+		}
+		
+		// Now adding in death rat movements
+		for (DeathRat dr : deathRatBuffer) {
+			Main.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
 		}
 	}
 
@@ -217,7 +278,7 @@ public class Board {
 				case GRASS_TILE -> board[i][j] = null;
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
 				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
-				// case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
+				case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
 				default -> System.out.println("Map error!");
 				}
 				board[i][++j] = new LightTile(i, j);
@@ -245,6 +306,7 @@ public class Board {
 					if (j != 0) {
 						counter += check(board[i][j - 1]) ? 1 : 0;
 					}
+					
 					if (j != xHeight * EXTRA_PADDING - 1) {
 						counter += check(board[i][j + 1]) ? 1 : 0;
 					}
