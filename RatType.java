@@ -27,6 +27,21 @@ public enum RatType {
 	private Image[] image = new Image[4];
 	
 	/**
+	 * Error message if file is not found.
+	 */
+	private final static String ERR_MSG = "Images are missing, please redownload file, make sure you save a copy of your save files!";
+	
+	/**
+	 * Places where Rat images are found. TODO Move to Main and have all files stored there.
+	 */
+	private final static String IMAGE_LOC = "./img/";
+	
+	/**
+	 * Extension of image files.
+	 */
+	private final static String FILE_TYPE = ".png";
+	
+	/**
 	 * Returns size of rat. Bigger is smaller.
 	 * @return size of rat
 	 */
@@ -55,15 +70,15 @@ public enum RatType {
 	 * @param size how big rat is (bigger is smaller)
 	 * @param speed how fast rat can move (bigger is faster)
 	 */
-	private RatType(int size, int speed, String imageLoc) {
+	private RatType(int size, int speed, String imagePic) {
 		this.size = size;
 		this.speed = speed;
 		try {
 			for(int i = 0; i < 4; i++) {
-				image[i] = new Image("./img/" + imageLoc + i + ".png");
+				image[i] = new Image(IMAGE_LOC + imagePic + i + FILE_TYPE);
 			}
 		} catch (NullPointerException e) {
-			System.out.println("Image not found: " + imageLoc);
+			System.err.println(ERR_MSG);
 			System.exit(0);
 		}
 	}
