@@ -5,10 +5,11 @@ import java.util.ArrayList;
  * @author 
  *
  */
-abstract class Item {
-	//Method
-	boolean isAlive = true;
+class Item {
+
+	int hp;
 	
-	public abstract void itemOnAction(ArrayList<Rat> rs);
-	
+	public boolean isAlive() {
+		return hp > 0;
+	}
 }

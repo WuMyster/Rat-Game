@@ -16,6 +16,12 @@ public abstract class Tile {
 	protected Item itemOnTile;
 
 	/**
+	 * Health of item.
+	 * @deprecated
+	 */
+	protected int itemHP;
+
+	/**
 	 * Stop sign will cause the tile to not be accessed. If false, Rat can enter
 	 * tile, else Rat will have to take another direction.
 	 */
@@ -263,17 +269,16 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
-		if (!isBlocked) {
+		if (!isBlocked || !(itemOnTile instanceof StopSign)) {
 			return n;
 		}
-		itemHP -= n;
-		if (itemHP > 0) {
-			return 0;
+		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
+		if (!itemOnTile.isAlive()) {
+			Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+					X_Y_POS[1] / Board.EXTRA_PADDING});
+			isBlocked = false;
 		}
-		Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-				X_Y_POS[1] / Board.EXTRA_PADDING});
-		isBlocked = false;
-		return Math.abs(itemHP);
+		return out;
 	}
 	
 	/**
