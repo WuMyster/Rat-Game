@@ -10,7 +10,7 @@ public class RatController {
 	
 		
 	public static void killRat(Rat rat1) { //static method to kill rats
-		points += rat1.get
+		points += rat1.getPointsUponDeath();
 		for(int i = 0; i<rats.size(); i++) {
 			if(rats.get(i) == rat1) {
 				rats.remove(i);

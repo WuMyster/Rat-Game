@@ -65,6 +65,7 @@ public class DeathRat {
 	public boolean killRat(Rat r, int move) {
 		hp -= 1;
 		if (hp >= 0) {
+			r.damageRat(20);
 			return true;
 		}
 		this.move = move;
@@ -72,19 +73,21 @@ public class DeathRat {
 	}
 	
 	//Need to think of way to prevent being drawn if dead
-	public ArrayList<Rat> killRats(ArrayList<Rat> r, int move) {
-		if (r.size() == 0) {
-			return r;
+	public ArrayList<Rat> killRats(ArrayList<Rat> rs, int move) {	
+		if (rs.size() == 0) {
+			return rs;
 		}
-		hp -= r.size();
+		hp -= rs.size();
 		if (hp >= 0) {
-			System.out.println();
+			for (Rat r : rs) {
+				r.damageRat(20);
+			}
 			return new ArrayList<>();
 		}
 		this.move = move;
 		
-		r.subList(r.size() + hp, r.size());
-		return r;
+		rs.subList(rs.size() + hp, rs.size());
+		return rs;
 	}
 	
 	// This might not be needed anymore, is item, but should be treated like Rat

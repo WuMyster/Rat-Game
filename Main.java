@@ -293,7 +293,9 @@ public class Main extends Application {
 		m.runAllTiles();
 
 		ratMoveTimeline.play();
-		//Set points
+		
+	
+		currPoints.setText(String.valueOf(RatController.getPoints()));
 		
 		drawItems();
 		
