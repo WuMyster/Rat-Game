@@ -25,34 +25,34 @@ public class MessageOfDay {
 	 * @return message of the day
 	 */
 	public static String getMsgDay() {
-		String input = getInformation(URL_PUZZLE, "");
+		String input = getInformation(URL_PUZZLE);
 		String out = String.valueOf(input.length() + END_TEXT.length());
 
 		int counter = 1;
-		boolean adder = false;
 
 		for (char c : input.toCharArray()) {
-			int i = c - 65 + (adder ? counter : -counter);
+			int i = c - 65 + (counter % 2 == 0 ? counter : -counter);
 			while (i < 0) {
 				i += 26;
 			}
+			// i = i < 0 ? i + 2600 : i;
 			out += ALPHABET[i % 26];
 
-			adder = !adder;
 			counter++;
 		}
-		return getInformation(URL_SOLUTION + out + END_TEXT, " ");
+		return getInformation(URL_SOLUTION + out + END_TEXT);
 	}
 	
-	private static String getInformation(String webURL, String extra) {
+	private static String getInformation(String webURL) {
 		URL url = null;
 		Scanner sc = null;
-		String a = "";
+		String out = "";
 		try {
 			url = new URL(webURL);
 			sc = new Scanner(url.openStream());
+			sc.useDelimiter("\n");
 			while (sc.hasNext()) {
-				a += sc.next() + extra;
+				out += sc.next();
 			}
 		} catch (MalformedURLException e2) {
 			System.err.println(BAD_URL);
@@ -65,6 +65,6 @@ public class MessageOfDay {
 		} finally {
 			sc.close();
 		}
-		return a;
+		return out;
 	}
 }
