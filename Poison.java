@@ -2,6 +2,10 @@
  * @author Andrew
  */
 class Poison extends Item {
+    enum name {
+        POISON
+    }
+
     private int itemHP = 1;
 
     public void itemAction (Rat rat) {

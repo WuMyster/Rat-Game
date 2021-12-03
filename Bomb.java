@@ -12,7 +12,7 @@ import java.util.TimerTask;
  * -Maybe
  */
 public class Bomb extends Item {
-    final private int COUNTDOWN_IN_MS = 1000;
+    final private int COUNTDOWN_IN_MS = 4000; // 4 seconds as per spec
     Timer timer = new Timer();
 
     /**
@@ -49,8 +49,8 @@ public class Bomb extends Item {
     private boolean detonate(int x, int y) {
         int originalY = y;
         int originalX = x;
-        y *= Board.EXTRA_PADDING;
-        x *= Board.EXTRA_PADDING;
+        y *= Board.getExtraPadding();
+        x *= Board.getExtraPadding();
         int startY = y;
         int startX = x;
         Tile[][] board = Board.getBoard();

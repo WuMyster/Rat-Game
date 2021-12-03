@@ -1,15 +1,23 @@
-public class Gas {
-    /**
-     * Max amount of tiles gas will spread in each direction.
+import javafx.scene.canvas.GraphicsContext;
+
+public class Gas extends Item {
+    /*
+    Set on tile
+    itemAction()
+    have a radius
+    one step, set tiles in all directions once
+    when its repeated for radius number, stop and disappear after a while
      */
-    final private int gasMaxSpread = 3;
 
     /**
-     * Current amount of tiles gas has spread to in each direction.
+     * Damage gas does to a rat.
      */
-    private int currentSpread = 0;
+    final private int damage = 20;
 
-    final private int gasExpandTime = 1;
+    /**
+     * Max amount of tiles gas spread to in each direction.
+     */
+    final private int gasMaxSpread = 2;
 
     /**
      * The max tile diameter of the gas cloud.
@@ -19,14 +27,24 @@ public class Gas {
     int newGasDia = 1;
     int gasSpread = 0;
 
-    int xOrigin;
-    int yOrigin;
 
-    Tile[][] board = Board.getBoard();
+    TileType[][] board = Board.getBoard();
 
-    public void itemAction(int x, int y) {
-        xOrigin = x;
-        yOrigin = y;
+    public void add(int x, int y) {
+        new Thread(() -> {
+            for (int i = 0; i < gasMaxSpread; i++) {
+                spreadGas(x, y);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {}
+            }
+        }).start();
+
+        //wait a bit and then remove items
+    }
+
+    public void itemAction(Rat rat) {
+       // Ratcontroller.damageRat(damage)
     }
 
     private void spreadGas(int x, int y) {
@@ -34,7 +52,15 @@ public class Gas {
         gasSpread += 1;
         for (int i = -(gasSpread); i <= gasSpread; i++) {
             for (int j = -(gasSpread); j <= gasSpread; j++) {
-                //setpoison at (i, j)
+                TileType t = board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
+                Poison gas = new Poison();
+
+                if (Board.isItemPlaceable(x - i, y - j)) {
+                    t.setTileItem(gas, x - i, y - j);
+                    Main.addGasPlace(x- i, y- j);
+                }
+                System.out.print("Gas" + i);
+                System.out.println(j);
             }
         }
     }
