@@ -25,6 +25,11 @@ public abstract class Tile {
 	 * tile, else Rat will have to take another direction.
 	 */
 	protected Boolean isBlocked;
+	
+	/**
+	 * If rat is on this tile, cannot have sex.
+	 */
+	protected Boolean isSterile;
 
 	/**
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
