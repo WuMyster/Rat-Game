@@ -51,8 +51,8 @@ public class RatController {
 		ArrayList<Rat> female = new ArrayList<>();
 		ArrayList<Rat> moving = new ArrayList<>();
 		
-		for(int i = 0; i<ratsOnTile.size(); i++) {
-			Rat nextRat = ratsOnTile.get(i);
+		while(ratsOnTile.size() > 0) {
+			Rat nextRat = ratsOnTile.get(0);
 			if(nextRat.isChild()) {
 				moving.add(nextRat);
 			} else if(nextRat.getIsBreeding() == true) {
@@ -76,13 +76,13 @@ public class RatController {
 					moving.add(nextRat);
 				}
 			}
-			ratsOnTile.remove(i);
+			ratsOnTile.remove(0);
 		}
 		
 		ArrayList<ArrayList<Rat>> newRatList = new ArrayList<>();
-		newRatList.add(male);				//0
-		newRatList.add(female);				//1
-		newRatList.add(moving);				//2
+		newRatList.add(male);
+		newRatList.add(female);
+		newRatList.add(moving);
 		return newRatList;
 	}
 	
