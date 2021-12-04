@@ -101,40 +101,73 @@ public class Rat {
 	public void setIsMale(boolean newIsMale) {
 		isMale = newIsMale;
 	}
-	
+	/**
+	 * Changes the rat to be pregnant or not pregnant
+	 * @param newPregnancyState - true = pregnant, false = not pregnant
+	 */
 	public void setPregnancy(boolean newPregnancyState) {
 		isPregnant = newPregnancyState;
 	}
+	/**
+	 * tells other classes whether the rat is pregnant or not
+	 * @return isPregnant - true = pregnant
+	 */
 	public boolean getPregnant() {
 		return isPregnant;
 	}
-	
+	/**
+	 * Tells other classes whether the rat is a death rat
+	 * @return isDeathRat - true = the rat is a death rat
+	 */
 	public boolean getDeathRat() {
 		return isDeathRat;
 	}
-	
+	/**
+	 * Sets isSterile to true - the rat can no longer breed
+	 */
 	public void sterilise() {
 		isSterile = true;
 	}
+	/**
+	 * Tells other classes whether the rat is sterile and cannot breed
+	 * @return A boolean for if the rat is sterile
+	 */
 	public boolean getSterile() {
 		return isSterile;
 	}
-	
+	/**
+	 * Changes whether the rat is currently breeding
+	 * @param breedStatus - true = breeding
+	 */
 	public void setBreedStatus(boolean breedStatus) {
 		isBreeding = breedStatus;
 	}
+	/**
+	 * Tells other classes whether the rat is currently breeding
+	 * @return Boolean value for if the rat is breeding
+	 */
 	public boolean getIsBreeding() {
 		return isBreeding;
 	}
-	
+	/**
+	 * Makes the rat older
+	 */
 	public void incrementAge() {
 		age++;
-	}	
+	}
+	/**
+	 * Tells other classes how old the rat is
+	 * @return An integer containing the rats age
+	 */
 	public int getAge() {
 		return age;
 	}
+	/**
+	 * Tells other classes whether the rat is a child
+	 * @return A boolean where true = the rat is a child
+	 */
 	public boolean isChild() {
-		if(age<50) {
+		if(age<30) {
 			return true;
 		}
 		else {
@@ -160,13 +193,16 @@ public class Rat {
 	public int getHealth() {
 		return health;
 	}
-	
+	/**
+	 * Tells other classes how many points the rat is worth
+	 * @return An integer containing the point value of the rat
+	 */
 	public int getPointsUponDeath() {
 		return calculatePointsUponDeath();
 	}
 	/**
-	 * 
-	 * @return
+	 * Calculates how many points the rat is worth
+	 * @return An integer value for the rats worth
 	 */
 	private int calculatePointsUponDeath() {
 		int points = 10;
@@ -181,7 +217,9 @@ public class Rat {
 		}
 		return points;
 	}
-	
+	/**
+	 * Translates the rat into a string which can be easily stored
+	 */
 	public String toString() {
 		String output = "";
 		output += age.toString() + ",";
