@@ -123,7 +123,7 @@ public class RatController {
 		}
 	}
 	
-	private Rat stringToRat(String[] newRat) {
+	private static Rat stringToRat(String[] newRat) {
 		int newRatAge = Integer.parseInt(newRat[0]);
 		boolean newRatIsMale = Boolean.parseBoolean(newRat[1]);
 		boolean newRatIsPregnant = Boolean.parseBoolean(newRat[2]);
