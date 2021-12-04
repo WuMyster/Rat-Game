@@ -257,7 +257,6 @@ public abstract class Tile {
 	 */
     
 	protected void placeStopSign() {
-		System.out.println(X_Y_POS);
 		itemOnTile = new StopSign(X_Y_POS);
 		isBlocked = true;
 	}
@@ -270,7 +269,6 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
-		System.out.println("SADF");
 		if (!isBlocked) {
 			return n;
 		}

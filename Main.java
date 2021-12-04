@@ -95,11 +95,6 @@ public class Main extends Application {
 	 * Offset needed to center the Rat along the y axis in pixels.
 	 */
 	private static final int TILE_Y_OFFSET = 10;
-	
-	/**
-	 * Image of Stop sign.
-	 */
-	private static Image STOP_SIGN;
 
     /**
 	 * Draggable image for stop sign.
@@ -400,7 +395,6 @@ public class Main extends Application {
 	 */
 	private BorderPane createGameGUI() {
 		
-		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
         POISON = new Image("Poison.png");
         SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
@@ -485,8 +479,8 @@ public class Main extends Application {
 	private void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		for (int[] i : stopSignPlace) {
-			gc.drawImage(STOP_SIGN, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+		for (int[] i : stopSignPlace) { //TODO
+			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
         for (int[] i : bombPlace) {
             gc.drawImage(BOMB, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
@@ -518,12 +512,12 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		stopSignPlace.add(new int[] { (int) y, (int) x });
+		stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
 		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
 
 		// Draw an icon at the dropped location.
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(STOP_SIGN, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     private void placeBomb(DragEvent event) {
@@ -648,8 +642,8 @@ public class Main extends Application {
 		currPoints.setFont(new Font(20));
 		root.getChildren().add(currPoints);
 
-		// Setup a draggable image.
-		draggableStop.setImage(STOP_SIGN);
+		// Setup a draggable image. //TODO
+		draggableStop.setImage(StopSign.getState(StopSign.MAX_STATES));
 		root.getChildren().add(draggableStop);
 
         draggableBomb.setImage(BOMB);
