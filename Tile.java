@@ -269,6 +269,18 @@ public abstract class Tile {
         }
         arr.remove(a);
     }
+    
+    /**
+     * Have the rats interact with each other.
+     */
+	public void getRatInteractions() {
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
+		for (Rat r : rs.get(0)) {
+			Direction d = currBlock.get(directions[0]).contains(r) ? directions[1] : directions[0];
+			Main.addCurrMovement(X_Y_POS, d.opposite(), r.getStatus(), 0);
+		}		
+		aliveRats = rs.get(1);
+	}
 
 	/**
 	 * Place stop sign on tile.

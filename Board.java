@@ -324,7 +324,12 @@ public class Board {
 			// t.giveRatItem();
 		}
 		
-		// Secondly move Death rats and any rats in its path
+		// Then have the rats interact with each other
+		for (Tile t : allTiles) {
+			t.getRatInteractions();
+		}
+		
+		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
 		}
