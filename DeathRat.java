@@ -7,7 +7,7 @@ public class DeathRat {
 	Direction d;
 	int move;
 	
-	int hp = 15; //For now
+	int hp = 15; //For now, NOTE: HP is to be 5 per functional spec.
 	
 	/**
 	 * Constructor for Death Rat with basically garbage args.
