@@ -96,11 +96,6 @@ public class Main extends Application {
 	 * Offset needed to center the Rat along the y axis in pixels.
 	 */
 	private static final int TILE_Y_OFFSET = 10;
-	
-	/**
-	 * Image of Stop sign.
-	 */
-	private static Image STOP_SIGN;
 
     /**
 	 * Draggable image for stop sign.
@@ -253,45 +248,13 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
-		chuckEverythingAtDeath();
-		runToLiveAnotherDay();
-		// 
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
-		// One more Test case where _ _ -> D B
-		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
+		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
-	}
-	
-	private void runToLiveAnotherDay() {
-		// Baby rat, will need to place stop sign
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3);
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3); 
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 4); 
-		// Adult
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 2); 
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 3); 
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 4); 
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 5); 
-	}
-	
-	private void chuckEverythingAtDeath() {
-		//Baby
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 4); //Baby rat
-		
-		// Adult
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 2); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 4); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 	}
 
 	/**
@@ -443,7 +406,6 @@ public class Main extends Application {
 	 */
 	private BorderPane createGameGUI() {
 		
-		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
         POISON = new Image("Poison.png");
         SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
@@ -514,13 +476,6 @@ public class Main extends Application {
 	 * @param pos position where the stop sign is
 	 */
 	public static void removeItem(Item item, int[] pos) {
-		int[] a = null;
-		for (int[] i : stopSignPlace) {
-			if (Arrays.equals(i, pos)) {
-				a = i;
-			}
-		}
-		stopSignPlace.remove(a);
         ArrayList<int[]> arr = null;
 
         if (item instanceof Poison) {
@@ -552,13 +507,6 @@ public class Main extends Application {
                 break;
         }
          */
-
-        for (int[] i : arr) {
-            if (Arrays.equals(i, pos)) {
-                a = i;
-            }
-        }
-        arr.remove(a);
 	}
 
 	/**
@@ -569,7 +517,7 @@ public class Main extends Application {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		for (int[] i : stopSignPlace) {
-			gc.drawImage(STOP_SIGN, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
         for (int[] i : bombPlace) {
             gc.drawImage(BOMB, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
@@ -590,6 +538,29 @@ public class Main extends Application {
             gc.drawImage(GAS, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
 	}
+	
+	/**
+	 * React when an object is dragged onto the canvas.
+	 * 
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 * @author Liam O'Reilly
+	 * @author Jing Shiang Gu
+	 * 
+	 * TODO Can check list, can check tile, I've had it check Tile - J
+	 * Could also use set, add it and check length
+	 */
+	private void placeStopSign(DragEvent event) {
+		double x = Math.floor(event.getX() / TILE_SIZE);
+		double y = Math.floor(event.getY() / TILE_SIZE);
+		
+		if (m.addStopSign((int) x, (int) y)) {
+			stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
+			// Draw an icon at the dropped location.
+			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+			gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
+		}
+	}
 
 	/**
 	 * React when an object is dragged onto the canvas.
@@ -601,7 +572,7 @@ public class Main extends Application {
 	 * TODO: Check if coordinate is already in list and say no
      * TODO Wu, look into a way to turn these all into one method if time allows
 	 */
-	private void placeStopSign(DragEvent event) {
+	private void placeStopSignAndrew(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -610,10 +581,48 @@ public class Main extends Application {
             m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
             // Draw an icon at the dropped location.
             GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-            gc.drawImage(STOP_SIGN, x * TILE_SIZE, y * TILE_SIZE);
+            // gc.drawImage(STOP_SIGN, x * TILE_SIZE, y * TILE_SIZE);
         }
 	}
+	
+	/**
+	 * Update the graphical state of the Stop Sign.
+	 * @param pos xy position of the Stop Sign
+	 * @param state the state it is in
+	 */
+	public static void damageStopSign(int[] pos, int state) {
+		// Will need to think about this Currently StopSign calls damage
+		if (state != 0) {
+			int[] xyPos = null;
+			for (int[] i : stopSignPlace) {
+				if (i[0] == pos[0] &&
+						i[1] == pos[1]) {
+					xyPos = i;
+				}
+			}
+			xyPos[2] = state;
+		}
+	}
+	
+	/**
+	 * Remove stop sign from board.
+	 * TODO Hopefully can be upgraded to remove all items.
+	 * @param pos position where the stop sign is
+	 */
+	public static void removeStopSign(int[] pos) {
+		int[] a = null;
+		for (int[] i : stopSignPlace) {
+			if (i[0] == pos[0] &&
+					i[1] == pos[1]) {
+				a = i;
+			}
+		}
+		stopSignPlace.remove(a);
+	}
 
+	// the y is first due to the nature of 2d arrays, can't be helped unfortunately...
+	// In future, have a method inside m.addBomb() to call a method here to add so people won't know
+	// this is 2d array
     private void placeBomb(DragEvent event) {
         double x = Math.floor(event.getX() / TILE_SIZE);
         double y = Math.floor(event.getY() / TILE_SIZE);
@@ -747,8 +756,8 @@ public class Main extends Application {
 		currPoints.setFont(new Font(20));
 		root.getChildren().add(currPoints);
 
-		// Setup a draggable image.
-		draggableStop.setImage(STOP_SIGN);
+		// Setup a draggable image. //TODO
+		draggableStop.setImage(StopSign.getState(StopSign.MAX_STATES));
 		root.getChildren().add(draggableStop);
 
         draggableBomb.setImage(BOMB);

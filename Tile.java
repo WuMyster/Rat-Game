@@ -140,6 +140,7 @@ public abstract class Tile {
 	 * Returns true if rat dies after being given item
 	 * @param r the rat receiving the item
 	 * @return {@code true} if rat dies after being given item
+	 * FIXME should assume item is alive? If already dead itemOnTile should already be null;
 	 */
 	protected boolean giveRatItem(Rat r) {
 		if (itemOnTile == null) {
@@ -236,7 +237,9 @@ public abstract class Tile {
      * When item is given to rat and used, item is removed from its Arraylist and subsequently
      * removed from screen.
      * @param pos co-ordinates of the current tile.
-     * @deprecated
+     * @deprecated Should simply check if item isAlive(), in future if poison had multuple uses, this
+     * would work better
+     * Encapsulation can be achieved by creating a method to remove the offending position
      */
     private void itemUsed(int[] pos) {
         ArrayList<int[]> arr = null;
@@ -270,9 +273,14 @@ public abstract class Tile {
 	/**
 	 * Place stop sign on tile.
 	 */
-	protected void placeStopSign() {
-		itemHP = 30; // Should call Item class go get health of stop sign
+    
+	protected boolean placeStopSign() {
+		if (itemOnTile != null) {
+			return false;
+		}
+		itemOnTile = new StopSign(X_Y_POS);
 		isBlocked = true;
+		return true;
 	}
 
 	/**
@@ -286,14 +294,18 @@ public abstract class Tile {
 		if (!isBlocked) {
 			return n;
 		}
-		itemHP -= n;
-		if (itemHP > 0) {
-			return 0;
+		if (itemOnTile == null) {
+			System.err.println("No item on tile!!");
+			return n;
 		}
-		//Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-				//X_Y_POS[1] / Board.EXTRA_PADDING});
-		//isBlocked = false;
-		return Math.abs(itemHP);
+		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
+		if (!itemOnTile.isAlive()) {
+			Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+					X_Y_POS[1] / Board.EXTRA_PADDING});
+			itemOnTile = null;
+			isBlocked = false;
+		}
+		return out;
 	}
 	
 	/**
