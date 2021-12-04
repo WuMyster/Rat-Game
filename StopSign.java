@@ -1,25 +1,58 @@
 import javafx.scene.image.Image;
 
+/**
+ * An {@code Item} that prevents rats from entering the tile this item is on.
+ * @author Jing
+ *
+ */
 public class StopSign extends Item {
 	
-	public static final int MAX_STATES = 1;
-	private static final int START_HP = 3;
+	/**
+	 * Max number of images - 1.
+	 */
+	public static final int MAX_STATES = 2;
+	
+	/**
+	 * Start health of all Stop Signs.
+	 */
+	private static final int START_HP = 9;
+	
+	/**
+	 * Number to show the different stages of the Stop Sign
+	 * breaking down.
+	 */
 	private static final int DIVIDER = 3;
+	
+	/**
+	 * XY position of the stop sign.
+	 */
 	private final int[] xyPos;
+	
+	/**
+	 * Last state the Stop Sign was.
+	 */
 	private int currState;
 	
-	
+	/**
+	 * Images of the different states of the stop sign.
+	 * TODO change divider so all images are used
+	 */
 	private static final Image[] STATES = new Image[] {
 			new Image("/img/StopSign0.png"),
 			new Image("/img/StopSign1.png"),
 			new Image("/img/StopSign2.png")
 	};
 	
+	/**
+	 * Constructs a {@code StopSign} which prevents rats from entering the
+	 * {@code Tile} that has this item. Has
+	 * @param xyPos
+	 */
 	public StopSign(int[] xyPos) {
-		this.xyPos = xyPos;
+		this.xyPos = new int[] {xyPos[0] / Board.EXTRA_PADDING, 
+				xyPos[1] / Board.EXTRA_PADDING};
 		this.hp = START_HP;
 		currState = START_HP / DIVIDER;
-		
 	}
 	
 	/**
@@ -29,11 +62,12 @@ public class StopSign extends Item {
 	 */
 	public int numsRatsCanEnter(int n) {
 		hp -= n;
-		
-		if (currState != hp / DIVIDER) {
+		int nextState = hp / DIVIDER;
+		if (nextState == 0) {
+			// Still want tile to remove StopSign from itself
+		} else if (currState != hp / DIVIDER) {
 			currState = hp / DIVIDER;
-			System.out.println(currState);
-			// Main.damageStopSign(xyPos, currState);
+			Main.damageStopSign(xyPos, currState);
 		}
 		
 		if (hp > 0) {
@@ -42,6 +76,11 @@ public class StopSign extends Item {
 		return Math.abs(hp);
 	}
 	
+	/**
+	 * Returns an image of the Stop Sign based on its state.
+	 * @param s state number, lower is more broken Stop Sign
+	 * @return the image of the Stop Sign
+	 */
 	public static Image getState(int s) {
 		return STATES[s];
 	}

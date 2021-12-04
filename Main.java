@@ -458,29 +458,13 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Remove stop sign from board.
-	 * TODO Hopefully can be upgraded to remove all items.
-	 * @param pos position where the stop sign is
-	 */
-	public static void removeStopSign(int[] pos) {
-		int[] a = null;
-		for (int[] i : stopSignPlace) {
-			if (i[0] == pos[0] &&
-					i[1] == pos[1]) {
-				a = i;
-			}
-		}
-		System.out.println("Removed: " + stopSignPlace.remove(a));
-	}
-
-	/**
 	 * Redraws all stop signs onto the map.
 	 * TODO Hopefully can be upgraded to draw all items.
 	 */
 	private void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		for (int[] i : stopSignPlace) { //TODO
+		for (int[] i : stopSignPlace) {
 			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
         for (int[] i : bombPlace) {
@@ -514,7 +498,6 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		
 		if (m.addStopSign((int) x, (int) y)) {
 			stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
 			// Draw an icon at the dropped location.
@@ -522,7 +505,45 @@ public class Main extends Application {
 			gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
 		}
 	}
+	
+	/**
+	 * Update the graphical state of the Stop Sign.
+	 * @param pos xy position of the Stop Sign
+	 * @param state the state it is in
+	 */
+	public static void damageStopSign(int[] pos, int state) {
+		// Will need to think about this Currently StopSign calls damage
+		if (state != 0) {
+			int[] xyPos = null;
+			for (int[] i : stopSignPlace) {
+				if (i[0] == pos[0] &&
+						i[1] == pos[1]) {
+					xyPos = i;
+				}
+			}
+			xyPos[2] = state;
+		}
+	}
+	
+	/**
+	 * Remove stop sign from board.
+	 * TODO Hopefully can be upgraded to remove all items.
+	 * @param pos position where the stop sign is
+	 */
+	public static void removeStopSign(int[] pos) {
+		int[] a = null;
+		for (int[] i : stopSignPlace) {
+			if (i[0] == pos[0] &&
+					i[1] == pos[1]) {
+				a = i;
+			}
+		}
+		stopSignPlace.remove(a);
+	}
 
+	// the y is first due to the nature of 2d arrays, can't be helped unfortunately...
+	// In future, have a method inside m.addBomb() to call a method here to add so people won't know
+	// this is 2d array
     private void placeBomb(DragEvent event) {
         double x = Math.floor(event.getX() / TILE_SIZE);
         double y = Math.floor(event.getY() / TILE_SIZE);

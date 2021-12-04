@@ -94,6 +94,7 @@ public class Board {
 	/**
 	 * Debug only!!
 	 * @return
+	 * @deprecated
 	 */
 	public static Tile[][] getBoard() {
 		return board;

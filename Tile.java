@@ -135,6 +135,7 @@ public abstract class Tile {
 	 * Returns true if rat dies after being given item
 	 * @param r the rat receiving the item
 	 * @return {@code true} if rat dies after being given item
+	 * FIXME should assume item is alive? If already dead itemOnTile should already be null;
 	 */
 	protected boolean giveRatItem(Rat r) {
 		if (itemOnTile == null) {
@@ -278,7 +279,7 @@ public abstract class Tile {
 		}
 		if (itemOnTile == null) {
 			System.err.println("No item on tile!!");
-			return 0;
+			return n;
 		}
 		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
 		if (!itemOnTile.isAlive()) {
