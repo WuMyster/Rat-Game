@@ -257,8 +257,8 @@ public abstract class Tile {
 	 * Place stop sign on tile.
 	 */
 	protected void placeStopSign() {
-		itemHP = 30; // Should call Item class go get health of stop sign
 		isBlocked = true;
+		itemOnTile = new StopSign();
 	}
 
 	/**

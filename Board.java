@@ -256,7 +256,7 @@ public class Board {
 		}
 		// First give item to rat(s)
 		for (Tile t : allTiles) {
-			t.giveRatItem();
+			//t.giveRatItem();
 		}
 		
 		// Secondly move Death rats and any rats in its path

@@ -96,11 +96,6 @@ public class Main extends Application {
 	 */
 	private static final int TILE_Y_OFFSET = 10;
 	
-	/**
-	 * Image of Stop sign.
-	 */
-	private static Image STOP_SIGN;
-
     /**
 	 * Draggable image for stop sign.
 	 */
@@ -431,8 +426,6 @@ public class Main extends Application {
 	 * @return the GUI
 	 */
 	private BorderPane createGameGUI() {
-		
-		STOP_SIGN = new Image("Stop_Sign.png");
         BOMB = new Image("Bomb.png");
         POISON = new Image("Poison.png");
         SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
@@ -494,6 +487,20 @@ public class Main extends Application {
 
 		return root;
 	}
+	
+	public void damageStopSign(int[] pos) {
+		int[] a = null;
+		for (int[] i : stopSignPlace) {
+			if (i[0] != pos[0] &&
+					i[1] != pos[1]) {
+				a = i;
+			}
+		}
+		a[2] -= 1;
+		if (a[2] == 0) {
+			stopSignPlace.remove(a);
+		}
+	}
 
 	/**
 	 * Remove stop sign from board.
@@ -503,7 +510,8 @@ public class Main extends Application {
 	public static void removeStopSign(int[] pos) {
 		int[] a = null;
 		for (int[] i : stopSignPlace) {
-			if (Arrays.equals(i, pos)) {
+			if (i[0] != pos[0] &&
+					i[1] != pos[1]) {
 				a = i;
 			}
 		}
@@ -518,7 +526,7 @@ public class Main extends Application {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		for (int[] i : stopSignPlace) {
-			gc.drawImage(STOP_SIGN, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
         for (int[] i : bombPlace) {
             gc.drawImage(BOMB, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
@@ -550,12 +558,12 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		stopSignPlace.add(new int[] { (int) y, (int) x });
+		stopSignPlace.add(new int[] { (int) y, (int) x, 2 });
 		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
 
 		// Draw an icon at the dropped location.
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(STOP_SIGN, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(StopSign.getState(2), x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     private void placeBomb(DragEvent event) {
@@ -572,7 +580,7 @@ public class Main extends Application {
     }
 
     private void placePoison(DragEvent event) {
-        double x = Math.floor(event.getX() / TILE_SIZE);
+        double x = Math.floor(event.getX() / TILE_SIZE); 
         double y = Math.floor(event.getY() / TILE_SIZE);
 
         poisonPlace.add(new int[] { (int) y, (int) x}); // NOTE: why is y first. Confusing in rest of
@@ -681,7 +689,7 @@ public class Main extends Application {
 		root.getChildren().add(currPoints);
 
 		// Setup a draggable image.
-		draggableStop.setImage(STOP_SIGN);
+		draggableStop.setImage(StopSign.getState(2));
 		root.getChildren().add(draggableStop);
 
         draggableBomb.setImage(BOMB);

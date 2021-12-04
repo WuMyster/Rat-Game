@@ -1,7 +1,14 @@
+import javafx.scene.image.Image;
 
 public class StopSign extends Item {
 	
 	private static final int START_HP = 10;
+	
+	private static final Image[] STATES = new Image[] {
+			new Image("/img/StopSign0.png"),
+			new Image("/img/StopSign1.png"),
+			new Image("/img/StopSign2.png")
+	};
 	
 	public StopSign() {
 		this.hp = START_HP;
@@ -18,5 +25,9 @@ public class StopSign extends Item {
 			return 0;
 		}
 		return Math.abs(hp);
+	}
+	
+	public static Image getState(int s) {
+		return STATES[s];
 	}
 }

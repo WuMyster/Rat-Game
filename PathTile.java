@@ -24,7 +24,11 @@ public class PathTile extends Tile {
 	@Override
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
-
+		aliveRats = new ArrayList<>();
+		for (Direction prevDirection : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(prevDirection));
+		}
+		
 		// Pass in ArrayList of Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
@@ -85,7 +89,12 @@ public class PathTile extends Tile {
 	 * @return {@code true} if rat exists in list
 	 */
 	private boolean exists(Rat r) {
-		return aliveRats.remove(r);
+		try {
+			return aliveRats.remove(r);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	// Death rat and stop sign stopping rats from moving away hence moving towards
@@ -162,7 +171,8 @@ public class PathTile extends Tile {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 
 			if (!ratList.isEmpty()) {
-				int i = giveRatItem(ratList.get(0)) ? 1 : 0;
+				// int i = giveRatItem(ratList.get(0)) ? 1 : 0;
+				int i = 0;
 				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				int ratsGoForward; // Number of rats that can keep go in current direction
 
