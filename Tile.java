@@ -256,9 +256,13 @@ public abstract class Tile {
 	 * Place stop sign on tile.
 	 */
     
-	protected void placeStopSign() {
+	protected boolean placeStopSign() {
+		if (itemOnTile != null) {
+			return false;
+		}
 		itemOnTile = new StopSign(X_Y_POS);
 		isBlocked = true;
+		return true;
 	}
 
 	/**
@@ -272,10 +276,15 @@ public abstract class Tile {
 		if (!isBlocked) {
 			return n;
 		}
+		if (itemOnTile == null) {
+			System.err.println("No item on tile!!");
+			return 0;
+		}
 		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
 		if (!itemOnTile.isAlive()) {
 			Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
 					X_Y_POS[1] / Board.EXTRA_PADDING});
+			itemOnTile = null;
 			isBlocked = false;
 		}
 		return out;

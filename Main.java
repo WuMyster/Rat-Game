@@ -465,11 +465,12 @@ public class Main extends Application {
 	public static void removeStopSign(int[] pos) {
 		int[] a = null;
 		for (int[] i : stopSignPlace) {
-			if (Arrays.equals(i, pos)) {
+			if (i[0] == pos[0] &&
+					i[1] == pos[1]) {
 				a = i;
 			}
 		}
-		stopSignPlace.remove(a);
+		System.out.println("Removed: " + stopSignPlace.remove(a));
 	}
 
 	/**
@@ -506,18 +507,19 @@ public class Main extends Application {
 	 *              occurred.
 	 * @author Liam O'Reilly
 	 * @author Jing Shiang Gu
-	 * TODO: Check if coordinate is already in list and say no
+	 * TODO Can check list, can check tile, I've had it check Tile - J
 	 */
 	private void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
-		m.addStopSign((int) x, (int) y); //Will return boolean if sign can be placed
-
-		// Draw an icon at the dropped location.
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
+		
+		if (m.addStopSign((int) x, (int) y)) {
+			stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
+			// Draw an icon at the dropped location.
+			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+			gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
+		}
 	}
 
     private void placeBomb(DragEvent event) {

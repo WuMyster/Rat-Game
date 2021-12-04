@@ -113,10 +113,7 @@ public class Board {
 			return false;
 		}
 
-        //TODO Wu move this to item
-		t.placeStopSign();
-
-		return true;
+		return t.placeStopSign();
 	}
 
 	/**
