@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A standard tile that has at most 2 tiles connected to it.
@@ -25,16 +26,18 @@ public class PathTile extends Tile {
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 
-		// Pass in ArrayList of rats on this tile.
+		// Pass in ArrayList of rats on this tile. Should be moved to giveItemToRat
 		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(prevDirection));
 		}
+		
+		int beforeDeathInter = aliveRats.size();
+		
 		// Pass in ArrayList of Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				aliveRats = dr.killRats(aliveRats, -1);
-
 			}
 		}
 
@@ -67,17 +70,25 @@ public class PathTile extends Tile {
 
 		// Remove fallen rats from list.
 		// Will not automatically move the rats in case other death rats come here.
-		// Compare size of lists!
-		for (Direction prevDirection : currBlock.keySet()) {
-			ArrayList<Rat> tmp = new ArrayList<>();
-			ArrayList<Rat> rs = currBlock.get(prevDirection);
-			if (rs != null) {
-				for (Rat r : rs) {
-					if (exists(r)) {
-						tmp.add(r);
+		if (aliveRats.isEmpty()) {
+			currBlock = new HashMap<>();
+		} else if (aliveRats.size() == beforeDeathInter) {
+			// Interesting as to why there is no change...
+		} else { 
+			// Could theoterically still decrease by comparing the difference
+			// from before and now. ArrayList keeps order so chances are, all rats
+			// from one direction will be eliminated before other direction is
+			for (Direction prevDirection : currBlock.keySet()) {
+				ArrayList<Rat> tmp = new ArrayList<>();
+				ArrayList<Rat> rs = currBlock.get(prevDirection);
+				if (rs != null) {
+					for (Rat r : rs) {
+						if (exists(r)) {
+							tmp.add(r);
+						}
 					}
+					currBlock.put(prevDirection, tmp);
 				}
-				currBlock.put(prevDirection, tmp);
 			}
 		}
 		return drs;
@@ -97,60 +108,86 @@ public class PathTile extends Tile {
 	// DR
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
-		// Get rats going towards Death Rat
-		Direction prevDirectionR = prevDirectionDR == directions[0] ? directions[1] : directions[0];
-		ArrayList<Rat> rs1 = currBlock.get(prevDirectionR);
-		ArrayList<Rat> rs2 = new ArrayList<>();
-		if (rs1 != null) {
-
+		// Deal with all rats going towards Death Rat
+		Direction dirToDeath = prevDirectionDR == directions[0] ? directions[1] : directions[0];
+		ArrayList<Rat> currList = currBlock.get(dirToDeath);
+		ArrayList<Rat> escaped = new ArrayList<>();
+		if (currList != null) {
 			// Baby rats are faster so it will reach Death Rat first
-			for (Rat r : rs1) {
+			for (Rat r : currList) {
 				if (r.getStatus() == RatType.BABY) {
 					if (dr.killRat(r, 2)) {
-						Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), RatType.BABY, 2);
+						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
 					} else {
 						// Should be moved afterwards if more death rats come
-						rs2.add(r);
+						escaped.add(r);
 					}
 				} else {
-					rs2.add(r);
+					escaped.add(r);
 				}
 			}
 
 			// Then Death Rats will deal with slower adult rats
-			rs1 = new ArrayList<>();
-			for (Rat r : rs2) {
+			currList = escaped;
+			escaped = new ArrayList<>();
+			for (Rat r : currList) {
 				if (dr.killRat(r, 3)) {
-					Main.addCurrMovement(X_Y_POS, prevDirectionR.opposite(), r.getStatus(), 1);
+					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
 				} else {
-					rs1.add(r);
+					escaped.add(r);
 				}
 			}
-
-			currBlock.put(prevDirectionR, rs1);
+			currBlock.put(dirToDeath, escaped);
 		}
 
 		// Now that all rats going towards DR from this tile are dealt with, deal with
 		// any stragglers who are bounced back by stop sign IF DR is alive and stop sign
-		// is present in next tile
-		if (dr.isAlive()) {
-			Direction goTo = prevDirectionDR == directions[0] ? directions[0] : directions[1];
-			ArrayList<Rat> ratList = currBlock.get(goTo);
-			int ratsGoToDeath = 0;
-
-			// Only check stop sign forward of rat
-			if (ratList != null) {
-				Tile tile = neighbourTiles.get(goTo);
-				ratsGoToDeath = tile.numsRatsCanEnter(this, ratList.size());
-				if (ratsGoToDeath != 0) {
-					ratList = dr.killRats((new ArrayList<Rat>(ratList.subList(0, ratsGoToDeath))), 3);
+		// is present in next tile - basically same as before
+		Direction goTo = prevDirectionDR == directions[0] ? directions[0] : directions[1];
+		currList = currBlock.get(goTo);
+		int ratsGoToDeath = -1;
+		int beforeDeath = -1;
+		if (dr.isAlive() && currList != null) {
+			beforeDeath = currList.size();
+			
+			Tile tile = neighbourTiles.get(goTo);
+			ratsGoToDeath = beforeDeath - tile.numsRatsCanEnter(this, beforeDeath);
+			int i = 0;
+			for (; i < ratsGoToDeath && i < beforeDeath; i++) {
+				Rat r = currList.get(i);
+				if (r.getStatus() == RatType.BABY) {
+					if (dr.killRat(currList.get(i), 2)) {
+						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
+					} else {
+						escaped.add(r);
+					}
+				} else {
+					escaped.add(r);
 				}
 			}
+			// Add in rats that DR couldn't deal with since it died
+			escaped.addAll(currList.subList(i, beforeDeath));
+			currList = escaped;
+			escaped = new ArrayList<>();
+		}
+		
+		if (dr.isAlive() && currList != null) {
+			int i = 0;
+			for (; i < ratsGoToDeath && i < currList.size(); i++) {
+				Rat r = currList.get(i); 
+				if (dr.killRat(currList.get(i), 3)) {
+					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
+				} else {
+					escaped.add(r);
+				}
+			}
+			escaped.addAll(currList.subList(i, currList.size()));
 		}
 
 		if (dr.isAlive()) {
 			this.addRat(dr, prevDirectionDR);
 		}
+		currBlock.put(goTo, escaped);
 	}
 
 	/**
