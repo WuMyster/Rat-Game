@@ -329,7 +329,7 @@ public class Board {
 		for (Tile t : allTiles) {
 			t.getRatInteractions();
 		}
-		
+		System.out.println();
 		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());

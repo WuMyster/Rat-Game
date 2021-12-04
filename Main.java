@@ -257,7 +257,7 @@ public class Main extends Application {
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);x
 		cycler.setCycleCount(Animation.INDEFINITE);
-		cycler.play();
+		// cycler.play();
 	}
 
 	/**

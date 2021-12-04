@@ -281,14 +281,21 @@ public abstract class Tile {
      */
 	public void getRatInteractions() {
 		// Del // WILL BE MOVED TO ITEMS
+		bufferNextBlock = new HashMap<>();
 		aliveRats = new ArrayList<>();
 		for (Direction dir : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(dir));
 		}
+		
+		for(Rat r : aliveRats) {
+			System.out.println(r.toString());
+		}
+		
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
 		for (Rat r : rs.get(0)) {
 			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
-			bufferNextBlock.putIfAbsent(d, aliveRats);
+			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
+			bufferNextBlock.get(d).add(r);
 		}		
 		aliveRats = rs.get(1);
 	}

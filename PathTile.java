@@ -27,8 +27,10 @@ public class PathTile extends Tile {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 
 		if (currDeath.isEmpty()) {
+			correctList();
 			return new ArrayList<>();
 		}
+		System.out.println("Death rat present");
 		// Pass in ArrayList of rats on this tile. Should be moved to giveItemToRat
 		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
@@ -92,22 +94,25 @@ public class PathTile extends Tile {
 			// Could theoterically still decrease by comparing the difference
 			// from before and now. ArrayList keeps order so chances are, all rats
 			// from one direction will be eliminated before other direction is
-			for (Direction prevDirection : currBlock.keySet()) {
-				ArrayList<Rat> tmp = new ArrayList<>();
-				ArrayList<Rat> rs = currBlock.get(prevDirection);
-				if (rs != null) {
-					for (Rat r : rs) {
-						if (exists(r)) {
-							tmp.add(r);
-						}
-					}
-					currBlock.put(prevDirection, tmp);
-				}
-			}
+			correctList();
 		}
 		return drs;
 	}
 
+	public void correctList() {
+		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> tmp = new ArrayList<>();
+			ArrayList<Rat> rs = currBlock.get(prevDirection);
+			if (rs != null) {
+				for (Rat r : rs) {
+					if (exists(r)) {
+						tmp.add(r);
+					}
+				}
+				currBlock.put(prevDirection, tmp);
+			}
+		}
+	}
 	/**
 	 * Returns {@code true} if Rat is in aliveRats list.
 	 * 
@@ -221,6 +226,7 @@ public class PathTile extends Tile {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 
 			if (!ratList.isEmpty()) {
+				System.out.println("Moving");
 				int i = 0;
 				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				int ratsGoForward; // Number of rats that can keep go in current direction
@@ -259,7 +265,7 @@ public class PathTile extends Tile {
 		//For non-moving rats
 		for (Direction prevDirection : bufferNextBlock.keySet()) {
 			ArrayList<Rat> ratList = bufferNextBlock.get(prevDirection);
-			//Similar to above but no need to check for stop signs <Insert sex joke>
+			//Similar to above but no need to check for stop signs
 			for (Rat r : ratList) {
 				Main.addCurrMovement(X_Y_POS, prevDirection, r.getStatus(), 0);
 			}
