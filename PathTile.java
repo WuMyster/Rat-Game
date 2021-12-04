@@ -74,6 +74,7 @@ public class PathTile extends Tile {
 			currBlock = new HashMap<>();
 		} else if (aliveRats.size() == beforeDeathInter) {
 			// Interesting as to why there is no change...
+			System.err.println("aliveRats list has not changed!" + X_Y_POS);
 		} else { 
 			// Could theoterically still decrease by comparing the difference
 			// from before and now. ArrayList keeps order so chances are, all rats
@@ -95,7 +96,7 @@ public class PathTile extends Tile {
 	}
 
 	/**
-	 * Returns {@code true} if Rat is in alive rats list.
+	 * Returns {@code true} if Rat is in aliveRats list.
 	 * 
 	 * @param r the rat to find
 	 * @return {@code true} if rat exists in list
