@@ -255,8 +255,10 @@ public abstract class Tile {
 	/**
 	 * Place stop sign on tile.
 	 */
+    
 	protected void placeStopSign() {
-		itemHP = 10; // Should call Item class go get health of stop sign
+		System.out.println(X_Y_POS);
+		itemOnTile = new StopSign(X_Y_POS);
 		isBlocked = true;
 	}
 
@@ -268,17 +270,17 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
+		System.out.println("SADF");
 		if (!isBlocked) {
 			return n;
 		}
-		itemHP -= n;
-		if (itemHP > 0) {
-			return 0;
+		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
+		if (!itemOnTile.isAlive()) {
+			Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
+					X_Y_POS[1] / Board.EXTRA_PADDING});
+			isBlocked = false;
 		}
-		Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-				X_Y_POS[1] / Board.EXTRA_PADDING});
-		isBlocked = false;
-		return Math.abs(itemHP);
+		return out;
 	}
 	
 	/**

@@ -20,8 +20,11 @@ public class MainBoardTester {
 	static String properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
 	public static Main BBOAD;
 
+
 	public static void main(String[] args) {
 		Board m = new Board(properMap1, 17, 11);
+		System.out.println(Board.getBoard()[2][2].X_Y_POS);
+		m.addStopSign(1, 1);
 		//print2dArray(m.getBoard());
 		//System.out.println();
 		//m.eliminateEmpties();

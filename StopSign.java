@@ -8,13 +8,20 @@ public class StopSign extends Item {
 	private int currState;
 	
 	
-	private static final Image[] STATES = new Image[] {
-			new Image("/img/StopSign0.png"),
-			new Image("/img/StopSign1.png"),
-			new Image("/img/StopSign2.png")
-	};
+	private static Image[] STATES = new Image[1];
+//			new Image("/img/StopSign0.png"),
+//			new Image("/img/StopSign1.png"),
+//			new Image("/img/StopSign2.png")
+//	};
+	
+	String[] a = new String[2];
 	
 	public StopSign(int[] xyPos) {
+		try {
+			STATES[0] = new Image("/img/StopSign0.png");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.xyPos = xyPos;
 		this.hp = START_HP;
 		currState = START_HP / DIVIDER;
