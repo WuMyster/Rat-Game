@@ -124,13 +124,13 @@ public class RatController {
 	}
 	
 	private Rat stringToRat(String[] newRat) {
-		int newRatAge = parseInt(newRat[0]);
-		boolean newRatIsMale = parseBoolean(newRat[1]);
-		boolean newRatIsPregnant = parseBoolean(newRat[2]);
-		int newRatHP = parseInt(newRat[3]);
-		boolean newRatIsSterile = parseBoolean(newRat[4]);
-		boolean newRatIsBreeding = parseBoolean(newRat[5]);
-		boolean newRatIsDeathRat = parseBoolean(newRat[6]);
+		int newRatAge = Integer.parseInt(newRat[0]);
+		boolean newRatIsMale = Boolean.parseBoolean(newRat[1]);
+		boolean newRatIsPregnant = Boolean.parseBoolean(newRat[2]);
+		int newRatHP = Integer.parseInt(newRat[3]);
+		boolean newRatIsSterile = Boolean.parseBoolean(newRat[4]);
+		boolean newRatIsBreeding = Boolean.parseBoolean(newRat[5]);
+		boolean newRatIsDeathRat = Boolean.parseBoolean(newRat[6]);
 		return new Rat(newRatAge, newRatIsMale, newRatIsPregnant, newRatHP, newRatIsSterile, newRatIsBreeding, newRatIsDeathRat);
 	}
 	
