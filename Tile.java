@@ -49,7 +49,13 @@ public abstract class Tile {
 	protected HashMap<Direction, ArrayList<Rat>> currBlock;
 	
 	/**
-	 * Death Rat that is arriving to this tile. 
+	 * List of rats staying on current tile. May be killed by Death rat later on. Once 
+	 * given all clear, will be moved to nextBlock.
+	 */
+	protected HashMap<Direction, ArrayList<Rat>> bufferNextBlock = new HashMap<>();
+	
+	/**
+	 * Death Rats that are arriving to this tile. 
 	 */
 	protected HashMap<Direction, ArrayList<DeathRat>> nextDeath = new HashMap<>();
 	
@@ -276,8 +282,8 @@ public abstract class Tile {
 	public void getRatInteractions() {
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
 		for (Rat r : rs.get(0)) {
-			Direction d = currBlock.get(directions[0]).contains(r) ? directions[1] : directions[0];
-			Main.addCurrMovement(X_Y_POS, d.opposite(), r.getStatus(), 0);
+			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
+			bufferNextBlock.putIfAbsent(d, aliveRats);
 		}		
 		aliveRats = rs.get(1);
 	}

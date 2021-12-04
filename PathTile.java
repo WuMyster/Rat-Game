@@ -201,11 +201,12 @@ public class PathTile extends Tile {
 	 */
 	@Override
 	public void getNextDirection() {
+		// For moving rats
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 
 			if (!ratList.isEmpty()) {
-				int i = giveRatItem(ratList.get(0)) ? 1 : 0;
+				int i = 0;
 				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				int ratsGoForward; // Number of rats that can keep go in current direction
 
@@ -237,6 +238,15 @@ public class PathTile extends Tile {
 					goTo = prevDirection;
 					prevDirection = tmp;
 				}
+			}
+		}
+		
+		//For non-moving rats
+		for (Direction prevDirection : bufferNextBlock.keySet()) {
+			ArrayList<Rat> ratList = bufferNextBlock.get(prevDirection);
+			//Similar to above but no need to check for stop signs <Insert sex joke>
+			for (Rat r : ratList) {
+				Main.addCurrMovement(X_Y_POS, prevDirection, r.getStatus(), 0);
 			}
 		}
 	}
