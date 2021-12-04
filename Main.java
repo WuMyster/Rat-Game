@@ -1,4 +1,3 @@
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -70,7 +69,7 @@ public class Main extends Application {
 	/**
 	 * Position multiplier of where rat is.
 	 */
-	public static final int RAT_POSITION = 25;
+	public static final int RAT_POSITION = 50;
 	
 	/**
 	 * Time in miliseconds between each rat steps. 100
@@ -85,7 +84,7 @@ public class Main extends Application {
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
 	 */
-	public static final int NORMAL_RAT_SPEED = 25;
+	public static final int NORMAL_RAT_SPEED = 50;
 
 	/**
 	 * Offset needed to center the Rat along the x axis in pixels.
@@ -685,7 +684,7 @@ public class Main extends Application {
 
         if (Board.isItemPlaceable((int) x, (int) y)) {
             gasPlace.add(new int[] { (int) y, (int) x });
-            m.addGas((int) x, (int) y); //Will return boolean if sign can be placed
+            // m.addGas((int) x, (int) y); //Will return boolean if sign can be placed
             // Draw an icon at the dropped location.
             GraphicsContext gc = itemCanvas.getGraphicsContext2D();
             gc.drawImage(GAS, x * TILE_SIZE, y * TILE_SIZE);
