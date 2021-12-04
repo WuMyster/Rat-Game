@@ -31,7 +31,7 @@ public class RatController {
 	public static void newBabyRat() {
 		Random nextRand = new Random();
 		Boolean newRatIsMale = nextRand.nextBoolean();
-		ratList.add(newRatIsMale);
+		ratList.add(new Rat(newRatIsMale));
 	}
 	
 	/**
@@ -62,20 +62,20 @@ public class RatController {
 	 * @param ratString - A toString output from the Rat.toString() method
 	 * @return a constructed rat with the same values as in ratString
 	 */
-	private Rat stringToRat(String ratString) {
+	private static Rat stringToRat(String ratString) {
 		String[] newRat = ratString.split(",")
 		
-		int newRatAge = parseInt(newRat[0]);
-		boolean newRatIsMale = parseBoolean(newRat[1]);
-		boolean newRatIsPregnant = parseBoolean(newRat[2]);
-		int newRatHP = parseInt(newRat[3]);
-		boolean newRatIsSterile = parseBoolean(newRat[4]);
-		boolean newRatIsBreeding = parseBoolean(newRat[5]);
-		boolean newRatIsDeathRat = parseBoolean(newRat[6]);
+		int newRatAge = Integer.parseInt(newRat[0]);
+		boolean newRatIsMale = Boolean.parseBoolean(newRat[1]);
+		boolean newRatIsPregnant = Boolean.parseBoolean(newRat[2]);
+		int newRatHP = Integer.parseInt(newRat[3]);
+		boolean newRatIsSterile = Boolean.parseBoolean(newRat[4]);
+		boolean newRatIsBreeding = Boolean.parseBoolean(newRat[5]);
+		boolean newRatIsDeathRat = Boolean.parseBoolean(newRat[6]);
 		return new Rat(newRatAge, newRatIsMale, newRatIsPregnant, newRatHP, newRatIsSterile, newRatIsBreeding, newRatIsDeathRat);
 	}
 	
-		
+	
 	/**
 	 * Sorts an arraylist of rats into two arraylists, those which are moving and those which aren't
 	 * @param ratsOnTile - An arraylist of rats on an individual tile
@@ -100,7 +100,7 @@ public class RatController {
 		
 		return stationaryMovingRats;
 	}
-		
+	
 	/**
 	 * Sorts an arraylist of rats into three arraylists, those which are breedable male rats, breedable female rats and moving rats
 	 * @param ratsOnTile - An arraylist of rats
@@ -111,8 +111,8 @@ public class RatController {
 		ArrayList<Rat> female = new ArrayList<>();
 		ArrayList<Rat> moving = new ArrayList<>();
 		
-		for(int i = 0; i<ratsOnTile.size(); i++) {
-			Rat nextRat = ratsOnTile.get(i);
+		while(ratsOnTile.size() > 0) {
+			Rat nextRat = ratsOnTile.get(0);
 			if(nextRat.isChild()) {
 				moving.add(nextRat);
 			} else if(nextRat.getIsBreeding() == true) {
@@ -136,7 +136,7 @@ public class RatController {
 					moving.add(nextRat);
 				}
 			}
-			ratsOnTile.remove(i);
+			ratsOnTile.remove(0);
 		}
 		
 		ArrayList<ArrayList<Rat>> newRatList = new ArrayList<>();
