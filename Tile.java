@@ -74,7 +74,7 @@ public abstract class Tile {
 	protected final int[] X_Y_POS;
 
     // @Jing, added this to clean up code below.
-    protected final int[] X_Y_POS_PADDED;
+    protected final int[] ORIGINAL_X_Y_POS;
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
@@ -115,7 +115,7 @@ public abstract class Tile {
 	 */
 	public Tile(int[] xyPos) {
 		this.X_Y_POS = xyPos;
-        this.X_Y_POS_PADDED = new int[] {X_Y_POS[0] / Board.getExtraPadding(),
+        this.ORIGINAL_X_Y_POS = new int[] {X_Y_POS[0] / Board.getExtraPadding(),
                 X_Y_POS[1] / Board.getExtraPadding()};
 		resetTile();
 	}
@@ -154,31 +154,32 @@ public abstract class Tile {
         // TODO Wu Find out a way to reduce repetition here
         if (itemOnTile instanceof Poison) {
             ((Poison) itemOnTile).itemAction(r);
-            Main.removeItem(Item.Name.POISON, X_Y_POS_PADDED);
+            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
             itemOnTile = null;
             return true;
         }
         if (itemOnTile instanceof SexChangeToFemale) {
             ((SexChangeToFemale) itemOnTile).itemAction(r);
-            itemUsed(X_Y_POS_PADDED);
+            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof SexChangeToMale) {
             ((SexChangeToMale) itemOnTile).itemAction(r);
-            itemUsed(X_Y_POS_PADDED);
+            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
             itemOnTile = null;
             return false;
         }
         if (itemOnTile instanceof Sterilisation) {
             ((Sterilisation) itemOnTile).itemAction(r);
-            itemUsed(X_Y_POS_PADDED);
+            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
             itemOnTile = null;
             return false;
         }
+        // TODO itemused not changed over to main yet
         if (itemOnTile instanceof Gas) {
             ((Gas) itemOnTile).itemAction(r);
-            itemUsed(X_Y_POS_PADDED);
+            itemUsed(ORIGINAL_X_Y_POS);
             itemOnTile = null;
             return true;
         }
@@ -235,6 +236,7 @@ public abstract class Tile {
      * When item is given to rat and used, item is removed from its Arraylist and subsequently
      * removed from screen.
      * @param pos co-ordinates of the current tile.
+     * @deprecated
      */
     private void itemUsed(int[] pos) {
         ArrayList<int[]> arr = null;
@@ -312,8 +314,8 @@ public abstract class Tile {
             if (itemOnTile instanceof Bomb) {
                 ((Bomb) itemOnTile).timer.cancel();
             }
-            itemUsed(new int[] {X_Y_POS[0] / Board.getExtraPadding(),
-                    X_Y_POS[1] / Board.getExtraPadding()});
+            //Main.removeItem(itemOnTile., X_Y_POS); CANNOT GET THIS TO WORK
+            itemUsed(ORIGINAL_X_Y_POS);
 		}
 		resetTile();
 		System.out.println("BLOWN UP");
