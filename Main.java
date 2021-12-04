@@ -90,12 +90,12 @@ public class Main extends Application {
 	/**
 	 * Offset needed to center the Rat along the x axis in pixels.
 	 */
-	public static final int TILE_X_OFFSET = 10;
+	public static final int TILE_X_OFFSET = 5;
 	
 	/**
 	 * Offset needed to center the Rat along the y axis in pixels.
 	 */
-	private static final int TILE_Y_OFFSET = 10;
+	private static final int TILE_Y_OFFSET = 5;
 	
 	/**
 	 * Image of Stop sign.
@@ -414,7 +414,7 @@ public class Main extends Application {
 					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[3], 
 								i[1] * RAT_POSITION - step * speed, 
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4), // * (size - 1)
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4) * (size - 1),
 								height, width);
 					} 
 				}
@@ -450,8 +450,8 @@ public class Main extends Application {
         SEX_TO_MALE = new Image("SexChangeToMale.png");
         STERILISE = new Image("img/Sterilise.png");
         GAS = new Image("img/icon-gas.png");
-		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;
+        RAT_WIDTH = 15; // 30
+		RAT_HEIGHT = 25; // 45
 		stopSignPlace = new ArrayList<>();
         bombPlace = new ArrayList<>();
         poisonPlace = new ArrayList<>();
