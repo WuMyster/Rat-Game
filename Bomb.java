@@ -5,13 +5,17 @@ import java.util.TimerTask;
 
 /**
  * Class emulating a bomb item.
- * @author Andrew
- * @author Jing
+ * @author Andrew Wu
+ * @author Jing Gu
  * TODO Wu, flash colour tiles on detonation
  * TODO Wu, maybe move bomb pic and arraylist here?
  * -Maybe
  */
 public class Bomb extends Item {
+
+    enum Name {
+        BOMB
+    }
     final private int COUNTDOWN_IN_MS = 4000; // 4 seconds as per spec
     Timer timer = new Timer();
 
@@ -33,12 +37,10 @@ public class Bomb extends Item {
             }
         };
 
-        timer.schedule(task, COUNTDOWN_IN_MS); // Start method run() after amount of time in ms.
+        timer.schedule(task, COUNTDOWN_IN_MS); // Start method run() after amount of time.
 
         return true;
     }
-
-
 
     /**
      * Detonates bomb by clearing all tiles in each row one by one.
@@ -47,8 +49,6 @@ public class Bomb extends Item {
      * @return true if bomb detonated successfully
      */
     private boolean detonate(int x, int y) {
-        int originalY = y;
-        int originalX = x;
         y *= Board.getExtraPadding();
         x *= Board.getExtraPadding();
         int startY = y;
@@ -56,6 +56,7 @@ public class Bomb extends Item {
         Tile[][] board = Board.getBoard();
 
         Tile t = board[startY][startX];
+        //Tile t = Tile[startY][startX];
         while (t != null) {
             t.blowUp();
             t = board[y--][x];
@@ -85,7 +86,9 @@ public class Bomb extends Item {
             t = board[y][x++];
         }
 
-        itemUsed(new int[] {originalY, originalX});
+        //Not needed due to blowup()
+        //Main.removeItem(Item.Name.BOMB, new int[] {startY, startX});
+        //itemUsed(new int[] {startY, startX});
         return true;
     }
 
