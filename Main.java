@@ -248,7 +248,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		test41();
+		test54();
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
@@ -267,7 +267,7 @@ public class Main extends Application {
 		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 7);
 	}
 	
-	// Good
+	// Good PathTile
 	private void test30() {
 		m.placeRat(new DeathRat(), Direction.EAST, 1 , 6);
 		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 4);
@@ -281,7 +281,7 @@ public class Main extends Application {
 		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 2);
 	}
 	
-	// Good
+	// Good JunctionTile
 	private void test40() {
 		m.placeRat(new DeathRat(), Direction.EAST, 1, 11);
 		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 9);
@@ -295,9 +295,29 @@ public class Main extends Application {
 		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 7);
 	}
 	
-	// Death and adult rat with Junction
-	private void test5() {
+	// Good
+	private void test50() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1, 12);
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
+	}
+	
+	private void test51() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1, 11);
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
+	}
+	
+	private void test52() {
 		m.placeRat(new DeathRat(), Direction.EAST, 1, 10);
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
+	}
+	
+	private void test53() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1, 9);
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
+	}
+	
+	private void test54() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1, 13);
 		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
 	}
 
