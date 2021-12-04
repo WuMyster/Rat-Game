@@ -79,6 +79,7 @@ public enum RatType {
 			}
 		} catch (NullPointerException e) {
 			System.err.println(ERR_MSG);
+			System.out.println("AA");
 			System.exit(0);
 		}
 	}

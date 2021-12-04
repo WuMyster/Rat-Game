@@ -242,45 +242,13 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new DeathRat(), Direction.SOUTH, 2, 1); //Death Rat
-		chuckEverythingAtDeath();
-		runToLiveAnotherDay();
-		// 
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.WEST, 5, 5); //Female rat
-		// One more Test case where _ _ -> D B
-		m.placeRat(new Rat(50, true, false, 20, true, true, false), Direction.SOUTH, 9, 15); //Male rat
+		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
+		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
 		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
-	}
-	
-	private void runToLiveAnotherDay() {
-		// Baby rat, will need to place stop sign
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 2); 
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3);
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 3); 
-		m.placeRat(new Rat(true, 20), Direction.WEST, 1, 4); 
-		// Adult
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 2); 
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 3); 
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 4); 
-		m.placeRat(new Rat(50, true, true, 20, true, true, false), Direction.WEST, 1, 5); 
-	}
-	
-	private void chuckEverythingAtDeath() {
-		//Baby
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 2); //Baby rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 3); //Baby rat
-		m.placeRat(new Rat(true, 20), Direction.EAST, 1, 4); //Baby rat
-		
-		// Adult
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 2); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 3); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 4); //Female rat
-		m.placeRat(new Rat(50, false, true, 20, true, true, false), Direction.EAST, 1, 5); //Female rat
 	}
 
 	/**
