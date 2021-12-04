@@ -508,6 +508,7 @@ public class Main extends Application {
 	 * @author Liam O'Reilly
 	 * @author Jing Shiang Gu
 	 * TODO Can check list, can check tile, I've had it check Tile - J
+	 * Could also use set, add it and check length
 	 */
 	private void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
