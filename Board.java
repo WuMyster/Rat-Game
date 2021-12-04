@@ -132,15 +132,14 @@ public class Board {
 			return false;
 		}
 
-        //TODO Wu move this to item
 		t.placeStopSign();
 
 		return true;
 	}
 
 	/**
-	 * TODO
-	 * Adds effect of bomb to tile.
+	 * TODO Get rid of repetition
+	 * Adds item to tile.
 	 * @param x x position of tile on map
 	 * @param y y position of tile on map
 	 * @return {@code true} if bomb can be placed at that location.
@@ -151,6 +150,48 @@ public class Board {
 
         t.setTileItem(bomb, x, y);
 	}
+
+    /**
+     * Blows up tiles from origin until "null" Tile reached.
+     * @param x x-coordinate bomb was placed on
+     * @param y y-coordinate bomb was placed on
+     */
+    public static void detonate(int x, int y) {
+        y *= Board.getExtraPadding();
+        x *= Board.getExtraPadding();
+        int startY = y;
+        int startX = x;
+
+        Tile t = board[startY][startX];
+        while (t != null) {
+            t.blowUp();
+            t = board[y--][x];
+        }
+
+        t = board[startY][startX];
+        y = startY;
+        x = startX;
+        while (t != null) {
+            t.blowUp();
+            t = board[y++][x];
+        }
+
+        t = board[startY][startX];
+        y = startY;
+        x = startX;
+        while (t != null) {
+            t.blowUp();
+            t = board[y][x--];
+        }
+
+        t = board[startY][startX];
+        y = startY;
+        x = startX;
+        while (t != null) {
+            t.blowUp();
+            t = board[y][x++];
+        }
+    }
 
     public void addPoison(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
@@ -180,16 +221,13 @@ public class Board {
         t.setTileItem(s, x, y);
     }
 
-    /*
     public void addGas(int x, int y) {
-        TileType t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Gas gas = new Gas();
 
         t.setTileItem(gas, x, y);
 
     }
-
-     */
 
 	/**
 	 * Draws board onto game window.
@@ -284,9 +322,9 @@ public class Board {
 			t.setCurrRat();
 		}
 		// First give item to rat(s)
-		for (Tile t : allTiles) {
-			t.giveRatItem();
-		}
+		//for (Tile t : allTiles) {
+		//	t.giveRatItem();
+		//}
 		
 		// Secondly move Death rats and any rats in its path
 		for (Tile t : allTiles) {

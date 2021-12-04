@@ -12,7 +12,6 @@ import java.util.TimerTask;
  * -Maybe
  */
 public class Bomb extends Item {
-
     enum Name {
         BOMB
     }
@@ -23,8 +22,8 @@ public class Bomb extends Item {
      * Item ability triggered through calling this method. Method delayed by an amount in
      * milliseconds to emulate a bomb detonating.
      * FIXME Wu need to clear timer properly.
-     * @param x
-     * @param y
+     * @param x x-coordinate bomb was placed on
+     * @param y y-coordinate bomb was placed on
      * @return true if bomb detonates successfully.
      */
     public boolean itemAction(int x, int y) {
@@ -33,7 +32,7 @@ public class Bomb extends Item {
 
         TimerTask task = new TimerTask() {
             public void run() {
-                detonate(x, y);
+                Board.detonate(x, y);
             }
         };
 
@@ -41,72 +40,6 @@ public class Bomb extends Item {
 
         return true;
     }
-
-    /**
-     * Detonates bomb by clearing all tiles in each row one by one.
-     * @param x x-coordinate bomb was placed on
-     * @param y y-coordinate bomb was placed on
-     * @return true if bomb detonated successfully
-     */
-    private boolean detonate(int x, int y) {
-        y *= Board.getExtraPadding();
-        x *= Board.getExtraPadding();
-        int startY = y;
-        int startX = x;
-        Tile[][] board = Board.getBoard();
-
-        Tile t = board[startY][startX];
-        //Tile t = Tile[startY][startX];
-        while (t != null) {
-            t.blowUp();
-            t = board[y--][x];
-        }
-
-        t = board[startY][startX];
-        y = startY;
-        x = startX;
-        while (t != null) {
-            t.blowUp();
-            t = board[y++][x];
-        }
-
-        t = board[startY][startX];
-        y = startY;
-        x = startX;
-        while (t != null) {
-            t.blowUp();
-            t = board[y][x--];
-        }
-
-        t = board[startY][startX];
-        y = startY;
-        x = startX;
-        while (t != null) {
-            t.blowUp();
-            t = board[y][x++];
-        }
-
-        //Not needed due to blowup()
-        //Main.removeItem(Item.Name.BOMB, new int[] {startY, startX});
-        //itemUsed(new int[] {startY, startX});
-        return true;
-    }
-
-    /**
-     * Once bomb is detonated, bomb is removed from arrayList storing it and subsequently,
-     * graphic is removed.
-     * @param pos Coordinates of bomb.
-     */
-    private void itemUsed(int[] pos) {
-        int[] a = null;
-        for (int[] i : Main.getBombPlace()) {
-            if (Arrays.equals(i, pos)) {
-                a = i;
-            }
-        }
-        Main.getBombPlace().remove(a);
-    }
-
     // TODO Need method to reduce inventory quantity
 
     /**
