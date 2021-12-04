@@ -1,4 +1,3 @@
-
 /**
  * Models a single rat
  * @author Ollie Jarrett
