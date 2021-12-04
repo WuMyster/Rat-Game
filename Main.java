@@ -513,7 +513,7 @@ public class Main extends Application {
 	 * TODO Hopefully can be upgraded to remove all items.
 	 * @param pos position where the stop sign is
 	 */
-	public static void removeItem(Item.Name item, int[] pos) {
+	public static void removeItem(Item item, int[] pos) {
 		int[] a = null;
 		for (int[] i : stopSignPlace) {
 			if (Arrays.equals(i, pos)) {
@@ -521,7 +521,22 @@ public class Main extends Application {
 			}
 		}
 		stopSignPlace.remove(a);
+        ArrayList<int[]> arr = null;
 
+        if (item instanceof Poison) {
+            arr = poisonPlace;
+        }
+        if (item instanceof SexChangeToFemale) {
+            arr = sexToFemalePlace;
+        }
+        if (item instanceof SexChangeToMale) {
+            arr = sexToMalePlace;
+        }
+        if (item instanceof Sterilisation) {
+            arr = sterilisePlace;
+        }
+
+        /*
         ArrayList<int[]> itemPlace = null;
         Item.Name itemName = Item.Name.POISON;
 
@@ -532,16 +547,18 @@ public class Main extends Application {
             case BOMB:
                 itemPlace = bombPlace;
                 break;
+            case SEX_CHANGE_TO_FEMALE:
+                itemPlace = sexToFemalePlace;
+                break;
         }
+         */
 
-        if (item == itemName) {
-            for (int[] i : itemPlace) {
-                if (Arrays.equals(i, pos)) {
-                    a = i;
-                }
+        for (int[] i : arr) {
+            if (Arrays.equals(i, pos)) {
+                a = i;
             }
-            itemPlace.remove(a);
         }
+        arr.remove(a);
 	}
 
 	/**
