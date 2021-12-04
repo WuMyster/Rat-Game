@@ -7,10 +7,15 @@ import java.util.*;
 public class Leaderboard {
 
     public int scoring() {
+    	
+    	int points;
         if (GameMaster.getTimer() < GameMaster.getExpectedTime()) { // needs GameMaster to be implemented
-            RatController.getPoints() += (GameMaster.getExpectedTime() - GameMaster.getTimer());
+            points = RatController.getPoints();
+            points += (GameMaster.getExpectedTime() - GameMaster.getTimer());
+        } else {
+        	points = 0;
         }
-        return RatController.getPoints();
+        return points;
     }
 
     //ArrayList<Integer> scores = new ArrayList<Integer>(); // In GameMaster
