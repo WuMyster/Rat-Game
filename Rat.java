@@ -42,9 +42,9 @@ public class Rat {
 	 * @param isMale the rats sex
 	 * @param health the rats health
 	 */
-	public Rat(boolean isMale, int health) {
+	public Rat(boolean isMale) {
 		this.isMale = isMale;
-		this.health = health;
+		this.health = 5;
 		isBreeding = false;
 		isPregnant = false;
 		isDeathRat = false;
@@ -149,7 +149,7 @@ public class Rat {
 	 */
 	public void damageRat(int damage) {
 		health -= damage;
-		if(health == 0) {
+		if(health <= 0) {
 			RatController.killRat(this);
 		}
 	}
@@ -182,7 +182,17 @@ public class Rat {
 		return points;
 	}
 	
-	
+	public String toString() {
+		String output = "";
+		output += age.toString() + ",";
+		output += isMale.toString() + ",";
+		output += isPregnant.toString() + ",";
+		output += health.toString() + ",";
+		output += isSterile.toString() + ",";
+		output += isBreeding.toString() + ",";
+		output += isDeathRat.toString();
+		return output;
+	}
 	
 	
 	
