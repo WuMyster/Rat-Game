@@ -232,17 +232,4 @@ public class Rat {
 		return output;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
