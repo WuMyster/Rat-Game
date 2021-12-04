@@ -65,7 +65,7 @@ public class Main extends Application {
 	/**
 	 * Height and width of a Tile in pixels.
 	 */
-	public static final int TILE_SIZE = 50;
+	public static final int TILE_SIZE = 25;
 
 	/**
 	 * Position multiplier of where rat is.
@@ -668,7 +668,7 @@ public class Main extends Application {
 
         if (Board.isItemPlaceable((int) x, (int) y)) {
             gasPlace.add(new int[] { (int) y, (int) x });
-            m.addGas((int) x, (int) y); //Will return boolean if sign can be placed
+            // m.addGas((int) x, (int) y); //Will return boolean if sign can be placed
             // Draw an icon at the dropped location.
             GraphicsContext gc = itemCanvas.getGraphicsContext2D();
             gc.drawImage(GAS, x * TILE_SIZE, y * TILE_SIZE);

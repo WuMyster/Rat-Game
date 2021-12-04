@@ -208,8 +208,8 @@ public class Board {
 		int x = 0;
 		int y = 0;
 		
-		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
-			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
+		for (int i = 0; i < yHeight * EXTRA_PADDING; i += 1) {
+			for (int j = 0; j < xHeight * EXTRA_PADDING; j += 1) {
 				if (board[i][j] == null) {
 					gc.drawImage(grassImage, 
 							x++ * Main.TILE_SIZE, 
@@ -285,7 +285,7 @@ public class Board {
 		}
 		// First give item to rat(s)
 		for (Tile t : allTiles) {
-			t.giveRatItem();
+			// t.giveRatItem();
 		}
 		
 		// Secondly move Death rats and any rats in its path
