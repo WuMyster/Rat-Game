@@ -315,6 +315,7 @@ public class Board {
 	public void runAllTiles() {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
 		deathRatBuffer = new ArrayList<>();
+		
 		// Movement
 		for (Tile t : allTiles) {
 			t.setCurrRat();

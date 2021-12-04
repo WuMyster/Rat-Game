@@ -34,7 +34,16 @@ public class PathTile extends Tile {
 		
 		int beforeDeathInter = aliveRats.size();
 		
-		// Pass in ArrayList of Rats still alive to each DeathRat on the tile
+		for (Direction dir : bufferNextBlock.keySet()) {
+			ArrayList<Rat> r = bufferNextBlock.get(dir);
+			for (Direction prevDirection : currDeath.keySet()) {
+				for (DeathRat dr : currDeath.get(prevDirection)) {
+					bufferNextBlock.put(dir, dr.killRats(r, -1));
+				}
+			}
+		}
+		
+		// Pass in ArrayList of Moving Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				aliveRats = dr.killRats(aliveRats, -1);
@@ -185,6 +194,8 @@ public class PathTile extends Tile {
 			escaped.addAll(currList.subList(i, currList.size()));
 		}
 
+		// Does not deal with non-moving rats as rats on this tile will be dealt with next time 
+		// the death rat starts moving
 		if (dr.isAlive()) {
 			this.addRat(dr, prevDirectionDR);
 		}
