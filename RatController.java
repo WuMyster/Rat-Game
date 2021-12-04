@@ -26,7 +26,7 @@ public class RatController {
 	//give list of rats -> rat interact with rat
 	//ratInteractions method - take in rats an arraylist of rats
 	//returns 2 arraylists of rats - rats that aren't moving (i.e interacting) and rats that are moving
-	public static void ratInteractions(ArrayList<Rat> ratsOnTile) {
+	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile) {
 		
 		ArrayList<ArrayList<Rat>> sortedRatsOnTile = sortRats(ratsOnTile);
 		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);
