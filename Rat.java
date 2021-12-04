@@ -149,7 +149,7 @@ public class Rat {
 	 */
 	public void damageRat(int damage) {
 		health -= damage;
-		if(health == 0) {
+		if(health <= 0) {
 			RatController.killRat(this);
 		}
 	}
@@ -182,7 +182,16 @@ public class Rat {
 		return points;
 	}
 	
-	
+	public String toString() {
+		String output = "";
+		output += age.toString() + " ";
+		output += isMale.toString() + " ";
+		output += isPregnant.toString() + " ";
+		output += health.toString() + " ";
+		output += isSterile.toString() + " ";
+		output += isBreeding.toString();
+		return output;
+	}
 	
 	
 	
