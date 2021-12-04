@@ -2,7 +2,9 @@
 import java.util.ArrayList;
 
 /**
- * An invisible tile in between standard tiles, allow interactions between rats
+ * Now: basically a PathTile
+ * 
+ * OLD: An invisible tile in between standard tiles, allow interactions between rats
  * and some items (death rat and bomb) outside of the standard tiles
  * 
  * @author Jing Shiang Gu
