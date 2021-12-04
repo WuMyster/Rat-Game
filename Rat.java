@@ -35,7 +35,6 @@ public class Rat {
 	 */
 	private int health;
 	
-
 	
 	/**
 	 * Constructor for new rats - used at the start of the level or for newly born rats
