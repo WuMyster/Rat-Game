@@ -329,14 +329,15 @@ public class Board {
 		for (Tile t : allTiles) {
 			t.getRatInteractions();
 		}
+		
+		for (Tile t : allTiles) {
+			t.correctList();
+		}
+		
 		System.out.println();
 		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
-		}
-		
-		for (Tile t : allTiles) {
-			t.correctList();
 		}
 		
 		// Before moving all other rats

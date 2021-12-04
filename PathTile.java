@@ -30,10 +30,10 @@ public class PathTile extends Tile {
 			return new ArrayList<>();
 		}
 		// Pass in ArrayList of rats on this tile. Should be moved to giveItemToRat
-		aliveRats = new ArrayList<>();
-		for (Direction prevDirection : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(prevDirection));
-		}
+//		aliveRats = new ArrayList<>();
+//		for (Direction prevDirection : currBlock.keySet()) {
+//			aliveRats.addAll(currBlock.get(prevDirection));
+//		}
 		
 		int beforeDeathInter = aliveRats.size();
 		
