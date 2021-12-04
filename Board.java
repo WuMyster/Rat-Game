@@ -69,8 +69,9 @@ public class Board {
 
 	/**
 	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
+	 * FIXME -> Will need to make sure all tiles have CORRECT xy pos excluding LightTile.
 	 */
-	private final static int EXTRA_PADDING = 2;
+	public final static int EXTRA_PADDING = 2;
 
     public static int getExtraPadding() {
         return EXTRA_PADDING;
@@ -131,10 +132,7 @@ public class Board {
 		}  else if (t instanceof TunnelTile) {
 			return false;
 		}
-
-		t.placeStopSign();
-
-		return true;
+		return t.placeStopSign();
 	}
 
 	/**
@@ -322,9 +320,9 @@ public class Board {
 			t.setCurrRat();
 		}
 		// First give item to rat(s)
-		//for (Tile t : allTiles) {
-		//	t.giveRatItem();
-		//}
+		for (Tile t : allTiles) {
+			// t.giveRatItem();
+		}
 		
 		// Secondly move Death rats and any rats in its path
 		for (Tile t : allTiles) {
