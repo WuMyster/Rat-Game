@@ -137,7 +137,7 @@ public class RatController {
 	public static void newBabyRat() {
 		Random nextRand = new Random();
 		Boolean newRatIsMale = nextRand.nextBoolean();
-		rats.add(newRatIsMale);
+		rats.add(new Rat(newRatIsMale));
 	}
 	
 }
