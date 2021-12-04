@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 /**
  * 
  * @author Ollie Jarrett
@@ -114,4 +115,29 @@ public class RatController {
 		postBreedRats.add(notBreeding);				//1
 		return postBreedRats;
 	}
+	
+	public static void addRats(String[] newRats) {
+		for(int i = 0; i<newRats.length; i++) {
+			String[] newRat = newRats[i].split(",");
+			rats.add(stringToRat(newRat));
+		}
+	}
+	
+	private Rat stringToRat(String[] newRat) {
+		int newRatAge = parseInt(newRat[0]);
+		boolean newRatIsMale = parseBoolean(newRat[1]);
+		boolean newRatIsPregnant = parseBoolean(newRat[2]);
+		int newRatHP = parseInt(newRat[3]);
+		boolean newRatIsSterile = parseBoolean(newRat[4]);
+		boolean newRatIsBreeding = parseBoolean(newRat[5]);
+		boolean newRatIsDeathRat = parseBoolean(newRat[6]);
+		return new Rat(newRatAge, newRatIsMale, newRatIsPregnant, newRatHP, newRatIsSterile, newRatIsBreeding, newRatIsDeathRat);
+	}
+	
+	public static void newBabyRat() {
+		Random nextRand = new Random();
+		Boolean newRatIsMale = nextRand.nextBoolean();
+		rats.add(newRatIsMale);
+	}
+	
 }
