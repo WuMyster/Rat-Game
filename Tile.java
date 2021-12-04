@@ -237,7 +237,9 @@ public abstract class Tile {
      * When item is given to rat and used, item is removed from its Arraylist and subsequently
      * removed from screen.
      * @param pos co-ordinates of the current tile.
-     * @deprecated
+     * @deprecated Should simply check if item isAlive(), in future if poison had multuple uses, this
+     * would work better
+     * Encapsulation can be achieved by creating a method to remove the offending position
      */
     private void itemUsed(int[] pos) {
         ArrayList<int[]> arr = null;
