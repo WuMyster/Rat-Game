@@ -335,6 +335,10 @@ public class Board {
 			deathRatBuffer.addAll(t.getNextDeathRat());
 		}
 		
+		for (Tile t : allTiles) {
+			t.correctList();
+		}
+		
 		// Before moving all other rats
 		for (Tile t : allTiles) {
 			t.getNextDirection();

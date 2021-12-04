@@ -277,7 +277,7 @@ public abstract class Tile {
     }
     
     /**
-     * Have the rats interact with each other.
+     * Have the rats on this tile interact with each other.
      */
 	public void getRatInteractions() {
 		// Del // WILL BE MOVED TO ITEMS
@@ -286,18 +286,34 @@ public abstract class Tile {
 		for (Direction dir : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(dir));
 		}
-		
-		for(Rat r : aliveRats) {
-			System.out.println(r.toString());
+	}
+
+	/**
+	 * Makes sure the list the tile is currently dealing with don't involve rats that are not moving.
+	 */
+	public void correctList() {
+		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> tmp = new ArrayList<>();
+			ArrayList<Rat> rs = currBlock.get(prevDirection);
+			if (rs != null) {
+				for (Rat r : rs) {
+					if (exists(r)) {
+						tmp.add(r);
+					}
+				}
+				currBlock.put(prevDirection, tmp);
+			}
 		}
-		
-		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
-		for (Rat r : rs.get(0)) {
-			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
-			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
-			bufferNextBlock.get(d).add(r);
-		}		
-		aliveRats = rs.get(1);
+	}
+	
+	/**
+	 * Returns {@code true} if Rat is in aliveRats list.
+	 * 
+	 * @param r the rat to find
+	 * @return {@code true} if rat exists in list
+	 */
+	private boolean exists(Rat r) {
+		return aliveRats.remove(r);
 	}
 
 	/**

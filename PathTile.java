@@ -27,10 +27,8 @@ public class PathTile extends Tile {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 
 		if (currDeath.isEmpty()) {
-			correctList();
 			return new ArrayList<>();
 		}
-		System.out.println("Death rat present");
 		// Pass in ArrayList of rats on this tile. Should be moved to giveItemToRat
 		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
@@ -94,33 +92,8 @@ public class PathTile extends Tile {
 			// Could theoterically still decrease by comparing the difference
 			// from before and now. ArrayList keeps order so chances are, all rats
 			// from one direction will be eliminated before other direction is
-			correctList();
 		}
 		return drs;
-	}
-
-	public void correctList() {
-		for (Direction prevDirection : currBlock.keySet()) {
-			ArrayList<Rat> tmp = new ArrayList<>();
-			ArrayList<Rat> rs = currBlock.get(prevDirection);
-			if (rs != null) {
-				for (Rat r : rs) {
-					if (exists(r)) {
-						tmp.add(r);
-					}
-				}
-				currBlock.put(prevDirection, tmp);
-			}
-		}
-	}
-	/**
-	 * Returns {@code true} if Rat is in aliveRats list.
-	 * 
-	 * @param r the rat to find
-	 * @return {@code true} if rat exists in list
-	 */
-	private boolean exists(Rat r) {
-		return aliveRats.remove(r);
 	}
 
 	// Death rat and stop sign stopping rats from moving away hence moving towards
@@ -267,11 +240,26 @@ public class PathTile extends Tile {
 			ArrayList<Rat> ratList = bufferNextBlock.get(prevDirection);
 			//Similar to above but no need to check for stop signs
 			for (Rat r : ratList) {
-				Main.addCurrMovement(X_Y_POS, prevDirection, r.getStatus(), 0);
+				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
+				this.addRat(r, prevDirection);
 			}
 		}
 	}
 
+	@Override
+	public void getRatInteractions() {
+		super.getRatInteractions();
+		
+		// This method should be moved up
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
+		for (Rat r : rs.get(0)) {
+			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
+			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
+			bufferNextBlock.get(d).add(r);
+		}	
+		aliveRats = rs.get(1);
+	}
+	
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		// Direction goTo = directions[0] == prevDirection ? directions[1] :
