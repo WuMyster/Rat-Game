@@ -260,6 +260,8 @@ public class Main extends Application {
 	/**
 	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
 	 * currently allows rats to move around.
+	 * TODO Check if time is over
+	 * TODO Level from Game Master
 	 */
 	private void runCycle() {
 		currMovement = new HashMap<>();
