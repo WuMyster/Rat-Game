@@ -171,17 +171,24 @@ public class JunctionTile extends Tile {
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 		// TODO
-
-		// Pass in ArrayList of rats on this tile.
-		aliveRats = new ArrayList<>();
-		for (Direction prevDirection : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(prevDirection));
+		
+		if (currDeath.isEmpty()) {
+			return new ArrayList<>();
+		}
+		
+		for (Direction dir : bufferNextBlock.keySet()) {
+			ArrayList<Rat> r = bufferNextBlock.get(dir);
+			for (Direction prevDirection : currDeath.keySet()) {
+				for (DeathRat dr : currDeath.get(prevDirection)) {
+					bufferNextBlock.put(dir, dr.killRats(r, -1));
+				}
+			}
 		}
 
+		int beforeDeath = aliveRats.size();
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				aliveRats = dr.killRats(aliveRats, 0);
-
+				aliveRats = dr.killRats(aliveRats, -1);
 			}
 		}
 
@@ -212,16 +219,24 @@ public class JunctionTile extends Tile {
 		// Remove fallen rats from list.
 		// Will not automatically move the rats in case other death rats come here.
 		// Compare size of lists!
-		for (Direction prevDirection : currBlock.keySet()) {
-			ArrayList<Rat> tmp = new ArrayList<>();
-			ArrayList<Rat> rs = currBlock.get(prevDirection);
-			if (rs != null) {
-				for (Rat r : rs) {
-					if (exists(r)) {
-						tmp.add(r);
+		if (aliveRats.isEmpty()) {
+			currBlock = new HashMap<>();
+		} else if (aliveRats.size() == beforeDeath) {
+			// Interesting as to why there is no change...
+			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " +
+			X_Y_POS[1]);
+		} else { 
+			for (Direction prevDirection : currBlock.keySet()) {
+				ArrayList<Rat> tmp = new ArrayList<>();
+				ArrayList<Rat> rs = currBlock.get(prevDirection);
+				if (rs != null) {
+					for (Rat r : rs) {
+						if (exists(r)) {
+							tmp.add(r);
+						}
 					}
+					currBlock.put(prevDirection, tmp);
 				}
-				currBlock.put(prevDirection, tmp);
 			}
 		}
 

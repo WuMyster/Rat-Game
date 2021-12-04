@@ -26,6 +26,9 @@ public class PathTile extends Tile {
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 
+		if (currDeath.isEmpty()) {
+			return new ArrayList<>();
+		}
 		// Pass in ArrayList of rats on this tile. Should be moved to giveItemToRat
 		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
@@ -83,7 +86,8 @@ public class PathTile extends Tile {
 			currBlock = new HashMap<>();
 		} else if (aliveRats.size() == beforeDeathInter) {
 			// Interesting as to why there is no change...
-			System.err.println("aliveRats list has not changed!" + X_Y_POS);
+			System.err.println("aliveRats list has not changed! "  + X_Y_POS[0] + " " +
+					X_Y_POS[1]);
 		} else { 
 			// Could theoterically still decrease by comparing the difference
 			// from before and now. ArrayList keeps order so chances are, all rats

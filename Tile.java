@@ -280,6 +280,11 @@ public abstract class Tile {
      * Have the rats interact with each other.
      */
 	public void getRatInteractions() {
+		// Del // WILL BE MOVED TO ITEMS
+		aliveRats = new ArrayList<>();
+		for (Direction dir : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(dir));
+		}
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
 		for (Rat r : rs.get(0)) {
 			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];

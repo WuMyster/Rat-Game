@@ -248,11 +248,14 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true), Direction.WEST, 1, 2); 
+		// m.placeRat(new Rat(true), Direction.WEST, 1, 2); 
+		// int age, boolean isMale, boolean isPregnant, int hp, boolean isSterile, boolean isBreeding, boolean isDeathRat
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 5);
+		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 1);
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
-		// a.setCycleCount(10);
+		// a.setCycleCount(10);x
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
 	}
