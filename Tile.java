@@ -334,6 +334,11 @@ public abstract class Tile {
 	}
 
 
+    /**
+     * Blows up a tile by:
+     * - removing any existing item (if a bomb, also cancels the detonation timer)
+     * - kills the rats present on the tile
+     */
 	public void blowUp() {
 		if (itemOnTile != null) {
 			if (itemOnTile instanceof Bomb) {

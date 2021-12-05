@@ -13,6 +13,10 @@ import java.util.TimerTask;
  * -Maybe
  */
 public class Bomb extends Item {
+    public Bomb() {
+        hp = 1; // is never used, only for constructor
+    }
+
     public static final Image[] COUNTDOWN = new Image[] {
             new Image("img/ItemBomb1.png"),
             new Image("img/ItemBomb2.png"),
@@ -23,10 +27,6 @@ public class Bomb extends Item {
 
     Timer timer = new Timer();
     private int currentCountdown = COUNTDOWN_IN_S;
-
-    public int getCurrentCountdown() {
-        return currentCountdown;
-    }
 
     public static Image getImage(int n) {
         return COUNTDOWN[n];
@@ -56,7 +56,6 @@ public class Bomb extends Item {
             }
         }, 0, 1000);
         return true;
-
         }
 
 	@Override
