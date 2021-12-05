@@ -39,6 +39,22 @@ public class RatController {
 	}
 	
 	/**
+	 * Takes in a {@code Rat} class to be added to list.
+	 * This is for when we add rat manually. J
+	 */
+	public static void addRat(Rat r) {
+		ratList.add(r);
+	}
+	
+	/**
+	 * Add this list of rats.
+	 * @param r
+	 */
+	public static void addRats(ArrayList<Rat> r) {
+		ratList.addAll(r);
+	}
+	
+	/**
 	 * Takes in a list of toString rat values and adds them to the rat list
 	 * @param newRats
 	 */
@@ -65,8 +81,9 @@ public class RatController {
 	 * Constructs a rat from a rats toString output
 	 * @param ratString - A toString output from the Rat.toString() method
 	 * @return a constructed rat with the same values as in ratString
+	 * @Ollie, J made this public
 	 */
-	private static Rat stringToRat(String ratString) {
+	public static Rat stringToRat(String ratString) {
 		String[] newRat = ratString.split(",");
 		
 		int newRatAge = Integer.parseInt(newRat[0]);

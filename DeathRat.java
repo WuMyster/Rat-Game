@@ -33,6 +33,15 @@ public class DeathRat {
 	}
 	
 	/**
+	 * Constructor for Death Rat. Does not interact with items other
+	 * than Stop Signs and Bombs. HP is set for this Death Rat
+	 * @param hp hot points left on this Death Rat
+	 */
+	public DeathRat(int hp) {
+		this.hp = hp;
+	}
+	
+	/**
 	 * Returns the XY position of the Death Rat on the board.
 	 * @return XY position on the board
 	 */
