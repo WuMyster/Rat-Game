@@ -265,7 +265,7 @@ public class Main extends Application {
 		m.placeRat(new Rat(true), Direction.WEST, 1, 2);
         m.placeRat(new Rat(50, true, false, 20, false, false, false), Direction.WEST, 1, 4);
         m.placeRat(new Rat(50, false, false, 20, false, false, false), Direction.EAST, 1, 5);
-        //m.placeRat(new DeathRat(), Direction.WEST, 1, 1);
+        m.placeRat(new DeathRat(), Direction.WEST, 9, 1);
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
@@ -314,9 +314,14 @@ public class Main extends Application {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
+		try {
 		
 		for (RatType rt : RatType.values()) {
+			
 			drawRat(rt);
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
