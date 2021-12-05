@@ -161,11 +161,13 @@ public abstract class Tile {
 			aliveRats.addAll(currBlock.get(dir));
 		}
 		if (itemOnTile != null) {
-			
-			itemOnTile.itemAction(aliveRats);
+            if (!aliveRats.isEmpty()) {
+                aliveRats = itemOnTile.itemAction(aliveRats);
 
-			if (!itemOnTile.isAlive()) {
-				itemOnTile = null;
+                if (!itemOnTile.isAlive()) {
+                    Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+                    itemOnTile = null;
+                }
 			}
 		}
 
