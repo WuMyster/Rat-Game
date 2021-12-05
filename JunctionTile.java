@@ -82,7 +82,7 @@ public class JunctionTile extends Tile {
 			// Similar to above but no need to check for stop signs
 			for (Rat r : ratList) {
 				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
-				this.addRat(r, prevDirection);
+				this.addRat(r, prevDirection.opposite());
 			}
 		}
 	}
@@ -147,7 +147,6 @@ public class JunctionTile extends Tile {
 	 * Set up a predetermined route for each rat, so no rat will pass by a death rat
 	 */
 	private void createBuffer() {
-		System.out.println("CurrBlock: " + currBlock.size());
 		for (Direction prevDirectionRat : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirectionRat.opposite());
 			if (!ratList.isEmpty()) {
@@ -184,8 +183,7 @@ public class JunctionTile extends Tile {
 		
 		// For now assign random directions to every rat
 		createBuffer();
-		System.out.println(prevDirectionDR);
-		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR.opposite());
+		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
 		ArrayList<Rat> slowerRats = new ArrayList<>();
 		if (ratsToDoom != null) {
 			for (Rat r : ratsToDoom) {
@@ -195,6 +193,8 @@ public class JunctionTile extends Tile {
 					} else {
 						slowerRats.add(r);
 					}
+				} else {
+					slowerRats.add(r);
 				}
 			}
 		}
