@@ -122,6 +122,7 @@ public class RatController {
 		ArrayList<Rat> moving = new ArrayList<>();
 		
 		while(ratsOnTile.size() > 0) {
+			ratsOnTile.get(0).incrementAge();
 			Rat nextRat = ratsOnTile.get(0);
 			if(nextRat.isChild()) {
 				moving.add(nextRat);
