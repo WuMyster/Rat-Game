@@ -1,14 +1,19 @@
+import java.util.ArrayList;
+
 /**
  * @author Salim, Andrew
  * */
 
 public class SexChangeToMale extends Item {
-    public void itemAction(Rat a) {
-        a.setIsMale(true);
-        System.out.println("toMale item used");
+	
+	public SexChangeToMale() {
+		hp = 1;
+	}
 
-
-        // Need to see how inventory is implemented to implement this properly
-        //count -=1;
-    }
+	@Override
+	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
+		r.get(0).setIsMale(true);
+		hp--;
+		return null;
+	}
 }

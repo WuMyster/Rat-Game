@@ -12,7 +12,7 @@ import java.util.TimerTask;
  * TODO Wu, maybe move bomb pic and arraylist here?
  * -Maybe
  */
-public class Bomb extends Item{
+public class Bomb extends Item {
     public static final Image[] COUNTDOWN = new Image[] {
             new Image("img/ItemBomb1.png"),
             new Image("img/ItemBomb2.png"),
@@ -58,4 +58,10 @@ public class Bomb extends Item{
         return true;
 
         }
+
+	@Override
+	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
+		// Does nothing to rats
+		return r;
+	}
 }

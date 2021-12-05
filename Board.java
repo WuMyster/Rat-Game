@@ -339,7 +339,7 @@ public class Board {
 		}
 		// First give item to rat(s)
 		for (Tile t : allTiles) {
-			// t.giveRatItem();
+			t.giveRatItem();
 		}
 		
 		// Then have the rats interact with each other

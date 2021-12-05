@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+
 /**
  * 
  * @author 
  *
  */
-class Item {
+abstract class Item {
+	
 	/**
 	 * The hp of the item.
 	 */
@@ -16,4 +19,6 @@ class Item {
 	public boolean isAlive() {
 		return hp > 0;
 	}
+	
+	public abstract ArrayList<Rat> itemAction(ArrayList<Rat> r);
 }

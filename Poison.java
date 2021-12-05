@@ -1,20 +1,20 @@
+import java.util.ArrayList;
+
 /**
  * @author Andrew
  */
 class Poison extends Item {
-    private int itemHP = 1;
-
-    public void itemAction (Rat rat) {
-        RatController.killRat(rat);
-        System.out.println("Rat killed by poison");
-        itemUsed();
+	
+    public Poison() {
+    	hp = 1;
     }
 
-    public int getItemHP () {
-        return this.itemHP;
-    }
-
-    private void itemUsed () {
-        this.itemHP -= 1;
-    }
+	@Override
+	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
+		Rat main = r.get(0);
+		RatController.killRat(main);
+		r.remove(0);
+		hp--;
+		return r;
+	}
 }

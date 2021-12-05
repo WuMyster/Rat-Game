@@ -153,53 +153,69 @@ public abstract class Tile {
 	 * @return {@code true} if rat dies after being given item
 	 * FIXME should assume item is alive? If already dead itemOnTile should already be null;
 	 */
-	protected boolean giveRatItem(Rat r) {
+	protected boolean giveRatItem() {
 		if (itemOnTile == null) {
 			return false;
 		}
+		
 		//Check item damage type and remove health as necessary
-		if (itemHP == 0) {
+		if (!itemOnTile.isAlive()) {
 			//Run method to do something if needed e.g. bomb
 			itemOnTile = null;
 		}
-
-        // TODO Wu Find out a way to reduce repetition here
-        if (itemOnTile instanceof Poison) {
-            ((Poison) itemOnTile).itemAction(r);
-            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-            itemOnTile = null;
-            return true;
-        }
-        if (itemOnTile instanceof SexChangeToFemale) {
-            ((SexChangeToFemale) itemOnTile).itemAction(r);
-            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-            itemOnTile = null;
-            return false;
-        }
-        if (itemOnTile instanceof SexChangeToMale) {
-            ((SexChangeToMale) itemOnTile).itemAction(r);
-            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-            itemOnTile = null;
-            return false;
-        }
-        if (itemOnTile instanceof Sterilisation) {
-            ((Sterilisation) itemOnTile).itemAction(r);
-            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-            itemOnTile = null;
-            return false;
-        }
-        // TODO itemused not changed over to main yet
-        if (itemOnTile instanceof Gas) {
-            ((Gas) itemOnTile).itemAction(r);
-            //itemUsed(ORIGINAL_X_Y_POS);
-            //itemOnTile = null;
-            //return true;
-        }
+		
+		// Create list of rats
+		bufferNextBlock = new HashMap<>();
+		aliveRats = new ArrayList<>();
+		for (Direction dir : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(dir));
+		}
+		
+		itemOnTile.itemAction(aliveRats);
+		
+		if (!itemOnTile.isAlive()) {
+			itemOnTile = null;
+		}
+		
+//        // TODO Wu Find out a way to reduce repetition here
+		// TODO for Andrew - reduced.
+//        if (itemOnTile instanceof Poison) {
+//            ((Poison) itemOnTile).itemAction(r);
+//            removeItem();
+//            return true;
+//        }
+//        if (itemOnTile instanceof SexChangeToFemale) {
+//            ((SexChangeToFemale) itemOnTile).itemAction(r);
+//            removeItem();
+//            return false;
+//        }
+//        if (itemOnTile instanceof SexChangeToMale) {
+//            ((SexChangeToMale) itemOnTile).itemAction(r);
+//            removeItem();
+//            return false;
+//        }
+//        if (itemOnTile instanceof Sterilisation) {
+//            ((Sterilisation) itemOnTile).itemAction(r);
+//            removeItem();
+//            return false;
+//        }
+//        // TODO itemused not changed over to main yet
+//        if (itemOnTile instanceof Gas) {
+//            ((Gas) itemOnTile).itemAction(r);
+//            //itemUsed(ORIGINAL_X_Y_POS);
+//            //itemOnTile = null;
+//            //return true;
+//        }
 
 		
 		//Method to give item away
 		
 		return false;
+	}
+	
+	private void removeItem() {
+		Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+		itemOnTile = null;
 	}
 	
 	//??????? TODO }Item{
@@ -253,11 +269,7 @@ public abstract class Tile {
      */
 	public void getRatInteractions() {
 		// Del // WILL BE MOVED TO ITEMS
-		bufferNextBlock = new HashMap<>();
-		aliveRats = new ArrayList<>();
-		for (Direction dir : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(dir));
-		}
+		
 	}
 
 	/**
@@ -385,6 +397,9 @@ public abstract class Tile {
 	 * Empties tile of all attributes/ things on tile.
 	 */
 	private void resetTile() {
+		if (itemOnTile != null) {
+			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+		}
 		itemOnTile = null;
 		isBlocked = false;
 		isSterile = false;
