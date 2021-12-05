@@ -147,10 +147,12 @@ public class PathTile extends Tile {
 		int beforeDeath = 0;
 		if (dr.isAlive() && currList != null) {
 			beforeDeath = currList.size();
-			Tile tile = neighbourTiles.get(dirAwayDeath); //?
+			System.out.println("Len " + beforeDeath);
+			Tile tile = neighbourTiles.get(dirToDeath); //?
 			
 			// Number of rats towards death	after boucing off stop sign		
 			ratsGoToDeath = currList.size() - tile.numsRatsCanEnter(this, currList.size());
+			System.out.println(ratsGoToDeath);
 			int i = 0;
 			// Let Death Rat first deal with Baby rats
 			for (; i < ratsGoToDeath && i < currList.size(); i++) {
