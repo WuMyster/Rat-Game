@@ -550,10 +550,13 @@ public class Main extends Application {
         if (item instanceof Sterilisation) {
             arr = sterilisePlace;
         }
+        if (item instanceof Bomb) {
+            arr = bombPlace;
+        }
 
         int[] a = null;
         for (int[] i : arr) {
-            if (Arrays.equals(i, pos)) {
+            if (i[0] == pos[0] && i[1] == pos[1]) {
                 a = i;
             }
         }

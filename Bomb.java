@@ -17,7 +17,7 @@ public class Bomb extends Item{
             new Image("img/ItemBomb1.png"),
             new Image("img/ItemBomb2.png"),
             new Image("img/ItemBomb3.png"),
-            new Image("img/ItemBomb4.png"), 
+            new Image("img/ItemBomb4.png")
     };
     public static final int COUNTDOWN_IN_S = 4;
 
