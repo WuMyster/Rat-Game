@@ -24,6 +24,16 @@ public class RatController {
 		return points;
 	}
 	
+	/**
+	 * Will need to compare number of rats on the map to the max number of rats 
+	 * you should have.
+	 * @return {@code true} if the number of rats do not exceed the max number
+	 * of rats allowed on the map
+	 */
+	public static boolean continueGame() {
+		return true;
+	}
+	
 	
 	/**
 	 * Adds a new baby rat to rats
