@@ -125,6 +125,9 @@ public class Rat {
 	 */
 	public void sterilise() {
 		isSterile = true;
+		if(age<30) {
+			age = 30;
+		}
 	}
 	/**
 	 * Tells other classes whether the rat is sterile and cannot breed
