@@ -82,7 +82,7 @@ public class JunctionTile extends Tile {
 			// Similar to above but no need to check for stop signs
 			for (Rat r : ratList) {
 				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
-				this.addRat(r, prevDirection);
+				this.addRat(r, prevDirection.opposite());
 			}
 		}
 	}
@@ -92,7 +92,7 @@ public class JunctionTile extends Tile {
 		super.getRatInteractions();
 		
 		// This implementation should be moved up
-		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(this, aliveRats);	
 		
 		ArrayList<Rat> asdf = rs.get(0);
 		for (Rat r : asdf) {
@@ -147,7 +147,6 @@ public class JunctionTile extends Tile {
 	 * Set up a predetermined route for each rat, so no rat will pass by a death rat
 	 */
 	private void createBuffer() {
-		System.out.println("CurrBlock: " + currBlock.size());
 		for (Direction prevDirectionRat : currBlock.keySet()) {
 			ArrayList<Rat> ratList = currBlock.get(prevDirectionRat);
 			if (!ratList.isEmpty()) {
@@ -173,18 +172,17 @@ public class JunctionTile extends Tile {
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 
-//		for (Direction dir : bufferNextBlock.keySet()) {
-//			ArrayList<Rat> r = bufferNextBlock.get(dir);
-//			for (Direction prevDirection : currDeath.keySet()) {
-//				for (DeathRat dR : currDeath.get(prevDirection)) {
-//					bufferNextBlock.put(dir, dR.killRats(r, -1));
-//				}
-//			}
-//		}
+		for (Direction dir : bufferNextBlock.keySet()) {
+			ArrayList<Rat> r = bufferNextBlock.get(dir);
+			for (Direction prevDirection : currDeath.keySet()) {
+				for (DeathRat dR : currDeath.get(prevDirection)) {
+					bufferNextBlock.put(dir, dR.killRats(r, -1));
+				}
+			}
+		}
 		
 		// For now assign random directions to every rat
 		createBuffer();
-		System.out.println(prevDirectionDR);
 		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
 		ArrayList<Rat> slowerRats = new ArrayList<>();
 		if (ratsToDoom != null) {
@@ -195,6 +193,8 @@ public class JunctionTile extends Tile {
 					} else {
 						slowerRats.add(r);
 					}
+				} else {
+					slowerRats.add(r);
 				}
 			}
 		}
@@ -271,6 +271,7 @@ public class JunctionTile extends Tile {
 		if (aliveRats.isEmpty()) {
 			currBlock = new HashMap<>();
 			buffer = new HashMap<>();
+			nextBlock = new HashMap<>();
 		} else if (aliveRats.size() == beforeDeath) {
 			// Interesting as to why there is no change...
 			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);

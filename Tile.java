@@ -229,10 +229,10 @@ public abstract class Tile {
             ((Bomb) i).itemAction(x, y);
             return true;
         }
-        if (i instanceof secondGas) {
-            itemHP = 1;
-            return true;
-        }
+//        if (i instanceof secondGas) {
+//            itemHP = 1;
+//            return true;
+//        }
         if (i instanceof Gas) {
             itemHP = 1;
             ((Gas) i).add(x, y);
@@ -384,6 +384,7 @@ public abstract class Tile {
 		isBlocked = false;
 		nextBlock =  new HashMap<>();	
 		nextDeath = new HashMap<>();
+		currDeath = new HashMap<>();
 	}
 	
 }

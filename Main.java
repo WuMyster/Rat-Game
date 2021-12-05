@@ -305,7 +305,7 @@ public class Main extends Application {
 				if (spl[0].length() == 1) {
 					createR = new Rat(spl[0].equals("M")); // Only for new start of levels
 				} else {
-					createR = RatController.stringToRat(spl[0]);
+					createR = RatController.addRat(spl[0]);
 				}
 				m.placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 			}
