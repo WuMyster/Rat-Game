@@ -10,11 +10,12 @@ public class RatController {
 	static int maxNumOfRats = 10;
 	private static int points;
 	
+
 	// Needs to be set when starting
 	public static void setRatController(int max) {
 		maxNumOfRats = max;
 	}
-	
+
 	/**
 	 * Gets how many points have been earnt by killing rats.
 	 * @return An integer representing the points earnt.
@@ -142,7 +143,13 @@ public class RatController {
 			Rat nextRat = ratsOnTile.get(0);
 			if(nextRat.isChild()) {
 				moving.add(nextRat);
-			} else if(nextRat.getIsBreeding() == true) {
+			} else if (nextRat.isPregnant()) {
+				nextRat.decrementPregCounter();
+				if(nextRat.getPregCounter() == 5 || nextRat.getPregCounter() == 3 || nextRat.getPregCounter() == 1) {
+					newBabyRat();
+				}
+			}
+			else if(nextRat.getIsBreeding() == true) {
 				if(nextRat.getIsMale() == false) {
 					nextRat.setBreedStatus(false);
 					nextRat.setPregnancy(true);
@@ -208,4 +215,5 @@ public class RatController {
 		postBreedRats.add(notBreeding);				//1
 		return postBreedRats;
 	}
+	
 }
