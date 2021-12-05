@@ -253,9 +253,13 @@ public class Board {
 		
 		Image grassImage = new Image("Grass.png");
 		//Image tileImage = new Image("Tile.png");
-		Image[] tunnelImages = new Image[4];
+		Image[] tunnelImagesEntrance = new Image[4];
 		for(int i = 0; i < 4; i++) {
-			tunnelImages[i] = new Image("Tunnel" + i + ".png");
+			tunnelImagesEntrance[i] = new Image("/img/Tunnel" + i + ".png");
+		}
+		Image[] tunnelImages = new Image[2];
+		for(int i = 0; i < 2; i++) {
+			tunnelImages[i] = new Image("/img/TunnelF" + i + ".png");
 		}
 		
 		int x = 0;
@@ -270,21 +274,35 @@ public class Board {
 							Main.TILE_SIZE,
 							Main.TILE_SIZE);
 				} else if (board[i][j] instanceof TunnelTile) {
-					Image t = grassImage;
+					Image t = new Image("/img/tile.png");
+					
+					// Only checks for left right
+					
 					
 					// Check for NESW entrance
-					if (board[i - EXTRA_PADDING][j] != null &&
-							!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
-						t = tunnelImages[0];
-					} else if (board[i][j + EXTRA_PADDING] != null &&
-							!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
-						t = tunnelImages[1];
-					} else if (board[i + EXTRA_PADDING][j] != null &&
-							!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
-						t = tunnelImages[2];
-					} else if (board[i][j - EXTRA_PADDING] != null &&
-							!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
-						t = tunnelImages[3];
+					if (board[i - EXTRA_PADDING][j] != null) {
+						if (!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[0];
+						} else {
+							t = tunnelImages[0];
+						}
+					} 
+					if (board[i][j + EXTRA_PADDING] != null) {
+						if (!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[1];
+						} else {
+							t = tunnelImages[1];
+						}
+					}
+					if (board[i + EXTRA_PADDING][j] != null) {
+						if (!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[2];
+						} 
+					} 
+					if (board[i][j - EXTRA_PADDING] != null) {
+						if (!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[3];
+						}
 					} 
 					gc.drawImage(t, 
 							x++ * Main.TILE_SIZE, 
