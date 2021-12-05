@@ -124,6 +124,9 @@ public class Main extends Application {
     private static Image GAS;
     ImageView draggableGas = new ImageView();
 
+    private static Image DEATH_RAT;
+    ImageView draggableDeathRat = new ImageView();
+
     /**
      * Image of Poison
      */
@@ -248,7 +251,9 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		m.placeRat(new Rat(true), Direction.WEST, 1, 2); 
+		m.placeRat(new Rat(true), Direction.WEST, 1, 2);
+        m.placeRat(new Rat(50, true, false, 20, false, false, false), Direction.WEST, 1, 4);
+        //m.placeRat(new DeathRat(), Direction.WEST, 1, 1);
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
@@ -414,6 +419,7 @@ public class Main extends Application {
         SEX_TO_MALE = new Image("SexChangeToMale.png");
         STERILISE = new Image("img/Sterilise.png");
         GAS = new Image("img/icon-gas.png");
+        DEATH_RAT = new Image ("img/ItemDeathRat.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
 		stopSignPlace = new ArrayList<>();
@@ -473,7 +479,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Remove stop sign from board.
+	 * Removes items from board.
 	 * TODO Hopefully can be upgraded to remove all items.
 	 * @param pos position where the stop sign is
 	 */
@@ -492,6 +498,14 @@ public class Main extends Application {
         if (item instanceof Sterilisation) {
             arr = sterilisePlace;
         }
+
+        int[] a = null;
+        for (int[] i : arr) {
+            if (Arrays.equals(i, pos)) {
+                a = i;
+            }
+        }
+        arr.remove(a);
 
         /*
         ArrayList<int[]> itemPlace = null;
@@ -703,6 +717,15 @@ public class Main extends Application {
         }
     }
 
+    private void placeDeathRat(DragEvent event) {
+        double x = Math.floor(event.getX() / TILE_SIZE);
+        double y = Math.floor(event.getY() / TILE_SIZE);
+
+        if (Board.isItemPlaceable((int) x, (int) y)) {
+            m.addDeathRat((int) x, (int) y); //Will return boolean if sign can be placed
+        }
+    }
+
 	/**
 	 * Creates the top menu bar. Contains menu options.
 	 * 
@@ -779,6 +802,9 @@ public class Main extends Application {
 
         draggableGas.setImage(GAS);
         root.getChildren().add(draggableGas);
+
+        draggableDeathRat.setImage(DEATH_RAT);
+        root.getChildren().add(draggableDeathRat);
 
 		// This code setup what happens when the dragging starts on the image.
 		// You probably don't need to change this (unless you wish to do more advanced
@@ -916,6 +942,24 @@ public class Main extends Application {
             }
         });
 
+        draggableDeathRat.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                // Mark the drag as started.
+                // We do not use the transfer mode (this can be used to indicate different forms
+                // of drags operations, for example, moving files or copying files).
+                Dragboard db = draggableDeathRat.startDragAndDrop(TransferMode.ANY);
+
+                // We have to put some content in the clipboard of the drag event.
+                // We do not use this, but we could use it to store extra data if we wished.
+                ClipboardContent content = new ClipboardContent();
+                content.putString("Hello");
+                db.setContent(content);
+
+                // Consume the event. This means we mark it as dealt with.
+                event.consume();
+            }
+        });
+
 		// This code allows the canvas to receive a dragged object within its bounds.
 		// You probably don't need to change this (unless you wish to do more advanced
 		// things).
@@ -971,6 +1015,12 @@ public class Main extends Application {
                     // Consume the event. This means we mark it as dealt with.
                     event.consume();
                 }
+                if (event.getGestureSource() == draggableDeathRat) {
+                    // Mark the drag event as acceptable by the canvas.
+                    event.acceptTransferModes(TransferMode.ANY);
+                    // Consume the event. This means we mark it as dealt with.
+                    event.consume();
+                }
 			}
 		});
 
@@ -1019,6 +1069,9 @@ public class Main extends Application {
         }
         if (event.getGestureSource() == draggableGas) {
             placeGas(event);
+        }
+        if (event.getGestureSource() == draggableDeathRat) {
+            placeDeathRat(event);
         }
     }
 

@@ -224,7 +224,24 @@ public class Board {
         Gas gas = new Gas();
 
         t.setTileItem(gas, x, y);
+    }
 
+    public void addDeathRat(int x, int y) {
+        placeRat(new DeathRat(), Direction.NORTH, y, x);
+
+    }
+
+    // Not working
+    public void spreadItem(Item item, int x, int y, int r) {
+        for (int i = -(r-1); i <= (r-1); i++) {
+            for (int j = -(r-1); j <= (r-1); j++) {
+                if (isItemPlaceable(x - i, y - j)) {
+                    Tile t = board[(y-i) * EXTRA_PADDING][(x-j) * EXTRA_PADDING];
+
+                    t.setTileItem(item, x, y);
+                }
+            }
+        }
     }
 
 	/**

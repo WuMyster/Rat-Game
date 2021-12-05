@@ -22,7 +22,7 @@ public class DeathRat {
 	 * @return
 	 */
 	public Rat itemAction() {
-		Rat deathRat = new Rat(true, 10);
+		Rat deathRat = new Rat(true);
 		
 		return deathRat;
 	}
