@@ -17,15 +17,19 @@ public class Bomb extends Item{
             new Image("img/ItemBomb1.png"),
             new Image("img/ItemBomb2.png"),
             new Image("img/ItemBomb3.png"),
-            new Image("img/ItemBomb4.png"),
+            new Image("img/ItemBomb4.png"), 
     };
-    private static final int COUNTDOWN_IN_S = 4;
+    public static final int COUNTDOWN_IN_S = 4;
 
     Timer timer = new Timer();
-    private static int currentCountdown = COUNTDOWN_IN_S;
+    private int currentCountdown = COUNTDOWN_IN_S;
 
-    public static int getCurrentCountdown() {
+    public int getCurrentCountdown() {
         return currentCountdown;
+    }
+
+    public static Image getImage(int n) {
+        return COUNTDOWN[n];
     }
 
     /**
@@ -36,11 +40,14 @@ public class Bomb extends Item{
      * @return true if bomb detonates successfully.
      */
     public boolean itemAction(int x, int y) {
-        Timer timer = new Timer();
+        this.timer = new Timer();
 
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 currentCountdown--;
+                if (currentCountdown >= 0) {
+                    Main.editBombCountdown(currentCountdown, x, y);
+                }
 
                 if (currentCountdown < 0) {
                     timer.cancel();

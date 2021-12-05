@@ -186,9 +186,9 @@ public abstract class Tile {
         // TODO itemused not changed over to main yet
         if (itemOnTile instanceof Gas) {
             ((Gas) itemOnTile).itemAction(r);
-            itemUsed(ORIGINAL_X_Y_POS);
-            itemOnTile = null;
-            return true;
+            //itemUsed(ORIGINAL_X_Y_POS);
+            //itemOnTile = null;
+            //return true;
         }
 
 		
@@ -229,11 +229,16 @@ public abstract class Tile {
             ((Bomb) i).itemAction(x, y);
             return true;
         }
+        if (i instanceof secondGas) {
+            itemHP = 1;
+            return true;
+        }
         if (i instanceof Gas) {
             itemHP = 1;
             ((Gas) i).add(x, y);
             return true;
         }
+
 
 		return true;
 	}
@@ -269,7 +274,7 @@ public abstract class Tile {
 
         int[] a = null;
         for (int[] i : arr) {
-            if (Arrays.equals(i, pos)) {
+            if (i[0] == pos[0] && i[1] == pos[1]) {
                 a = i;
             }
         }

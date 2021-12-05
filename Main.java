@@ -582,7 +582,7 @@ public class Main extends Application {
 			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
         for (int[] i : bombPlace) {
-            gc.drawImage(Bomb.COUNTDOWN[Bomb.getCurrentCountdown()], i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+            gc.drawImage(Bomb.getImage(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
         for (int[] i : poisonPlace) {
             gc.drawImage(POISON, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
@@ -690,11 +690,19 @@ public class Main extends Application {
         double y = Math.floor(event.getY() / TILE_SIZE);
 
         if (Board.isItemPlaceable((int) x, (int) y)) {
-            bombPlace.add(new int[] { (int) y, (int) x });
+            bombPlace.add(new int[] { (int) y, (int) x , Bomb.COUNTDOWN_IN_S});
             m.addBomb((int) x, (int) y); //Will return boolean if sign can be placed
             // Draw an icon at the dropped location.
             GraphicsContext gc = itemCanvas.getGraphicsContext2D();
             gc.drawImage(BOMB, x * TILE_SIZE, y * TILE_SIZE);
+        }
+    }
+
+    public static void editBombCountdown (int n, int x, int y) {
+        for (int[] i : bombPlace) {
+            if (i[0] == y && i[1] == x) {
+                i[2] = n;
+            }
         }
     }
 
