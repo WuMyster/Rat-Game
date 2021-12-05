@@ -242,44 +242,6 @@ public abstract class Tile {
 
 		return true;
 	}
-
-    /**
-     * TODO Wu, not encapsulated, will look into it if theres time
-     * When item is given to rat and used, item is removed from its Arraylist and subsequently
-     * removed from screen.
-     * @param pos co-ordinates of the current tile.
-     * @deprecated Should simply check if item isAlive(), in future if poison had multuple uses, this
-     * would work better
-     * Encapsulation can be achieved by creating a method to remove the offending position
-     */
-    private void itemUsed(int[] pos) {
-        ArrayList<int[]> arr = null;
-        
-        if (itemOnTile instanceof Poison) {
-            arr = Main.getPoisonPlace();
-        }
-        if (itemOnTile instanceof SexChangeToFemale) {
-            arr = Main.getSexToFemalePlace();
-        }
-        if (itemOnTile instanceof SexChangeToMale) {
-            arr = Main.getSexToMalePlace();
-        }
-        if (itemOnTile instanceof Sterilisation) {
-            arr = Main.getSterilisePlace();
-        }
-
-        if (itemOnTile instanceof Bomb) {
-            arr = Main.getBombPlace();
-        }
-
-        int[] a = null;
-        for (int[] i : arr) {
-            if (i[0] == pos[0] && i[1] == pos[1]) {
-                a = i;
-            }
-        }
-        arr.remove(a);
-    }
     
     /**
      * Have the rats on this tile interact with each other.
@@ -373,8 +335,7 @@ public abstract class Tile {
             if (itemOnTile instanceof Bomb) {
                 ((Bomb) itemOnTile).timer.cancel();
             }
-            //Main.removeItem(itemOnTile., X_Y_POS); CANNOT GET THIS TO WORK
-            itemUsed(ORIGINAL_X_Y_POS);
+            Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 		}
 		resetTile();
 		System.out.println("BLOWN UP");

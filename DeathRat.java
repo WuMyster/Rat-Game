@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class DeathRat extends Item{
+public class DeathRat {
 	
 	/**
 	 * XY position on the board the death rat starts from.
@@ -38,6 +38,10 @@ public class DeathRat extends Item{
 	 */
 	public int[] getXyPos() {
 		return xyPos;
+	}
+	
+	public boolean isAlive() {
+		return hp > 0;
 	}
 
 	/**
