@@ -144,8 +144,9 @@ public class PathTile extends Tile {
 		
 		currList = currBlock.get(dirAwayDeath);
 		int ratsGoToDeath = -1;
+		int beforeDeath = 0;
 		if (dr.isAlive() && currList != null) {
-			
+			beforeDeath = currList.size();
 			Tile tile = neighbourTiles.get(dirAwayDeath); //?
 			
 			// Number of rats towards death	after boucing off stop sign		
@@ -179,7 +180,7 @@ public class PathTile extends Tile {
 			currBlock.put(dirToDeath, escaped);
 			
 			// Now get rats that have bounced back due to stop sign that DR haven't yet killed
-			ArrayList<Rat> a = new ArrayList<>(currBlock.get(dirAwayDeath).subList(i, currList.size()));
+			ArrayList<Rat> a = new ArrayList<>(currBlock.get(dirAwayDeath).subList(i, beforeDeath));
 			if (a != null) {
 				currBlock.put(dirAwayDeath, a);
 			}

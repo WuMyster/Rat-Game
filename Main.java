@@ -261,7 +261,7 @@ public class Main extends Application {
 	}
 	
 	private void test101() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1, 3);
+		m.placeRat(new DeathRat(), Direction.EAST, 1, 4);
 		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 3);
 		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 2);
 	}
