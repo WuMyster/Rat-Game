@@ -41,8 +41,9 @@ public class RatController {
 	public static Rat newBabyRat() {
 		Random nextRand = new Random();
 		Boolean newRatIsMale = nextRand.nextBoolean();
-		ratList.add(new Rat(newRatIsMale));
-		return new Rat(newRatIsMale);
+		Rat r = new Rat(newRatIsMale);
+		ratList.add(r);
+		return r;
 	}
 	
 	/**
@@ -111,7 +112,7 @@ public class RatController {
 		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);
 		
 		ArrayList<ArrayList<Rat>> bredRats = breedRats(sortedRatsOnTile.get(0), sortedRatsOnTile.get(1));
-		ArrayList<Rat> notBred = bredRats.get(1);
+		ArrayList<Rat> notBred = bredRats.get(1); 
 		
 		while(notBred.size()>0) {
 			movingRats.add(notBred.get(0)); 

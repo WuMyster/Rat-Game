@@ -275,11 +275,11 @@ public class Main extends Application {
 		primaryStage.show();
 
 		String[] iner = new String[] { 
-				"M;3,1,2", // Should only be on very new levels i.e starting maps
+				//"M;3,1,2", // Should only be on very new levels i.e starting maps
 				"50,true,false,20,false,false,false;3,1,4",
 				"50,false,false,20,false,false,false;1,1,5", 
-				"D;3,9,1", //  Same here
-				"D,2;1,9,1"
+				//"D;3,9,1", //  Same here
+				//"D,2;1,9,1"
 		};
 
 		for (String str : iner) {
@@ -477,7 +477,8 @@ public class Main extends Application {
 	 * @return the GUI
 	 */
 	private BorderPane createGameGUI() {
-
+		startTime = LocalTime.now();
+		maxTime = 20;
 		BOMB = new Image("img/ItemBomb.png");
 		POISON = new Image("Poison.png");
 		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
@@ -506,7 +507,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		String properMap1;
-		int tunnel = 3;
+		int tunnel = 1;
 		if (tunnel == 0) {
 			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
 		} else if (tunnel == 1) {

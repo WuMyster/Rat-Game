@@ -275,6 +275,12 @@ public abstract class Tile {
 				for (Rat r : rs) {
 					if (aliveRats.remove(r)) {
 						tmp.add(r);
+					} else if (r.getAge() < 2) {
+						tmp.add(r);
+						System.out.println("New");
+					} else {
+						System.out.println("Del" + r);
+						
 					}
 				}
 				currBlock.put(prevDirection, tmp);

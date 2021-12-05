@@ -242,12 +242,12 @@ public class Rat {
 	public String toString() {
 		String output = "";
 		output += age + ",";
-		output += isMale.toString() + ",";
-		output += isPregnant.toString() + ",";
-		output += health.toString() + ",";
-		output += isSterile.toString() + ",";
-		output += isBreeding.toString() + ",";
-		output += isDeathRat.toString();
+		output += isMale + ",";
+		output += isPregnant+ ",";
+		output += health + ",";
+		output += isSterile + ",";
+		output += isBreeding + ",";
+		output += isDeathRat;
 		return output;
 	}
 
