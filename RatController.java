@@ -63,7 +63,7 @@ public class RatController {
 	 * @return a constructed rat with the same values as in ratString
 	 */
 	private static Rat stringToRat(String ratString) {
-		String[] newRat = ratString.split(",")
+		String[] newRat = ratString.split(",");
 		
 		int newRatAge = Integer.parseInt(newRat[0]);
 		boolean newRatIsMale = Boolean.parseBoolean(newRat[1]);
@@ -140,9 +140,9 @@ public class RatController {
 		}
 		
 		ArrayList<ArrayList<Rat>> newRatList = new ArrayList<>();
-		newRatList.add(male);				//0
-		newRatList.add(female);				//1
-		newRatList.add(moving);				//2
+		newRatList.add(male);
+		newRatList.add(female);
+		newRatList.add(moving);
 		return newRatList;
 	}
 	
@@ -182,5 +182,4 @@ public class RatController {
 		postBreedRats.add(notBreeding);				//1
 		return postBreedRats;
 	}
-	
 }

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -25,65 +26,6 @@ public class JunctionTile extends Tile {
 	public JunctionTile(int x, int y) {
 		super(new int[] { x, y });
 	}
-	
-	private void createBuffer() {
-		for (Direction prevDirectionRat : currBlock.keySet()) {
-			ArrayList<Rat> ratList = currBlock.get(prevDirectionRat);
-			if (!ratList.isEmpty()) {
-				for (Rat r : ratList) {
-					Direction goTo = getADirection(prevDirectionRat);
-					Tile tile;
-					int ratsGoForward;
-					do {
-						tile = neighbourTiles.get(goTo);
-						ratsGoForward = tile.numsRatsCanEnter(this, 1);
-
-						prevDirectionRat = goTo;
-						goTo = getADirection(prevDirectionRat);
-					} while (ratsGoForward == 0);
-
-					buffer.putIfAbsent(prevDirectionRat, new ArrayList<>());
-					buffer.get(prevDirectionRat).add(r);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
-		// TODO Auto-generated method stub
-
-		// For now assign random directions to every rat
-		createBuffer();
-
-		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
-		ArrayList<Rat> slowerRats = new ArrayList<>();
-		if (ratsToDoom != null) {
-			for (Rat r : ratsToDoom) {
-				if (r.getStatus() == RatType.BABY) {
-					if (dr.killRat(r, 2)) {
-						Main.addCurrMovement(X_Y_POS, prevDirectionDR, RatType.BABY, 2);
-					} else {
-						slowerRats.add(r);
-					}
-				}
-			}
-		}
-
-		ratsToDoom = new ArrayList<>();
-		for (Rat r : slowerRats) {
-			if (dr.killRat(r, 3)) {
-				Main.addCurrMovement(X_Y_POS, prevDirectionDR, r.getStatus(), 1);
-			} else {
-				ratsToDoom.add(r);
-			}
-		}
-		buffer.put(prevDirectionDR, ratsToDoom);
-		
-		if (dr.isAlive()) {
-			this.addRat(dr, prevDirectionDR);
-		}
-	}
 
 	/**
 	 * Will choose a random direction for Rat to go to.
@@ -96,12 +38,12 @@ public class JunctionTile extends Tile {
 				if (!ratList.isEmpty()) {
 					int i = 0;
 					while (i != ratList.size()) {
-	
+
 						Direction goTo = getADirection(prevDirection);
 						Tile tile = neighbourTiles.get(goTo);
-	
+
 						int ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
-	
+
 						for (; i < ratsGoForward; i++) {
 							RatType status = ratList.get(i).getStatus();
 							if (status == RatType.BABY) {
@@ -121,19 +63,53 @@ public class JunctionTile extends Tile {
 				ArrayList<Rat> ratList = buffer.get(goTo);
 				if (!ratList.isEmpty()) {
 					Tile tile = neighbourTiles.get(goTo);
-					for(Rat r : ratList) {
+					for (Rat r : ratList) {
 						RatType status = r.getStatus();
 						if (status == RatType.BABY) {
-							Main.addCurrMovement(X_Y_POS, goTo.opposite(), RatType.BABY, 4);
-							tile.getAcceleratedDirection(r, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
+							tile.getAcceleratedDirection(r, goTo.opposite());
 						} else {
-							Main.addCurrMovement(X_Y_POS, goTo.opposite(), r.getStatus(), 4);
-							tile.addRat(r, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, r.getStatus(), 4);
+							tile.addRat(r, goTo.opposite());
 						}
 					}
 				}
 			}
 		}
+		// For non-moving rats
+		for (Direction prevDirection : bufferNextBlock.keySet()) {
+			ArrayList<Rat> ratList = bufferNextBlock.get(prevDirection);
+			// Similar to above but no need to check for stop signs
+			for (Rat r : ratList) {
+				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
+				this.addRat(r, prevDirection);
+			}
+		}
+	}
+	
+	@Override
+	public void getRatInteractions() {
+		super.getRatInteractions();
+		
+		// This implementation should be moved up
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
+		
+		ArrayList<Rat> asdf = rs.get(0);
+		for (Rat r : asdf) {
+			Direction d = null;
+			
+			for (Direction dir : directions) {
+				ArrayList<Rat> a = currBlock.get(dir);
+				if (a == null) {
+					
+				} else if (a.contains(r)) {
+					d = dir;
+				}
+			}
+			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
+			bufferNextBlock.get(d).add(r);
+		}	
+		aliveRats = rs.get(1);
 	}
 
 	/**
@@ -166,22 +142,102 @@ public class JunctionTile extends Tile {
 			r.incrementAge();
 		}
 	}
+	
+	/**
+	 * Set up a predetermined route for each rat, so no rat will pass by a death rat
+	 */
+	private void createBuffer() {
+		System.out.println("CurrBlock: " + currBlock.size());
+		for (Direction prevDirectionRat : currBlock.keySet()) {
+			ArrayList<Rat> ratList = currBlock.get(prevDirectionRat);
+			if (!ratList.isEmpty()) {
+				for (Rat r : ratList) {
+					Direction goTo = getADirection(prevDirectionRat);
+					Tile tile;
+					int ratsGoForward;
+					do {
+						tile = neighbourTiles.get(goTo);
+						ratsGoForward = tile.numsRatsCanEnter(this, 1);
+
+						prevDirectionRat = goTo;
+						goTo = getADirection(prevDirectionRat);
+					} while (ratsGoForward == 0);
+
+					buffer.putIfAbsent(prevDirectionRat, new ArrayList<>());
+					buffer.get(prevDirectionRat).add(r);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
+
+//		for (Direction dir : bufferNextBlock.keySet()) {
+//			ArrayList<Rat> r = bufferNextBlock.get(dir);
+//			for (Direction prevDirection : currDeath.keySet()) {
+//				for (DeathRat dR : currDeath.get(prevDirection)) {
+//					bufferNextBlock.put(dir, dR.killRats(r, -1));
+//				}
+//			}
+//		}
+		
+		// For now assign random directions to every rat
+		createBuffer();
+		System.out.println(prevDirectionDR);
+		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
+		ArrayList<Rat> slowerRats = new ArrayList<>();
+		if (ratsToDoom != null) {
+			for (Rat r : ratsToDoom) {
+				if (r.getStatus() == RatType.BABY) {
+					if (dr.killRat(r, 2)) {
+						Main.addCurrMovement(X_Y_POS, prevDirectionDR, RatType.BABY, 2);
+					} else {
+						slowerRats.add(r);
+					}
+				}
+			}
+		}
+
+		ratsToDoom = new ArrayList<>();
+		for (Rat r : slowerRats) {
+			if (dr.killRat(r, 3)) {
+				Main.addCurrMovement(X_Y_POS, prevDirectionDR, r.getStatus(), 1);
+			} else {
+				ratsToDoom.add(r);
+			}
+		}
+		buffer.put(prevDirectionDR, ratsToDoom);
+
+		if (dr.isAlive()) {
+			this.addRat(dr, prevDirectionDR);
+		}
+	}
 
 	@Override
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 		// TODO
-
-		// Pass in ArrayList of rats on this tile.
-		aliveRats = new ArrayList<>();
-		for (Direction prevDirection : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(prevDirection));
+ 
+		if (currDeath.isEmpty()) {
+			return new ArrayList<>();
 		}
 
+		for (Direction dir : bufferNextBlock.keySet()) {
+			ArrayList<Rat> r = bufferNextBlock.get(dir);
+			for (Direction prevDirection : currDeath.keySet()) {
+				for (DeathRat dr : currDeath.get(prevDirection)) {
+					bufferNextBlock.put(dir, dr.killRats(r, -1));
+					System.out.println("B ded");
+				}
+			}
+		}
+
+		int beforeDeath = aliveRats.size();
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				aliveRats = dr.killRats(aliveRats, 0);
-
+				aliveRats = dr.killRats(aliveRats, -1);
+				System.out.println("A ded");
 			}
 		}
 
@@ -212,17 +268,25 @@ public class JunctionTile extends Tile {
 		// Remove fallen rats from list.
 		// Will not automatically move the rats in case other death rats come here.
 		// Compare size of lists!
-		for (Direction prevDirection : currBlock.keySet()) {
-			ArrayList<Rat> tmp = new ArrayList<>();
-			ArrayList<Rat> rs = currBlock.get(prevDirection);
-			if (rs != null) {
-				for (Rat r : rs) {
-					if (exists(r)) {
-						tmp.add(r);
-					}
-				}
-				currBlock.put(prevDirection, tmp);
-			}
+		if (aliveRats.isEmpty()) {
+			currBlock = new HashMap<>();
+			buffer = new HashMap<>();
+		} else if (aliveRats.size() == beforeDeath) {
+			// Interesting as to why there is no change...
+			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
+		} else {
+//			for (Direction prevDirection : currBlock.keySet()) {
+//				ArrayList<Rat> tmp = new ArrayList<>();
+//				ArrayList<Rat> rs = currBlock.get(prevDirection);
+//				if (rs != null) {
+//					for (Rat r : rs) {
+//						if (exists(r)) {
+//							tmp.add(r);
+//						}
+//					}
+//					currBlock.put(prevDirection, tmp);
+//				}
+//			}
 		}
 
 		return drs;

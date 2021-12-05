@@ -257,11 +257,11 @@ public class Main extends Application {
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
-		// a.setCycleCount(10);
+		// a.setCycleCount(10);x
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
 	}
-
+	
 	/**
 	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
 	 * currently allows rats to move around.
@@ -326,10 +326,12 @@ public class Main extends Application {
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
 					if (i[2] == 0) {
-						gc.drawImage(ratImage[0],
-								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
-								width, height);
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[0],
+									i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+									width, height);
+						}
 					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[0],
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
@@ -343,10 +345,12 @@ public class Main extends Application {
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
 					if (i[2] == 0) {
-						gc.drawImage(ratImage[1], 
-								i[1] * RAT_POSITION, 
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
-								height, width);
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[1], 
+									i[1] * RAT_POSITION, 
+									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+									height, width);
+						}
 					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
 						gc.drawImage(ratImage[1], 
 								i[1] * RAT_POSITION + step * speed, 
@@ -360,10 +364,12 @@ public class Main extends Application {
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
 					if (i[2] == 0) {
-						gc.drawImage(ratImage[2], 
-								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
-								i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
-								width, height);
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[2], 
+									i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
+									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)),
+									width, height);
+						}
 					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[2], 
 								i[1] * RAT_POSITION + (TILE_X_OFFSET * size), 
@@ -377,10 +383,12 @@ public class Main extends Application {
 			if (currDirection != null) {
 				for (int[] i : currDirection) {
 					if (i[2] == 0) {
-						gc.drawImage(ratImage[3], 
-								i[1] * RAT_POSITION, 
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
-								height, width);
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[3], 
+									i[1] * RAT_POSITION, 
+									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)),
+									height, width);
+						}
 					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
 						gc.drawImage(ratImage[3], 
 								i[1] * RAT_POSITION - step * speed, 
@@ -403,9 +411,27 @@ public class Main extends Application {
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move});
+		
+		if (move == 0) {		
+			currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], 0, 4});
+		} else {
+			currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move});
+		}
 	}
-
+	
+	/**
+	 * Adds to list of Rat movements on the game canvas.
+	 * 
+	 * @param pos xy position of the rat
+	 * @param dir direction the rat is facing
+	 * @param rt type of rat
+	 * @param move movement status of rat
+	 */
+	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move, int steps) {
+		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
+		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
+		currMovement.get(rt).get(dir).add(new int[] {pos[0], pos[1], move, steps});
+	}
 	/**
 	 * Creates game GUI.
 	 * 
@@ -429,12 +455,17 @@ public class Main extends Application {
         sexToMalePlace = new ArrayList<>();
         sterilisePlace = new ArrayList<>();
         gasPlace = new ArrayList<>();
-		
-		BorderPane root = new BorderPane();
+		BorderPane root = null;
+		try {
+		root = new BorderPane();
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
-		
+		} catch (NullPointerException n) {
+			n.printStackTrace();
+		}catch (Exception e ) {
+			e.printStackTrace();
+		}
 		String properMap1;
 		int tunnel = 3;
 		if (tunnel == 0) {

@@ -73,6 +73,13 @@ public class DeathRat {
 	}
 	
 	//Need to think of way to prevent being drawn if dead
+	/**
+	 * Kills as many rats as it can from this list and returns a list of rats that are still alive.
+	 * Only works when dealing with rats on tiles and not in between.
+	 * @param rs list of rats the DR will take on
+	 * @param move limit it's going forwards to
+	 * @return list of rats that survive attack
+	 */
 	public ArrayList<Rat> killRats(ArrayList<Rat> rs, int move) {	
 		if (rs.size() == 0) {
 			return rs;

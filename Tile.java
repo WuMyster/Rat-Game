@@ -49,7 +49,13 @@ public abstract class Tile {
 	protected HashMap<Direction, ArrayList<Rat>> currBlock;
 	
 	/**
-	 * Death Rat that is arriving to this tile. 
+	 * List of rats staying on current tile. May be killed by Death rat later on. Once 
+	 * given all clear, will be moved to nextBlock.
+	 */
+	protected HashMap<Direction, ArrayList<Rat>> bufferNextBlock = new HashMap<>();
+	
+	/**
+	 * Death Rats that are arriving to this tile. 
 	 */
 	protected HashMap<Direction, ArrayList<DeathRat>> nextDeath = new HashMap<>();
 	
@@ -269,6 +275,41 @@ public abstract class Tile {
         }
         arr.remove(a);
     }
+    
+    /**
+     * Have the rats on this tile interact with each other.
+     */
+	public void getRatInteractions() {
+		// Del // WILL BE MOVED TO ITEMS
+		bufferNextBlock = new HashMap<>();
+		aliveRats = new ArrayList<>();
+		for (Direction dir : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(dir));
+		}
+		if (!aliveRats.isEmpty()) {
+			System.out.println(aliveRats.size());
+		}
+	}
+
+	/**
+	 * Makes sure the list the tile is currently dealing with don't involve rats that are not moving.
+	 */
+	public void correctList() {
+		ArrayList<Rat> tmp1 = aliveRats;
+		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> tmp = new ArrayList<>();
+			ArrayList<Rat> rs = currBlock.get(prevDirection);
+			if (rs != null) {
+				for (Rat r : rs) {
+					if (aliveRats.remove(r)) {
+						tmp.add(r);
+					}
+				}
+				currBlock.put(prevDirection, tmp);
+			}
+		}
+		aliveRats = tmp1;
+	}
 
 	/**
 	 * Place stop sign on tile.
@@ -291,6 +332,7 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
+		System.out.println(X_Y_POS[0] + " " + X_Y_POS[1]);
 		if (!isBlocked) {
 			return n;
 		}
