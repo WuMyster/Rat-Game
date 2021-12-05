@@ -310,15 +310,7 @@ public class Main extends Application {
 				m.placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 			}
 		}
-
-//		m.placeRat(new Rat(true), Direction.WEST, 1, 2);
-//		m.placeRat(new Rat(50, true, false, 20, false, false, false), Direction.WEST, 1, 4);
-//		m.placeRat(new Rat(50, false, false, 20, false, false, false), Direction.EAST, 1, 5);
-//		m.placeRat(new DeathRat(), Direction.WEST, 9, 1);
-
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
-		// a.setCycleCount(1);
-		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
 	}
