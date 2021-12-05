@@ -3,10 +3,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * This class provides a skeltal implementation of the {@code Tile}, it is a
+ * This class provides a skeletal implementation of the {@code Tile}, it is a
  * superclass of all {@code Tile}s.
  * @author Jing Shiang Gu
- * 
+ * @author Andrew Wu
  */
 public abstract class Tile {
 
