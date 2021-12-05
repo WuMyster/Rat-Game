@@ -7,10 +7,9 @@ public class SexChangeToFemale extends Item {
      * @param a a Rat object.
      */
     public void itemAction(Rat a) {
-        if (a.getIsMale() == true) {
-            a.setIsMale(false);
-            System.out.println("Male to female");
-        }
+        a.setIsMale(false);
+        System.out.println("toFemale item used");
+
 
 
         // Need to see how inventory is implemented to implement this properly
