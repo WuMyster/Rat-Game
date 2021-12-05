@@ -14,6 +14,6 @@ public class SexChangeToMale extends Item {
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
 		r.get(0).setIsMale(true);
 		hp--;
-		return null;
+		return r;
 	}
 }
