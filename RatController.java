@@ -38,10 +38,11 @@ public class RatController {
 	/**
 	 * Adds a new baby rat of random sex to the ratList.
 	 */
-	public static void newBabyRat() {
+	public static Rat newBabyRat() {
 		Random nextRand = new Random();
 		Boolean newRatIsMale = nextRand.nextBoolean();
 		ratList.add(new Rat(newRatIsMale));
+		return new Rat(newRatIsMale);
 	}
 	
 	/**
@@ -53,7 +54,7 @@ public class RatController {
 			ratList.add(stringToRat(newRats[i]));
 		}
 	}
-
+	
 	/**
 	 * Takes in a Rat class toString() value and adds it to the rat list.
 	 * @param newRat - the formatted rat string.
@@ -104,7 +105,7 @@ public class RatController {
 	 * @param t the tile the rat is on
 	 * @return A nested arraylist of rats, where the first index contains rats that aren't moving and the second index contains rats which will be moving
 	 */
-	public static ArrayList<ArrayList<Rat>> ratInteractions(Tile t, ArrayList<Rat> ratsOnTile) {
+	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile) {
 		
 		ArrayList<ArrayList<Rat>> sortedRatsOnTile = sortRats(ratsOnTile);
 		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);
@@ -145,7 +146,7 @@ public class RatController {
 			} else if (nextRat.getPregnant()) {
 				nextRat.decrementPregCounter();
 				if(nextRat.getPregCounter() == 5 || nextRat.getPregCounter() == 3 || nextRat.getPregCounter() == 1) {
-					newBabyRat();
+					moving.add(newBabyRat());
 				}
 				moving.add(nextRat);
 			}
