@@ -1,26 +1,20 @@
 import java.util.ArrayList;
 import java.util.Random;
 /**
- * 
+ * This class stores an arraylist of the rats on the board, dealing with rat interactions (breeding) and killing the rats.
  * @author Ollie Jarrett
- *
+ * @version
  */
 public class RatController {
-	/**
-	 * An arraylist of all the rats on the board
-	 */
-	private static ArrayList<Rat> ratList = new ArrayList<>(); //static list of rats in rat controller
-	/**
-	 * The amount of points earnt by killing rats
-	 */
-	private static int points; //static ratcontroller stores points 
+	private static ArrayList<Rat> ratList = new ArrayList<>();
+	private static int points;
 	
 	
 	/**
 	 * Tells other classes how many points have been earnt by killing rats
 	 * @return An integer representing the points earnt
 	 */
-	public static int getPoints() { //ratcontroller.getpoints - static method
+	public static int getPoints() {
 		return points;
 	}
 	
