@@ -25,6 +25,11 @@ public abstract class Tile {
 	 * tile, else Rat will have to take another direction.
 	 */
 	protected Boolean isBlocked;
+	
+	/**
+	 * Sterile Item will cause this tile to not allow any rats to have sex.
+	 */
+	protected Boolean isSterile;
 
 	/**
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
@@ -379,10 +384,13 @@ public abstract class Tile {
 	 */
 	private void resetTile() {
 		itemOnTile = null;
+		isBlocked = false;
+		isSterile = false;
 		// TODO Remove item from tile.
 		itemHP = 0;
 		isBlocked = false;
-		nextBlock =  new HashMap<>();	
+		nextBlock =  new HashMap<>();
+		currBlock = new HashMap<>();
 		nextDeath = new HashMap<>();
 		currDeath = new HashMap<>();
 	}
