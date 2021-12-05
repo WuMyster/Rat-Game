@@ -4,7 +4,7 @@ import java.util.*;
  * @author Salim
  */
 
-public class Leaderboard {
+public class LeaderBoard {
 
     public int scoring() {
     	
@@ -20,10 +20,19 @@ public class Leaderboard {
 
     //ArrayList<Integer> scores = new ArrayList<Integer>(); // In GameMaster
 
-    Collections.sort(scores, Collections.reverseOrder()); //sorts arraylist from highest to lowest score
-
-    for (int i = 0; i < 10; i++) { // only top 10 scores are kept
-        System.out.println(score.get(i));
+    public void addPoints() {
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+        scores.add(scoring());
     }
 
+    public void sortList(ArrayList<Integer> scores) {
+        Collections.sort(scores, Collections.reverseOrder()); //sorts arraylist from highest to lowest score
+    }
+
+    public void showLeaderboard(ArrayList<Integer> scores) {
+
+        for (int i = 0; i < 10; i++) { // only top 10 scores are kept
+            System.out.println(scores.get(i));
+        }
+    }
 }

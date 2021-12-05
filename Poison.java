@@ -2,17 +2,11 @@
  * @author Andrew
  */
 class Poison extends Item {
-    enum name {
-        POISON
-    }
-
     private int itemHP = 1;
 
     public void itemAction (Rat rat) {
-        // Waiting for ratcontroller kill() to be implemented
-        //RatController rc = new RatController();
-        //rc.killRat(rat);
-
+        RatController.killRat(rat);
+        System.out.println("Rat killed by poison");
         itemUsed();
     }
 

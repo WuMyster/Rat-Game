@@ -1,3 +1,4 @@
+import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -11,42 +12,50 @@ import java.util.TimerTask;
  * TODO Wu, maybe move bomb pic and arraylist here?
  * -Maybe
  */
-public class Bomb extends Item {
-    enum Name {
-        BOMB
-    }
-    final private int COUNTDOWN_IN_MS = 4000; // 4 seconds as per spec
+public class Bomb extends Item{
+    public static final Image[] COUNTDOWN = new Image[] {
+            new Image("img/ItemBomb1.png"),
+            new Image("img/ItemBomb2.png"),
+            new Image("img/ItemBomb3.png"),
+            new Image("img/ItemBomb4.png"), 
+    };
+    public static final int COUNTDOWN_IN_S = 4;
+
     Timer timer = new Timer();
+    private int currentCountdown = COUNTDOWN_IN_S;
+
+    public int getCurrentCountdown() {
+        return currentCountdown;
+    }
+
+    public static Image getImage(int n) {
+        return COUNTDOWN[n];
+    }
 
     /**
      * Item ability triggered through calling this method. Method delayed by an amount in
      * milliseconds to emulate a bomb detonating.
-     * FIXME Wu need to clear timer properly.
      * @param x x-coordinate bomb was placed on
      * @param y y-coordinate bomb was placed on
      * @return true if bomb detonates successfully.
      */
     public boolean itemAction(int x, int y) {
-        timer.cancel(); // Cancel any existing timer.
         this.timer = new Timer();
 
-        TimerTask task = new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                Board.detonate(x, y);
+                currentCountdown--;
+                if (currentCountdown >= 0) {
+                    Main.editBombCountdown(currentCountdown, x, y);
+                }
+
+                if (currentCountdown < 0) {
+                    timer.cancel();
+                    Board.detonate(x, y);
+                }
             }
-        };
-
-        timer.schedule(task, COUNTDOWN_IN_MS); // Start method run() after amount of time.
-
+        }, 0, 1000);
         return true;
-    }
-    // TODO Need method to reduce inventory quantity
 
-    /**
-     * Debug
-     * @param array
-     */
-    public static void printArray(ArrayList<int[]> array) {
-        for(int[] item : array) System.out.println(Arrays.toString(item));
-    }
+        }
 }

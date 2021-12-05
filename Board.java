@@ -224,7 +224,24 @@ public class Board {
         Gas gas = new Gas();
 
         t.setTileItem(gas, x, y);
+    }
 
+    public void addDeathRat(int x, int y) {
+        placeRat(new DeathRat(), Direction.NORTH, y, x);
+
+    }
+
+    // Not working
+    public void spreadItem(Item item, int x, int y, int r) {
+        for (int i = -(r-1); i <= (r-1); i++) {
+            for (int j = -(r-1); j <= (r-1); j++) {
+                if (isItemPlaceable(x - i, y - j)) {
+                    Tile t = board[(y-i) * EXTRA_PADDING][(x-j) * EXTRA_PADDING];
+
+                    t.setTileItem(item, x, y);
+                }
+            }
+        }
     }
 
 	/**
@@ -315,6 +332,7 @@ public class Board {
 	public void runAllTiles() {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
 		deathRatBuffer = new ArrayList<>();
+		
 		// Movement
 		for (Tile t : allTiles) {
 			t.setCurrRat();
@@ -324,7 +342,17 @@ public class Board {
 			// t.giveRatItem();
 		}
 		
-		// Secondly move Death rats and any rats in its path
+		// Then have the rats interact with each other
+		for (Tile t : allTiles) {
+			t.getRatInteractions();
+		}
+		
+		for (Tile t : allTiles) {
+			t.correctList();
+		}
+		
+		System.out.println();
+		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
 		}

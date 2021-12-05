@@ -70,13 +70,14 @@ public enum RatType {
 	 * @param size how big rat is (bigger is smaller)
 	 * @param speed how fast rat can move (bigger is faster)
 	 */
-	private RatType(int size, int speed, String imagePic) {
+	private RatType(int size, int speed, String imagePic) throws NullPointerException {
 		this.size = size;
 		this.speed = speed;
+		for(int i = 0; i < 4; i++) {
+			image[i] = new Image(IMAGE_LOC + imagePic + i + FILE_TYPE);
+		}
 		try {
-			for(int i = 0; i < 4; i++) {
-				image[i] = new Image(IMAGE_LOC + imagePic + i + FILE_TYPE);
-			}
+			
 		} catch (NullPointerException e) {
 			System.err.println(ERR_MSG);
 			System.exit(0);
