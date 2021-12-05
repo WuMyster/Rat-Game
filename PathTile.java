@@ -178,49 +178,28 @@ public class PathTile extends Tile {
 			currBlock.put(dirToDeath, escaped);
 			
 			// Now get rats that have bounced back that DR haven't yet killed
-			System.out.println(i);
-			System.out.println(currList.size());
 			ArrayList<Rat> a = new ArrayList<>(currBlock.get(goTo).subList(i, currList.size()));
 			if (a != null) {
 				currBlock.put(goTo, a);
 			}
 			currList = escaped;
 			escaped = new ArrayList<>(); 
-		} else {
-			System.out.println("DR alive: " + (dr.isAlive()));
-			System.out.println("List empty: " + (currList != null));
-			System.out.println();
 		}
-		
-		
-		System.out.println("DR: " + dr.isAlive());
-		System.out.println("CurrList: " + (currList != null));
 		if (dr.isAlive() && currList != null) {
-			System.out.println("is inside");
-			System.out.println(ratsGoToDeath);
-			System.out.println(currList.size());
 			
 			int i = 0;
 			for (; i < ratsGoToDeath && i < currList.size(); i++) {
 				Rat r = currList.get(i); 
 				System.out.println(r);
 				if (dr.killRat(currList.get(i), 3)) {
-					System.out.println("Does kill");
 					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
 				} else {
 					escaped.add(r);
-					System.out.println("Adult escaped!");
 				}
 			}
 			if (!currList.subList(i, currList.size()).isEmpty()) {
 				escaped.addAll(currList.subList(i, currList.size()));
-				System.out.println("Added to escape");
-			} else {
-				System.out.println("Escape list empty");
-			}
-			
-		} else {
-			System.out.println("Passed");
+			} 
 		}
 
 		// Does not deal with non-moving rats as rats on this tile will be dealt with next time 

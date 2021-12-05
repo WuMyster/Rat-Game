@@ -33,46 +33,83 @@ public class LightTile extends Tile {
 
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirection) {
-		
-		// For rats going towards the death rat (not including baby rat since they shouldn't be
-		// on this tile
-		ArrayList<Rat> dealing = currBlock.get(prevDirection.opposite());
+
+		// For rats going towards the death rat (not including baby rat since they
+		// shouldn't be on this tile
+		ArrayList<Rat> currList = currBlock.get(prevDirection.opposite());
 		ArrayList<Rat> escaped = new ArrayList<>();
-		if (dealing != null) {
-			for (int i = 0; i < dealing.size(); i++) {
-				if (dr.killRat(dealing.get(i), 1)) {
-					Main.addCurrMovement(X_Y_POS, prevDirection, dealing.get(i).getStatus(), 2);
+		if (currList != null) {
+			for (int i = 0; i < currList.size(); i++) {
+				if (dr.killRat(currList.get(i), 1)) {
+					Main.addCurrMovement(X_Y_POS, prevDirection, currList.get(i).getStatus(), 2);
 				} else {
-					escaped.add(dealing.get(i));
+					escaped.add(currList.get(i));
 				}
 			}
 			currBlock.put(prevDirection.opposite(), escaped);
 		}
 		
+		// Deal with rats staying put on this tile
+		if (dr.isAlive()) {
+			for (Direction dir : bufferNextBlock.keySet()) {
+				ArrayList<Rat> ratList = bufferNextBlock.get(dir);
+				escaped = new ArrayList<>();
+				
+				for (Rat r : ratList) {
+					if (dr.killRat(r, 2)) {
+						Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0, 2);
+					} else {
+						escaped.add(r);
+					}
+				}
+				bufferNextBlock.put(dir, escaped);
+			}
+		}
+		
+
 		// Adult rats going away from death rat (not including baby rat)
 		if (dr.isAlive()) {
-			dealing = currBlock.get(prevDirection);
-			if (dealing != null) {
-				for (int i = 0; i < dealing.size(); i++) {
-					if (dr.killRat(dealing.get(i), 1)) {
-						Main.addCurrMovement(X_Y_POS, 
-								prevDirection.opposite(), 
-								dealing.get(i).getStatus(), 
-								2);
+			currList = currBlock.get(prevDirection);
+			escaped = new ArrayList<>();
+			if (currList != null) {
+				for (int i = 0; i < currList.size(); i++) {
+					if (dr.killRat(currList.get(i), 1)) {
+						Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), currList.get(i).getStatus(), 2);
 					} else {
-						escaped.add(dealing.get(i));
+						escaped.add(currList.get(i));
 					}
 				}
 				currBlock.put(prevDirection, escaped);
 			}
 		}
-		
+
 		if (dr.isAlive()) {
 			Tile t = neighbourTiles.get(prevDirection.opposite());
 			t.moveDeathRat(dr, prevDirection);
 		}
 	}
-	
+
+	@Override
+	public void getRatInteractions() {
+		super.getRatInteractions();
+
+		// This method should be moved up
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
+		for (Rat r : rs.get(0)) {
+			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
+			if (currBlock.get(directions[0]).contains(r)) {
+				System.out.println("Good 1");
+			} else if (currBlock.get(directions[1]).contains(r)) {
+				System.out.println("Good 2");
+			} else {
+				System.out.println("ERROR");
+			}
+			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
+			bufferNextBlock.get(d).add(r);
+		}
+		aliveRats = rs.get(1);
+	}
+
 	/**
 	 * Death Rat should not be on this tile.
 	 */
@@ -99,11 +136,18 @@ public class LightTile extends Tile {
 				}
 			}
 		}
+		
+		for (Direction dir : bufferNextBlock.keySet()) {
+			for (Rat r : bufferNextBlock.get(dir)) {
+				Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
+				this.addRat(r, dir);
+			}
+		}
 	}
 
 	/**
-	 * Light tile won't decide where it goes, already predetermined by previous tile, 
-	 * will go straight to next tile.
+	 * Light tile won't decide where it goes, already predetermined by previous
+	 * tile, will go straight to next tile.
 	 */
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
