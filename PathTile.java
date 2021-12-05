@@ -36,7 +36,7 @@ public class PathTile extends Tile {
 //		}
 		
 		int beforeDeathInter = aliveRats.size();
-				
+//				
 //		for (Direction dir : bufferNextBlock.keySet()) {
 //			System.out.println("Biffer");
 //			ArrayList<Rat> r = bufferNextBlock.get(dir);
@@ -104,9 +104,11 @@ public class PathTile extends Tile {
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 		// Deal with all rats going towards Death Rat
+		
 		Direction dirToDeath = prevDirectionDR == directions[0] ? directions[1] : directions[0];
 		ArrayList<Rat> currList = currBlock.get(dirToDeath);
 		ArrayList<Rat> escaped = new ArrayList<>();
+		
 		if (currList != null) {
 			// Baby rats are faster so it will reach Death Rat first
 			for (Rat r : currList) {
@@ -135,7 +137,6 @@ public class PathTile extends Tile {
 			}
 			currBlock.put(dirToDeath, escaped);
 		}
-
 		// Now that all rats going towards DR from this tile are dealt with, deal with
 		// any stragglers who are bounced back by stop sign IF DR is alive and stop sign
 		// is present in next tile - basically same as before
@@ -163,13 +164,14 @@ public class PathTile extends Tile {
 					escaped.add(r);
 				}
 			}
-			
-			// No need to get all the rest of currList
-			// Add in rats that DR couldn't deal with since it died
+			// Rest of rats can keep going
+			currBlock.put(dirToDeath, (ArrayList<Rat>) currList.subList(i, beforeDeath));
+			// Now get rats that have bounced back that DR haven't yet killed
 			currList = escaped;
 			escaped = new ArrayList<>();
-			
 		}
+		
+		
 		System.out.println("DR: " + dr.isAlive());
 		System.out.println("CurrList: " + (currList != null));
 		if (dr.isAlive() && currList != null) {
