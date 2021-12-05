@@ -379,10 +379,13 @@ public abstract class Tile {
 	 */
 	private void resetTile() {
 		itemOnTile = null;
+		isBlocked = false;
+		
 		// TODO Remove item from tile.
 		itemHP = 0;
 		isBlocked = false;
-		nextBlock =  new HashMap<>();	
+		nextBlock =  new HashMap<>();
+		currBlock = new HashMap<>();
 		nextDeath = new HashMap<>();
 		currDeath = new HashMap<>();
 	}
