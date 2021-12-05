@@ -117,7 +117,7 @@ public class PathTile extends Tile {
 						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
 					} else {
 						// Should be moved afterwards if more death rats come
-						escaped.add(r);
+						escaped.add(r); 
 					}
 				} else {
 					escaped.add(r);
@@ -140,28 +140,15 @@ public class PathTile extends Tile {
 		// Now that all rats going towards DR from this tile are dealt with, deal with
 		// any stragglers who are bounced back by stop sign IF DR is alive and stop sign
 		// is present in next tile - basically same as before
-		System.out.println("ASDFASDF");
 		Direction goTo = prevDirectionDR == directions[1] ? directions[1] : directions[0];
 		currList = currBlock.get(goTo);
 		int ratsGoToDeath = -1;
-		int beforeDeath = -1;
 		if (dr.isAlive() && currList != null) {
-			System.err.println("Start here!");
-			beforeDeath = 1; //currList.size();
 			
-			Tile tile = neighbourTiles.get(goTo.opposite());
+			Tile tile = neighbourTiles.get(goTo.opposite()); //?
 			
-			System.out.println("On Tile: " + currList.size());
-			
-			// Number of rats towards death
-			System.out.print("Curr pos: " + X_Y_POS[0] + " " + X_Y_POS[1] +"; Next tile pos: ");
-			int tmpN = tile.numsRatsCanEnter(this, currList.size());
-			System.out.println("Can enter next tile: " + tmpN);
-			int n = beforeDeath - tmpN;
-			System.out.println("Will go back: " + n);
-			
-			
-			ratsGoToDeath = n;
+			// Number of rats towards death			
+			ratsGoToDeath = currList.size() - tile.numsRatsCanEnter(this, currList.size());
 			int i = 0;
 			for (; i < ratsGoToDeath && i < currList.size(); i++) {
 				Rat r = currList.get(i);
@@ -172,7 +159,6 @@ public class PathTile extends Tile {
 						escaped.add(r);
 					}
 				} else {
-					System.out.println("Adult escaped" + r);
 					escaped.add(r);
 				}
 			}
@@ -185,25 +171,21 @@ public class PathTile extends Tile {
 				Rat r = currList.get(i);
 				if (dr.killRat(currList.get(i), 3)) {
 					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
-					System.out.println("Killed");
 				} else {
 					escaped.add(r);
-					System.out.println("Lucky bugger!");
 				}
 			}
 			currBlock.put(dirToDeath, escaped);
 			
 			// Now get rats that have bounced back that DR haven't yet killed
 			System.out.println(i);
-			System.out.println(beforeDeath);
-			ArrayList<Rat> a = new ArrayList<>(currBlock.get(goTo).subList(i, beforeDeath));
+			System.out.println(currList.size());
+			ArrayList<Rat> a = new ArrayList<>(currBlock.get(goTo).subList(i, currList.size()));
 			if (a != null) {
-				System.out.println("Added back to forward");
-				System.out.println(a.size());
 				currBlock.put(goTo, a);
 			}
 			currList = escaped;
-			escaped = new ArrayList<>();
+			escaped = new ArrayList<>(); 
 		} else {
 			System.out.println("DR alive: " + (dr.isAlive()));
 			System.out.println("List empty: " + (currList != null));

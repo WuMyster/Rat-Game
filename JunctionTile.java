@@ -66,11 +66,11 @@ public class JunctionTile extends Tile {
 					for (Rat r : ratList) {
 						RatType status = r.getStatus();
 						if (status == RatType.BABY) {
-							Main.addCurrMovement(X_Y_POS, goTo.opposite(), RatType.BABY, 4);
-							tile.getAcceleratedDirection(r, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
+							tile.getAcceleratedDirection(r, goTo.opposite());
 						} else {
-							Main.addCurrMovement(X_Y_POS, goTo.opposite(), r.getStatus(), 4);
-							tile.addRat(r, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, r.getStatus(), 4);
+							tile.addRat(r, goTo.opposite());
 						}
 					}
 				}
@@ -149,7 +149,7 @@ public class JunctionTile extends Tile {
 	private void createBuffer() {
 		System.out.println("CurrBlock: " + currBlock.size());
 		for (Direction prevDirectionRat : currBlock.keySet()) {
-			ArrayList<Rat> ratList = currBlock.get(prevDirectionRat);
+			ArrayList<Rat> ratList = currBlock.get(prevDirectionRat.opposite());
 			if (!ratList.isEmpty()) {
 				for (Rat r : ratList) {
 					Direction goTo = getADirection(prevDirectionRat);
@@ -270,6 +270,8 @@ public class JunctionTile extends Tile {
 		// Compare size of lists!
 		if (aliveRats.isEmpty()) {
 			currBlock = new HashMap<>();
+			buffer = new HashMap<>();
+			nextBlock = new HashMap<>();
 		} else if (aliveRats.size() == beforeDeath) {
 			// Interesting as to why there is no change...
 			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
