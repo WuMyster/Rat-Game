@@ -66,11 +66,11 @@ public class JunctionTile extends Tile {
 					for (Rat r : ratList) {
 						RatType status = r.getStatus();
 						if (status == RatType.BABY) {
-							Main.addCurrMovement(X_Y_POS, goTo.opposite(), RatType.BABY, 4);
-							tile.getAcceleratedDirection(r, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
+							tile.getAcceleratedDirection(r, goTo.opposite());
 						} else {
-							Main.addCurrMovement(X_Y_POS, goTo.opposite(), r.getStatus(), 4);
-							tile.addRat(r, goTo);
+							Main.addCurrMovement(X_Y_POS, goTo, r.getStatus(), 4);
+							tile.addRat(r, goTo.opposite());
 						}
 					}
 				}
