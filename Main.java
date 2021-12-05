@@ -248,7 +248,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		test60();
+		test61();
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
@@ -265,7 +265,7 @@ public class Main extends Application {
 	}
 	
 	private void test61() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1 , 4);
+		m.placeRat(new DeathRat(), Direction.EAST, 1 , 5);
 		m.placeRat(new Rat(100, true, false, 10, true, false, false), Direction.EAST, 1, 3);
 		m.placeRat(new Rat(100, false, false, 10, true, false, false), Direction.WEST, 1, 3);
 	
@@ -489,12 +489,17 @@ public class Main extends Application {
         sexToMalePlace = new ArrayList<>();
         sterilisePlace = new ArrayList<>();
         gasPlace = new ArrayList<>();
-		
-		BorderPane root = new BorderPane();
+		BorderPane root = null;
+		try {
+		root = new BorderPane();
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
-		
+		} catch (NullPointerException n) {
+			n.printStackTrace();
+		}catch (Exception e ) {
+			e.printStackTrace();
+		}
 		String properMap1;
 		int tunnel = 3;
 		if (tunnel == 0) {

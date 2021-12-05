@@ -332,6 +332,7 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
+		System.out.println(X_Y_POS[0] + " " + X_Y_POS[1]);
 		if (!isBlocked) {
 			return n;
 		}
