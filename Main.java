@@ -569,14 +569,18 @@ public class Main extends Application {
 		if (item instanceof Bomb) {
 			arr = bombPlace;
 		}
-
-		int[] a = null;
-		for (int[] i : arr) {
-			if (i[0] == pos[0] && i[1] == pos[1]) {
-				a = i;
-			}
+		if (item instanceof StopSign) {
+			arr = stopSignPlace;
 		}
-		arr.remove(a);
+		if (arr != null) {
+			int[] a = null;
+			for (int[] i : arr) {
+				if (i[0] == pos[0] && i[1] == pos[1]) {
+					a = i;
+				}
+			}
+			arr.remove(a);
+		}
 
 		/*
 		 * ArrayList<int[]> itemPlace = null; Item.Name itemName = Item.Name.POISON;
