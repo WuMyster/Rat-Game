@@ -4,7 +4,7 @@ import java.util.*;
  * @author Salim
  */
 
-public class Leaderboard {
+public class LeaderBoard {
 
     public int scoring() {
     	
