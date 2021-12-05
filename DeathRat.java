@@ -1,47 +1,59 @@
 import java.util.ArrayList;
 
-public class DeathRat {
-	
-	Rat rat;
-	int[] xyPos;
-	Direction d;
-	int move;
-	
-	int hp = 15; //For now, NOTE: HP is to be 5 per functional spec.
+public class DeathRat extends Item{
 	
 	/**
-	 * Constructor for Death Rat with basically garbage args.
-	 * @author j
+	 * XY position on the board the death rat starts from.
+	 */
+	private int[] xyPos;
+	
+	/**
+	 * Direction the Death rat is facing and moving towards.
+	 */
+	private Direction d;
+	
+	/**
+	 * How far the Death Rat moves
+	 */
+	private int move;
+	
+	/**
+	 * Inital hp of the Death rat
+	 */
+	private int hp;
+	
+	private static int START_HP = 5;
+	
+	/**
+	 * Constructor for Death Rat. Does not interact with items other
+	 * than Stop Signs and Bombs.
 	 */
 	public DeathRat() {
-		rat = new Rat(50, true, true, 20, true, true, true);
+		this.hp = START_HP;
 	}
 	
 	/**
-	 * Should be changed!
-	 * @return
+	 * Returns the XY position of the Death Rat on the board.
+	 * @return XY position on the board
 	 */
-	public Rat itemAction() {
-		Rat deathRat = new Rat(true);
-		
-		return deathRat;
-	}
-	
 	public int[] getXyPos() {
 		return xyPos;
 	}
 
+	/**
+	 * Gets the direction it's heading.
+	 * @return direction it's heading
+	 */
 	public Direction getD() {
 		return d;
 	}
 
+	/**
+	 * Move limit of the Death Rat.
+	 * @return move limit
+	 */
 	public int getMove() {
 		return move;
-	}
-	
-	public boolean isAlive() {
-		// Check hp
-		return hp > 0;
 	}
 	
 	/**
@@ -72,10 +84,9 @@ public class DeathRat {
 		return false;
 	}
 	
-	//Need to think of way to prevent being drawn if dead
 	/**
 	 * Kills as many rats as it can from this list and returns a list of rats that are still alive.
-	 * Only works when dealing with rats on tiles and not in between.
+	 * Currently only for rats on tiles.
 	 * @param rs list of rats the DR will take on
 	 * @param move limit it's going forwards to
 	 * @return list of rats that survive attack
@@ -95,9 +106,5 @@ public class DeathRat {
 		
 		rs.subList(rs.size() + hp, rs.size());
 		return rs;
-	}
-	
-	// This might not be needed anymore, is item, but should be treated like Rat
-	
-	
+	}	
 }

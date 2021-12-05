@@ -92,10 +92,10 @@ public class LightTile extends Tile {
 			if (!ratList.isEmpty()) {
 				Direction goTo = prevDirection.opposite();
 				Tile tile = neighbourTiles.get(goTo);
-				for (int i = 0; i < ratList.size(); i++) {
-					RatType gen = ratList.get(i).getIsMale() ? RatType.MALE : RatType.FEMALE;
-					Main.addCurrMovement(X_Y_POS, goTo, gen, 4);
-					tile.addRat(ratList.get(i), goTo.opposite());
+				
+				for (Rat r : ratList) {
+					Main.addCurrMovement(X_Y_POS, goTo, r.getStatus(), 4);
+					tile.addRat(r, goTo.opposite());
 				}
 			}
 		}
