@@ -163,7 +163,6 @@ public abstract class Tile {
 		if (itemOnTile != null) {
             if (!aliveRats.isEmpty()) {
                 aliveRats = itemOnTile.itemAction(aliveRats);
-
                 if (!itemOnTile.isAlive()) {
                     Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
                     itemOnTile = null;
@@ -334,17 +333,26 @@ public abstract class Tile {
 		// itemOnTile = new Bomb();
 	}
 
-	/**
-	 * TODO -> Andrew Blow up this tile??.
-	 */
+
 	public void blowUp() {
-		// ratcontroller.kill
 		if (itemOnTile != null) {
 			if (itemOnTile instanceof Bomb) {
 				((Bomb) itemOnTile).timer.cancel();
 			}
 			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 		}
+
+        // Create list of rats
+        aliveRats = new ArrayList<>();
+        for (Direction dir : currBlock.keySet()) {
+            aliveRats.addAll(currBlock.get(dir));
+        }
+
+        if (!aliveRats.isEmpty()) {
+            for (int i = 0; i < aliveRats.size(); i++) {
+                RatController.killRat(aliveRats.get(i));
+            }
+        }
 		resetTile();
 		System.out.println("BLOWN UP");
 	}

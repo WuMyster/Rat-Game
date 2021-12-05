@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * 
- * @author 
+ * @author Andrew
  *
  */
 abstract class Item {
