@@ -52,9 +52,7 @@ public class PathTile extends Tile {
 		// Pass in ArrayList of Moving Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				System.out.print(aliveRats.size() + " - ");
 				aliveRats = dr.killRats(aliveRats, -1);
-				System.out.println(aliveRats.size());
 			}
 		}
 
@@ -130,7 +128,6 @@ public class PathTile extends Tile {
 			escaped = new ArrayList<>();
 			for (Rat r : currList) {
 				if (dr.killRat(r, 3)) {
-					System.out.println(r);
 					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
 				} else {
 					escaped.add(r);
@@ -151,6 +148,7 @@ public class PathTile extends Tile {
 			
 			Tile tile = neighbourTiles.get(goTo);
 			ratsGoToDeath = beforeDeath - tile.numsRatsCanEnter(this, beforeDeath);
+			System.out.println("# " + ratsGoToDeath);
 			int i = 0;
 			for (; i < ratsGoToDeath && i < beforeDeath; i++) {
 				Rat r = currList.get(i);
@@ -161,29 +159,46 @@ public class PathTile extends Tile {
 						escaped.add(r);
 					}
 				} else {
+					System.out.println("Adult escaped" + r);
 					escaped.add(r);
 				}
 			}
 			
-			// This is what is causing all the issues!!
+			// No need to get all the rest of currList
 			// Add in rats that DR couldn't deal with since it died
-			escaped.addAll(currList.subList(i, beforeDeath));
 			currList = escaped;
 			escaped = new ArrayList<>();
+			
 		}
-//		
-//		if (dr.isAlive() && currList != null) {
-//			int i = 0;
-//			for (; i < ratsGoToDeath && i < currList.size(); i++) {
-//				Rat r = currList.get(i); 
-//				if (dr.killRat(currList.get(i), 3)) {
-//					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
-//				} else {
-//					escaped.add(r);
-//				}
-//			}
-//			escaped.addAll(currList.subList(i, currList.size()));
-//		}
+		System.out.println("DR: " + dr.isAlive());
+		System.out.println("CurrList: " + (currList != null));
+		if (dr.isAlive() && currList != null) {
+			System.out.println("is inside");
+			System.out.println(ratsGoToDeath);
+			System.out.println(currList.size());
+			
+			int i = 0;
+			for (; i < ratsGoToDeath && i < currList.size(); i++) {
+				Rat r = currList.get(i); 
+				System.out.println(r);
+				if (dr.killRat(currList.get(i), 3)) {
+					System.out.println("Does kill");
+					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
+				} else {
+					escaped.add(r);
+					System.out.println("Adult escaped!");
+				}
+			}
+			if (!currList.subList(i, currList.size()).isEmpty()) {
+				escaped.addAll(currList.subList(i, currList.size()));
+				System.out.println("Added to escape");
+			} else {
+				System.out.println("Escape list empty");
+			}
+			
+		} else {
+			System.out.println("Passed");
+		}
 
 		// Does not deal with non-moving rats as rats on this tile will be dealt with next time 
 		// the death rat starts moving
@@ -208,7 +223,6 @@ public class PathTile extends Tile {
 			ArrayList<Rat> ratList = currBlock.get(prevDirection);
 
 			if (!ratList.isEmpty()) {
-				System.out.println("Moving");
 				int i = 0;
 				Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 				int ratsGoForward; // Number of rats that can keep go in current direction
