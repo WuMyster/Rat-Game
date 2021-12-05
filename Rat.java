@@ -1,5 +1,5 @@
 /**
- * Models a single rat
+ * This class models a single rat
  * @author Ollie Jarrett
  *
  */
@@ -223,19 +223,6 @@ public class Rat {
 	 */
 	public String toString() {
 		String output = "";
-		output += age + ", ";
-		output += isMale + ", ";
-		output += isPregnant + ", ";
-		output += health + ", ";
-		output += isSterile + ", ";
-		output += isBreeding + ", ";
-		output += isDeathRat;
-		return output;
-	}
-	
-	/*
-	public String toString() {
-		String output = "";
 		output += age.toString() + ",";
 		output += isMale.toString() + ",";
 		output += isPregnant.toString() + ",";
@@ -245,6 +232,6 @@ public class Rat {
 		output += isDeathRat.toString();
 		return output;
 	}
-	*/
+
 	
 }
