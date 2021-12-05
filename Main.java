@@ -2,6 +2,7 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.time.LocalTime;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -242,6 +243,16 @@ public class Main extends Application {
 	 * 2x for baby rats and death rats.
 	 */
 	private int step;
+	
+	/**
+	 * Time when the game started.
+	 */
+	private LocalTime startTime;
+	
+	/**
+	 * Max time to complete game in seconds.
+	 */
+	private int maxTime;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -257,7 +268,7 @@ public class Main extends Application {
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
-		// a.setCycleCount(10);x
+		// a.setCycleCount(10);
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
 	}
@@ -272,12 +283,16 @@ public class Main extends Application {
 		currMovement = new HashMap<>();
 		step = 0;
 		m.runAllTiles();
-		// currPoints.setText(String.valueOf(RatController.getPoints()));
 		ratMoveTimeline.play();
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		
 		drawItems();
 		
+		if (RatController.continueGame()) {
+			
+		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
+			
+		}
 		//Game end?
 	}
 
