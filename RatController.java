@@ -142,11 +142,12 @@ public class RatController {
 			Rat nextRat = ratsOnTile.get(0);
 			if(nextRat.isChild()) {
 				moving.add(nextRat);
-			} else if (nextRat.isPregnant()) {
+			} else if (nextRat.getPregnant()) {
 				nextRat.decrementPregCounter();
 				if(nextRat.getPregCounter() == 5 || nextRat.getPregCounter() == 3 || nextRat.getPregCounter() == 1) {
 					newBabyRat();
 				}
+				moving.add(nextRat);
 			}
 			else if(nextRat.getIsBreeding() == true) {
 				if(nextRat.getIsMale() == false) {
