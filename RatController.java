@@ -114,7 +114,7 @@ public class RatController {
 		ArrayList<Rat> notBred = bredRats.get(1);
 		
 		while(notBred.size()>0) {
-			movingRats.add(notBred.get(0));
+			movingRats.add(notBred.get(0)); 
 			notBred.remove(0);
 		}
 		
