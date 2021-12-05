@@ -139,36 +139,38 @@ public class PathTile extends Tile {
 			currBlock.put(dirToDeath, escaped);
 		}
 
-//		// Now that all rats going towards DR from this tile are dealt with, deal with
-//		// any stragglers who are bounced back by stop sign IF DR is alive and stop sign
-//		// is present in next tile - basically same as before
-//		Direction goTo = prevDirectionDR == directions[0] ? directions[0] : directions[1];
-//		currList = currBlock.get(goTo);
-//		int ratsGoToDeath = -1;
-//		int beforeDeath = -1;
-//		if (dr.isAlive() && currList != null) {
-//			beforeDeath = currList.size();
-//			
-//			Tile tile = neighbourTiles.get(goTo);
-//			ratsGoToDeath = beforeDeath - tile.numsRatsCanEnter(this, beforeDeath);
-//			int i = 0;
-//			for (; i < ratsGoToDeath && i < beforeDeath; i++) {
-//				Rat r = currList.get(i);
-//				if (r.getStatus() == RatType.BABY) {
-//					if (dr.killRat(currList.get(i), 2)) {
-//						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
-//					} else {
-//						escaped.add(r);
-//					}
-//				} else {
-//					escaped.add(r);
-//				}
-//			}
-//			// Add in rats that DR couldn't deal with since it died
-//			escaped.addAll(currList.subList(i, beforeDeath));
-//			currList = escaped;
-//			escaped = new ArrayList<>();
-//		}
+		// Now that all rats going towards DR from this tile are dealt with, deal with
+		// any stragglers who are bounced back by stop sign IF DR is alive and stop sign
+		// is present in next tile - basically same as before
+		Direction goTo = prevDirectionDR == directions[0] ? directions[0] : directions[1];
+		currList = currBlock.get(goTo);
+		int ratsGoToDeath = -1;
+		int beforeDeath = -1;
+		if (dr.isAlive() && currList != null) {
+			beforeDeath = currList.size();
+			
+			Tile tile = neighbourTiles.get(goTo);
+			ratsGoToDeath = beforeDeath - tile.numsRatsCanEnter(this, beforeDeath);
+			int i = 0;
+			for (; i < ratsGoToDeath && i < beforeDeath; i++) {
+				Rat r = currList.get(i);
+				if (r.getStatus() == RatType.BABY) {
+					if (dr.killRat(currList.get(i), 2)) {
+						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
+					} else {
+						escaped.add(r);
+					}
+				} else {
+					escaped.add(r);
+				}
+			}
+			
+			// This is what is causing all the issues!!
+			// Add in rats that DR couldn't deal with since it died
+			escaped.addAll(currList.subList(i, beforeDeath));
+			currList = escaped;
+			escaped = new ArrayList<>();
+		}
 //		
 //		if (dr.isAlive() && currList != null) {
 //			int i = 0;
