@@ -173,14 +173,14 @@ public class JunctionTile extends Tile {
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 
-		for (Direction dir : bufferNextBlock.keySet()) {
-			ArrayList<Rat> r = bufferNextBlock.get(dir);
-			for (Direction prevDirection : currDeath.keySet()) {
-				for (DeathRat dR : currDeath.get(prevDirection)) {
-					bufferNextBlock.put(dir, dR.killRats(r, -1));
-				}
-			}
-		}
+//		for (Direction dir : bufferNextBlock.keySet()) {
+//			ArrayList<Rat> r = bufferNextBlock.get(dir);
+//			for (Direction prevDirection : currDeath.keySet()) {
+//				for (DeathRat dR : currDeath.get(prevDirection)) {
+//					bufferNextBlock.put(dir, dR.killRats(r, -1));
+//				}
+//			}
+//		}
 		
 		// For now assign random directions to every rat
 		createBuffer();
@@ -270,6 +270,7 @@ public class JunctionTile extends Tile {
 		// Compare size of lists!
 		if (aliveRats.isEmpty()) {
 			currBlock = new HashMap<>();
+			buffer = new HashMap<>();
 		} else if (aliveRats.size() == beforeDeath) {
 			// Interesting as to why there is no change...
 			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
