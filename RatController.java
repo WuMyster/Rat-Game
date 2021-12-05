@@ -32,7 +32,7 @@ public class RatController {
 	 * of rats allowed on the map
 	 */
 	public static boolean continueGame() {
-		return ratList.size() < maxNumOfRats;
+		return ratList.size() < maxNumOfRats && !ratList.isEmpty();
 	}
 	
 	/**
