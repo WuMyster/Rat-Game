@@ -764,12 +764,10 @@ public class Main extends Application {
     }
 
     private void placeDeathRat(DragEvent event) {
-        double x = Math.floor(event.getX() / TILE_SIZE);
-        double y = Math.floor(event.getY() / TILE_SIZE);
+        int x = (int) Math.floor(event.getX() / TILE_SIZE);
+        int y = (int) Math.floor(event.getY() / TILE_SIZE);
 
-        if (Board.isItemPlaceable((int) x, (int) y)) {
-            m.addDeathRat((int) x, (int) y); //Will return boolean if sign can be placed
-        }
+        m.placeRat(new DeathRat(), Direction.NORTH, y, x);
     }
 
 	/**
