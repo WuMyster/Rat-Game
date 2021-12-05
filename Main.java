@@ -222,7 +222,7 @@ public class Main extends Application {
 	private Timeline ratMoveTimeline;
 
 	/**
-	 * 
+	 * The main cycle that runs the game.
 	 */
 	private Timeline cycler;
 
@@ -269,171 +269,17 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		BorderPane root = createGameGUI();
+		BorderPane root = createGameGUI(GameMasterExample.getMap(), GameMasterExample.getRats(), 
+				GameMasterExample.getItems(), GameMasterExample.getMaxTime(), GameMasterExample.getMaxRats());
+		
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
-		String[] iner = new String[] { 
-				//"M;3,1,2", // Should only be on very new levels i.e starting maps
-				"50,true,false,20,false,false,false;3,1,4",
-				"50,false,false,20,false,false,false;1,1,5", 
-				//"D;3,9,1", //  Same here
-				//"D,2;1,9,1"
-		};
-
-		for (String str : iner) {
-			Rat createR;
-			String[] spl = str.split(";");
-			String[] splD = spl[1].split(",");
-			Direction d = null;
-			switch (Integer.parseInt(splD[0])) {
-			case (0) -> d = Direction.NORTH;
-			case (1) -> d = Direction.EAST;
-			case (2) -> d = Direction.SOUTH;
-			case (3) -> d = Direction.WEST;
-			}
-			if (spl[0].split(",")[0].equals("D")) {
-				if (spl[0].length() == 1) {
-					m.placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
-				} else {
-					m.placeRat(new DeathRat(Integer.parseInt(spl[0].split(",")[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
-				}
-			} else {
-				if (spl[0].length() == 1) {
-					createR = new Rat(spl[0].equals("M")); // Only for new start of levels
-				} else {
-					createR = RatController.addRat(spl[0]);
-				}
-				m.placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
-			}
-		}
+		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
-	}
-
-	/**
-	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
-	 * currently allows rats to move around. TODO Check if time is over TODO Level
-	 * from Game Master
-	 */
-	private void runCycle() {
-		currMovement = new HashMap<>();
-		step = 0;
-		m.runAllTiles();
-		ratMoveTimeline.play();
-		currPoints.setText(String.valueOf(RatController.getPoints()));
-
-		drawItems();
-
-		// Losing conditions
-		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
-			cycler.stop();
-			// Pass control back to game master, game has finished
-		}
-	}
-
-	/**
-	 * Criteria for Rat movements.
-	 */
-	private void moveRat() {
-		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
-		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
-	}
-
-	/**
-	 * Goes through each type of rats to draw them onto canvas
-	 */
-	private void goThroughRat() {
-		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		step += 1;
-		for (RatType rt : RatType.values()) {
-			drawRat(rt);
-		}
-	}
-
-	/**
-	 * Draws the rats onto the game canvas.
-	 * 
-	 * @param smallerList type of rat you're dealing with
-	 * @param ratImage    image of rat
-	 */
-	private void drawRat(RatType rt) {
-		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
-		if (smallerList != null) {
-			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-
-			Image[] ratImage = rt.getImage();
-			int size = rt.getSize();
-			int width = RAT_WIDTH / size;
-			int height = RAT_HEIGHT / size;
-			int speed = rt.getSpeed();
-
-			// List of rat positions and direction
-			ArrayList<int[]> currDirection;
-			currDirection = smallerList.get(Direction.NORTH);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
-						gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
-					}
-				}
-			}
-
-			currDirection = smallerList.get(Direction.EAST);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[1], i[1] * RAT_POSITION,
-									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
-						gc.drawImage(ratImage[1], i[1] * RAT_POSITION + step * speed,
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-					}
-				}
-			}
-
-			currDirection = smallerList.get(Direction.SOUTH);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
-						gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
-					}
-				}
-			}
-
-			currDirection = smallerList.get(Direction.WEST);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[3], i[1] * RAT_POSITION,
-									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
-						gc.drawImage(ratImage[3], i[1] * RAT_POSITION - step * speed,
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-					}
-				}
-			}
-		}
 	}
 
 	/**
@@ -447,7 +293,6 @@ public class Main extends Application {
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-
 		if (move == 0) {
 			currMovement.get(rt).get(dir).add(new int[] { pos[0], pos[1], 0, 4 });
 		} else {
@@ -472,27 +317,22 @@ public class Main extends Application {
 	/**
 	 * Creates game GUI.
 	 * 
+	 * @param map the map design
+	 * @param rats list of rats and their positions
+	 * @param items list of items and their positions
+	 * @param maxTime maximum amount of time to finish the game
+	 * @param maxRats maximum number of rats before the game ends
 	 * @return the GUI
 	 */
-	private BorderPane createGameGUI() {
+	private BorderPane createGameGUI(String map, ArrayList<String> rats,
+			ArrayList<String> items, int maxTime, int maxRats) {
+			
+		setInitialValues();
+		
 		startTime = LocalTime.now();
-		maxTime = 20;
-		BOMB = new Image("img/ItemBomb.png");
-		POISON = new Image("Poison.png");
-		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
-		SEX_TO_MALE = new Image("SexChangeToMale.png");
-		STERILISE = new Image("img/Sterilise.png");
-		GAS = new Image("img/icon-gas.png");
-		DEATH_RAT = new Image("img/ItemDeathRat.png");
-		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;
-		stopSignPlace = new ArrayList<>();
-		bombPlace = new ArrayList<>();
-		poisonPlace = new ArrayList<>();
-		sexToFemalePlace = new ArrayList<>();
-		sexToMalePlace = new ArrayList<>();
-		sterilisePlace = new ArrayList<>();
-		gasPlace = new ArrayList<>();
+		this.maxTime = maxTime;
+		RatController.setRatController(maxRats);
+		
 		BorderPane root = null;
 		try {
 			root = new BorderPane();
@@ -504,20 +344,36 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String properMap1;
-		int tunnel = 1;
-		if (tunnel == 0) {
-			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
-		} else if (tunnel == 1) {
-			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
-		} else {// if (tunnel == 2) {
-			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
-		}
-		m = new Board(properMap1, 17, 11);
+
+		m = new Board(map, 17, 11);
+		m.setUpRats(rats);
+		m.setUpItems(items);
 		drawMap();
 		moveRat();
 
 		return root;
+	}
+	
+	private void setInitialValues() {
+		// These should not be here, should be gotten from classes
+		BOMB = new Image("img/ItemBomb.png");
+		POISON = new Image("Poison.png");
+		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
+		SEX_TO_MALE = new Image("SexChangeToMale.png");
+		STERILISE = new Image("img/Sterilise.png");
+		GAS = new Image("img/icon-gas.png");
+		DEATH_RAT = new Image("img/ItemDeathRat.png");
+		
+		// These no choice
+		RAT_WIDTH = 30;
+		RAT_HEIGHT = 45;
+		stopSignPlace = new ArrayList<>();
+		bombPlace = new ArrayList<>();
+		poisonPlace = new ArrayList<>();
+		sexToFemalePlace = new ArrayList<>();
+		sexToMalePlace = new ArrayList<>();
+		sterilisePlace = new ArrayList<>();
+		gasPlace = new ArrayList<>();
 	}
 
 	/**
@@ -1013,5 +869,129 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		System.out.println("End");
+	}
+	
+	
+
+
+	/**
+	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
+	 * currently allows rats to move around. TODO Check if time is over TODO Level
+	 * from Game Master
+	 */
+	private void runCycle() {
+		currMovement = new HashMap<>();
+		step = 0;
+		m.runAllTiles();
+		ratMoveTimeline.play();
+		currPoints.setText(String.valueOf(RatController.getPoints()));
+		drawItems();
+
+		// Losing conditions
+		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
+			cycler.stop();
+			// Pass control back to game master, game has finished
+		}
+	}
+
+	/**
+	 * Criteria for Rat movements.
+	 */
+	private void moveRat() {
+		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
+		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
+	}
+
+	/**
+	 * Goes through each type of rats to draw them onto canvas
+	 */
+	private void goThroughRat() {
+		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		step += 1;
+		for (RatType rt : RatType.values()) {
+			drawRat(rt);
+		}
+	}
+
+	/**
+	 * Draws the rats onto the game canvas.
+	 * 
+	 * @param smallerList type of rat you're dealing with
+	 * @param ratImage    image of rat
+	 */
+	private void drawRat(RatType rt) {
+		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
+		if (smallerList != null) {
+			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+
+			Image[] ratImage = rt.getImage();
+			int size = rt.getSize();
+			int width = RAT_WIDTH / size;
+			int height = RAT_HEIGHT / size;
+			int speed = rt.getSpeed();
+
+			// List of rat positions and direction
+			ArrayList<int[]> currDirection;
+			currDirection = smallerList.get(Direction.NORTH);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
+					}
+				}
+			}
+
+			currDirection = smallerList.get(Direction.EAST);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[1], i[1] * RAT_POSITION,
+									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
+						gc.drawImage(ratImage[1], i[1] * RAT_POSITION + step * speed,
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+					}
+				}
+			}
+
+			currDirection = smallerList.get(Direction.SOUTH);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
+					}
+				}
+			}
+
+			currDirection = smallerList.get(Direction.WEST);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[3], i[1] * RAT_POSITION,
+									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[3], i[1] * RAT_POSITION - step * speed,
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+					}
+				}
+			}
+		}
 	}
 }

@@ -366,6 +366,39 @@ public class Board {
 			Main.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
 		}
 	}
+	
+	public void setUpRats(ArrayList<String> rats) {
+		for (String str : rats) {
+			Rat createR;
+			String[] spl = str.split(";");
+			String[] splD = spl[1].split(",");
+			Direction d = null;
+			switch (Integer.parseInt(splD[0])) {
+			case (0) -> d = Direction.NORTH;
+			case (1) -> d = Direction.EAST;
+			case (2) -> d = Direction.SOUTH;
+			case (3) -> d = Direction.WEST;
+			}
+			if (spl[0].split(",")[0].equals("D")) {
+				if (spl[0].length() == 1) {
+					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				} else {
+					placeRat(new DeathRat(Integer.parseInt(spl[0].split(",")[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				}
+			} else {
+				if (spl[0].length() == 1) {
+					createR = new Rat(spl[0].equals("M")); // Only for new start of levels
+				} else {
+					createR = RatController.addRat(spl[0]);
+				}
+				placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+			}
+		}
+	}
+	
+	public void setUpItems(ArrayList<String> items) {
+		
+	}
 
 	/**
 	 * Creates 2d array of the map.

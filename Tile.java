@@ -316,8 +316,7 @@ public abstract class Tile {
 		}
 		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
 		if (!itemOnTile.isAlive()) {
-			Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-					X_Y_POS[1] / Board.EXTRA_PADDING});
+			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 			itemOnTile = null;
 			isBlocked = false;
 		}
