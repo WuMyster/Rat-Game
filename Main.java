@@ -248,11 +248,9 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		test41();
+		test61();
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
-		// a.setCycleCount(1);
-		// a.setCycleCount(10);x
 		cycler.setCycleCount(Animation.INDEFINITE);
 		// cycler.play();
 	}
@@ -279,15 +277,21 @@ public class Main extends Application {
 		m.placeRat(new DeathRat(), Direction.EAST, 1 , 5);
 		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 3);
 		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 3);
-	
 	}
 	
 	private void test61() {
 		m.placeRat(new DeathRat(), Direction.EAST, 1 , 5);
 		m.placeRat(new Rat(100, true, false, 10, true, false, false), Direction.EAST, 1, 3);
 		m.placeRat(new Rat(100, false, false, 10, true, false, false), Direction.WEST, 1, 3);
-	
 	}
+	
+	private void test62() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1 , 3);
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 1);
+		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.SOUTH, 1, 1);
+	}
+	
+	
 	
 	// Good PathTile
 	private void test30() {

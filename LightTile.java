@@ -135,7 +135,7 @@ public class LightTile extends Tile {
 					tile.addRat(ratList.get(i), goTo.opposite());
 				}
 			}
-		}
+		} 
 		
 		for (Direction dir : bufferNextBlock.keySet()) {
 			for (Rat r : bufferNextBlock.get(dir)) {
