@@ -293,9 +293,7 @@ public class Main extends Application {
 			case (2) -> d = Direction.SOUTH;
 			case (3) -> d = Direction.WEST;
 			}
-			System.out.println(spl[0]);
 			if (spl[0].split(",")[0].equals("D")) {
-				System.out.println("Death");
 				if (spl[0].length() == 1) {
 					m.placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 				} else {

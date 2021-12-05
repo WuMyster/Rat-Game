@@ -351,7 +351,6 @@ public class Board {
 			t.correctList();
 		}
 		
-		System.out.println();
 		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
@@ -380,7 +379,7 @@ public class Board {
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
 				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
 				case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
-				default -> System.out.println("Map error!");
+				default -> { System.out.println("Map error!"); System.exit(0);}
 				}
 				board[i][++j] = new LightTile(i, j);
 			}

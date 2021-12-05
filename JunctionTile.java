@@ -129,10 +129,6 @@ public class JunctionTile extends Tile {
 
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
-		// System.out.println("Junction Tile speed not implemented yet");
-
-		// Maybe try inserting .opposite to fix turn around issues
-		// Direction goTo = getADirection(prevDirection);
 		this.addRat(r, prevDirection.opposite());
 	}
 
@@ -228,7 +224,6 @@ public class JunctionTile extends Tile {
 			for (Direction prevDirection : currDeath.keySet()) {
 				for (DeathRat dr : currDeath.get(prevDirection)) {
 					bufferNextBlock.put(dir, dr.killRats(r, -1));
-					System.out.println("B ded");
 				}
 			}
 		}
@@ -237,7 +232,6 @@ public class JunctionTile extends Tile {
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				aliveRats = dr.killRats(aliveRats, -1);
-				System.out.println("A ded");
 			}
 		}
 

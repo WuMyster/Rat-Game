@@ -38,13 +38,10 @@ public class PathTile extends Tile {
 		int beforeDeathInter = aliveRats.size();
 //				
 //		for (Direction dir : bufferNextBlock.keySet()) {
-//			System.out.println("Biffer");
 //			ArrayList<Rat> r = bufferNextBlock.get(dir);
 //			for (Direction prevDirection : currDeath.keySet()) {
 //				for (DeathRat dr : currDeath.get(prevDirection)) {
-//					System.out.print(bufferNextBlock.get(dir).size() + " > ");
 //					bufferNextBlock.put(dir, dr.killRats(r, -1));
-//					System.out.println(bufferNextBlock.get(dir).size());
 //				}
 //			}
 //		}
@@ -147,12 +144,10 @@ public class PathTile extends Tile {
 		int beforeDeath = 0;
 		if (dr.isAlive() && currList != null) {
 			beforeDeath = currList.size();
-			System.out.println("Len " + beforeDeath);
 			Tile tile = neighbourTiles.get(dirToDeath); //?
 			
 			// Number of rats towards death	after boucing off stop sign		
 			ratsGoToDeath = currList.size() - tile.numsRatsCanEnter(this, currList.size());
-			System.out.println(ratsGoToDeath);
 			int i = 0;
 			// Let Death Rat first deal with Baby rats
 			for (; i < ratsGoToDeath && i < currList.size(); i++) {
@@ -281,16 +276,12 @@ public class PathTile extends Tile {
 		// This method should be moved up
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats, isSterile);	
 		for (Rat r : rs.get(0)) {
-			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
-			if (currBlock.get(directions[0]).contains(r)) {
-				System.out.println("Good 1");
-			} else if (currBlock.get(directions[1]).contains(r)) {
-				System.out.println("Good 2");
-			} else {
-				System.out.println("ERROR");
+			ArrayList<Rat> rats = currBlock.get(directions[0]);
+			if (rats != null) {
+				Direction d = rats.contains(r) ? directions[0] : directions[1];
+				bufferNextBlock.putIfAbsent(d, new ArrayList<>());
+				bufferNextBlock.get(d).add(r);
 			}
-			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
-			bufferNextBlock.get(d).add(r);
 		}	
 		aliveRats = rs.get(1);
 	}
