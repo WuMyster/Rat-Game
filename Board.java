@@ -310,7 +310,7 @@ public class Board {
 	 * 
 	 */
 	public void placeRat(Rat rats, Direction dir, int x, int y) {
-		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rats, dir);
+		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rats, dir); 
 	}
 
 	/**

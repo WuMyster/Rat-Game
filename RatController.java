@@ -7,8 +7,13 @@ import java.util.Random;
  */
 public class RatController {
 	private static ArrayList<Rat> ratList = new ArrayList<>();
+	static int maxNumOfRats = 10;
 	private static int points;
 	
+	// Needs to be set when starting
+	public static void setRatController(int max) {
+		maxNumOfRats = max;
+	}
 	
 	/**
 	 * Gets how many points have been earnt by killing rats.
@@ -18,6 +23,7 @@ public class RatController {
 		return points;
 	}
 	
+	
 	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
 	 * you should have.
@@ -25,7 +31,7 @@ public class RatController {
 	 * of rats allowed on the map
 	 */
 	public static boolean continueGame() {
-		return true;
+		return ratList.size() < maxNumOfRats;
 	}
 	
 	/**
@@ -50,9 +56,12 @@ public class RatController {
 	/**
 	 * Takes in a Rat class toString() value and adds it to the rat list.
 	 * @param newRat - the formatted rat string.
+	 * @return 
 	 */
-	public static void addRat(String newRat) {
-		ratList.add(stringToRat(newRat));
+	public static Rat addRat(String newRat) {
+		Rat r = stringToRat(newRat);
+		ratList.add(r);
+		return r;
 	}
 	
 	/**
@@ -91,9 +100,10 @@ public class RatController {
 	 * Sorts rats into stationary rats and moving rats.
 	 * Breeds rats which are breedable.
 	 * @param ratsOnTile - An arraylist of rats on an individual tile
+	 * @param t the tile the rat is on
 	 * @return A nested arraylist of rats, where the first index contains rats that aren't moving and the second index contains rats which will be moving
 	 */
-	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile) {
+	public static ArrayList<ArrayList<Rat>> ratInteractions(Tile t, ArrayList<Rat> ratsOnTile) {
 		
 		ArrayList<ArrayList<Rat>> sortedRatsOnTile = sortRats(ratsOnTile);
 		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);
@@ -107,7 +117,7 @@ public class RatController {
 		}
 		
 		ArrayList<ArrayList<Rat>> stationaryMovingRats = new ArrayList<>();
-		stationaryMovingRats.add(bredRats.get(0));
+		stationaryMovingRats.add(bredRats.get(0)); 
 		stationaryMovingRats.add(movingRats);
 		
 		return stationaryMovingRats;
