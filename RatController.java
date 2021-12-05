@@ -24,7 +24,6 @@ public class RatController {
 		return points;
 	}
 	
-	
 	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
 	 * you should have.

@@ -243,7 +243,7 @@ public class Rat {
 		String output = "";
 		output += age + ",";
 		output += isMale + ",";
-		output += isPregnant+ ",";
+		output += isPregnant + ",";
 		output += health + ",";
 		output += isSterile + ",";
 		output += isBreeding + ",";
