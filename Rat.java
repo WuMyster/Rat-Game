@@ -182,7 +182,7 @@ public class Rat {
 		return points;
 	}
 	
-	public String toStringA() {
+	public String toString() {
 		String output = "";
 		output += age + ", ";
 		output += isMale + ", ";
