@@ -11,8 +11,8 @@ public class RatController {
 	
 	
 	/**
-	 * Tells other classes how many points have been earnt by killing rats
-	 * @return An integer representing the points earnt
+	 * Gets how many points have been earnt by killing rats.
+	 * @return An integer representing the points earnt.
 	 */
 	public static int getPoints() {
 		return points;
@@ -28,9 +28,8 @@ public class RatController {
 		return true;
 	}
 	
-	
 	/**
-	 * Adds a new baby rat to rats
+	 * Adds a new baby rat of random sex to the ratList.
 	 */
 	public static void newBabyRat() {
 		Random nextRand = new Random();
@@ -39,8 +38,8 @@ public class RatController {
 	}
 	
 	/**
-	 * Takes in a list of toString rat values and adds them to the rat list
-	 * @param newRats
+	 * Takes in an array of toString rat values and adds them to the rat list.
+	 * @param newRats - an array of strings.
 	 */
 	public static void addRats(String[] newRats) {
 		for(int i = 0; i<newRats.length; i++) {
@@ -49,7 +48,7 @@ public class RatController {
 	}
 
 	/**
-	 * Takes in a Rat toString rat value and adds it to the rat list
+	 * Takes in a Rat class toString() value and adds it to the rat list.
 	 * @param newRat - the formatted rat string.
 	 */
 	public static void addRat(String newRat) {
@@ -57,10 +56,10 @@ public class RatController {
 	}
 	
 	/**
-	 * Removes a specific rat from rats
-	 * @param deadRat - the rat to be killed by the rat controller
+	 * Removes a specific rat from rats.
+	 * @param deadRat - the rat to be killed by the rat controller.
 	 */
-	public static void killRat(Rat deadRat) { //static method to kill rats
+	public static void killRat(Rat deadRat) {
 		points += deadRat.getPointsUponDeath();
 		for(int i = 0; i<ratList.size(); i++) {
 			if(ratList.get(i) == deadRat) {
@@ -70,9 +69,9 @@ public class RatController {
 	}
 		
 	/**
-	 * Constructs a rat from a rats toString output
-	 * @param ratString - A toString output from the Rat.toString() method
-	 * @return a constructed rat with the same values as in ratString
+	 * Constructs a rat from a rats toString output.
+	 * @param ratString - A toString output from the Rat class toString() method.
+	 * @return a constructed rat with the same values as in ratString.
 	 */
 	private static Rat stringToRat(String ratString) {
 		String[] newRat = ratString.split(",");
@@ -87,9 +86,10 @@ public class RatController {
 		return new Rat(newRatAge, newRatIsMale, newRatIsPregnant, newRatHP, newRatIsSterile, newRatIsBreeding, newRatIsDeathRat);
 	}
 	
-	
 	/**
-	 * Sorts an arraylist of rats into two arraylists, those which are moving and those which aren't
+	 * Deals with rat to rat interactions.
+	 * Sorts rats into stationary rats and moving rats.
+	 * Breeds rats which are breedable.
 	 * @param ratsOnTile - An arraylist of rats on an individual tile
 	 * @return A nested arraylist of rats, where the first index contains rats that aren't moving and the second index contains rats which will be moving
 	 */
@@ -114,7 +114,10 @@ public class RatController {
 	}
 	
 	/**
-	 * Sorts an arraylist of rats into three arraylists, those which are breedable male rats, breedable female rats and moving rats
+	 * Sorts an arraylist of rats into three arraylists
+	 * =>breedable male rats
+	 * =>breedable female rats
+	 * =>moving rats.
 	 * @param ratsOnTile - An arraylist of rats
 	 * @return A nested arraylist of rats, where the first index contains breedable male rats, the second contains breedable female rats and the third contains moving rats
 	 */
@@ -160,10 +163,10 @@ public class RatController {
 	}
 	
 	/**
-	 * 
-	 * @param male - An arraylist of male rats
-	 * @param female - An arraylist of female rats
-	 * @return A nested arraylist of rats with 2 indexes, the rats who're breeding and those who aren't
+	 * Takes in two arraylists of rats and breeds as many as it can.
+	 * @param male - An arraylist of male rats.
+	 * @param female - An arraylist of female rats.
+	 * @return A nested arraylist of rats with 2 indexes, the rats who're breeding and those who aren't.
 	 */
 	private static ArrayList<ArrayList<Rat>> breedRats(ArrayList<Rat> male, ArrayList<Rat> female) {
 		
