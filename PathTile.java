@@ -106,7 +106,7 @@ public class PathTile extends Tile {
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 		// Deal with all rats going towards Death Rat
-		Direction dirToDeath = prevDirectionDR == directions[0] ? directions[1] : directions[0];
+		Direction dirToDeath = prevDirectionDR == directions[1] ? directions[1] : directions[0];
 		ArrayList<Rat> currList = currBlock.get(dirToDeath);
 		ArrayList<Rat> escaped = new ArrayList<>();
 		if (currList != null) {
