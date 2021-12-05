@@ -439,7 +439,7 @@ public class Main extends Application {
 	 */
 	private BorderPane createGameGUI() {
 		
-        BOMB = new Image("Bomb.png");
+        BOMB = new Image("img/ItemBomb.png");
         POISON = new Image("Poison.png");
         SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
         SEX_TO_MALE = new Image("SexChangeToMale.png");
@@ -567,7 +567,7 @@ public class Main extends Application {
 			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
         for (int[] i : bombPlace) {
-            gc.drawImage(BOMB, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+            gc.drawImage(Bomb.COUNTDOWN[Bomb.getCurrentCountdown()], i[1] * TILE_SIZE, i[0] * TILE_SIZE);
         }
         for (int[] i : poisonPlace) {
             gc.drawImage(POISON, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
