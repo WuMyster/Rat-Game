@@ -286,34 +286,29 @@ public abstract class Tile {
 		for (Direction dir : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(dir));
 		}
+		if (!aliveRats.isEmpty()) {
+			System.out.println(aliveRats.size());
+		}
 	}
 
 	/**
 	 * Makes sure the list the tile is currently dealing with don't involve rats that are not moving.
 	 */
 	public void correctList() {
+		ArrayList<Rat> tmp1 = aliveRats;
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> tmp = new ArrayList<>();
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
 			if (rs != null) {
 				for (Rat r : rs) {
-					if (exists(r)) {
+					if (aliveRats.remove(r)) {
 						tmp.add(r);
 					}
 				}
 				currBlock.put(prevDirection, tmp);
 			}
 		}
-	}
-	
-	/**
-	 * Returns {@code true} if Rat is in aliveRats list.
-	 * 
-	 * @param r the rat to find
-	 * @return {@code true} if rat exists in list
-	 */
-	private boolean exists(Rat r) {
-		return aliveRats.remove(r);
+		aliveRats = tmp1;
 	}
 
 	/**

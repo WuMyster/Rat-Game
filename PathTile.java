@@ -36,20 +36,25 @@ public class PathTile extends Tile {
 //		}
 		
 		int beforeDeathInter = aliveRats.size();
-		
-		for (Direction dir : bufferNextBlock.keySet()) {
-			ArrayList<Rat> r = bufferNextBlock.get(dir);
-			for (Direction prevDirection : currDeath.keySet()) {
-				for (DeathRat dr : currDeath.get(prevDirection)) {
-					bufferNextBlock.put(dir, dr.killRats(r, -1));
-				}
-			}
-		}
+				
+//		for (Direction dir : bufferNextBlock.keySet()) {
+//			System.out.println("Biffer");
+//			ArrayList<Rat> r = bufferNextBlock.get(dir);
+//			for (Direction prevDirection : currDeath.keySet()) {
+//				for (DeathRat dr : currDeath.get(prevDirection)) {
+//					System.out.print(bufferNextBlock.get(dir).size() + " > ");
+//					bufferNextBlock.put(dir, dr.killRats(r, -1));
+//					System.out.println(bufferNextBlock.get(dir).size());
+//				}
+//			}
+//		}
 		
 		// Pass in ArrayList of Moving Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
+				System.out.print(aliveRats.size() + " - ");
 				aliveRats = dr.killRats(aliveRats, -1);
+				System.out.println(aliveRats.size());
 			}
 		}
 
@@ -119,7 +124,8 @@ public class PathTile extends Tile {
 				}
 			}
 
-			// Then Death Rats will deal with slower adult rats
+			// Then Death Rats will deal with slower adult rats (If contains baby rat then it has
+			// already died, so no adults will die before baby
 			currList = escaped;
 			escaped = new ArrayList<>();
 			for (Rat r : currList) {
@@ -254,6 +260,13 @@ public class PathTile extends Tile {
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
 		for (Rat r : rs.get(0)) {
 			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
+			if (currBlock.get(directions[0]).contains(r)) {
+				System.out.println("Good 1");
+			} else if (currBlock.get(directions[1]).contains(r)) {
+				System.out.println("Good 2");
+			} else {
+				System.out.println("ERROR");
+			}
 			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
 			bufferNextBlock.get(d).add(r);
 		}	

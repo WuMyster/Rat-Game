@@ -248,7 +248,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		test54();
+		test61();
 		
 		Timeline cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		// a.setCycleCount(1);
@@ -257,14 +257,18 @@ public class Main extends Application {
 		// cycler.play();
 	}
 	
-	private void test1() {
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 4);
-		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 2);
+	private void test60() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1 , 5);
+		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 3);
+		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 3);
+	
 	}
 	
-	private void test2() {
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 9);
-		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 7);
+	private void test61() {
+		m.placeRat(new DeathRat(), Direction.EAST, 1 , 4);
+		m.placeRat(new Rat(100, true, false, 10, true, false, false), Direction.EAST, 1, 3);
+		m.placeRat(new Rat(100, false, false, 10, true, false, false), Direction.WEST, 1, 3);
+	
 	}
 	
 	// Good PathTile
@@ -293,32 +297,6 @@ public class Main extends Application {
 		m.placeRat(new DeathRat(), Direction.EAST, 1, 12);
 		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.EAST, 1, 9);
 		m.placeRat(new Rat(100, false, false, 10, false, false, false), Direction.WEST, 1, 7);
-	}
-	
-	// Good
-	private void test50() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1, 12);
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
-	}
-	
-	private void test51() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1, 11);
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
-	}
-	
-	private void test52() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1, 10);
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
-	}
-	
-	private void test53() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1, 9);
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
-	}
-	
-	private void test54() {
-		m.placeRat(new DeathRat(), Direction.EAST, 1, 13);
-		m.placeRat(new Rat(100, true, false, 10, false, false, false), Direction.WEST, 1, 9);
 	}
 
 	/**
