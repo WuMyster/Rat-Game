@@ -11,6 +11,7 @@ public class Rat {
 	private boolean isBreeding;
 	private int age;
 	private int health;
+	private int pregnancyCounter;
 	
 	
 	/**
@@ -82,11 +83,32 @@ public class Rat {
 	}
 	
 	/**
+	 * Gets the value of the rats pregnancy counter.
+	 * @return an integer of the rats pregnancy counter.
+	 */
+	public int getPregCounter() {
+		return pregnancyCounter;
+	}
+	
+	/**
+	 * Decrements the rats pregnancy counter and terminates the pregnancy when the counter depletes.
+	 */
+	public void decrementPregCounter() {
+		pregnancyCounter -= 1;
+		if(pregnancyCounter == 0) {
+			isPregnant = false;
+		}
+	}
+	
+	/**
 	 * Set the rat pregnancy to a new boolean value.
 	 * @param newPregnancyState - true = pregnant, false = not pregnant.
 	 */
 	public void setPregnancy(boolean newPregnancyState) {
 		isPregnant = newPregnancyState;
+		if(isPregnant == true) {
+			pregnancyCounter = 7;
+		}
 	}
 	
 	/**
@@ -219,7 +241,7 @@ public class Rat {
 	 */
 	public String toString() {
 		String output = "";
-		output += age.toString() + ",";
+		output += age + ",";
 		output += isMale.toString() + ",";
 		output += isPregnant.toString() + ",";
 		output += health.toString() + ",";
