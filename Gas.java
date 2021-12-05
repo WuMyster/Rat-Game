@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public class Gas extends Item {
@@ -64,4 +66,10 @@ public class Gas extends Item {
             }
         }
     }
+
+	@Override
+	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
+		// Should damage all rats!
+		return null;
+	}
 }

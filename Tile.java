@@ -250,7 +250,6 @@ public abstract class Tile {
 //            return true;
 //        }
 		
-	}
 
 	/**
 	 * Have the rats on this tile interact with each other.
