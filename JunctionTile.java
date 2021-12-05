@@ -185,7 +185,7 @@ public class JunctionTile extends Tile {
 		// For now assign random directions to every rat
 		createBuffer();
 		System.out.println(prevDirectionDR);
-		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR.opposite());
+		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
 		ArrayList<Rat> slowerRats = new ArrayList<>();
 		if (ratsToDoom != null) {
 			for (Rat r : ratsToDoom) {
