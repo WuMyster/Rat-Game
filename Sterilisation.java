@@ -6,11 +6,17 @@ import java.util.ArrayList;
  */
 public class Sterilisation extends Item {
 
+	public static String name = "Steralise";
+	
     /**
      * Health point of item.
      */
     public Sterilisation() {
         hp = 1;
+    }
+    
+    public Sterilisation(int hp) {
+    	this.hp = hp;
     }
 
     /**
@@ -23,5 +29,11 @@ public class Sterilisation extends Item {
 		r.get(0).sterilise();
         hp--;
 		return r;
+	}
+	
+	@Override
+	public String toString() {
+		String out = name + "," + hp;
+		return out;
 	}
 }

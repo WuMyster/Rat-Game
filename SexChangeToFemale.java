@@ -6,11 +6,17 @@ import java.util.ArrayList;
  */
 public class SexChangeToFemale extends Item {
 
+	public static String name = "toFemale";
+	
     /**
      * Health point of item.
      */
 	public SexChangeToFemale() {
 		hp = 1;
+	}
+	
+	public SexChangeToFemale(int hp) {
+		this.hp = hp;
 	}
 	
     /**
@@ -24,5 +30,11 @@ public class SexChangeToFemale extends Item {
 		r.get(0).setIsMale(false);
 		hp--;
 		return r;
+	}
+	
+	@Override
+	public String toString() {
+		String out = name + "," + hp;
+		return out;
 	}
 }

@@ -22,7 +22,12 @@ public class DeathRat {
 	 */
 	private int hp;
 	
+	/**
+	 * Start hp of all Death rats
+	 */
 	private static int START_HP = 5;
+	
+	String name = "Death";
 	
 	/**
 	 * Constructor for Death Rat. Does not interact with items other

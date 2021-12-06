@@ -419,9 +419,9 @@ public class Board {
 			case (2) -> d = Direction.SOUTH;
 			case (3) -> d = Direction.WEST;
 			}
-			if (spl[0].split(",")[0].equals("D")) {
+			if (spl[0].split(",")[0].equals("Death")) {
 				if (spl[0].length() == 1) {
-					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2])); // Only for new start of levels
 				} else {
 					placeRat(new DeathRat(Integer.parseInt(spl[0].split(",")[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 				}
@@ -437,7 +437,11 @@ public class Board {
 	}
 	
 	public void setUpItems(ArrayList<String> items) {
-		
+		if (items != null) {
+			for (String i : items) {
+				
+			}
+		}
 	}
 	
 	public void saveState(String filename) {

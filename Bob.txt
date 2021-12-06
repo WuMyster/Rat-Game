@@ -1,4 +1,9 @@
-62,true,false,20,false,false,false;3,5,6
-62,false,false,20,false,false,false;3,5,7
-5;3,9,12
-StopSign@200a9f7d
+86,true,false,20,false,false,false;2,1,6
+5;0,4,15
+86,false,false,20,false,false,false;3,9,6
+StopSign,7;1,15
+Bomb1;4,1
+Steralise,1;5,8
+toMale,1;8,8
+toFemale,1;9,11
+Poison,1;9,14

@@ -9,11 +9,34 @@ import java.util.TimerTask;
  * @author Andrew Wu
  */
 public class Bomb extends Item {
+	
+	/**
+	 * X position of bomb
+	 */
+	private int x;
+	
+	/**
+	 * y position of bomb.
+	 */
+	private int y;
+	
+	public static String name = "Bomb";
+	
     /**
      * Sets the bomb with 1 health point.
      */
     public Bomb() {
         hp = 1; // is never used, only for constructor
+    }
+    
+    /**
+     * Sets the bomb with the remaining health it has.
+     * @param hp seconds left from the bomb before it blows up
+     */
+    public Bomb(int[] xyPos, int hp) {
+    	this.x = xyPos[0];
+    	this.y = xyPos[1];
+    	this.hp = hp;
     }
 
     /**
@@ -76,7 +99,13 @@ public class Bomb extends Item {
 
 	@Override
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
-		// Does nothing to rats
+		// Does nothing directly to rats
 		return r;
+	}
+
+	@Override
+	public String toString() {
+		String out = name + hp;
+		return out;
 	}
 }

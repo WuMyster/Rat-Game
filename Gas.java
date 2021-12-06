@@ -70,7 +70,7 @@ public class Gas extends Item {
 
                     if (item instanceof Gas) {
                         t.setTileItem(new Gas(), x, y);
-                        Main.addGasPlace(x-i, y-j);
+                        // Main.addGasPlace(x-i, y-j);
                         System.out.print((i));
                         System.out.println(j);
                     }
@@ -154,5 +154,11 @@ public class Gas extends Item {
             }
         }
 		return r;
+	}
+	
+	@Override
+	public String toString() {
+		String out = "Gas deprecated";
+		return out;
 	}
 }

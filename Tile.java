@@ -280,7 +280,8 @@ public abstract class Tile {
 		if (itemOnTile == null) {
 			return "";
 		}
-		return itemOnTile.toString();
+		return itemOnTile.toString() + ";" + ORIGINAL_X_Y_POS[0] + "," +
+				ORIGINAL_X_Y_POS[1] + "\n";
 	}
 	
 	/**

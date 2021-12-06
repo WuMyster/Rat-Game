@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
  */
 public class StopSign extends Item {
 	
+	public static String name = "StopSign";
+	
 	/**
 	 * Max number of images - 1.
 	 */
@@ -57,6 +59,13 @@ public class StopSign extends Item {
 		currState = START_HP / DIVIDER;
 	}
 	
+	public StopSign(int[] xyPos, int hp) {
+		this.xyPos = new int[] {xyPos[0] / Board.EXTRA_PADDING, 
+				xyPos[1] / Board.EXTRA_PADDING};
+		this.hp = hp;
+		currState = START_HP / DIVIDER;
+	}
+	
 	/**
 	 * Number of rats trying to access this tile against the stop sign.
 	 * @param n number of rats trying to get to this tile
@@ -91,5 +100,11 @@ public class StopSign extends Item {
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
 		// Does nothing
 		return r;
+	}
+	
+	@Override
+	public String toString() {
+		String out = name + "," + hp;
+		return out;
 	}
 }

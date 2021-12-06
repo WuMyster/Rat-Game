@@ -6,11 +6,16 @@ import java.util.ArrayList;
  */
 class Poison extends Item {
 
+	public static String name = "Poison";
     /**
      * Health point of item.
      */
     public Poison() {
     	hp = 1;
+    }
+    
+    public Poison(int hp) {
+    	this.hp = hp;
     }
 
     /**
@@ -25,5 +30,11 @@ class Poison extends Item {
 		r.remove(0);
 		hp--;
 		return r;
+	}
+	
+	@Override
+	public String toString() {
+		String out = name + "," + hp;
+		return out;
 	}
 }
