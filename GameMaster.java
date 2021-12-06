@@ -9,12 +9,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GameMaster extends Application {
 
     Stage window;
-    TableView<LeaderBoard> table;
+    TableView<Leaderboard> table;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -46,19 +50,15 @@ public class GameMaster extends Application {
         GridPane.setConstraints(loginButton, 1, 3);
         loginButton.setOnAction(e -> isInt(levelInput, levelInput.getText()));
         loginButton.setOnAction(e -> getPlayer(playerInput,levelInput));
-        //loginButton.setOnAction(e -> takePlayerName);
 
         Button leaderboardButton = new Button("Check Leaderboard");
         leaderboardButton.setOnAction(e -> LeaderBoardWindow.displayLeaderboard("Leaderboard"));
         GridPane.setConstraints(leaderboardButton,1,5);
-
-        //Name column
-        //TableColumn<LeaderBoard, String> nameColumn = new TableColumn<>("Name");
-        //nameColumn.setMinWidth(200);
-        //nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        leaderboardButton.setOnAction(e -> Leaderboard.showLeaderboard(scores));
 
 
-
+        //message
+        String message = MessageOfDay.getMsgDay();
 
 
         grid.getChildren().addAll(playerLabel, playerInput, levelLabel, levelInput, loginButton, leaderboardButton);
@@ -67,14 +67,6 @@ public class GameMaster extends Application {
 
         window.setScene(scene);
         window.show();
-    }
-
-    //public void StartLeaderBoard
-
-    public ObservableList<LeaderBoard> getLeaderBoard(){
-        ObservableList<LeaderBoard> leaderBoard = FXCollections.observableArrayList();
-        return leaderBoard;
-
     }
 
     private boolean isInt(TextField input, String message){
@@ -89,8 +81,20 @@ public class GameMaster extends Application {
 
     }
 
-    private void getPlayer(){
-
+    private void getPlayer(TextField playerInput, TextField levelInput) {
+        try {
+            File myObj = new File("filename.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String name = myReader.nextLine();
+                int level = myReader.nextInt();
+                //forward to create game class
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't access file...");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
