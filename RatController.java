@@ -25,7 +25,7 @@ public class RatController {
 
 	/**
 	 * Sets the max number of rats allowed before the game ends.
-	 * @param max
+	 * @param max - the maximum number of rats allowed
 	 */
 	public static void setRatController(int max) {
 		maxNumOfRats = max;
@@ -51,6 +51,7 @@ public class RatController {
 	
 	/**
 	 * Adds a new baby rat of random sex to the ratList.
+	 * @return The newly constructed baby rat
 	 */
 	public static Rat newBabyRat() {
 		Random nextRand = new Random();
@@ -73,7 +74,7 @@ public class RatController {
 	/**
 	 * Takes in a Rat class toString() value and adds it to the rat list.
 	 * @param newRat - the formatted rat string.
-	 * @return 
+	 * @return Returns a single constructed rat
 	 */
 	public static Rat addRat(String newRat) {
 		Rat r = stringToRat(newRat);

@@ -152,7 +152,7 @@ public class Board {
 	 * Adds bomb to tile.
 	 * @param x x position of tile on map
 	 * @param y y position of tile on map
-	 * @return {@code true} if bomb can be placed at that location.
+	 * @return if bomb can be placed at that location.
 	 */
 	public void addBomb(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];

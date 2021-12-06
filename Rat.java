@@ -18,7 +18,6 @@ public class Rat {
 	 * Constructor for new rats.
 	 * Should be used at the start of the level or for newly born rats.
 	 * @param isMale the rats sex.
-	 * @param health the rats health.
 	 */
 	public Rat(boolean isMale) {
 		this.isMale = isMale;

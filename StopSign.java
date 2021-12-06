@@ -8,7 +8,9 @@ import javafx.scene.image.Image;
  *
  */
 public class StopSign extends Item {
-	
+	/**
+	 * The name of the item
+	 */
 	public static final String NAME = "StopSign";
 	
 	/**
@@ -59,6 +61,11 @@ public class StopSign extends Item {
 		currState = START_HP / DIVIDER;
 	}
 	
+	/**
+	 * Constructs a {@code StopSign}
+	 * @param xyPos - The x and y coordinates
+	 * @param hp - the stop signs hp
+	 */
 	public StopSign(int[] xyPos, int hp) {
 		this.xyPos = new int[] {xyPos[0] / Board.EXTRA_PADDING, 
 				xyPos[1] / Board.EXTRA_PADDING};
@@ -95,17 +102,27 @@ public class StopSign extends Item {
 	public static Image getImageState(int s) {
 		return STATES[s];
 	}
-	
+	/**
+	 * Gets the current state
+	 * @return the current state
+	 */
 	public int getState() {
 		return currState - 1;
 	}
 
+	/**
+	 * Doesnt touch the rat
+	 * @return a list of rats
+	 */
 	@Override
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
 		// Does nothing
 		return r;
 	}
-	
+
+	/**
+	 * Translates the class to a string
+	 */
 	@Override
 	public String toString() {
 		String out = NAME + "," + hp;

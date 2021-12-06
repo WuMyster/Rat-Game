@@ -48,25 +48,48 @@ public class GameMasterExample {
 		
 	}
 	
+	/**
+	 * Return map of the game.
+	 */
 	public static String getMap() {
 		return map;
 	}
+	
+	/**
+	 * Array list returning the rats.
+	 */
 	
 	public static ArrayList<String> getRats() {
 		return rats;
 	}
 	
+	/**
+	 * Array list returning the items.
+	 */
+	
 	public static ArrayList<String> getItems() {
 		return items;
 	}
+	
+	/**
+	 * Return maxTime of the game.
+	 */
 	
 	public static int getMaxTime() {
 		return maxTime;
 	}
 	
+	/**
+	 * Return maxRats of the game.
+	 */
+	
 	public static int getMaxRats() {
 		return maxRats;
 	}
+	
+	/**
+	 * Return every playerName.
+	 */
 	
 	public static String getName() {
 		return playerName;
