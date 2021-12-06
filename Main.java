@@ -985,6 +985,7 @@ public class Main extends Application {
 		// Losing conditions
 		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
 			cycler.stop();
+			System.out.println("Game has finished");
 			// Pass control back to game master, game has finished
 		} else if (playerStopGame) {
 			cycler.stop();
