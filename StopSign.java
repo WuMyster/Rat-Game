@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javafx.scene.image.Image;
 
 /**
@@ -83,5 +85,11 @@ public class StopSign extends Item {
 	 */
 	public static Image getState(int s) {
 		return STATES[s];
+	}
+
+	@Override
+	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
+		// Does nothing
+		return r;
 	}
 }

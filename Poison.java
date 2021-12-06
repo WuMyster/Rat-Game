@@ -1,20 +1,29 @@
+import java.util.ArrayList;
+
 /**
- * @author Andrew
+ * Models a poison item.
+ * @author Andrew Wu
  */
 class Poison extends Item {
-    private int itemHP = 1;
 
-    public void itemAction (Rat rat) {
-        RatController.killRat(rat);
-        System.out.println("Rat killed by poison");
-        itemUsed();
+    /**
+     * Health point of item.
+     */
+    public Poison() {
+    	hp = 1;
     }
 
-    public int getItemHP () {
-        return this.itemHP;
-    }
-
-    private void itemUsed () {
-        this.itemHP -= 1;
-    }
+    /**
+     * The effect of the Poison item.
+     * Kills the first rat that is passed to it.
+     * @param r a rat object
+     * @return ArrayList with remaining alive rats.
+     */
+	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
+		Rat main = r.get(0);
+		RatController.killRat(main);
+		r.remove(0);
+		hp--;
+		return r;
+	}
 }

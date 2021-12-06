@@ -1,3 +1,4 @@
-58,true,false,20,false,false,false;0,4,5
-5;0,4,15
-58,false,false,20,false,false,false;0,5,5
+62,true,false,20,false,false,false;3,5,6
+62,false,false,20,false,false,false;3,5,7
+5;3,9,12
+StopSign@200a9f7d

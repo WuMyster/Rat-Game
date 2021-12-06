@@ -1,11 +1,7 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -76,6 +72,10 @@ public class Board {
 	 */
 	public final static int EXTRA_PADDING = 2;
 
+    /**
+     * Returns extra padding
+     * @return extra padding number
+     */
     public static int getExtraPadding() {
         return EXTRA_PADDING;
     }
@@ -111,13 +111,23 @@ public class Board {
 		return board;
 	}
 
+    /**
+     * Checks if item can be placed on tile. Can be placed if tile is an instance of path but not
+     * a tunnel. Also if tile is a junction.
+     * @param x x-coordinate being checked.
+     * @param y y-coordinate being checked.
+     * @return boolean of if item can be placed on tile.
+     */
     public static boolean isItemPlaceable(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        if (t instanceof PathTile && !(t instanceof TunnelTile)) {
-            return true;
-        }
-        if (t instanceof JunctionTile) {
-            return true;
+        if (t.itemOnTile == null) {
+            if (t instanceof PathTile && !(t instanceof TunnelTile)) {
+                return true;
+            }
+            if (t instanceof JunctionTile) {
+                return true;
+            }
+            return false;
         }
         return false;
     }
@@ -139,8 +149,7 @@ public class Board {
 	}
 
 	/**
-	 * TODO Get rid of repetition
-	 * Adds item to tile.
+	 * Adds bomb to tile.
 	 * @param x x position of tile on map
 	 * @param y y position of tile on map
 	 * @return {@code true} if bomb can be placed at that location.
@@ -153,7 +162,7 @@ public class Board {
 	}
 
     /**
-     * Blows up tiles from origin until "null" Tile reached.
+     * Blows up tiles from origin in a row until "null" Tile reached.
      * @param x x-coordinate bomb was placed on
      * @param y y-coordinate bomb was placed on
      */
@@ -194,6 +203,11 @@ public class Board {
         }
     }
 
+    /**
+     * Adds poison item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addPoison(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Poison p = new Poison();
@@ -201,6 +215,11 @@ public class Board {
         t.setTileItem(p, x, y);
         }
 
+    /**
+     * Adds sex change (Male to Female) item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addSexToFemale(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToFemale toFemale = new SexChangeToFemale();
@@ -208,6 +227,11 @@ public class Board {
         t.setTileItem(toFemale, x, y);
     }
 
+    /**
+     * Adds sex change (Female to Male) item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addSexToMale(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToMale toMale = new SexChangeToMale();
@@ -215,6 +239,11 @@ public class Board {
         t.setTileItem(toMale, x, y);
     }
 
+    /**
+     * Adds sterilise item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addSterilise(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Sterilisation s = new Sterilisation();
@@ -222,29 +251,19 @@ public class Board {
         t.setTileItem(s, x, y);
     }
 
-    public void addGas(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Gas gas = new Gas();
-
-        t.setTileItem(gas, x, y);
+    /**
+     * Returns tile location.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     * @return tile
+     */
+    public static Tile getTile(int x, int y) {
+        return board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
     }
 
     public void addDeathRat(int x, int y) {
         placeRat(new DeathRat(), Direction.NORTH, y, x);
 
-    }
-
-    // Not working
-    public void spreadItem(Item item, int x, int y, int r) {
-        for (int i = -(r-1); i <= (r-1); i++) {
-            for (int j = -(r-1); j <= (r-1); j++) {
-                if (isItemPlaceable(x - i, y - j)) {
-                    Tile t = board[(y-i) * EXTRA_PADDING][(x-j) * EXTRA_PADDING];
-
-                    t.setTileItem(item, x, y);
-                }
-            }
-        }
     }
 
 	/**
@@ -360,7 +379,7 @@ public class Board {
 		}
 		// First give item to rat(s)
 		for (Tile t : allTiles) {
-			// t.giveRatItem();
+			t.giveRatItem();
 		}
 		
 		// Then have the rats interact with each other
