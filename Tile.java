@@ -16,12 +16,6 @@ public abstract class Tile {
 	protected Item itemOnTile;
 
 	/**
-	 * Health of item.
-	 * @deprecated
-	 */
-	protected int itemHP;
-
-	/**
 	 * Stop sign will cause the tile to not be accessed. If false, Rat can enter
 	 * tile, else Rat will have to take another direction.
 	 */
@@ -319,8 +313,6 @@ public abstract class Tile {
     /**
      * Sets item on tile.
      * @param i item to be placed on tile.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
      * @return boolean if item is placed on tile.
      */
 	protected boolean setTileItem(Item i) {
@@ -336,19 +328,6 @@ public abstract class Tile {
         }
         return true;
     }
-
-	/**
-	 * Place stop sign on tile.
-	 * @deprecated
-	 */
-	protected boolean placeStopSign() {
-		if (itemOnTile != null) {
-			return false;
-		}
-		itemOnTile = new StopSign(X_Y_POS);
-		isBlocked = true;
-		return true;
-	}
 
 	/**
 	 * Empties tile of all attributes/ things on tile.

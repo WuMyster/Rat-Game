@@ -323,6 +323,7 @@ public class Main extends Application {
 	 * @param dir  direction the rat is facing
 	 * @param rt   type of rat
 	 * @param move movement status of rat
+	 * @param steps move limit of the rat
 	 */
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move, int steps) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
@@ -332,6 +333,7 @@ public class Main extends Application {
 
 	/**
 	 * Removes items from board.
+	 * @param item the item to be removed
 	 * @param pos x y coordinates of where item is located on board.
 	 */
 	public static void removeItem(Item item, int[] pos) {
@@ -368,7 +370,6 @@ public class Main extends Application {
 	 * Draws a steraliseIcon on this location on the board.
 	 * @param x x position of the steraliseIcon
 	 * @param y y posision of the steraliseIcon
-	 * @param state the state of the steraliseIcon
 	 */
 	public static void drawSterilise(int x, int y) {
 		sterilisePlace.add(new int[] { (int) y, (int) x });
@@ -392,7 +393,6 @@ public class Main extends Application {
 	 * Draw a bomb on this location on the board.
 	 * @param x x position of the Bomb
 	 * @param y y posision of the Bomb
-	 * @param state the state of the Bomb
 	 */
 	public static void drawBomb(int x, int y) {
 		bombPlace.add(new int[] { (int) y, (int) x, Bomb.COUNTDOWN_IN_S });
@@ -418,7 +418,6 @@ public class Main extends Application {
 	 * Draws a sexToMaleIcon on this location on the board.
 	 * @param x x position of the sexToMaleIcon
 	 * @param y y posision of the sexToMaleIcon
-	 * @param state the state of the sexToMaleIcon
 	 */
 	public static void drawSexToMale(int x, int y) {
 		sexToMalePlace.add(new int[] { (int) y, (int) x });
@@ -430,7 +429,6 @@ public class Main extends Application {
 	 * Draws a Poison on this location on the board.
 	 * @param x x position of the Poison
 	 * @param y y posision of the Poison
-	 * @param state the state of the Poison
 	 */
 	public static void drawPoison(int x, int y) {
 		poisonPlace.add(new int[] { (int) y, (int) x });
@@ -442,7 +440,6 @@ public class Main extends Application {
 	 * Draws a sexToFemaleIcon on this location on the board.
 	 * @param x x position of the sexToFemaleIcon
 	 * @param y y posision of the sexToFemaleIcon
-	 * @param state the state of the sexToFemaleIcon
 	 */
 	public static void drawSexToFemale(int x, int y) {
 		sexToFemalePlace.add(new int[] { (int) y, (int) x });
@@ -662,12 +659,8 @@ public class Main extends Application {
 			playerStopGame = true;
 		});
 
-		// TODO Del me when not needed anymore
-		Button startTickTimelineButton = new Button("Move rat");
-		root.getChildren().addAll(startTickTimelineButton);
-		startTickTimelineButton.setOnAction(e -> {
-			runCycle();
-		});
+		Label msg = new Label(MessageOfDay.getMsgDay());
+		root.getChildren().add(msg);
 
 		return root;
 	}
@@ -959,6 +952,10 @@ public class Main extends Application {
 		m.drawBoard(gc);
 	}
 
+	/**
+	 * Run this to run program.
+	 * @param args cli arguements
+	 */
 	public static void main(String[] args) {
 		System.out.println("Start");
 		try {

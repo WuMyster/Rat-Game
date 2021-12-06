@@ -6,6 +6,9 @@ import java.util.ArrayList;
  */
 public class SexChangeToFemale extends Item {
 
+	/**
+	 * Name of item.
+	 */
 	public static final String NAME = "toFemale";
 	
     /**
