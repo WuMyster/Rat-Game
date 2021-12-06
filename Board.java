@@ -1,12 +1,7 @@
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 /**
  *
@@ -110,11 +105,14 @@ public class Board {
 
     public static boolean isItemPlaceable(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        if (t instanceof PathTile && !(t instanceof TunnelTile)) {
-            return true;
-        }
-        if (t instanceof JunctionTile) {
-            return true;
+        if (t.itemOnTile == null) {
+            if (t instanceof PathTile && !(t instanceof TunnelTile)) {
+                return true;
+            }
+            if (t instanceof JunctionTile) {
+                return true;
+            }
+            return false;
         }
         return false;
     }
@@ -222,26 +220,56 @@ public class Board {
     public void addGas(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Gas gas = new Gas();
+        //t.setTileItem(gas, x, y);
+        //spreadGasCloud(gas, x, y, gas.getGasMaxRadius());
+        gas.spreadGasCloud(gas, x, y, 3);
+    }
 
-        t.setTileItem(gas, x, y);
+    public static Tile getTile(int x, int y) {
+        return board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
+    }
+
+    public void gasCloud(Item item, int x, int y, int r, int gasSpread) {
+        for (int i = -(gasSpread); i <= gasSpread; i++) {
+            for (int j = -(gasSpread); j <= gasSpread; j++) {
+                if (isItemPlaceable(x - i, y - j)) {
+                    Tile t = board[(y-j) * EXTRA_PADDING][(x-i) * EXTRA_PADDING];
+
+                    if (item instanceof Gas) {
+                        t.setTileItem(new Gas(), x, y);
+                        Main.addGasPlace(x-i, y-j);
+                    }
+                    if (item == null) {
+                        t.setTileItem(null, x, y);
+                        Main.removeItem(new Gas(), new int[] {x, y});
+                    }
+
+                }
+            }
+        }
+    }
+
+    public void spreadGasCloud(Gas gas, int x, int y, int r) {
+        //AtomicInteger gasSpread = new AtomicInteger();
+        new Thread(() -> {
+            for (int i = 0; i < r; i++) {
+                System.out.println(gas.getGasSpread());
+                gasCloud(new Gas(), x, y, 2, gas.getGasSpread() + 1);
+                try {
+                    Thread.sleep(Gas.getGAS_EXPAND_TIME());
+                } catch (InterruptedException ex) {}
+            }
+
+        }).start();
+    }
+
+    public void decreaseGasCloud(int x, int y, int r) {
+
     }
 
     public void addDeathRat(int x, int y) {
         placeRat(new DeathRat(), Direction.NORTH, y, x);
 
-    }
-
-    // Not working
-    public void spreadItem(Item item, int x, int y, int r) {
-        for (int i = -(r-1); i <= (r-1); i++) {
-            for (int j = -(r-1); j <= (r-1); j++) {
-                if (isItemPlaceable(x - i, y - j)) {
-                    Tile t = board[(y-i) * EXTRA_PADDING][(x-j) * EXTRA_PADDING];
-
-                    t.setTileItem(item, x, y);
-                }
-            }
-        }
     }
 
 	/**
