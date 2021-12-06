@@ -183,12 +183,7 @@ public class Rat {
 	 * @return A boolean where true = the rat is a child.
 	 */
 	public boolean isChild() {
-		if(age<30) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return age < 30;
 	}
 	
 	/**
@@ -219,6 +214,21 @@ public class Rat {
 	}
 	
 	/**
+	 * Translates the rat into a string which can be easily stored.
+	 */
+	public String toString() {
+		String output = "";
+		output += age + ",";
+		output += isMale + ",";
+		output += isPregnant + ",";
+		output += health + ",";
+		output += isSterile + ",";
+		output += isBreeding + ",";
+		output += isDeathRat;
+		return output;
+	}
+	
+	/**
 	 * Calculates how many points the rat is worth.
 	 * @return An integer value for the rats worth.
 	 */
@@ -235,21 +245,4 @@ public class Rat {
 		}
 		return points;
 	}
-	
-	/**
-	 * Translates the rat into a string which can be easily stored.
-	 */
-	public String toString() {
-		String output = "";
-		output += age + ",";
-		output += isMale + ",";
-		output += isPregnant + ",";
-		output += health + ",";
-		output += isSterile + ",";
-		output += isBreeding + ",";
-		output += isDeathRat;
-		return output;
-	}
-
-	
 }

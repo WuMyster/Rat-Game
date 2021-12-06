@@ -6,19 +6,34 @@ import java.util.Random;
  * @version
  */
 public class RatController {
+	
+	/**
+	 * List of rats alive.
+	 */
 	private static ArrayList<Rat> ratList = new ArrayList<>();
+	
+	/**
+	 * Maximum number of rats before losing.
+	 */
 	private static int maxNumOfRats = 10;
+	
+	/**
+	 * Number of points earned in this game.
+	 */
 	private static int points;
 	
 
-	// Needs to be set when starting
+	/**
+	 * Sets the max number of rats allowed before the game ends.
+	 * @param max
+	 */
 	public static void setRatController(int max) {
 		maxNumOfRats = max;
 	}
 
 	/**
-	 * Gets how many points have been earnt by killing rats.
-	 * @return An integer representing the points earnt.
+	 * Returns points earned from killing rats.
+	 * @return An integer representing the points earned.
 	 */
 	public static int getPoints() {
 		return points;

@@ -11,6 +11,36 @@ import java.util.TimerTask;
 public class Bomb extends Item {
 	
 	/**
+	 * Item name of Bomb.
+	 */
+	public static final String NAME = "Bomb";
+	
+    /**
+     * Second bomb will count down from.
+     */
+    public static final int COUNTDOWN_IN_S = 4;
+
+    /**
+     * Timer the bomb will run off.
+     */
+    public Timer timer = new Timer();
+
+    /**
+     * Current countdown of the bomb.
+     */
+    private int currentCountdown = COUNTDOWN_IN_S;
+
+    /**
+     * Array holding the variations of countdown images for the bomb.
+     */
+    public static final Image[] COUNTDOWN = new Image[] {
+            new Image("img/ItemBomb1.png"),
+            new Image("img/ItemBomb2.png"),
+            new Image("img/ItemBomb3.png"),
+            new Image("img/ItemBomb4.png")
+    };
+	
+	/**
 	 * X position of bomb
 	 */
 	private int x;
@@ -20,15 +50,13 @@ public class Bomb extends Item {
 	 */
 	private int y;
 	
-	public static String name = "Bomb";
-	
     /**
      * Sets the bomb with 1 health point.
      */
-    public Bomb(int y, int x) {
+    public Bomb(int[] xyPos) {
         hp = 1; // is never used, only for constructor
-        this.x = x;
-        this.y = y;
+        this.x = xyPos[1];
+    	this.y = xyPos[0];
     }
     
     /**
@@ -42,16 +70,6 @@ public class Bomb extends Item {
     }
 
     /**
-     * Array holding the variations of countdown images for the bomb.
-     */
-    public static final Image[] COUNTDOWN = new Image[] {
-            new Image("img/ItemBomb1.png"),
-            new Image("img/ItemBomb2.png"),
-            new Image("img/ItemBomb3.png"),
-            new Image("img/ItemBomb4.png")
-    };
-
-    /**
      * Returns the image corresponding to the countdown time on the bomb.
      * @param n image number.
      * @return Bomb image with countdown number.
@@ -62,18 +80,6 @@ public class Bomb extends Item {
     	}
         return COUNTDOWN[n];
     }
-
-    /**
-     * Second bomb will count down from.
-     */
-    public static final int COUNTDOWN_IN_S = 4;
-
-    /**
-     * Current countdown of the bomb.
-     */
-    private int currentCountdown = COUNTDOWN_IN_S;
-
-    Timer timer = new Timer();
 
     /**
      * Item ability triggered through calling this method. Method delayed per second, updating
@@ -110,7 +116,7 @@ public class Bomb extends Item {
 
 	@Override
 	public String toString() {
-		String out = name + hp;
+		String out = NAME + hp;
 		return out;
 	}
 }

@@ -10,6 +10,9 @@ public enum Direction {
 	EAST(3), 
 	WEST(2);
 	
+	/**
+	 * Number that corresponds to the opposing direction
+	 */
 	private final int oppo;
 
 	/**
@@ -24,19 +27,33 @@ public enum Direction {
 	 * Returns the opposite direction of current direction
 	 * @return opposite direction
 	 */
-	Direction opposite() {
+	public Direction opposite() {
 		return Direction.values() [this.oppo];
 	}
 	
-	int toInt() {
+	/**
+	 * Converts a number to a direction.
+	 * @param i the number that corresponds to its direction
+	 * @return the direction that is its number
+	 */
+	public static Direction toD(int i) {
+		return Direction.values() [i];
+	}
+	
+	/**
+	 * Converts a direction to a number.
+	 * @return the number pointing to this direction
+	 */
+	public int toInt() {
 		return toInt(Direction.values() [this.oppo]);
 	}
 	
+	/**
+	 * Converts direction into the number position it is.
+	 * @param d direction
+	 * @return number the direction is designated to
+	 */
 	private int toInt(Direction d) {
 		return d.oppo;
-	}
-	
-	static Direction toD(int i) {
-		return Direction.values() [i];
 	}
 }

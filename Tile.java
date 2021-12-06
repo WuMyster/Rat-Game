@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -18,6 +17,7 @@ public abstract class Tile {
 
 	/**
 	 * Health of item.
+	 * @deprecated
 	 */
 	protected int itemHP;
 
@@ -100,7 +100,6 @@ public abstract class Tile {
 	 */
 	public abstract void getAcceleratedDirection(Rat r, Direction prevDirection);
 
-	// Will be run 2nd, after items deal with all rats aside from death rat.
 	/**
 	 * Moves Death Rat allowing it to take down normal rats along the way.
 	 * 
@@ -108,7 +107,6 @@ public abstract class Tile {
 	 */
 	public abstract ArrayList<DeathRat> getNextDeathRat();
 
-	// For now only deals with one moving death rat between 3 tiletypes.
 	/**
 	 * Runs if Death Rat is coming to this tile, accelerates all processes. I.e.
 	 * item, rat interactions and movement.
@@ -119,7 +117,7 @@ public abstract class Tile {
 	public abstract void moveDeathRat(DeathRat dr, Direction prevDirection);
 
 	/**
-	 * Constructor for most normal tiles.
+	 * Constructor for tiles.
 	 * 
 	 * @param xyPos the position of the Tile
 	 */
@@ -145,7 +143,159 @@ public abstract class Tile {
 		}
 		this.directions = direction;
 	}
+	
+	/**
+	 * Have the rats on this tile interact with each other.
+	 */
+	public void getRatInteractions() {
+		bufferNextBlock = new HashMap<>();
+	}
 
+	/**
+	 * Sorts the rats on this tile to ensure only alive rats are interacting.
+	 */
+	public void correctList() {
+		ArrayList<Rat> tmp1 = aliveRats;
+		for (Direction prevDirection : currBlock.keySet()) {
+			ArrayList<Rat> tmp = new ArrayList<>();
+			ArrayList<Rat> rs = currBlock.get(prevDirection);
+			if (rs != null) {
+				for (Rat r : rs) {
+					if (aliveRats.remove(r)) {
+						tmp.add(r);
+					} else if (r.getAge() < 2) { // For newborn bab rats
+						tmp.add(r);
+						System.out.println("New");
+					} else {
+						System.out.println("Del" + r);
+
+					}
+				}
+				currBlock.put(prevDirection, tmp);
+			}
+		}
+		aliveRats = tmp1;
+	}
+
+	/**
+	 * Returns number of rats that can go onto this tile.
+	 * 
+	 * @param t the tile that is requesting the information
+	 * @param n number of rats
+	 * @return the number of rats that can pass through it
+	 */
+	public int numsRatsCanEnter(Tile t, int n) {
+		if (!isBlocked) {
+			return n;
+		}
+		if (itemOnTile == null) {
+			System.err.println("No item on tile!!");
+			return n;
+		}
+		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
+		if (!itemOnTile.isAlive()) {
+			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+			itemOnTile = null;
+			isBlocked = false;
+		}
+		return out;
+	}
+	
+	/**
+	 * Returns a list of rats and their position in string format.
+	 * @return list of rats and their positions in string format
+	 */
+	public ArrayList<String> getRats() {
+		String here = ORIGINAL_X_Y_POS[0] + "," +
+				ORIGINAL_X_Y_POS[1];
+		ArrayList<String> out = new ArrayList<>();
+		for (Direction d : nextBlock.keySet()) {
+			for (Rat r : nextBlock.get(d)) {
+				String dir = d.toInt() + "," + here;
+				out.add(r + ";" + dir);
+			}
+		}
+		for (Direction d : nextDeath.keySet()) {
+			for (DeathRat dr : nextDeath.get(d)) {
+				String dir = d.toInt() + "," + here;
+				out.add(dr + ";" + dir);
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * Returns item and their position in string format.
+	 * @return item and their position in string format
+	 */
+	public String getItem() {
+		if (itemOnTile == null) {
+			return "";
+		}
+		return itemOnTile.toString() + ";" + ORIGINAL_X_Y_POS[0] + "," +
+				ORIGINAL_X_Y_POS[1] + "\n";
+	}
+
+    /**
+     * Blows up a tile by:
+     * - removing any existing item (if a bomb, also cancels the detonation timer)
+     * - kills the rats present on the tile
+     */
+	public void blowUp() {
+		if (itemOnTile != null) {
+			if (itemOnTile instanceof Bomb) {
+				((Bomb) itemOnTile).timer.cancel();
+			}
+			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+		}
+
+        // Create list of rats
+        aliveRats = new ArrayList<>();
+        for (Direction dir : currBlock.keySet()) {
+            aliveRats.addAll(currBlock.get(dir));
+        }
+
+        if (!aliveRats.isEmpty()) {
+            for (int i = 0; i < aliveRats.size(); i++) {
+                RatController.killRat(aliveRats.get(i));
+            }
+        }
+		resetTile();
+	}
+
+	/**
+	 * Add rat that is going to this tile.
+	 * 
+	 * @param r rat to be added to this Tile
+	 * @param d direction the rat came from
+	 */
+	public void addRat(Rat r, Direction d) {
+		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
+		nextBlock.get(d).add(r);
+	}
+
+	/**
+	 * Add death rat to this tile.
+	 * 
+	 * @param r death rat to be added
+	 * @param d direction the death rat came from
+	 */
+	public void addRat(DeathRat r, Direction d) {
+		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
+		nextDeath.get(d).add(r);
+	}
+
+	/**
+	 * Sets list of rats the tile is currently dealing with
+	 */
+	public void setCurrRat() {
+		currBlock = nextBlock;
+		nextBlock = new HashMap<>();
+
+		currDeath = nextDeath;
+		nextDeath = new HashMap<>();
+	}
+	
 	/**
 	 * Give rat[s] items on the tile
 	 */
@@ -178,7 +328,9 @@ public abstract class Tile {
             return false;
         }
         itemOnTile = i;
-
+        if (itemOnTile instanceof StopSign) {
+        	isBlocked = true;
+        }
         if (i instanceof Bomb) {
             ((Bomb) i).itemAction();
         }
@@ -186,44 +338,9 @@ public abstract class Tile {
     }
 
 	/**
-	 * Have the rats on this tile interact with each other.
-	 */
-	public void getRatInteractions() {
-		// Del // WILL BE MOVED TO ITEMS
-		bufferNextBlock = new HashMap<>();
-	}
-
-	/**
-	 * Makes sure the list the tile is currently dealing with don't involve rats
-	 * that are not moving.
-	 */
-	public void correctList() {
-		ArrayList<Rat> tmp1 = aliveRats;
-		for (Direction prevDirection : currBlock.keySet()) {
-			ArrayList<Rat> tmp = new ArrayList<>();
-			ArrayList<Rat> rs = currBlock.get(prevDirection);
-			if (rs != null) {
-				for (Rat r : rs) {
-					if (aliveRats.remove(r)) {
-						tmp.add(r);
-					} else if (r.getAge() < 2) {
-						tmp.add(r);
-						System.out.println("New");
-					} else {
-						System.out.println("Del" + r);
-
-					}
-				}
-				currBlock.put(prevDirection, tmp);
-			}
-		}
-		aliveRats = tmp1;
-	}
-
-	/**
 	 * Place stop sign on tile.
+	 * @deprecated
 	 */
-
 	protected boolean placeStopSign() {
 		if (itemOnTile != null) {
 			return false;
@@ -234,126 +351,6 @@ public abstract class Tile {
 	}
 
 	/**
-	 * Returns number of rats that can go onto this tile.
-	 * 
-	 * @param t the tile that is requesting the information
-	 * @param n number of rats
-	 * @return the number of rats that can pass through it
-	 */
-	public int numsRatsCanEnter(Tile t, int n) {
-		if (!isBlocked) {
-			return n;
-		}
-		if (itemOnTile == null) {
-			System.err.println("No item on tile!!");
-			return n;
-		}
-		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
-		if (!itemOnTile.isAlive()) {
-			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-			itemOnTile = null;
-			isBlocked = false;
-		}
-		return out;
-	}
-	
-	public ArrayList<String> getRats() {
-		String here = ORIGINAL_X_Y_POS[0] + "," +
-				ORIGINAL_X_Y_POS[1];
-		ArrayList<String> out = new ArrayList<>();
-		for (Direction d : nextBlock.keySet()) {
-			for (Rat r : nextBlock.get(d)) {
-				String dir = d.toInt() + "," + here;
-				out.add(r + ";" + dir);
-			}
-		}
-		for (Direction d : nextDeath.keySet()) {
-			for (DeathRat dr : nextDeath.get(d)) {
-				String dir = d.toInt() + "," + here;
-				out.add(dr + ";" + dir);
-			}
-		}
-		return out;
-	}
-	
-	public String getItem() {
-		if (itemOnTile == null) {
-			return "";
-		}
-		return itemOnTile.toString() + ";" + ORIGINAL_X_Y_POS[0] + "," +
-				ORIGINAL_X_Y_POS[1] + "\n";
-	}
-	
-	/**
-	 * Add bomb item onto Tile??.
-	 * @deprecated
-	 */
-	public void placeBomb() {
-		//itemOnTile = new Bomb();
-	}
-
-    /**
-     * Blows up a tile by:
-     * - removing any existing item (if a bomb, also cancels the detonation timer)
-     * - kills the rats present on the tile
-     */
-	public void blowUp() {
-		if (itemOnTile != null) {
-			if (itemOnTile instanceof Bomb) {
-				((Bomb) itemOnTile).timer.cancel();
-			}
-			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-		}
-
-        // Create list of rats
-        aliveRats = new ArrayList<>();
-        for (Direction dir : currBlock.keySet()) {
-            aliveRats.addAll(currBlock.get(dir));
-        }
-
-        if (!aliveRats.isEmpty()) {
-            for (int i = 0; i < aliveRats.size(); i++) {
-                RatController.killRat(aliveRats.get(i));
-            }
-        }
-		resetTile();
-		System.out.println("BLOWN UP");
-	}
-
-	/**
-	 * MOVEMENT Add rat that is going to this tile.
-	 * 
-	 * @param r rat to be added to this Tile
-	 * @param d direction the rat came from
-	 */
-	public void addRat(Rat r, Direction d) {
-		nextBlock.putIfAbsent(d, new ArrayList<Rat>());
-		nextBlock.get(d).add(r);
-	}
-
-	/**
-	 * MOVEMENT Add death rat to this tile.
-	 * 
-	 * @param r death rat to be added
-	 * @param d direction the death rat came from
-	 */
-	public void addRat(DeathRat r, Direction d) {
-		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
-		nextDeath.get(d).add(r);
-	}
-
-	/**
-	 * Sets list of rats the tile is currently dealing with
-	 */
-	public void setCurrRat() {
-		currBlock = nextBlock;
-		nextBlock = new HashMap<>();
-
-		currDeath = nextDeath;
-		nextDeath = new HashMap<>();
-	}
-
-	/**
 	 * Empties tile of all attributes/ things on tile.
 	 */
 	private void resetTile() {
@@ -361,9 +358,6 @@ public abstract class Tile {
 			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 		}
 		itemOnTile = null;
-		isBlocked = false;
-		// TODO Remove item from tile.
-		itemHP = 0;
 		isBlocked = false;
 		nextBlock = new HashMap<>();
 		currBlock = new HashMap<>();

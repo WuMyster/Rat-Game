@@ -156,7 +156,7 @@ public class Board {
 	 */
 	public void addBomb(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Bomb bomb = new Bomb(y, x);
+        Bomb bomb = new Bomb(new int[] {y, x});
 
         t.setTileItem(bomb);
 	}
@@ -407,6 +407,10 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Adds in rats from string format.
+	 * @param rats list of rats to be added in
+	 */
 	public void setUpRats(ArrayList<String> rats) {
 		for (String str : rats) {
 			Rat createR;
@@ -419,7 +423,7 @@ public class Board {
 			case (2) -> d = Direction.SOUTH;
 			case (3) -> d = Direction.WEST;
 			}
-			if (spl[0].split(",")[0].equals("Death")) {
+			if (spl[0].split(",")[0].equals(DeathRat.NAME)) {
 				if (spl[0].length() == 1) {
 					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2])); // Only for new start of levels
 				} else {
@@ -436,20 +440,44 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Adds in items from string format.
+	 * @param items list of items to be added in
+	 */
 	public void setUpItems(ArrayList<String> items) {
 		if (items != null) {
 			for (String i : items) {
 				String[] it = i.split(";");
 				String[] desc = it[0].split(",");
 				String[] loc = it[1].split(",");
-				Item item = Item.toItem(desc[0], Integer.parseInt(desc[1]), null);
+				int x = Integer.parseInt(loc[0]);
+				int y = Integer.parseInt(loc[1]);
+				Item item = Item.toItem(desc[0], Integer.parseInt(desc[1]), 
+						new int[] {y, x});
 				
-				Tile t = board[Integer.parseInt(loc[1])][Integer.parseInt(loc[2])];
+				Tile t = board[y][x];
 				t.setTileItem(item);
+				if (item instanceof StopSign) {
+					Main.drawStopSign(y / EXTRA_PADDING, x / EXTRA_PADDING, ((StopSign) item).getState());
+				} else if (item instanceof Bomb) { //Should get state
+					Main.drawBomb(y / EXTRA_PADDING, x / EXTRA_PADDING);
+				} else if (item instanceof Poison) {
+					Main.drawPoison(y / EXTRA_PADDING, x / EXTRA_PADDING);
+				} else if (item instanceof SexChangeToFemale) {
+					Main.drawSexToFemale(y / EXTRA_PADDING, x / EXTRA_PADDING);
+				} else if (item instanceof SexChangeToMale) {
+					Main.drawSexToMale(y / EXTRA_PADDING, x / EXTRA_PADDING);
+				} else if (item instanceof Sterilisation) {
+					Main.drawSterilise(y / EXTRA_PADDING, x / EXTRA_PADDING);
+				}
 			}
 		}
 	}
 	
+	/**
+	 * Takes in a filename to save the board state to.
+	 * @param filename the file to save to
+	 */
 	public void saveState(String filename) {
 		PrintWriter out = null;
 		try {
@@ -495,6 +523,9 @@ public class Board {
 
 	}
 
+	/**
+	 * Eliminate LightTiles that aren't connected to enough good tiles.
+	 */
 	private void eliminateEmpties() {
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
@@ -523,6 +554,12 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Checks if item can be added to this tile.
+	 * 
+	 * @param t tile to check
+	 * @return {@code true} if item can be placed on this tile
+	 */
 	private boolean check(Tile t) {
 		if (t == null) {
 			return false;
@@ -532,9 +569,8 @@ public class Board {
 		return true;
 	}
 
-	// Possible to implement the gui part too!
 	/**
-	 * Converts the 2d array of the map into a graph.
+	 * Converts the map into a graph.
 	 */
 	private void createGraph() {
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {

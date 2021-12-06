@@ -4,11 +4,14 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * 
+ * Tile that has 3 or more tiles connected to it.
  * @author Jing Shiang Gu
  */
 public class JunctionTile extends Tile {
 
+	/**
+	 * Random generator for direction.
+	 */
 	private Random rand = new Random();
 
 	/**
@@ -112,31 +115,9 @@ public class JunctionTile extends Tile {
 		aliveRats = rs.get(1);
 	}
 
-	/**
-	 * Get direction that isn't the same as the direction it came from or direction
-	 * it tried.
-	 * 
-	 * @param prevDirection direction the rat came from or direction it tried
-	 * @return direction that Rat should next try go to
-	 */
-	private Direction getADirection(Direction prevDirection) {
-		int num = rand.nextInt(limit);
-		while (directions[num] == prevDirection) {
-			num = rand.nextInt(limit);
-		}
-		return directions[num];
-	}
-
 	@Override
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		this.addRat(r, prevDirection.opposite());
-	}
-
-	// Debug Speeds up aging
-	private void timeTravel(Rat r) {
-		for (int i = 0; i < 45; i++) {
-			r.incrementAge();
-		}
 	}
 	
 	/**
@@ -270,30 +251,23 @@ public class JunctionTile extends Tile {
 			// Interesting as to why there is no change...
 			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
 		} else {
-//			for (Direction prevDirection : currBlock.keySet()) {
-//				ArrayList<Rat> tmp = new ArrayList<>();
-//				ArrayList<Rat> rs = currBlock.get(prevDirection);
-//				if (rs != null) {
-//					for (Rat r : rs) {
-//						if (exists(r)) {
-//							tmp.add(r);
-//						}
-//					}
-//					currBlock.put(prevDirection, tmp);
-//				}
-//			}
+			// Will run correctList from Tile.java
 		}
-
 		return drs;
 	}
 
 	/**
-	 * Returns {@code true} if Rat is in alive rats list.
+	 * Get direction that isn't the same as the direction it came from or direction
+	 * it tried.
 	 * 
-	 * @param r the rat to find
-	 * @return {@code true} if rat exists in list
+	 * @param prevDirection direction the rat came from or direction it tried
+	 * @return direction that Rat should next try go to
 	 */
-	private boolean exists(Rat r) {
-		return aliveRats.remove(r);
+	private Direction getADirection(Direction prevDirection) {
+		int num = rand.nextInt(limit);
+		while (directions[num] == prevDirection) {
+			num = rand.nextInt(limit);
+		}
+		return directions[num];
 	}
 }

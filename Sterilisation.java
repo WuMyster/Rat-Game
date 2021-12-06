@@ -6,7 +6,7 @@ import java.util.ArrayList;
  */
 public class Sterilisation extends Item {
 
-	public static String name = "Steralise";
+	public static final String NAME = "Steralise";
 	
     /**
      * Health point of item.
@@ -33,7 +33,7 @@ public class Sterilisation extends Item {
 	
 	@Override
 	public String toString() {
-		String out = name + "," + hp;
+		String out = NAME + "," + hp;
 		return out;
 	}
 }

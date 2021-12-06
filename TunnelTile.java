@@ -16,5 +16,4 @@ public class TunnelTile extends PathTile {
 	public TunnelTile(int x, int y) {
 		super(x, y);
 	}
-	
 }

@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 public class DeathRat {
 	
+	public static final String NAME = "D";
+	
 	/**
 	 * XY position on the board the death rat starts from.
 	 */
@@ -26,8 +28,6 @@ public class DeathRat {
 	 * Start hp of all Death rats
 	 */
 	private static int START_HP = 5;
-	
-	String name = "Death";
 	
 	/**
 	 * Constructor for Death Rat. Does not interact with items other

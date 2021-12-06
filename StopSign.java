@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
  */
 public class StopSign extends Item {
 	
-	public static String name = "StopSign";
+	public static final String NAME = "StopSign";
 	
 	/**
 	 * Max number of images - 1.
@@ -26,6 +26,16 @@ public class StopSign extends Item {
 	 * breaking down.
 	 */
 	private static final int DIVIDER = 3;
+
+	/**
+	 * Images of the different states of the stop sign.
+	 * TODO change divider so all images are used
+	 */
+	private static final Image[] STATES = new Image[] {
+			new Image("/img/StopSign0.png"),
+			new Image("/img/StopSign1.png"),
+			new Image("/img/StopSign2.png")
+	};
 	
 	/**
 	 * XY position of the stop sign.
@@ -36,16 +46,6 @@ public class StopSign extends Item {
 	 * Last state the Stop Sign was.
 	 */
 	private int currState;
-	
-	/**
-	 * Images of the different states of the stop sign.
-	 * TODO change divider so all images are used
-	 */
-	private static final Image[] STATES = new Image[] {
-			new Image("/img/StopSign0.png"),
-			new Image("/img/StopSign1.png"),
-			new Image("/img/StopSign2.png")
-	};
 	
 	/**
 	 * Constructs a {@code StopSign} which prevents rats from entering the
@@ -92,8 +92,12 @@ public class StopSign extends Item {
 	 * @param s state number, lower is more broken Stop Sign
 	 * @return the image of the Stop Sign
 	 */
-	public static Image getState(int s) {
+	public static Image getImageState(int s) {
 		return STATES[s];
+	}
+	
+	public int getState() {
+		return currState - 1;
 	}
 
 	@Override
@@ -104,7 +108,7 @@ public class StopSign extends Item {
 	
 	@Override
 	public String toString() {
-		String out = name + "," + hp;
+		String out = NAME + "," + hp;
 		return out;
 	}
 }

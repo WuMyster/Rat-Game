@@ -32,14 +32,32 @@ public enum RatType {
 	private final static String ERR_MSG = "Images are missing, please redownload file, make sure you save a copy of your save files!";
 	
 	/**
-	 * Places where Rat images are found. TODO Move to Main and have all files stored there.
+	 * Places where Rat images are found.
 	 */
 	private final static String IMAGE_LOC = "./img/";
 	
 	/**
 	 * Extension of image files.
 	 */
-	private final static String FILE_TYPE = ".png";
+	private final static String FILE_TYPE = ".png";	
+	
+	/**
+	 * Set values of each type of rat.
+	 * @param size how big rat is (bigger is smaller)
+	 * @param speed how fast rat can move (bigger is faster)
+	 */
+	private RatType(int size, int speed, String imagePic) {
+		this.size = size;
+		this.speed = speed;
+		try {
+			for(int i = 0; i < 4; i++) {
+				image[i] = new Image(IMAGE_LOC + imagePic + i + FILE_TYPE);
+			}
+		} catch (NullPointerException e) {
+			System.err.println(ERR_MSG);
+			System.exit(0);
+		}
+	}
 	
 	/**
 	 * Returns size of rat. Bigger is smaller.
@@ -63,24 +81,5 @@ public enum RatType {
 	 */
 	public Image[] getImage() {
 		return image;
-	}	
-	
-	/**
-	 * Set values of each type of rat.
-	 * @param size how big rat is (bigger is smaller)
-	 * @param speed how fast rat can move (bigger is faster)
-	 */
-	private RatType(int size, int speed, String imagePic) throws NullPointerException {
-		this.size = size;
-		this.speed = speed;
-		for(int i = 0; i < 4; i++) {
-			image[i] = new Image(IMAGE_LOC + imagePic + i + FILE_TYPE);
-		}
-		try {
-			
-		} catch (NullPointerException e) {
-			System.err.println(ERR_MSG);
-			System.exit(0);
-		}
 	}
 }

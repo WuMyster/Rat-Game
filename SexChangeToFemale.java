@@ -6,7 +6,7 @@ import java.util.ArrayList;
  */
 public class SexChangeToFemale extends Item {
 
-	public static String name = "toFemale";
+	public static final String NAME = "toFemale";
 	
     /**
      * Health point of item.
@@ -34,7 +34,7 @@ public class SexChangeToFemale extends Item {
 	
 	@Override
 	public String toString() {
-		String out = name + "," + hp;
+		String out = NAME + "," + hp;
 		return out;
 	}
 }

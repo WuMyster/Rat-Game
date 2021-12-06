@@ -6,7 +6,8 @@ import java.util.ArrayList;
  */
 class Poison extends Item {
 
-	public static String name = "Poison";
+	public static final String NAME = "Poison";
+	
     /**
      * Health point of item.
      */
@@ -34,7 +35,7 @@ class Poison extends Item {
 	
 	@Override
 	public String toString() {
-		String out = name + "," + hp;
+		String out = NAME + "," + hp;
 		return out;
 	}
 }

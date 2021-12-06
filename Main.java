@@ -196,7 +196,7 @@ public class Main extends Application {
 	/**
 	 * Canvas for all items not including death rat.
 	 */
-	private Canvas itemCanvas;
+	private static Canvas itemCanvas;
 
 	/**
 	 * Level number of current level.
@@ -278,32 +278,6 @@ public class Main extends Application {
 	 * If user themselves has told the game to stop.
 	 */
 	private boolean playerStopGame;
-	
-	@Deprecated
-	public static ArrayList<int[]> getBombPlace() {
-		return bombPlace;
-	}
-	@Deprecated
-	public static ArrayList<int[]> getGasPlace() {
-		//return gasPlace;
-		return null;
-	}
-	@Deprecated
-	public static ArrayList<int[]> getSterilisePlace() {
-		return sterilisePlace;
-	}
-	@Deprecated
-	public static ArrayList<int[]> getSexToMalePlace() {
-		return sexToMalePlace;
-	}
-	@Deprecated
-	public static ArrayList<int[]> getSexToFemalePlace() {
-		return sexToFemalePlace;
-	}
-	@Deprecated
-	public static ArrayList<int[]> getPoisonPlace() {
-		return poisonPlace;
-	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -357,98 +331,6 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Creates game GUI.
-	 * 
-	 * @param map the map design
-	 * @param rats list of rats and their positions
-	 * @param items list of items and their positions
-	 * @param maxTime maximum amount of time to finish the game
-	 * @param maxRats maximum number of rats before the game ends
-	 * @param name name of the player
-	 * @return the GUI
-	 */
-	private BorderPane createGameGUI(String map, ArrayList<String> rats,
-			ArrayList<String> items, int maxTime, int maxRats, String name) {
-			
-		setInitialValues();
-		
-		this.playerName = name;
-		
-		startTime = LocalTime.now();
-		this.maxTime = maxTime;
-		RatController.setRatController(maxRats);
-		
-		BorderPane root = null;
-		
-		root = new BorderPane();
-		root.setCenter(createCenterMap());
-		root.setTop(createTopMenu());
-		root.setRight(createRightMenu());
-		try {
-			
-		} catch (NullPointerException n) {
-			n.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		m = new Board(map, 17, 11);
-		m.setUpRats(rats);
-		m.setUpItems(items);
-		drawMap();
-		moveRat();
-
-		return root;
-	}
-	
-	private void setInitialValues() {
-		// These should not be here, should be gotten from classes
-		BOMB = new Image("img/ItemBomb.png");
-		POISON = new Image("Poison.png");
-		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
-		SEX_TO_MALE = new Image("SexChangeToMale.png");
-		STERILISE = new Image("img/Sterilise.png");
-		DEATH_RAT = new Image("img/ItemDeathRat.png");
-		
-		// These no choice
-		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;
-		stopSignPlace = new ArrayList<>();
-		bombPlace = new ArrayList<>();
-		poisonPlace = new ArrayList<>();
-		sexToFemalePlace = new ArrayList<>();
-		sexToMalePlace = new ArrayList<>();
-		sterilisePlace = new ArrayList<>();
-		playerStopGame = false;
-	}
-
-	/**
-	 * Creates the game canvas in window. Will have the Board, Rats and Items.
-	 * 
-	 * @return Game canvas
-	 */
-	private Pane createCenterMap() {
-		Pane root = new Pane();
-		// Creating canvases
-		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-
-		// Adding canvas to pane
-		root.getChildren().add(baseCanvas);
-		root.getChildren().add(ratCanvas);
-		root.getChildren().add(mapCanvas);
-		root.getChildren().add(itemCanvas);
-
-		GraphicsContext gc = baseCanvas.getGraphicsContext2D();
-		gc.setFill(Color.GRAY);
-		gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-		return root;
-	}
-
-	/**
 	 * Removes items from board.
 	 * @param pos x y coordinates of where item is located on board.
 	 */
@@ -481,7 +363,116 @@ public class Main extends Application {
 			System.err.println("Item cannot be removed\n" + item);
 		}
 	}
+	
+	/**
+	 * Draws a steraliseIcon on this location on the board.
+	 * @param x x position of the steraliseIcon
+	 * @param y y posision of the steraliseIcon
+	 * @param state the state of the steraliseIcon
+	 */
+	public static void drawSterilise(int x, int y) {
+		sterilisePlace.add(new int[] { (int) y, (int) x });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(STERILISE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	/**
+	 * Draws a stop sign on this location on the board.
+	 * @param x x position of the StopSign
+	 * @param y y posision of the StopSign
+	 * @param state the state of the StopSign
+	 */
+	public static void drawStopSign(int x, int y, int state) {
+		stopSignPlace.add(new int[] { (int) y, (int) x, state });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(StopSign.getImageState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	/**
+	 * Draw a bomb on this location on the board.
+	 * @param x x position of the Bomb
+	 * @param y y posision of the Bomb
+	 * @param state the state of the Bomb
+	 */
+	public static void drawBomb(int x, int y) {
+		bombPlace.add(new int[] { (int) y, (int) x, Bomb.COUNTDOWN_IN_S });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(BOMB, x * TILE_SIZE, y * TILE_SIZE);
+	}
 
+    /**
+     * Updates value of bomb responsible for the remaining time till detonation.
+     * @param n remaining time
+     * @param x x-coordinate of bomb placement
+     * @param y y-coordinate of bomb placement
+     */
+	public static void editBombCountdown(int n, int x, int y) {
+		for (int[] i : bombPlace) {
+			if (i[0] == y && i[1] == x) {
+				i[2] = n;
+			}
+		}
+	}
+	
+	/**
+	 * Draws a sexToMaleIcon on this location on the board.
+	 * @param x x position of the sexToMaleIcon
+	 * @param y y posision of the sexToMaleIcon
+	 * @param state the state of the sexToMaleIcon
+	 */
+	public static void drawSexToMale(int x, int y) {
+		sexToMalePlace.add(new int[] { (int) y, (int) x });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(SEX_TO_MALE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	/**
+	 * Draws a Poison on this location on the board.
+	 * @param x x position of the Poison
+	 * @param y y posision of the Poison
+	 * @param state the state of the Poison
+	 */
+	public static void drawPoison(int x, int y) {
+		poisonPlace.add(new int[] { (int) y, (int) x });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(POISON, x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	/**
+	 * Draws a sexToFemaleIcon on this location on the board.
+	 * @param x x position of the sexToFemaleIcon
+	 * @param y y posision of the sexToFemaleIcon
+	 * @param state the state of the sexToFemaleIcon
+	 */
+	public static void drawSexToFemale(int x, int y) {
+		sexToFemalePlace.add(new int[] { (int) y, (int) x });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+
+	/**
+	 * Reacts to item that is dragged onto canvas.
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occured.
+	 */
+	public void itemCanvasDragDropOccurred(DragEvent event) {
+		if (event.getGestureSource() == draggableStop) {
+			placeStopSign(event);
+		} else if (event.getGestureSource() == draggableBomb) {
+			placeBomb(event);
+		} else if (event.getGestureSource() == draggablePoison) {
+			placePoison(event);
+		} else if (event.getGestureSource() == draggableSexToFemale) {
+			placeSexToFemale(event);
+		} else if (event.getGestureSource() == draggableSexToMale) {
+			placeSexToMale(event);
+		} else if (event.getGestureSource() == draggableSterilise) {
+			placeSterilise(event);
+		} else if (event.getGestureSource() == draggableDeathRat) {
+			placeDeathRat(event);
+		}
+	}
+	
 	/**
 	 * Redraws all items.
 	 */
@@ -489,7 +480,7 @@ public class Main extends Application {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		for (int[] i : stopSignPlace) {
-			gc.drawImage(StopSign.getState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(StopSign.getImageState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 		for (int[] i : bombPlace) {
 			gc.drawImage(Bomb.getImage(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
@@ -524,9 +515,7 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addStopSign((int) x, (int) y)) {
-			stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
+			drawStopSign((int) x, (int) y, StopSign.MAX_STATES);
 		}
 	}
 
@@ -549,22 +538,6 @@ public class Main extends Application {
 		}
 	}
 
-	/**
-	 * Remove stop sign from board.
-	 * 
-	 * @param pos position where the stop sign is
-	 * @deprecated
-	 */
-	public static void removeStopSign(int[] pos) {
-		int[] a = null;
-		for (int[] i : stopSignPlace) {
-			if (i[0] == pos[0] && i[1] == pos[1]) {
-				a = i;
-			}
-		}
-		stopSignPlace.remove(a);
-	}
-
     /**
      * React when an object is dragged onto the canvas.
      *
@@ -577,24 +550,8 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (Board.isItemPlaceable((int) x, (int) y)) {
-			bombPlace.add(new int[] { (int) y, (int) x, Bomb.COUNTDOWN_IN_S });
 			m.addBomb((int) x, (int) y);
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(BOMB, x * TILE_SIZE, y * TILE_SIZE);
-		}
-	}
-
-    /**
-     * Updates value of bomb responsible for the remaining time till detonation.
-     * @param n remaining time
-     * @param x x-coordinate of bomb placement
-     * @param y y-coordinate of bomb placement
-     */
-	public static void editBombCountdown(int n, int x, int y) {
-		for (int[] i : bombPlace) {
-			if (i[0] == y && i[1] == x) {
-				i[2] = n;
-			}
+			drawBomb((int) x, (int) y);
 		}
 	}
 
@@ -610,10 +567,8 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (Board.isItemPlaceable((int) x, (int) y)) {
-			poisonPlace.add(new int[] { (int) y, (int) x });
 			m.addPoison((int) x, (int) y);
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(POISON, x * TILE_SIZE, y * TILE_SIZE);
+			drawPoison((int) x, (int) y);
 		}
 	}
 
@@ -629,10 +584,8 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (Board.isItemPlaceable((int) x, (int) y)) {
-			sexToFemalePlace.add(new int[] { (int) y, (int) x });
 			m.addSexToFemale((int) x, (int) y);
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+			drawSexToFemale((int) x, (int) y);
 		}
 	}
 
@@ -648,10 +601,8 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (Board.isItemPlaceable((int) x, (int) y)) {
-			sexToMalePlace.add(new int[] { (int) y, (int) x });
 			m.addSexToMale((int) x, (int) y);
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(SEX_TO_MALE, x * TILE_SIZE, y * TILE_SIZE);
+			drawSexToMale((int) x, (int) y);
 		}
 	}
 
@@ -667,10 +618,7 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (Board.isItemPlaceable((int) x, (int) y)) {
-			sterilisePlace.add(new int[] { (int) y, (int) x });
 			m.addSterilise((int) x, (int) y);
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(STERILISE, x * TILE_SIZE, y * TILE_SIZE);
 		}
 	}
 
@@ -683,7 +631,6 @@ public class Main extends Application {
 	private void placeDeathRat(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
-
 		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
 	}
 
@@ -745,8 +692,8 @@ public class Main extends Application {
 		currLevel.setTextAlignment(TextAlignment.CENTER);
 		root.getChildren().add(currPoints);
 
-		// Setup a draggable image. //TODO
-		draggableStop.setImage(StopSign.getState(StopSign.MAX_STATES));
+		// Setup a draggable image.
+		draggableStop.setImage(StopSign.getImageState(StopSign.MAX_STATES));
 		root.getChildren().add(draggableStop);
 
 		draggableBomb.setImage(BOMB);
@@ -767,9 +714,6 @@ public class Main extends Application {
 		draggableDeathRat.setImage(DEATH_RAT);
 		root.getChildren().add(draggableDeathRat);
 		
-		/**
-		 * @author Liam O'Reilly
-		 */
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableStop.startDragAndDrop(TransferMode.ANY);
@@ -779,10 +723,6 @@ public class Main extends Application {
 				event.consume();
 			}
 		});
-
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggableBomb.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableBomb.startDragAndDrop(TransferMode.ANY);
@@ -792,10 +732,6 @@ public class Main extends Application {
 				event.consume();
 			}
 		});
-
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggablePoison.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggablePoison.startDragAndDrop(TransferMode.ANY);
@@ -923,26 +859,95 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Reacts to item that is dragged onto canvas.
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occured.
+	 * Creates game GUI.
+	 * 
+	 * @param map the map design
+	 * @param rats list of rats and their positions
+	 * @param items list of items and their positions
+	 * @param maxTime maximum amount of time to finish the game
+	 * @param maxRats maximum number of rats before the game ends
+	 * @param name name of the player
+	 * @return the GUI
 	 */
-	public void itemCanvasDragDropOccurred(DragEvent event) {
-		if (event.getGestureSource() == draggableStop) {
-			placeStopSign(event);
-		} else if (event.getGestureSource() == draggableBomb) {
-			placeBomb(event);
-		} else if (event.getGestureSource() == draggablePoison) {
-			placePoison(event);
-		} else if (event.getGestureSource() == draggableSexToFemale) {
-			placeSexToFemale(event);
-		} else if (event.getGestureSource() == draggableSexToMale) {
-			placeSexToMale(event);
-		} else if (event.getGestureSource() == draggableSterilise) {
-			placeSterilise(event);
-		} else if (event.getGestureSource() == draggableDeathRat) {
-			placeDeathRat(event);
+	private BorderPane createGameGUI(String map, ArrayList<String> rats,
+			ArrayList<String> items, int maxTime, int maxRats, String name) {
+			
+		setInitialValues();
+		
+		this.playerName = name;
+		
+		startTime = LocalTime.now();
+		this.maxTime = maxTime;
+		RatController.setRatController(maxRats);
+		
+		BorderPane root = null;
+		
+		root = new BorderPane();
+		root.setCenter(createCenterMap());
+		root.setTop(createTopMenu());
+		root.setRight(createRightMenu());
+		try {
+			
+		} catch (NullPointerException n) {
+			n.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+		m = new Board(map, 17, 11);
+		m.setUpRats(rats);
+		m.setUpItems(items);
+		drawMap();
+		moveRat();
+
+		return root;
+	}
+	
+	private void setInitialValues() {
+		// These should not be here, should be gotten from classes
+		BOMB = new Image("img/ItemBomb.png");
+		POISON = new Image("Poison.png");
+		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
+		SEX_TO_MALE = new Image("SexChangeToMale.png");
+		STERILISE = new Image("img/Sterilise.png");
+		DEATH_RAT = new Image("img/ItemDeathRat.png");
+		
+		// These no choice
+		RAT_WIDTH = 30;
+		RAT_HEIGHT = 45;
+		stopSignPlace = new ArrayList<>();
+		bombPlace = new ArrayList<>();
+		poisonPlace = new ArrayList<>();
+		sexToFemalePlace = new ArrayList<>();
+		sexToMalePlace = new ArrayList<>();
+		sterilisePlace = new ArrayList<>();
+		playerStopGame = false;
+	}
+
+	/**
+	 * Creates the game canvas in window. Will have the Board, Rats and Items.
+	 * 
+	 * @return Game canvas
+	 */
+	private Pane createCenterMap() {
+		Pane root = new Pane();
+		// Creating canvases
+		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		mapCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		ratCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+		itemCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+
+		// Adding canvas to pane
+		root.getChildren().add(baseCanvas);
+		root.getChildren().add(ratCanvas);
+		root.getChildren().add(mapCanvas);
+		root.getChildren().add(itemCanvas);
+
+		GraphicsContext gc = baseCanvas.getGraphicsContext2D();
+		gc.setFill(Color.GRAY);
+		gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+		return root;
 	}
 
 	/**
@@ -963,9 +968,6 @@ public class Main extends Application {
 		}
 		System.out.println("End");
 	}
-	
-	
-
 
 	/**
 	 * IMPORTANT This method will run in a cycle indefinitely until stopped,

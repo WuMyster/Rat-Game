@@ -1,7 +1,6 @@
 /**
  *
- * @author
- *
+ * @author David
  */
 
 public class Player {
@@ -14,7 +13,6 @@ public class Player {
     /**
      * New player name.
      */
-
     protected String name;
 
     /**

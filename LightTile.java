@@ -93,7 +93,6 @@ public class LightTile extends Tile {
 	public void getRatInteractions() {
 		super.getRatInteractions();
 
-		// This method should be moved up
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
 		for (Rat r : rs.get(0)) {
 			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
@@ -104,7 +103,7 @@ public class LightTile extends Tile {
 	}
 
 	/**
-	 * Death Rat should not be on this tile.
+	 * Death Rat should not be on this tile. So return error message if there is one
 	 */
 	@Override
 	public ArrayList<DeathRat> getNextDeathRat() {

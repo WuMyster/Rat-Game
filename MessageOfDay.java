@@ -5,15 +5,38 @@ import java.util.Scanner;
 
 public class MessageOfDay {
 	
+	/**
+	 * Page to visit to get Puzzle.
+	 */
 	private static final String URL_PUZZLE = "http://cswebcat.swansea.ac.uk/puzzle";
+	
+	/**
+	 * Page to visit + answers to get Quote of the day.
+	 */
 	private static final String URL_SOLUTION = "http://cswebcat.swansea.ac.uk/message?solution=";
+	
+	/**
+	 * Text needed at the end of puzzle.
+	 */
 	private static final String END_TEXT = "CS-230";
+	
+	/**
+	 * Incorrect answer error message.
+	 */
 	private static final String ERROR_MSG = "Wrong answer!";
+	
+	/**
+	 * URL is not valid error message.
+	 */
 	private static final String BAD_URL = "Bad URL!";
+	
+	/**
+	 * The alphabet in a list.
+	 */
 	private static final char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
 	/**
-	 * DEBUG
+	 * DEBUG Add static
 	 * @param args cli input
 	 */
 	public static void main(String[] args) {
@@ -35,7 +58,6 @@ public class MessageOfDay {
 			while (i < 0) {
 				i += 26;
 			}
-			// i = i < 0 ? i + 2600 : i;
 			out += ALPHABET[i % 26];
 
 			counter++;
@@ -43,6 +65,11 @@ public class MessageOfDay {
 		return getInformation(URL_SOLUTION + out + END_TEXT);
 	}
 	
+	/**
+	 * Returns webpage output from given URL
+	 * @param webURL URL to visit
+	 * @return string from webpage
+	 */
 	private static String getInformation(String webURL) {
 		URL url = null;
 		Scanner sc = null;

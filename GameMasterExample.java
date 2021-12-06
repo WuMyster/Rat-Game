@@ -15,6 +15,10 @@ public class GameMasterExample {
 			//"D,2;1,9,1"
 			));
 	
+	private static ArrayList<String> items = new ArrayList<> (Arrays.asList(
+			"StopSign,1;2,2"
+			));
+	
 	private static int maxTime = 60;
 	
 	private static int maxRats = 10;
@@ -35,7 +39,7 @@ public class GameMasterExample {
 	}
 	
 	public static ArrayList<String> getItems() {
-		return null;
+		return items;
 	}
 	
 	public static int getMaxTime() {
