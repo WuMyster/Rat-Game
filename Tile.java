@@ -3,10 +3,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * This class provides a skeltal implementation of the {@code Tile}, it is a
+ * This class provides a skeletal implementation of the {@code Tile}, it is a
  * superclass of all {@code Tile}s.
  * @author Jing Shiang Gu
- * 
+ * @author Andrew Wu
  */
 public abstract class Tile {
 
@@ -258,9 +258,6 @@ public abstract class Tile {
 		for (Direction dir : currBlock.keySet()) {
 			aliveRats.addAll(currBlock.get(dir));
 		}
-		if (!aliveRats.isEmpty()) {
-			System.out.println(aliveRats.size());
-		}
 	}
 
 	/**
@@ -275,6 +272,12 @@ public abstract class Tile {
 				for (Rat r : rs) {
 					if (aliveRats.remove(r)) {
 						tmp.add(r);
+					} else if (r.getAge() < 2) {
+						tmp.add(r);
+						System.out.println("New");
+					} else {
+						System.out.println("Del" + r);
+						
 					}
 				}
 				currBlock.put(prevDirection, tmp);
@@ -304,7 +307,6 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
-		System.out.println(X_Y_POS[0] + " " + X_Y_POS[1]);
 		if (!isBlocked) {
 			return n;
 		}
@@ -314,8 +316,7 @@ public abstract class Tile {
 		}
 		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
 		if (!itemOnTile.isAlive()) {
-			Main.removeStopSign(new int[] {X_Y_POS[0] / Board.EXTRA_PADDING,
-					X_Y_POS[1] / Board.EXTRA_PADDING});
+			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 			itemOnTile = null;
 			isBlocked = false;
 		}

@@ -253,9 +253,13 @@ public class Board {
 		
 		Image grassImage = new Image("Grass.png");
 		//Image tileImage = new Image("Tile.png");
-		Image[] tunnelImages = new Image[4];
+		Image[] tunnelImagesEntrance = new Image[4];
 		for(int i = 0; i < 4; i++) {
-			tunnelImages[i] = new Image("Tunnel" + i + ".png");
+			tunnelImagesEntrance[i] = new Image("/img/Tunnel" + i + ".png");
+		}
+		Image[] tunnelImages = new Image[2];
+		for(int i = 0; i < 2; i++) {
+			tunnelImages[i] = new Image("/img/TunnelF" + i + ".png");
 		}
 		
 		int x = 0;
@@ -270,21 +274,35 @@ public class Board {
 							Main.TILE_SIZE,
 							Main.TILE_SIZE);
 				} else if (board[i][j] instanceof TunnelTile) {
-					Image t = grassImage;
+					Image t = new Image("/img/tile.png");
+					
+					// Only checks for left right
+					
 					
 					// Check for NESW entrance
-					if (board[i - EXTRA_PADDING][j] != null &&
-							!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
-						t = tunnelImages[0];
-					} else if (board[i][j + EXTRA_PADDING] != null &&
-							!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
-						t = tunnelImages[1];
-					} else if (board[i + EXTRA_PADDING][j] != null &&
-							!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
-						t = tunnelImages[2];
-					} else if (board[i][j - EXTRA_PADDING] != null &&
-							!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
-						t = tunnelImages[3];
+					if (board[i - EXTRA_PADDING][j] != null) {
+						if (!(board[i - EXTRA_PADDING][j] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[0];
+						} else {
+							t = tunnelImages[0];
+						}
+					} 
+					if (board[i][j + EXTRA_PADDING] != null) {
+						if (!(board[i][j + EXTRA_PADDING] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[1];
+						} else {
+							t = tunnelImages[1];
+						}
+					}
+					if (board[i + EXTRA_PADDING][j] != null) {
+						if (!(board[i + EXTRA_PADDING][j] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[2];
+						} 
+					} 
+					if (board[i][j - EXTRA_PADDING] != null) {
+						if (!(board[i][j - EXTRA_PADDING] instanceof TunnelTile)) {
+							t = tunnelImagesEntrance[3];
+						}
 					} 
 					gc.drawImage(t, 
 							x++ * Main.TILE_SIZE, 
@@ -351,7 +369,6 @@ public class Board {
 			t.correctList();
 		}
 		
-		System.out.println();
 		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {
 			deathRatBuffer.addAll(t.getNextDeathRat());
@@ -367,6 +384,39 @@ public class Board {
 			Main.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
 		}
 	}
+	
+	public void setUpRats(ArrayList<String> rats) {
+		for (String str : rats) {
+			Rat createR;
+			String[] spl = str.split(";");
+			String[] splD = spl[1].split(",");
+			Direction d = null;
+			switch (Integer.parseInt(splD[0])) {
+			case (0) -> d = Direction.NORTH;
+			case (1) -> d = Direction.EAST;
+			case (2) -> d = Direction.SOUTH;
+			case (3) -> d = Direction.WEST;
+			}
+			if (spl[0].split(",")[0].equals("D")) {
+				if (spl[0].length() == 1) {
+					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				} else {
+					placeRat(new DeathRat(Integer.parseInt(spl[0].split(",")[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				}
+			} else {
+				if (spl[0].length() == 1) {
+					createR = new Rat(spl[0].equals("M")); // Only for new start of levels
+				} else {
+					createR = RatController.addRat(spl[0]);
+				}
+				placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+			}
+		}
+	}
+	
+	public void setUpItems(ArrayList<String> items) {
+		
+	}
 
 	/**
 	 * Creates 2d array of the map.
@@ -380,7 +430,7 @@ public class Board {
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
 				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
 				case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
-				default -> System.out.println("Map error!");
+				default -> { System.out.println("Map error!"); System.exit(0);}
 				}
 				board[i][++j] = new LightTile(i, j);
 			}

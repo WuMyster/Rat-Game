@@ -193,43 +193,19 @@ public class Main extends Application {
 	 */
 	private static ArrayList<int[]> bombPlace;
 
-	public static ArrayList<int[]> getBombPlace() {
-		return bombPlace;
-	}
-
 	/**
 	 * x y coordinates of all poison placements
 	 */
 	private static ArrayList<int[]> poisonPlace;
 
-	public static ArrayList<int[]> getPoisonPlace() {
-		return poisonPlace;
-	}
-
 	// TODO Wu I won't need these if I don't let the items stay on a tile
-	private static ArrayList<int[]> sexToFemalePlace;
-
-	public static ArrayList<int[]> getSexToFemalePlace() {
-		return sexToFemalePlace;
-	}
+	private static ArrayList<int[]> sexToFemalePlace;	
 
 	private static ArrayList<int[]> sexToMalePlace;
 
-	public static ArrayList<int[]> getSexToMalePlace() {
-		return sexToMalePlace;
-	}
-
 	private static ArrayList<int[]> sterilisePlace;
 
-	public static ArrayList<int[]> getSterilisePlace() {
-		return sterilisePlace;
-	}
-
 	private static ArrayList<int[]> gasPlace;
-
-	public static ArrayList<int[]> getGasPlace() {
-		return gasPlace;
-	}
 
 	public static void addGasPlace(int x, int y) {
 		gasPlace.add(new int[] { (int) y, (int) x });
@@ -246,7 +222,7 @@ public class Main extends Application {
 	private Timeline ratMoveTimeline;
 
 	/**
-	 * 
+	 * The main cycle that runs the game.
 	 */
 	private Timeline cycler;
 
@@ -265,177 +241,49 @@ public class Main extends Application {
 	 * Max time to complete game in seconds.
 	 */
 	private int maxTime;
+	
+	@Deprecated
+	public static ArrayList<int[]> getBombPlace() {
+		return bombPlace;
+	}
+	@Deprecated
+	public static ArrayList<int[]> getGasPlace() {
+		return gasPlace;
+	}
+	@Deprecated
+	public static ArrayList<int[]> getSterilisePlace() {
+		return sterilisePlace;
+	}
+	@Deprecated
+	public static ArrayList<int[]> getSexToMalePlace() {
+		return sexToMalePlace;
+	}
+	@Deprecated
+	public static ArrayList<int[]> getSexToFemalePlace() {
+		return sexToFemalePlace;
+	}
+	@Deprecated
+	public static ArrayList<int[]> getPoisonPlace() {
+		return poisonPlace;
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		BorderPane root = createGameGUI();
-		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		primaryStage.setScene(scene);
-		primaryStage.show();
-
-		String[] iner = new String[] { 
-				"M;3,1,2", // Should only be on very new levels i.e starting maps
-				"50,true,false,20,false,false,false;3,1,4",
-				"50,false,false,20,false,false,false;1,1,5", 
-				"D;3,9,1", //  Same here
-				"D,2;1,9,1"
-		};
-
-		for (String str : iner) {
-			Rat createR;
-			String[] spl = str.split(";");
-			String[] splD = spl[1].split(",");
-			Direction d = null;
-			switch (Integer.parseInt(splD[0])) {
-			case (0) -> d = Direction.NORTH;
-			case (1) -> d = Direction.EAST;
-			case (2) -> d = Direction.SOUTH;
-			case (3) -> d = Direction.WEST;
-			}
-			System.out.println(spl[0]);
-			if (spl[0].split(",")[0].equals("D")) {
-				System.out.println("Death");
-				if (spl[0].length() == 1) {
-					m.placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
-				} else {
-					m.placeRat(new DeathRat(Integer.parseInt(spl[0].split(",")[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
-				}
-			} else {
-				if (spl[0].length() == 1) {
-					createR = new Rat(spl[0].equals("M")); // Only for new start of levels
-				} else {
-					createR = RatController.addRat(spl[0]);
-				}
-				m.placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
-			}
-		}
+		
+		Scene scene = null;
+		
+		BorderPane root = createGameGUI(GameMasterExample.getMap(), GameMasterExample.getRats(), 
+				GameMasterExample.getItems(), GameMasterExample.getMaxTime(), GameMasterExample.getMaxRats());
+		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
-	}
-
-	/**
-	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
-	 * currently allows rats to move around. TODO Check if time is over TODO Level
-	 * from Game Master
-	 */
-	private void runCycle() {
-		currMovement = new HashMap<>();
-		step = 0;
-		m.runAllTiles();
-		ratMoveTimeline.play();
-		currPoints.setText(String.valueOf(RatController.getPoints()));
-
-		drawItems();
-
-		// Losing conditions
-		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
-			cycler.stop();
-			// Pass control back
-		}
-		// Game end?
-	}
-
-	/**
-	 * Criteria for Rat movements.
-	 */
-	private void moveRat() {
-		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
-		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
-	}
-
-	/**
-	 * Goes through each type of rats to draw them onto canvas
-	 */
-	private void goThroughRat() {
-		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		step += 1;
-		for (RatType rt : RatType.values()) {
-			drawRat(rt);
-		}
-	}
-
-	/**
-	 * Draws the rats onto the game canvas.
-	 * 
-	 * @param smallerList type of rat you're dealing with
-	 * @param ratImage    image of rat
-	 */
-	private void drawRat(RatType rt) {
-		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
-		if (smallerList != null) {
-			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
-
-			Image[] ratImage = rt.getImage();
-			int size = rt.getSize();
-			int width = RAT_WIDTH / size;
-			int height = RAT_HEIGHT / size;
-			int speed = rt.getSpeed();
-
-			// List of rat positions and direction
-			ArrayList<int[]> currDirection;
-			currDirection = smallerList.get(Direction.NORTH);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
-						gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
-					}
-				}
-			}
-
-			currDirection = smallerList.get(Direction.EAST);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[1], i[1] * RAT_POSITION,
-									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
-						gc.drawImage(ratImage[1], i[1] * RAT_POSITION + step * speed,
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-					}
-				}
-			}
-
-			currDirection = smallerList.get(Direction.SOUTH);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
-						gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
-								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
-					}
-				}
-			}
-
-			currDirection = smallerList.get(Direction.WEST);
-			if (currDirection != null) {
-				for (int[] i : currDirection) {
-					if (i[2] == 0) {
-						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
-							gc.drawImage(ratImage[3], i[1] * RAT_POSITION,
-									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-						}
-					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
-						gc.drawImage(ratImage[3], i[1] * RAT_POSITION - step * speed,
-								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
-					}
-				}
-			}
-		}
+		
+		scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
 	}
 
 	/**
@@ -449,7 +297,6 @@ public class Main extends Application {
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move) {
 		currMovement.putIfAbsent(rt, new HashMap<Direction, ArrayList<int[]>>());
 		currMovement.get(rt).putIfAbsent(dir, new ArrayList<int[]>());
-
 		if (move == 0) {
 			currMovement.get(rt).get(dir).add(new int[] { pos[0], pos[1], 0, 4 });
 		} else {
@@ -474,26 +321,22 @@ public class Main extends Application {
 	/**
 	 * Creates game GUI.
 	 * 
+	 * @param map the map design
+	 * @param rats list of rats and their positions
+	 * @param items list of items and their positions
+	 * @param maxTime maximum amount of time to finish the game
+	 * @param maxRats maximum number of rats before the game ends
 	 * @return the GUI
 	 */
-	private BorderPane createGameGUI() {
-
-		BOMB = new Image("img/ItemBomb.png");
-		POISON = new Image("Poison.png");
-		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
-		SEX_TO_MALE = new Image("SexChangeToMale.png");
-		STERILISE = new Image("img/Sterilise.png");
-		GAS = new Image("img/icon-gas.png");
-		DEATH_RAT = new Image("img/ItemDeathRat.png");
-		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;
-		stopSignPlace = new ArrayList<>();
-		bombPlace = new ArrayList<>();
-		poisonPlace = new ArrayList<>();
-		sexToFemalePlace = new ArrayList<>();
-		sexToMalePlace = new ArrayList<>();
-		sterilisePlace = new ArrayList<>();
-		gasPlace = new ArrayList<>();
+	private BorderPane createGameGUI(String map, ArrayList<String> rats,
+			ArrayList<String> items, int maxTime, int maxRats) {
+			
+		setInitialValues();
+		
+		startTime = LocalTime.now();
+		this.maxTime = maxTime;
+		RatController.setRatController(maxRats);
+		
 		BorderPane root = null;
 		try {
 			root = new BorderPane();
@@ -505,20 +348,36 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String properMap1;
-		int tunnel = 3;
-		if (tunnel == 0) {
-			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
-		} else if (tunnel == 1) {
-			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
-		} else {// if (tunnel == 2) {
-			properMap1 = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
-		}
-		m = new Board(properMap1, 17, 11);
+
+		m = new Board(map, 17, 11);
+		m.setUpRats(rats);
+		m.setUpItems(items);
 		drawMap();
 		moveRat();
 
 		return root;
+	}
+	
+	private void setInitialValues() {
+		// These should not be here, should be gotten from classes
+		BOMB = new Image("img/ItemBomb.png");
+		POISON = new Image("Poison.png");
+		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
+		SEX_TO_MALE = new Image("SexChangeToMale.png");
+		STERILISE = new Image("img/Sterilise.png");
+		GAS = new Image("img/icon-gas.png");
+		DEATH_RAT = new Image("img/ItemDeathRat.png");
+		
+		// These no choice
+		RAT_WIDTH = 30;
+		RAT_HEIGHT = 45;
+		stopSignPlace = new ArrayList<>();
+		bombPlace = new ArrayList<>();
+		poisonPlace = new ArrayList<>();
+		sexToFemalePlace = new ArrayList<>();
+		sexToMalePlace = new ArrayList<>();
+		sterilisePlace = new ArrayList<>();
+		gasPlace = new ArrayList<>();
 	}
 
 	/**
@@ -557,27 +416,29 @@ public class Main extends Application {
 
 		if (item instanceof Poison) {
 			arr = poisonPlace;
-		}
-		if (item instanceof SexChangeToFemale) {
+		} else if (item instanceof SexChangeToFemale) {
 			arr = sexToFemalePlace;
-		}
-		if (item instanceof SexChangeToMale) {
+		} else if (item instanceof SexChangeToMale) {
 			arr = sexToMalePlace;
-		}
-		if (item instanceof Sterilisation) {
+		} else if (item instanceof Sterilisation) {
 			arr = sterilisePlace;
-		}
-		if (item instanceof Bomb) {
+		} else if (item instanceof Bomb) {
 			arr = bombPlace;
+		} else if (item instanceof StopSign) {
+			arr = stopSignPlace;
 		}
-
-		int[] a = null;
-		for (int[] i : arr) {
-			if (i[0] == pos[0] && i[1] == pos[1]) {
-				a = i;
+		
+		if (arr != null) {
+			int[] a = null;
+			for (int[] i : arr) {
+				if (i[0] == pos[0] && i[1] == pos[1]) {
+					a = i;
+				}
 			}
+			arr.remove(a);
+		} else {
+			System.err.println("Item cannot be removed\n" + item);
 		}
-		arr.remove(a);
 
 		/*
 		 * ArrayList<int[]> itemPlace = null; Item.Name itemName = Item.Name.POISON;
@@ -589,8 +450,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Redraws all stop signs onto the map. TODO Hopefully can be upgraded to draw
-	 * all items.
+	 * Redraws all stop signs onto the map.
 	 */
 	private void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
@@ -635,32 +495,8 @@ public class Main extends Application {
 
 		if (m.addStopSign((int) x, (int) y)) {
 			stopSignPlace.add(new int[] { (int) y, (int) x, StopSign.MAX_STATES });
-			// Draw an icon at the dropped location.
 			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 			gc.drawImage(StopSign.getState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
-		}
-	}
-
-	/**
-	 * React when an object is dragged onto the canvas.
-	 * 
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Liam O'Reilly
-	 * @author Jing Shiang Gu TODO: Check if coordinate is already in list and say
-	 *         no TODO Wu, look into a way to turn these all into one method if time
-	 *         allows
-	 */
-	private void placeStopSignAndrew(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			stopSignPlace.add(new int[] { (int) y, (int) x });
-			m.addStopSign((int) x, (int) y); // Will return boolean if sign can be placed
-			// Draw an icon at the dropped location.
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			// gc.drawImage(STOP_SIGN, x * TILE_SIZE, y * TILE_SIZE);
 		}
 	}
 
@@ -684,10 +520,10 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Remove stop sign from board. TODO Hopefully can be upgraded to remove all
-	 * items.
+	 * Remove stop sign from board.
 	 * 
 	 * @param pos position where the stop sign is
+	 * @deprecated
 	 */
 	public static void removeStopSign(int[] pos) {
 		int[] a = null;
@@ -700,10 +536,8 @@ public class Main extends Application {
 	}
 
 	// the y is first due to the nature of 2d arrays, can't be helped
-	// unfortunately...
-	// In future, have a method inside m.addBomb() to call a method here to add so
-	// people won't know
-	// this is 2d array
+	// unfortunately... In future, have a method inside m.addBomb() to 
+	// call a method here to add so people won't know this is 2d array
 	private void placeBomb(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
@@ -811,7 +645,7 @@ public class Main extends Application {
 
 		Menu menuFile = new Menu("File");
 
-		MenuItem add = new MenuItem("Shuffle");
+		MenuItem add = new MenuItem("Save");
 		menuFile.getItems().add(add);
 
 		Menu optionFile = new Menu("Option");
@@ -819,13 +653,9 @@ public class Main extends Application {
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
 
-		// Tick Timeline buttons
+		// TODO Del me when not needed anymore
 		Button startTickTimelineButton = new Button("Move rat");
-		// We add both buttons at the same time to the timeline (we could have done this
-		// in two steps).
 		root.getChildren().addAll(startTickTimelineButton);
-
-		// Setup the behaviour of the buttons.
 		startTickTimelineButton.setOnAction(e -> {
 			runCycle();
 		});
@@ -834,7 +664,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Creates the right menu - will contain level, points and number of items.
+	 * Creates the right menu - will contain level, points and items.
 	 * 
 	 * @return the right menu
 	 */
@@ -850,6 +680,7 @@ public class Main extends Application {
 
 		currPoints = new Label("Points xx");
 		currPoints.setFont(new Font(20));
+		currLevel.setTextAlignment(TextAlignment.CENTER);
 		root.getChildren().add(currPoints);
 
 		// Setup a draggable image. //TODO
@@ -876,27 +707,16 @@ public class Main extends Application {
 
 		draggableDeathRat.setImage(DEATH_RAT);
 		root.getChildren().add(draggableDeathRat);
-
-		// This code setup what happens when the dragging starts on the image.
-		// You probably don't need to change this (unless you wish to do more advanced
-		// things).
+		
 		/**
 		 * @author Liam O'Reilly
 		 */
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableStop.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
@@ -908,208 +728,101 @@ public class Main extends Application {
 		 */
 		draggableBomb.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableBomb.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
 		draggablePoison.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggablePoison.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
 		draggableSexToFemale.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableSexToFemale.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
 		draggableSexToMale.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableSexToMale.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
 		draggableSterilise.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableSterilise.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
 		draggableGas.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableGas.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
 		draggableDeathRat.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
 				Dragboard db = draggableDeathRat.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
 				ClipboardContent content = new ClipboardContent();
 				content.putString("Hello");
 				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
 
-		// This code allows the canvas to receive a dragged object within its bounds.
-		// You probably don't need to change this (unless you wish to do more advanced
-		// things).
 		/**
 		 * TODO Wu probably change to switch
+		 * 
 		 * 
 		 * @author Liam O'Reilly
 		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
-				// Mark the drag as acceptable if the source was the draggable image.
-				// (for example, we don't want to allow the user to drag things or files into
-				// our application)
-				if (event.getGestureSource() == draggableStop) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableBomb) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggablePoison) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-
-				if (event.getGestureSource() == draggableSexToFemale) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableSexToMale) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableSterilise) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableGas) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableDeathRat) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
+				ImageView[] lis = new ImageView[] {draggableStop, draggableBomb, draggablePoison, 
+						draggableSexToFemale, draggableSexToMale, draggableSterilise, draggableGas, 
+						draggableDeathRat};
+				
+				for (ImageView i : lis) {
+					if (event.getGestureSource() == i) {
+						event.acceptTransferModes(TransferMode.ANY);
+						event.consume();
+					}
 				}
 			}
 		});
-
-		// This code allows the canvas to react to a dragged object when it is finally
-		// dropped.
-		// You probably don't need to change this (unless you wish to do more advanced
-		// things).
+		
 		/**
 		 * @author Liam O'Reilly
 		 */
 		itemCanvas.setOnDragDropped(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
-				// We call this method which is where the bulk of the behaviour takes place.
 				itemCanvasDragDropOccurred(event);
-
-				// Consume the event. This means we mark it as dealt with.
 				event.consume();
 			}
 		});
@@ -1126,26 +839,19 @@ public class Main extends Application {
 	public void itemCanvasDragDropOccurred(DragEvent event) {
 		if (event.getGestureSource() == draggableStop) {
 			placeStopSign(event);
-		}
-		if (event.getGestureSource() == draggableBomb) {
+		} else if (event.getGestureSource() == draggableBomb) {
 			placeBomb(event);
-		}
-		if (event.getGestureSource() == draggablePoison) {
+		} else if (event.getGestureSource() == draggablePoison) {
 			placePoison(event);
-		}
-		if (event.getGestureSource() == draggableSexToFemale) {
+		} else if (event.getGestureSource() == draggableSexToFemale) {
 			placeSexToFemale(event);
-		}
-		if (event.getGestureSource() == draggableSexToMale) {
+		} else if (event.getGestureSource() == draggableSexToMale) {
 			placeSexToMale(event);
-		}
-		if (event.getGestureSource() == draggableSterilise) {
+		} else if (event.getGestureSource() == draggableSterilise) {
 			placeSterilise(event);
-		}
-		if (event.getGestureSource() == draggableGas) {
+		} else if (event.getGestureSource() == draggableGas) {
 			placeGas(event);
-		}
-		if (event.getGestureSource() == draggableDeathRat) {
+		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
 		}
 	}
@@ -1154,12 +860,8 @@ public class Main extends Application {
 	 * Draws map onto screen
 	 */
 	private void drawMap() {
-		// Get the Graphic Context of the canvas. This is what we draw on.
 		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
-
-		// Clear canvas
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
 		m.drawBoard(gc);
 	}
 
@@ -1171,5 +873,129 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		System.out.println("End");
+	}
+	
+	
+
+
+	/**
+	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
+	 * currently allows rats to move around. TODO Check if time is over TODO Level
+	 * from Game Master
+	 */
+	private void runCycle() {
+		currMovement = new HashMap<>();
+		step = 0;
+		m.runAllTiles();
+		ratMoveTimeline.play();
+		currPoints.setText(String.valueOf(RatController.getPoints()));
+		drawItems();
+
+		// Losing conditions
+		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
+			cycler.stop();
+			// Pass control back to game master, game has finished
+		}
+	}
+
+	/**
+	 * Criteria for Rat movements.
+	 */
+	private void moveRat() {
+		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
+		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
+	}
+
+	/**
+	 * Goes through each type of rats to draw them onto canvas
+	 */
+	private void goThroughRat() {
+		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		step += 1;
+		for (RatType rt : RatType.values()) {
+			drawRat(rt);
+		}
+	}
+
+	/**
+	 * Draws the rats onto the game canvas.
+	 * 
+	 * @param smallerList type of rat you're dealing with
+	 * @param ratImage    image of rat
+	 */
+	private void drawRat(RatType rt) {
+		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
+		if (smallerList != null) {
+			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
+
+			Image[] ratImage = rt.getImage();
+			int size = rt.getSize();
+			int width = RAT_WIDTH / size;
+			int height = RAT_HEIGHT / size;
+			int speed = rt.getSpeed();
+
+			// List of rat positions and direction
+			ArrayList<int[]> currDirection;
+			currDirection = smallerList.get(Direction.NORTH);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[0], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+								i[0] * RAT_POSITION - step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
+					}
+				}
+			}
+
+			currDirection = smallerList.get(Direction.EAST);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[1], i[1] * RAT_POSITION,
+									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4.0 / i[2])) {
+						gc.drawImage(ratImage[1], i[1] * RAT_POSITION + step * speed,
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+					}
+				}
+			}
+
+			currDirection = smallerList.get(Direction.SOUTH);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+									i[0] * RAT_POSITION + (TILE_SIZE / 4 * (size - 1)), width, height);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[2], i[1] * RAT_POSITION + (TILE_X_OFFSET * size),
+								i[0] * RAT_POSITION + step * speed + (TILE_SIZE / 4 * (size - 1)), width, height);
+					}
+				}
+			}
+
+			currDirection = smallerList.get(Direction.WEST);
+			if (currDirection != null) {
+				for (int[] i : currDirection) {
+					if (i[2] == 0) {
+						if (step <= NORMAL_RAT_SPEED / (4 / i[3])) {
+							gc.drawImage(ratImage[3], i[1] * RAT_POSITION,
+									i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+						}
+					} else if (step <= NORMAL_RAT_SPEED / (4 / i[2])) {
+						gc.drawImage(ratImage[3], i[1] * RAT_POSITION - step * speed,
+								i[0] * RAT_POSITION + TILE_Y_OFFSET + (TILE_SIZE / 4 * (size - 1)), height, width);
+					}
+				}
+			}
+		}
 	}
 }

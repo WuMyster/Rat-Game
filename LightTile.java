@@ -94,16 +94,9 @@ public class LightTile extends Tile {
 		super.getRatInteractions();
 
 		// This method should be moved up
-		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(this, aliveRats, isSterile);
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats, isSterile);
 		for (Rat r : rs.get(0)) {
 			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
-			if (currBlock.get(directions[0]).contains(r)) {
-				System.out.println("Good 1");
-			} else if (currBlock.get(directions[1]).contains(r)) {
-				System.out.println("Good 2");
-			} else {
-				System.out.println("ERROR");
-			}
 			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
 			bufferNextBlock.get(d).add(r);
 		}
