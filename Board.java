@@ -68,6 +68,10 @@ public class Board {
 	 */
 	public final static int EXTRA_PADDING = 2;
 
+    /**
+     * Returns extra padding
+     * @return extra padding number
+     */
     public static int getExtraPadding() {
         return EXTRA_PADDING;
     }
@@ -103,6 +107,13 @@ public class Board {
 		return board;
 	}
 
+    /**
+     * Checks if item can be placed on tile. Can be placed if tile is an instance of path but not
+     * a tunnel. Also if tile is a junction.
+     * @param x x-coordinate being checked.
+     * @param y y-coordinate being checked.
+     * @return boolean of if item can be placed on tile.
+     */
     public static boolean isItemPlaceable(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         if (t.itemOnTile == null) {
@@ -134,8 +145,7 @@ public class Board {
 	}
 
 	/**
-	 * TODO Get rid of repetition
-	 * Adds item to tile.
+	 * Adds bomb to tile.
 	 * @param x x position of tile on map
 	 * @param y y position of tile on map
 	 * @return {@code true} if bomb can be placed at that location.
@@ -148,7 +158,7 @@ public class Board {
 	}
 
     /**
-     * Blows up tiles from origin until "null" Tile reached.
+     * Blows up tiles from origin in a row until "null" Tile reached.
      * @param x x-coordinate bomb was placed on
      * @param y y-coordinate bomb was placed on
      */
@@ -189,6 +199,11 @@ public class Board {
         }
     }
 
+    /**
+     * Adds poison item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addPoison(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Poison p = new Poison();
@@ -196,6 +211,11 @@ public class Board {
         t.setTileItem(p, x, y);
         }
 
+    /**
+     * Adds sex change (Male to Female) item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addSexToFemale(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToFemale toFemale = new SexChangeToFemale();
@@ -203,6 +223,11 @@ public class Board {
         t.setTileItem(toFemale, x, y);
     }
 
+    /**
+     * Adds sex change (Female to Male) item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addSexToMale(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToMale toMale = new SexChangeToMale();
@@ -210,6 +235,11 @@ public class Board {
         t.setTileItem(toMale, x, y);
     }
 
+    /**
+     * Adds sterilise item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addSterilise(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Sterilisation s = new Sterilisation();
@@ -217,6 +247,11 @@ public class Board {
         t.setTileItem(s, x, y);
     }
 
+    /**
+     * Adds gas item to tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     */
     public void addGas(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Gas gas = new Gas();
@@ -225,46 +260,14 @@ public class Board {
         gas.spreadGasCloud(gas, x, y, 3);
     }
 
+    /**
+     * Returns tile location.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     * @return tile
+     */
     public static Tile getTile(int x, int y) {
         return board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
-    }
-
-    public void gasCloud(Item item, int x, int y, int r, int gasSpread) {
-        for (int i = -(gasSpread); i <= gasSpread; i++) {
-            for (int j = -(gasSpread); j <= gasSpread; j++) {
-                if (isItemPlaceable(x - i, y - j)) {
-                    Tile t = board[(y-j) * EXTRA_PADDING][(x-i) * EXTRA_PADDING];
-
-                    if (item instanceof Gas) {
-                        t.setTileItem(new Gas(), x, y);
-                        Main.addGasPlace(x-i, y-j);
-                    }
-                    if (item == null) {
-                        t.setTileItem(null, x, y);
-                        Main.removeItem(new Gas(), new int[] {x, y});
-                    }
-
-                }
-            }
-        }
-    }
-
-    public void spreadGasCloud(Gas gas, int x, int y, int r) {
-        //AtomicInteger gasSpread = new AtomicInteger();
-        new Thread(() -> {
-            for (int i = 0; i < r; i++) {
-                System.out.println(gas.getGasSpread());
-                gasCloud(new Gas(), x, y, 2, gas.getGasSpread() + 1);
-                try {
-                    Thread.sleep(Gas.getGAS_EXPAND_TIME());
-                } catch (InterruptedException ex) {}
-            }
-
-        }).start();
-    }
-
-    public void decreaseGasCloud(int x, int y, int r) {
-
     }
 
     public void addDeathRat(int x, int y) {

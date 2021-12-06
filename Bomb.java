@@ -7,34 +7,50 @@ import java.util.TimerTask;
 /**
  * Class emulating a bomb item.
  * @author Andrew Wu
- * @author Jing Gu
- * TODO Wu, flash colour tiles on detonation
- * TODO Wu, maybe move bomb pic and arraylist here?
- * -Maybe
  */
 public class Bomb extends Item {
+    /**
+     * Sets the bomb with 1 health point.
+     */
     public Bomb() {
         hp = 1; // is never used, only for constructor
     }
 
+    /**
+     * Array holding the variations of countdown images for the bomb.
+     */
     public static final Image[] COUNTDOWN = new Image[] {
             new Image("img/ItemBomb1.png"),
             new Image("img/ItemBomb2.png"),
             new Image("img/ItemBomb3.png"),
             new Image("img/ItemBomb4.png")
     };
-    public static final int COUNTDOWN_IN_S = 4;
 
-    Timer timer = new Timer();
-    private int currentCountdown = COUNTDOWN_IN_S;
-
+    /**
+     * Returns the image corresponding to the countdown time on the bomb.
+     * @param n image number.
+     * @return Bomb image with countdown number.
+     */
     public static Image getImage(int n) {
         return COUNTDOWN[n];
     }
 
     /**
-     * Item ability triggered through calling this method. Method delayed by an amount in
-     * milliseconds to emulate a bomb detonating.
+     * Second bomb will count down from.
+     */
+    public static final int COUNTDOWN_IN_S = 4;
+
+    /**
+     * Current countdown of the bomb.
+     */
+    private int currentCountdown = COUNTDOWN_IN_S;
+
+    Timer timer = new Timer();
+
+    /**
+     * Item ability triggered through calling this method. Method delayed per second, updating
+     * the current time left on detonation. Once count down reaches 0, will invoke a method to
+     * detonate.
      * @param x x-coordinate bomb was placed on
      * @param y y-coordinate bomb was placed on
      * @return true if bomb detonates successfully.

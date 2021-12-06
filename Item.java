@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 /**
+ * Superclass for items.
  * @author Andrew
- *
  */
 abstract class Item {
 	

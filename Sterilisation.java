@@ -1,24 +1,27 @@
 import java.util.ArrayList;
 
 /**
- * Item to make rats sterile.
+ * Class modelling a Sterilisation item.
  * @author Andrew Wu
  */
 public class Sterilisation extends Item {
+
     /**
-     * Checks if Rat object is sterile, if so, sets it to sterile.
-     * @param rat a Rat Object
+     * Health point of item.
      */
-    public void itemAction(Rat rat) {
-        if (rat.getSterile() == false) {
-            rat.sterilise();
-            System.out.println("Rat sterilised");
-        }
+    public Sterilisation() {
+        hp = 1;
     }
 
+    /**
+     * Sterilises rat so they can no longer get pregnant and give birth.
+     * @param r a rat Object.
+     * @return ArrayList of rats on the tile this item was invoked on.
+     */
 	@Override
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
-		// Should only affect tile!
+		r.get(0).sterilise();
+        hp--;
 		return r;
 	}
 }

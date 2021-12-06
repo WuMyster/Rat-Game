@@ -1,17 +1,23 @@
 import java.util.ArrayList;
 
 /**
-@author Salim, Andrew
+ * Class modelling a sex change item that turns males to females.
+ * @author Salim, Andrew Wu
  */
 public class SexChangeToFemale extends Item {
-	
+
+    /**
+     * Health point of item.
+     */
 	public SexChangeToFemale() {
 		hp = 1;
 	}
 	
     /**
-     * if rat is not male and thus female, then make rat male. Otherwise keep male. Subtract one from item count
-     * @param a a Rat object.
+     * Sets the gender of a rat to male regardless of it's starting gender.
+     * Removes 1 from hp when used.
+     * @param r a Rat object.
+     * @return ArrayList of alive rats on the tile this item was invoked on.
      */
 	@Override
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {

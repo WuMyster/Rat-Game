@@ -169,88 +169,26 @@ public abstract class Tile {
                 }
 			}
 		}
-
-//        // TODO Wu Find out a way to reduce repetition here
-		// TODO for Andrew - reduced.
-//        if (itemOnTile instanceof Poison) {
-//            ((Poison) itemOnTile).itemAction(r);
-//            removeItem();
-//            return true;
-//        }
-//        if (itemOnTile instanceof SexChangeToFemale) {
-//            ((SexChangeToFemale) itemOnTile).itemAction(r);
-//            removeItem();
-//            return false;
-//        }
-//        if (itemOnTile instanceof SexChangeToMale) {
-//            ((SexChangeToMale) itemOnTile).itemAction(r);
-//            removeItem();
-//            return false;
-//        }
-//        if (itemOnTile instanceof Sterilisation) {
-//            ((Sterilisation) itemOnTile).itemAction(r);
-//            removeItem();
-//            return false;
-//        }
-//        // TODO itemused not changed over to main yet
-//        if (itemOnTile instanceof Gas) {
-//            ((Gas) itemOnTile).itemAction(r);
-//            //itemUsed(ORIGINAL_X_Y_POS);
-//            //itemOnTile = null;
-//            //return true;
-//        }
 	}
 
-	private void removeItem() {
-		Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-		itemOnTile = null;
-	}
-
-	// ??????? TODO }Item{
+    /**
+     * Sets item on tile.
+     * @param i item to be placed on tile.
+     * @param x x-coordinate of tile.
+     * @param y y-coordinate of tile.
+     * @return boolean if item is placed on tile.
+     */
 	protected boolean setTileItem(Item i, int x, int y) {
-		/*
-		 * if (i instanceof Item) { //StopSign //itemHP = StopSign. HEALTH isBlocked =
-		 * true; //itemOnTile = new StopSign()? }
-		 */
-		if (itemOnTile != null) {
-			return false;
-		}
-		itemOnTile = i;
-		
-		if (i instanceof Bomb) {
-			((Bomb) i).itemAction(x, y);
-		} else if (i instanceof Gas) {
-			((Gas) i).add(x, y);
-		} // else if (i instanceof StopSign) {
-//			isBlocked = true;
-//		}
-			
+        if (itemOnTile != null) {
+            return false;
+        }
+        itemOnTile = i;
 
-		return true;
-
-//		if (i instanceof Poison) {
-//			itemHP = ((Poison) i).getItemHP();
-//			return true;
-//		}
-//		if (i instanceof SexChangeToFemale) {
-//			itemHP = 1;
-//			return true;
-//		}
-//		if (i instanceof SexChangeToMale) {
-//			itemHP = 1;
-//			return true;
-//		}
-//		if (i instanceof Sterilisation) {
-//			itemHP = 1;
-//			return true;
-//		}
-		
-		}
-//        if (i instanceof secondGas) {
-//            itemHP = 1;
-//            return true;
-//        }
-		
+        if (i instanceof Bomb) {
+            ((Bomb) i).itemAction(x, y);
+        }
+        return true;
+    }
 
 	/**
 	 * Have the rats on this tile interact with each other.
@@ -323,16 +261,6 @@ public abstract class Tile {
 		}
 		return out;
 	}
-
-	/**
-	 * Add bomb item onto Tile??.
-	 * 
-	 * @deprecated
-	 */
-	public void placeBomb() {
-		// itemOnTile = new Bomb();
-	}
-
 
     /**
      * Blows up a tile by:
