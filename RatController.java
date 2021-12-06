@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class RatController {
 	private static ArrayList<Rat> ratList = new ArrayList<>();
-	static int maxNumOfRats = 10;
+	private static int maxNumOfRats = 10;
 	private static int points;
 	
 
