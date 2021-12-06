@@ -6,9 +6,24 @@ import javafx.scene.image.Image;
  *
  */
 public enum RatType {
+	/**
+	 * Death Rat information.
+	 */
 	DEATH (1, 2, "DeathRat"), 
+	
+	/**
+	 * Male Rat information: size, speed and image names.
+	 */
 	MALE (1, 1, "MaleRat"), 
-	FEMALE(1, 1, "FemaleRat"), 
+	
+	/**
+	 * Female Rat information: size, speed and image names.
+	 */
+	FEMALE(1, 1, "FemaleRat"),
+	
+	/**
+	 * Baby Rat information: size, speed and image names.
+	 */
 	BABY(2, 2, "BabyRat");
 	
 	/**
