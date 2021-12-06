@@ -269,17 +269,21 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		Scene scene = null;
+		
 		BorderPane root = createGameGUI(GameMasterExample.getMap(), GameMasterExample.getRats(), 
 				GameMasterExample.getItems(), GameMasterExample.getMaxTime(), GameMasterExample.getMaxRats());
-		
-		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		primaryStage.setScene(scene);
-		primaryStage.show();
 		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
+		
+		scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
 	}
 
 	/**
