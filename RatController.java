@@ -102,16 +102,9 @@ public class RatController {
 	 * Sorts rats into stationary rats and moving rats.
 	 * Breeds rats which are breedable.
 	 * @param ratsOnTile - An arraylist of rats on an individual tile
-	 * @param tileIsSterile all rats on this tile cannot have sex
 	 * @return A nested arraylist of rats, where the first index contains rats that aren't moving and the second index contains rats which will be moving
 	 */
-	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile, boolean tileIsSterile) {
-		
-		if(tileIsSterile) {
-			for(int i = 0; i<ratsOnTile.size(); i++) {
-				tileIsSterile.get(i).sterilise();
-			}
-		}
+	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile) {
 		
 		ArrayList<ArrayList<Rat>> sortedRatsOnTile = sortRats(ratsOnTile);
 		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);

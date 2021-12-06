@@ -120,4 +120,8 @@ public class DeathRat {
 		rs.subList(rs.size() + hp, rs.size());
 		return rs;
 	}	
+	
+	public String toString() {
+		return String.valueOf(hp);
+	}
 }

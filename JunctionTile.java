@@ -92,7 +92,7 @@ public class JunctionTile extends Tile {
 		super.getRatInteractions();
 		
 		// This implementation should be moved up
-		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats, isSterile);	
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
 		
 		ArrayList<Rat> asdf = rs.get(0);
 		for (Rat r : asdf) {

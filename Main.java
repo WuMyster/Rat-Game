@@ -242,6 +242,16 @@ public class Main extends Application {
 	 */
 	private int maxTime;
 	
+	/**
+	 * Players name.
+	 */
+	private String playerName;
+	
+	/**
+	 * If user themselves has told the game to stop.
+	 */
+	private boolean playerStopGame;
+	
 	@Deprecated
 	public static ArrayList<int[]> getBombPlace() {
 		return bombPlace;
@@ -273,7 +283,8 @@ public class Main extends Application {
 		Scene scene = null;
 		
 		BorderPane root = createGameGUI(GameMasterExample.getMap(), GameMasterExample.getRats(), 
-				GameMasterExample.getItems(), GameMasterExample.getMaxTime(), GameMasterExample.getMaxRats());
+				GameMasterExample.getItems(), GameMasterExample.getMaxTime(), GameMasterExample.getMaxRats(),
+				GameMasterExample.getName());
 		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
@@ -283,7 +294,6 @@ public class Main extends Application {
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
 	}
 
 	/**
@@ -326,12 +336,15 @@ public class Main extends Application {
 	 * @param items list of items and their positions
 	 * @param maxTime maximum amount of time to finish the game
 	 * @param maxRats maximum number of rats before the game ends
+	 * @param name name of the player
 	 * @return the GUI
 	 */
 	private BorderPane createGameGUI(String map, ArrayList<String> rats,
-			ArrayList<String> items, int maxTime, int maxRats) {
+			ArrayList<String> items, int maxTime, int maxRats, String name) {
 			
 		setInitialValues();
+		
+		this.playerName = name;
 		
 		startTime = LocalTime.now();
 		this.maxTime = maxTime;
@@ -378,6 +391,7 @@ public class Main extends Application {
 		sexToMalePlace = new ArrayList<>();
 		sterilisePlace = new ArrayList<>();
 		gasPlace = new ArrayList<>();
+		playerStopGame = false;
 	}
 
 	/**
@@ -652,6 +666,12 @@ public class Main extends Application {
 
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
+		
+		Button stopGame = new Button("Stop and save game");
+		root.getChildren().addAll(stopGame);
+		stopGame.setOnAction(e -> {
+			playerStopGame = true;
+		});
 
 		// TODO Del me when not needed anymore
 		Button startTickTimelineButton = new Button("Move rat");
@@ -895,7 +915,14 @@ public class Main extends Application {
 		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
 			cycler.stop();
 			// Pass control back to game master, game has finished
+		} else if (playerStopGame) {
+			cycler.stop();
+			saveState();
 		}
+	}
+	
+	private void saveState() {
+		m.saveState(playerName + ".txt");
 	}
 
 	/**

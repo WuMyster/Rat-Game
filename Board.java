@@ -1,4 +1,3 @@
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,6 +6,10 @@ import java.util.Collections;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -416,6 +419,29 @@ public class Board {
 	
 	public void setUpItems(ArrayList<String> items) {
 		
+	}
+	
+	public void saveState(String filename) {
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(filename);
+			
+			for (Tile t : allTiles) {
+				ArrayList<String> rats = t.getRats();
+				for (String r : rats) {
+					out.print(r + "\n");
+				}
+			}
+			for (Tile t : allTiles) {
+				out.print(t.getItem());
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
 	}
 
 	/**

@@ -27,4 +27,16 @@ public enum Direction {
 	Direction opposite() {
 		return Direction.values() [this.oppo];
 	}
+	
+	int toInt() {
+		return toInt(Direction.values() [this.oppo]);
+	}
+	
+	private int toInt(Direction d) {
+		return d.oppo;
+	}
+	
+	static Direction toD(int i) {
+		return Direction.values() [i];
+	}
 }

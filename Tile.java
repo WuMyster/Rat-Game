@@ -25,11 +25,6 @@ public abstract class Tile {
 	 * tile, else Rat will have to take another direction.
 	 */
 	protected Boolean isBlocked;
-	
-	/**
-	 * Sterile Item will cause this tile to not allow any rats to have sex.
-	 */
-	protected Boolean isSterile;
 
 	/**
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
@@ -323,6 +318,32 @@ public abstract class Tile {
 		return out;
 	}
 	
+	public ArrayList<String> getRats() {
+		String here = ORIGINAL_X_Y_POS[0] + "," +
+				ORIGINAL_X_Y_POS[1];
+		ArrayList<String> out = new ArrayList<>();
+		for (Direction d : nextBlock.keySet()) {
+			for (Rat r : nextBlock.get(d)) {
+				String dir = d.toInt() + "," + here;
+				out.add(r + ";" + dir);
+			}
+		}
+		for (Direction d : nextDeath.keySet()) {
+			for (DeathRat dr : nextDeath.get(d)) {
+				String dir = d.toInt() + "," + here;
+				out.add(dr + ";" + dir);
+			}
+		}
+		return out;
+	}
+	
+	public String getItem() {
+		if (itemOnTile == null) {
+			return "";
+		}
+		return itemOnTile.toString();
+	}
+	
 	/**
 	 * Add bomb item onto Tile??.
 	 * @deprecated
@@ -386,7 +407,6 @@ public abstract class Tile {
 	private void resetTile() {
 		itemOnTile = null;
 		isBlocked = false;
-		isSterile = false;
 		// TODO Remove item from tile.
 		itemHP = 0;
 		isBlocked = false;

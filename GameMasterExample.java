@@ -19,6 +19,8 @@ public class GameMasterExample {
 	
 	private static int maxRats = 10;
 	
+	private static String playerName = "Bob";
+	
 	// Return GUI stuff to output to get information
 	public void main(String[] args) {
 		
@@ -42,5 +44,9 @@ public class GameMasterExample {
 	
 	public static int getMaxRats() {
 		return maxRats;
+	}
+	
+	public static String getName() {
+		return playerName;
 	}
 }

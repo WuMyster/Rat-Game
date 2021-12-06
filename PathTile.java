@@ -274,7 +274,7 @@ public class PathTile extends Tile {
 		super.getRatInteractions();
 		
 		// This method should be moved up
-		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats, isSterile);	
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
 		for (Rat r : rs.get(0)) {
 			ArrayList<Rat> rats = currBlock.get(directions[0]);
 			if (rats != null) {
