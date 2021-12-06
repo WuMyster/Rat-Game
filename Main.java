@@ -379,11 +379,13 @@ public class Main extends Application {
 		RatController.setRatController(maxRats);
 		
 		BorderPane root = null;
+		
+		root = new BorderPane();
+		root.setCenter(createCenterMap());
+		root.setTop(createTopMenu());
+		root.setRight(createRightMenu());
 		try {
-			root = new BorderPane();
-			root.setCenter(createCenterMap());
-			root.setTop(createTopMenu());
-			root.setRight(createRightMenu());
+			
 		} catch (NullPointerException n) {
 			n.printStackTrace();
 		} catch (Exception e) {

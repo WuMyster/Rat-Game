@@ -23,6 +23,13 @@ abstract class Item {
 	
 	public abstract String toString();
 	
+	/**
+	 * Creates and returns an item from given string.
+	 * @param item item name of item
+	 * @param hp hp remaining of item
+	 * @param xyPos x y position of item
+	 * @return item created from string
+	 */
 	public static Item toItem(String item, int hp, int[] xyPos) {
 		if (item.equals(Bomb.name)) {
 			return new Bomb(xyPos, hp);

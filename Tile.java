@@ -173,14 +173,14 @@ public abstract class Tile {
      * @param y y-coordinate of tile.
      * @return boolean if item is placed on tile.
      */
-	protected boolean setTileItem(Item i, int x, int y) {
+	protected boolean setTileItem(Item i) {
         if (itemOnTile != null) {
             return false;
         }
         itemOnTile = i;
 
         if (i instanceof Bomb) {
-            ((Bomb) i).itemAction(x, y);
+            ((Bomb) i).itemAction();
         }
         return true;
     }

@@ -25,8 +25,10 @@ public class Bomb extends Item {
     /**
      * Sets the bomb with 1 health point.
      */
-    public Bomb() {
+    public Bomb(int y, int x) {
         hp = 1; // is never used, only for constructor
+        this.x = x;
+        this.y = y;
     }
     
     /**
@@ -34,8 +36,8 @@ public class Bomb extends Item {
      * @param hp seconds left from the bomb before it blows up
      */
     public Bomb(int[] xyPos, int hp) {
-    	this.x = xyPos[0];
-    	this.y = xyPos[1];
+    	this.x = xyPos[1];
+    	this.y = xyPos[0];
     	this.hp = hp;
     }
 
@@ -55,6 +57,9 @@ public class Bomb extends Item {
      * @return Bomb image with countdown number.
      */
     public static Image getImage(int n) {
+    	if (n >= COUNTDOWN.length) {
+    		n = COUNTDOWN.length - 1;
+    	}
         return COUNTDOWN[n];
     }
 
@@ -78,7 +83,7 @@ public class Bomb extends Item {
      * @param y y-coordinate bomb was placed on
      * @return true if bomb detonates successfully.
      */
-    public boolean itemAction(int x, int y) {
+    public boolean itemAction() {
         this.timer = new Timer();
 
         timer.scheduleAtFixedRate(new TimerTask() {

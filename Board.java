@@ -156,9 +156,9 @@ public class Board {
 	 */
 	public void addBomb(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Bomb bomb = new Bomb();
+        Bomb bomb = new Bomb(y, x);
 
-        t.setTileItem(bomb, x, y);
+        t.setTileItem(bomb);
 	}
 
     /**
@@ -212,7 +212,7 @@ public class Board {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Poison p = new Poison();
 
-        t.setTileItem(p, x, y);
+        t.setTileItem(p);
         }
 
     /**
@@ -224,7 +224,7 @@ public class Board {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToFemale toFemale = new SexChangeToFemale();
 
-        t.setTileItem(toFemale, x, y);
+        t.setTileItem(toFemale);
     }
 
     /**
@@ -236,7 +236,7 @@ public class Board {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         SexChangeToMale toMale = new SexChangeToMale();
 
-        t.setTileItem(toMale, x, y);
+        t.setTileItem(toMale);
     }
 
     /**
@@ -248,7 +248,7 @@ public class Board {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
         Sterilisation s = new Sterilisation();
 
-        t.setTileItem(s, x, y);
+        t.setTileItem(s);
     }
 
     /**
@@ -439,7 +439,13 @@ public class Board {
 	public void setUpItems(ArrayList<String> items) {
 		if (items != null) {
 			for (String i : items) {
+				String[] it = i.split(";");
+				String[] desc = it[0].split(",");
+				String[] loc = it[1].split(",");
+				Item item = Item.toItem(desc[0], Integer.parseInt(desc[1]), null);
 				
+				Tile t = board[Integer.parseInt(loc[1])][Integer.parseInt(loc[2])];
+				t.setTileItem(item);
 			}
 		}
 	}
@@ -460,9 +466,7 @@ public class Board {
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+		}  finally {
 			out.close();
 		}
 	}
