@@ -45,7 +45,7 @@ public class RatController {
 	}
 	
 	/**
-	 * Takes in an array of toString rat values and adds them to the rat list.
+	 * Takes in a list of toString rat values and adds them to the rat list.
 	 * @param newRats - an array of strings.
 	 */
 	public static void addRats(String[] newRats) {
@@ -106,6 +106,12 @@ public class RatController {
 	 */
 	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile, boolean tileIsSterile) {
 		
+		if(tileIsSterile) {
+			for(int i = 0; i<ratsOnTile.size(); i++) {
+				tileIsSterile.get(i).sterilise();
+			}
+		}
+		
 		ArrayList<ArrayList<Rat>> sortedRatsOnTile = sortRats(ratsOnTile);
 		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);
 		
@@ -125,7 +131,7 @@ public class RatController {
 	}
 	
 	/**
-	 * Sorts an arraylist of rats into three arraylists
+	 * Sorts a list of rats into a nested list with three sub-lists
 	 * =>breedable male rats
 	 * =>breedable female rats
 	 * =>moving rats.
@@ -181,10 +187,10 @@ public class RatController {
 	}
 	
 	/**
-	 * Takes in two arraylists of rats and breeds as many as it can.
-	 * @param male - An arraylist of male rats.
-	 * @param female - An arraylist of female rats.
-	 * @return A nested arraylist of rats with 2 indexes, the rats who're breeding and those who aren't.
+	 * Takes in two lists of rats and breeds as many as it can.
+	 * @param male - A list of male rats.
+	 * @param female - A list of female rats.
+	 * @return A nested list of rats with 2 indexes, the rats who're breeding and those who aren't.
 	 */
 	private static ArrayList<ArrayList<Rat>> breedRats(ArrayList<Rat> male, ArrayList<Rat> female) {
 		
