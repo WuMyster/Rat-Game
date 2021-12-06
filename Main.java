@@ -144,16 +144,6 @@ public class Main extends Application {
     ImageView draggableSterilise = new ImageView();
 
     /**
-     * Image for gas item.
-     */
-	private static Image GAS;
-
-    /**
-     * Draggable image for gas item.
-     */
-	ImageView draggableGas = new ImageView();
-
-    /**
      * Image for death rat.
      */
 	private static Image DEATH_RAT;
@@ -247,28 +237,6 @@ public class Main extends Application {
      * x y coordinates of all sterilise item placements.
      */
 	private static ArrayList<int[]> sterilisePlace;
-
-    /**
-     * x y coordinates of all gas item placements.
-     */
-	private static ArrayList<int[]> gasPlace;
-
-    /**
-     * Returns ArrayList of all gas item placements.
-     * @return ArrayList of gas item placements.
-     */
-	public static ArrayList<int[]> getGasPlace() {
-		return gasPlace;
-	}
-
-    /**
-     * Adds x y coordinates of a placed gas item.
-     * @param x x-coordinate of gas item.
-     * @param y y-coordinate of gas item.
-     */
-	public static void addGasPlace(int x, int y) {
-		gasPlace.add(new int[] {y, x});
-	}
 
 	/**
 	 * The Rats in the game window which needs to move.
@@ -517,7 +485,6 @@ public class Main extends Application {
 		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
 		SEX_TO_MALE = new Image("SexChangeToMale.png");
 		STERILISE = new Image("img/Sterilise.png");
-		GAS = new Image("img/icon-gas.png");
 		DEATH_RAT = new Image("img/ItemDeathRat.png");
 		RAT_WIDTH = 30;
 		RAT_HEIGHT = 45;
@@ -527,7 +494,6 @@ public class Main extends Application {
 		sexToFemalePlace = new ArrayList<>();
 		sexToMalePlace = new ArrayList<>();
 		sterilisePlace = new ArrayList<>();
-		gasPlace = new ArrayList<>();
 		BorderPane root = null;
 		try {
 			root = new BorderPane();
@@ -606,9 +572,6 @@ public class Main extends Application {
 		if (item instanceof StopSign) {
 			arr = stopSignPlace;
 		}
-        if (item instanceof  Gas) {
-            arr = gasPlace;
-        }
 		if (arr != null) {
 			int[] a = null;
 			for (int[] i : arr) {
@@ -643,9 +606,6 @@ public class Main extends Application {
 		}
 		for (int[] i : sterilisePlace) {
 			gc.drawImage(STERILISE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
-		}
-		for (int[] i : gasPlace) {
-			gc.drawImage(GAS, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 	}
 
@@ -821,25 +781,6 @@ public class Main extends Application {
      *
      * @param event The drag event itself which contains data about the drag that
      *              occurred.
-     * @author Andrew Wu
-     */
-	private void placeGas(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			gasPlace.add(new int[] { (int) y, (int) x });
-			m.addGas((int) x, (int) y);
-			GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-			gc.drawImage(GAS, x * TILE_SIZE, y * TILE_SIZE);
-		}
-	}
-
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
      */
 	private void placeDeathRat(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
@@ -921,9 +862,6 @@ public class Main extends Application {
 
 		draggableSterilise.setImage(STERILISE);
 		root.getChildren().add(draggableSterilise);
-
-		draggableGas.setImage(GAS);
-		root.getChildren().add(draggableGas);
 
 		draggableDeathRat.setImage(DEATH_RAT);
 		root.getChildren().add(draggableDeathRat);
@@ -1060,27 +998,6 @@ public class Main extends Application {
         /**
          * Sets up what happens when image is dragged.
          */
-		draggableGas.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				// Mark the drag as started.
-				// We do not use the transfer mode (this can be used to indicate different forms
-				// of drags operations, for example, moving files or copying files).
-				Dragboard db = draggableGas.startDragAndDrop(TransferMode.ANY);
-
-				// We have to put some content in the clipboard of the drag event.
-				// We do not use this, but we could use it to store extra data if we wished.
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
-				db.setContent(content);
-
-				// Consume the event. This means we mark it as dealt with.
-				event.consume();
-			}
-		});
-
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggableDeathRat.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				// Mark the drag as started.
@@ -1143,12 +1060,6 @@ public class Main extends Application {
 					// Consume the event. This means we mark it as dealt with.
 					event.consume();
 				}
-				if (event.getGestureSource() == draggableGas) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
 				if (event.getGestureSource() == draggableDeathRat) {
 					// Mark the drag event as acceptable by the canvas.
 					event.acceptTransferModes(TransferMode.ANY);
@@ -1196,9 +1107,6 @@ public class Main extends Application {
 		}
 		if (event.getGestureSource() == draggableSterilise) {
 			placeSterilise(event);
-		}
-		if (event.getGestureSource() == draggableGas) {
-			placeGas(event);
 		}
 		if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);

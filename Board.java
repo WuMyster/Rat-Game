@@ -248,19 +248,6 @@ public class Board {
     }
 
     /**
-     * Adds gas item to tile.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
-     */
-    public void addGas(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Gas gas = new Gas();
-        //t.setTileItem(gas, x, y);
-        //spreadGasCloud(gas, x, y, gas.getGasMaxRadius());
-        gas.spreadGasCloud(gas, x, y, 3);
-    }
-
-    /**
      * Returns tile location.
      * @param x x-coordinate of tile.
      * @param y y-coordinate of tile.
