@@ -55,7 +55,7 @@ public class Leaderboard2 {
   //  }
 
 
-    public void comparePoints(GameMaster.points) throws IOException {  //points is a HashMap in GameMaster
+   /* public void comparePoints(GameMaster.points) throws IOException {  //points is a HashMap in GameMaster
         openLeaderboard();
         readLeaderboard();
 
@@ -70,7 +70,7 @@ public class Leaderboard2 {
 
             while (highscores.size() < 10) {
 
-                highscores.put(GameMaster.getPoints(i),GameMaster.getPoints(points.get(i)));
+                highscores.put(GameMaster.getPoints(i), GameMaster.getPoints(points.get(i)));
 
                 FileWriter writer = new FileWriter("Leaderboard.txt");
                 writer.write(String.valueOf(highscores));
@@ -79,22 +79,73 @@ public class Leaderboard2 {
             if (highscores.size() >= 10 && (GameMaster.points.get(i)) > score) {
                 highscores.clear(); //removes everything
 
-                highscores.put(GameMaster.getPoints(i),GameMaster.getPoints(points.get(i)));
+                highscores.put(GameMaster.getPoints(i), GameMaster.getPoints(points.get(i)));
 
                 FileWriter writer2 = new FileWriter("Leaderboard.txt");
                 writer2.write(String.valueOf(highscores));
                 writer2.close();
+
             } else {
                 //do nothing
             }
 
             closeLeaderboard();
         }
+    }
 
+    */
+
+    public void sortPoints(ArrayList<Integer> c) {
+
+        Collections.sort(c, Collections.reverseOrder()); //sorts arraylist from highest to lowest score
 
     }
 
 
+    public void comparePoints(GameMaster.points) throws IOException {  //points is a HashMap in GameMaster
+        openLeaderboard();
+        readLeaderboard();
 
+        while (s.hasNext()) {
+
+            HashMap<String, ArrayList<Integer>> highscores = new HashMap<>();
+
+            ArrayList<Integer> c = new ArrayList<>(highscores.keySet());
+
+            for (String i : highscores.keySet()) {
+                highscores.get(i);
+
+                String name = s.next();
+                int score = s.nextInt();
+
+                c.add(score);
+
+                highscores.put(name, c);
+
+            }
+
+            if (highscores.size() < 10) {
+
+                sortPoints(c);
+
+                highscores.put(GameMaster.getPoints(i), GameMaster.getPoints(points.get(i)));
+
+                FileWriter writer = new FileWriter("Leaderboard.txt");
+                writer.write(String.valueOf(highscores));
+
+            } else if (highscores.size() >= 10 && (GameMaster.points.get(i) > score)) {
+
+                sortPoints(c);
+
+                highscores.clear(); //removes everything
+
+                highscores.put(GameMaster.getPoints(i), GameMaster.getPoints(points.get(i)));
+
+                FileWriter writer2 = new FileWriter("Leaderboard.txt");
+                writer2.write(String.valueOf(highscores));
+                writer2.close();
+            }
+            closeLeaderboard();
+        }
+    }
 }
-
