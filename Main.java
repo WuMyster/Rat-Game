@@ -103,60 +103,30 @@ public class Main extends Application {
 	 */
 	ImageView draggableStop = new ImageView();
 
-//	/**
-//	 * Image of Bomb
-//	 */
-//	private static Image BOMB;
-
 	/**
 	 * Draggable image for bomb.
 	 */
 	ImageView draggableBomb = new ImageView();
-
-//    /**
-//     * Image of Sex change (Male to Female) item.
-//     */
-//	private static Image SEX_TO_FEMALE;
 
     /**
      * Draggable image for sex change (Male to Female) item.
      */
     ImageView draggableSexToFemale = new ImageView();
 
-//    /**
-//     * Image of sex change (Female to Male) item.
-//     */
-//	private static Image SEX_TO_MALE;
-
     /**
      * Draggable image for sex change (Female to Male) item.
      */
     ImageView draggableSexToMale = new ImageView();
-
-//    /**
-//     * Image of sterilise item.
-//     */
-//	private static Image STERILISE;
 
     /**
      * Draggable image for sterilise item.
      */
     ImageView draggableSterilise = new ImageView();
 
-//    /**
-//     * Image for death rat.
-//     */
-//	private static Image DEATH_RAT;
-
     /**
      * Draggable image for death rat.
      */
     ImageView draggableDeathRat = new ImageView();
-
-//	/**
-//	 * Image of Poison
-//	 */
-//	private static Image POISON;
 
 	/**
 	 * Draggable image for poison.
@@ -207,6 +177,8 @@ public class Main extends Application {
 	 * Number of points accumulated in level so far.
 	 */
 	private Label currPoints;
+	
+	private static HashMap<ItemType, ArrayList<int[]>> itemPlace;
 
 	/**
 	 * x y coordinates of all stop signs
@@ -372,21 +344,9 @@ public class Main extends Application {
 	 * @param y y posision of the steraliseIcon
 	 */
 	public static void drawSterilise(int x, int y) {
-		sterilisePlace.add(new int[] { (int) y, (int) x });
+		sterilisePlace.add(new int[] { (int) y, (int) x, -1 });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(Sterilisation.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-	
-	/**
-	 * Draws a stop sign on this location on the board.
-	 * @param x x position of the StopSign
-	 * @param y y posision of the StopSign
-	 * @param state the state of the StopSign
-	 */
-	public static void drawStopSign(int x, int y, int state) {
-		stopSignPlace.add(new int[] { (int) y, (int) x, state });
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(StopSign.getImageState(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
 	/**
@@ -395,7 +355,7 @@ public class Main extends Application {
 	 * @param y y posision of the Bomb
 	 */
 	public static void drawBomb(int x, int y) {
-		bombPlace.add(new int[] { (int) y, (int) x, Bomb.COUNTDOWN_IN_S });
+		bombPlace.add(new int[] { (int) y, (int) x, Bomb.START_COUNTDOWN });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(Bomb.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
@@ -420,7 +380,7 @@ public class Main extends Application {
 	 * @param y y posision of the sexToMaleIcon
 	 */
 	public static void drawSexToMale(int x, int y) {
-		sexToMalePlace.add(new int[] { (int) y, (int) x });
+		sexToMalePlace.add(new int[] { (int) y, (int) x, -1 });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(SexChangeToMale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
@@ -431,7 +391,6 @@ public class Main extends Application {
 	 * @param y y posision of the Poison
 	 */
 	public static void drawPoison(int x, int y) {
-		poisonPlace.add(new int[] { (int) y, (int) x });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
@@ -442,7 +401,7 @@ public class Main extends Application {
 	 * @param y y posision of the sexToFemaleIcon
 	 */
 	public static void drawSexToFemale(int x, int y) {
-		sexToFemalePlace.add(new int[] { (int) y, (int) x });
+		sexToFemalePlace.add(new int[] { (int) y, (int) x, -1 });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(SexChangeToFemale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
@@ -482,9 +441,23 @@ public class Main extends Application {
 		for (int[] i : bombPlace) {
 			gc.drawImage(Bomb.getImage(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
-		for (int[] i : poisonPlace) {
-			gc.drawImage(Poison.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+//		for (int[] i : poisonPlace) {
+//			gc.drawImage(Poison.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+//		}
+		
+		for (ItemType it : ItemType.values()) {
+			try {
+				ArrayList<int[]> loc = itemPlace.get(it);
+				if (loc != null) {
+					for (int[] i : loc) {
+						it.draw(i[1], i[0], i[2]);
+					}
+				}
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 		}
+		
 		for (int[] i : sexToFemalePlace) {
 			gc.drawImage(SexChangeToFemale.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
@@ -514,6 +487,18 @@ public class Main extends Application {
 		if (m.addStopSign((int) x, (int) y)) {
 			drawStopSign((int) x, (int) y, StopSign.MAX_STATES);
 		}
+	}
+	
+	/**
+	 * Draws a stop sign on this location on the board.
+	 * @param x x position of the StopSign
+	 * @param y y posision of the StopSign
+	 * @param state the state of the StopSign
+	 */
+	public static void drawStopSign(int x, int y, int state) {
+		stopSignPlace.add(new int[] { (int) y, (int) x, state });
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(StopSign.getImageState(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
 
 	/**
@@ -563,8 +548,14 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addPoison((int) x, (int) y)) {
+			addPoison((int) x, (int) y);
 			drawPoison((int) x, (int) y);
 		}
+	}
+	
+	private void addPoison(int x, int y) {
+		itemPlace.putIfAbsent(ItemType.POISON, new ArrayList<>());
+		itemPlace.get(ItemType.POISON).add(new int[] { (int) y, (int) x, -1 });
 	}
 
     /**
@@ -856,6 +847,9 @@ public class Main extends Application {
 		sexToFemalePlace = new ArrayList<>();
 		sexToMalePlace = new ArrayList<>();
 		sterilisePlace = new ArrayList<>();
+		
+		itemPlace = new HashMap<>();
+		
 		playerStopGame = false;
 	}
 

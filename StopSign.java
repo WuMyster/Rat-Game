@@ -62,7 +62,7 @@ public class StopSign extends Item {
 	public StopSign(int[] xyPos) {
 		this.xyPos = xyPos;
 		this.hp = START_HP;
-		currState = START_HP / DIVIDER;
+		currState = getState();
 	}
 	
 	/**
@@ -71,10 +71,9 @@ public class StopSign extends Item {
 	 * @param hp - the stop signs hp
 	 */
 	public StopSign(int[] xyPos, int hp) {
-		this.xyPos = new int[] {xyPos[0] / Board.EXTRA_PADDING, 
-				xyPos[1] / Board.EXTRA_PADDING};
+		this.xyPos = xyPos;
 		this.hp = hp;
-		currState = START_HP / DIVIDER;
+		currState = getState();
 	}
 	
 	/**
@@ -84,15 +83,14 @@ public class StopSign extends Item {
 	 */
 	public int numsRatsCanEnter(int n) {
 		hp -= n;
-		int nextState = hp / DIVIDER;
+		int nextState = getState();
 		if (nextState == 0) {
 			// Still want tile to remove StopSign from itself
-		} else if (currState != hp / DIVIDER) {
-			currState = hp / DIVIDER;
+		} else if (currState != nextState) {
+			currState = nextState;
 			Main.damageStopSign(xyPos, currState);
 		}
-		
-		if (hp > 0) {
+		if (isAlive()) {
 			return 0;
 		}
 		return Math.abs(hp);
@@ -111,11 +109,11 @@ public class StopSign extends Item {
 	 * @return the current state
 	 */
 	public int getState() {
-		return currState - 1;
+		return hp / DIVIDER;
 	}
 
 	/**
-	 * Doesnt touch the rat
+	 * Doesn't touch the rat.
 	 * @return a list of rats
 	 */
 	@Override
