@@ -697,7 +697,6 @@ public class Main extends Application {
 						draggablePoison, draggableSexToFemale, draggableSexToMale,
 						draggableSterilise, draggableDeathRat
 				};
-				
 				// Mark the drag as acceptable if the source was the draggable image.
 				// (for example, we don't want to allow the user to drag things or files into
 				// our application)
@@ -751,11 +750,12 @@ public class Main extends Application {
 	}
 	
 	private void setUpHandling() {
+		ClipboardContent content = new ClipboardContent();
+		content.putString("Hello");
+		
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableStop.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
@@ -763,8 +763,6 @@ public class Main extends Application {
 		draggableBomb.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableBomb.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
@@ -772,8 +770,6 @@ public class Main extends Application {
 		draggablePoison.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggablePoison.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
@@ -781,8 +777,6 @@ public class Main extends Application {
 		draggableSexToFemale.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableSexToFemale.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
@@ -790,33 +784,20 @@ public class Main extends Application {
 		draggableSexToMale.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableSexToMale.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
 		});
-
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggableSterilise.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableSterilise.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
 		});
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggableDeathRat.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableDeathRat.startDragAndDrop(TransferMode.ANY);
-				ClipboardContent content = new ClipboardContent();
-				content.putString("Hello");
 				db.setContent(content);
 				event.consume();
 			}
