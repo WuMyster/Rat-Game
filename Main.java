@@ -312,7 +312,7 @@ public class Main extends Application {
 		ArrayList<int[]> arr = null;
 
 		if (item instanceof Poison) {
-			arr = poisonPlace;
+			arr = itemPlace.get(ItemType.POISON);
 		} else if (item instanceof SexChangeToFemale) {
 			arr = sexToFemalePlace;
 		} else if (item instanceof SexChangeToMale) {
