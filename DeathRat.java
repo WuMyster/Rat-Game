@@ -1,8 +1,12 @@
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 public class DeathRat {
 	
 	public static final String NAME = "D";
+	
+	public static final Image IMAGE = new Image("img/ItemDeathRat.png");
 	
 	/**
 	 * XY position on the board the death rat starts from.

@@ -103,60 +103,60 @@ public class Main extends Application {
 	 */
 	ImageView draggableStop = new ImageView();
 
-	/**
-	 * Image of Bomb
-	 */
-	private static Image BOMB;
+//	/**
+//	 * Image of Bomb
+//	 */
+//	private static Image BOMB;
 
 	/**
 	 * Draggable image for bomb.
 	 */
 	ImageView draggableBomb = new ImageView();
 
-    /**
-     * Image of Sex change (Male to Female) item.
-     */
-	private static Image SEX_TO_FEMALE;
+//    /**
+//     * Image of Sex change (Male to Female) item.
+//     */
+//	private static Image SEX_TO_FEMALE;
 
     /**
      * Draggable image for sex change (Male to Female) item.
      */
     ImageView draggableSexToFemale = new ImageView();
 
-    /**
-     * Image of sex change (Female to Male) item.
-     */
-	private static Image SEX_TO_MALE;
+//    /**
+//     * Image of sex change (Female to Male) item.
+//     */
+//	private static Image SEX_TO_MALE;
 
     /**
      * Draggable image for sex change (Female to Male) item.
      */
     ImageView draggableSexToMale = new ImageView();
 
-    /**
-     * Image of sterilise item.
-     */
-	private static Image STERILISE;
+//    /**
+//     * Image of sterilise item.
+//     */
+//	private static Image STERILISE;
 
     /**
      * Draggable image for sterilise item.
      */
     ImageView draggableSterilise = new ImageView();
 
-    /**
-     * Image for death rat.
-     */
-	private static Image DEATH_RAT;
+//    /**
+//     * Image for death rat.
+//     */
+//	private static Image DEATH_RAT;
 
     /**
      * Draggable image for death rat.
      */
     ImageView draggableDeathRat = new ImageView();
 
-	/**
-	 * Image of Poison
-	 */
-	private static Image POISON;
+//	/**
+//	 * Image of Poison
+//	 */
+//	private static Image POISON;
 
 	/**
 	 * Draggable image for poison.
@@ -374,7 +374,7 @@ public class Main extends Application {
 	public static void drawSterilise(int x, int y) {
 		sterilisePlace.add(new int[] { (int) y, (int) x });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(STERILISE, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(Sterilisation.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
 	/**
@@ -397,7 +397,7 @@ public class Main extends Application {
 	public static void drawBomb(int x, int y) {
 		bombPlace.add(new int[] { (int) y, (int) x, Bomb.COUNTDOWN_IN_S });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(BOMB, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(Bomb.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     /**
@@ -422,7 +422,7 @@ public class Main extends Application {
 	public static void drawSexToMale(int x, int y) {
 		sexToMalePlace.add(new int[] { (int) y, (int) x });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(SEX_TO_MALE, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(SexChangeToMale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
 	/**
@@ -433,7 +433,7 @@ public class Main extends Application {
 	public static void drawPoison(int x, int y) {
 		poisonPlace.add(new int[] { (int) y, (int) x });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(POISON, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
 	/**
@@ -444,7 +444,7 @@ public class Main extends Application {
 	public static void drawSexToFemale(int x, int y) {
 		sexToFemalePlace.add(new int[] { (int) y, (int) x });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(SEX_TO_FEMALE, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(SexChangeToFemale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
 	/**
@@ -452,7 +452,7 @@ public class Main extends Application {
 	 * @param event The drag event itself which contains data about the drag that
 	 *              occured.
 	 */
-	public void itemCanvasDragDropOccurred(DragEvent event) {
+	public void itemCanvasDragDropOccurred(DragEvent event) {		
 		if (event.getGestureSource() == draggableStop) {
 			placeStopSign(event);
 		} else if (event.getGestureSource() == draggableBomb) {
@@ -483,16 +483,16 @@ public class Main extends Application {
 			gc.drawImage(Bomb.getImage(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 		for (int[] i : poisonPlace) {
-			gc.drawImage(POISON, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(Poison.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 		for (int[] i : sexToFemalePlace) {
-			gc.drawImage(SEX_TO_FEMALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(SexChangeToFemale.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 		for (int[] i : sexToMalePlace) {
-			gc.drawImage(SEX_TO_MALE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(SexChangeToMale.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 		for (int[] i : sterilisePlace) {
-			gc.drawImage(STERILISE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
+			gc.drawImage(Sterilisation.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 	}
 
@@ -689,22 +689,22 @@ public class Main extends Application {
 		draggableStop.setImage(StopSign.getImageState(StopSign.MAX_STATES));
 		root.getChildren().add(draggableStop);
 
-		draggableBomb.setImage(BOMB);
+		draggableBomb.setImage(Bomb.IMAGE);
 		root.getChildren().add(draggableBomb);
 
-		draggablePoison.setImage(POISON);
+		draggablePoison.setImage(Poison.IMAGE);
 		root.getChildren().add(draggablePoison);
 
-		draggableSexToFemale.setImage(SEX_TO_FEMALE);
+		draggableSexToFemale.setImage(SexChangeToFemale.IMAGE);
 		root.getChildren().add(draggableSexToFemale);
 
-		draggableSexToMale.setImage(SEX_TO_MALE);
+		draggableSexToMale.setImage(SexChangeToMale.IMAGE);
 		root.getChildren().add(draggableSexToMale);
 
-		draggableSterilise.setImage(STERILISE);
+		draggableSterilise.setImage(Sterilisation.IMAGE);
 		root.getChildren().add(draggableSterilise);
 
-		draggableDeathRat.setImage(DEATH_RAT);
+		draggableDeathRat.setImage(DeathRat.IMAGE);
 		root.getChildren().add(draggableDeathRat);
 		
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
@@ -734,10 +734,6 @@ public class Main extends Application {
 				event.consume();
 			}
 		});
-
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggableSexToFemale.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableSexToFemale.startDragAndDrop(TransferMode.ANY);
@@ -747,10 +743,6 @@ public class Main extends Application {
 				event.consume();
 			}
 		});
-
-        /**
-         * Sets up what happens when image is dragged.
-         */
 		draggableSexToMale.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableSexToMale.startDragAndDrop(TransferMode.ANY);
@@ -791,50 +783,21 @@ public class Main extends Application {
 		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
+				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb,
+						draggablePoison, draggableSexToFemale, draggableSexToMale,
+						draggableSterilise, draggableDeathRat
+				};
+				
 				// Mark the drag as acceptable if the source was the draggable image.
 				// (for example, we don't want to allow the user to drag things or files into
 				// our application)
-				if (event.getGestureSource() == draggableStop) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableBomb) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggablePoison) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableSexToFemale) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableSexToMale) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableSterilise) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
-				}
-				if (event.getGestureSource() == draggableDeathRat) {
-					// Mark the drag event as acceptable by the canvas.
-					event.acceptTransferModes(TransferMode.ANY);
-					// Consume the event. This means we mark it as dealt with.
-					event.consume();
+				for (ImageView i : goodImages) {
+					if  (event.getGestureSource() == i) {
+						// Mark the drag event as acceptable by the canvas.
+						event.acceptTransferModes(TransferMode.ANY);
+						// Consume the event. This means we mark it as dealt with.
+						event.consume();
+					}
 				}
 			}
 		});
@@ -897,13 +860,6 @@ public class Main extends Application {
 	}
 	
 	private void setInitialValues() {
-		// These should not be here, should be gotten from classes
-		BOMB = new Image("img/ItemBomb.png");
-		POISON = new Image("Poison.png");
-		SEX_TO_FEMALE = new Image("SexChangeToFemale.png");
-		SEX_TO_MALE = new Image("SexChangeToMale.png");
-		STERILISE = new Image("img/Sterilise.png");
-		DEATH_RAT = new Image("img/ItemDeathRat.png");
 		
 		// These no choice
 		RAT_WIDTH = 30;

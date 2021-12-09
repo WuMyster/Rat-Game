@@ -24,6 +24,8 @@ public class Bomb extends Item {
      * Timer the bomb will run off.
      */
     public Timer timer = new Timer();
+    
+    public static final Image IMAGE = new Image("img/ItemBomb.png");
 
     /**
      * Current countdown of the bomb.

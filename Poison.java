@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 /**
  * Models a poison item.
  * @author Andrew Wu
@@ -7,6 +9,8 @@ import java.util.ArrayList;
 class Poison extends Item {
 
 	public static final String NAME = "Poison";
+	
+	public static final Image IMAGE = new Image("Poison.png");
 	
     /**
      * Health point of item.

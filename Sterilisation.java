@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 /**
  * Class modelling a Sterilisation item.
  * @author Andrew Wu
@@ -7,6 +9,8 @@ import java.util.ArrayList;
 public class Sterilisation extends Item {
 
 	public static final String NAME = "Steralise";
+	
+	public static final Image IMAGE = new Image("/img/Sterilise.png");
 	
     /**
      * Health point of item.

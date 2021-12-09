@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 /**
  * Class modelling a sex change item that turns males to females.
  * @author Salim, Andrew Wu
@@ -10,6 +12,8 @@ public class SexChangeToFemale extends Item {
 	 * Name of item.
 	 */
 	public static final String NAME = "toFemale";
+	
+	public static final Image IMAGE = new Image("SexChangeToFemale.png");
 	
     /**
      * Health point of item.
