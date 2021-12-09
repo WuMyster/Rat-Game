@@ -1,3 +1,4 @@
 # CS230_Rats
 
-Created many Class Files, but nothing in it is yet implemented, it only acts as a placeholder for Class Files currently created
+Final submission to the course work given in CS-230
+I (Jing) have continued on this project in the branch Main-J
