@@ -145,7 +145,7 @@ public class Board {
 		}  else if (t instanceof TunnelTile) {
 			return false;
 		}
-		return t.placeStopSign();
+		return t.setTileItem(new StopSign(new int[] {y, x}));
 	}
 
 	/**

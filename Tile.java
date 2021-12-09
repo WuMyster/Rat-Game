@@ -16,12 +16,6 @@ public abstract class Tile {
 	protected Item itemOnTile;
 
 	/**
-	 * Stop sign will cause the tile to not be accessed. If false, Rat can enter
-	 * tile, else Rat will have to take another direction.
-	 */
-	protected Boolean isBlocked;
-
-	/**
 	 * Tiles neighbouring current tile along with the direction to {@code Tile}.
 	 */
 	protected HashMap<Direction, Tile> neighbourTiles;
@@ -179,7 +173,7 @@ public abstract class Tile {
 	 * @return the number of rats that can pass through it
 	 */
 	public int numsRatsCanEnter(Tile t, int n) {
-		if (!isBlocked) {
+		if (!(itemOnTile instanceof StopSign)) {
 			return n;
 		}
 		if (itemOnTile == null) {
@@ -190,7 +184,6 @@ public abstract class Tile {
 		if (!itemOnTile.isAlive()) {
 			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 			itemOnTile = null;
-			isBlocked = false;
 		}
 		return out;
 	}
@@ -291,20 +284,6 @@ public abstract class Tile {
 	}
 	
 	/**
-	 * Place stop sign on tile.
-	 * @deprecated
-	 */
-	protected boolean placeStopSign() {
-		System.err.println("THIS WAS NOT INCLUDED IN SUBMITTED WORK");
-		if (itemOnTile != null) {
-			return false;
-		}
-		itemOnTile = new StopSign(X_Y_POS);
-		isBlocked = true;
-		return true;
-	}
-	
-	/**
 	 * Give rat[s] items on the tile
 	 */
 	protected void giveRatItem() {
@@ -334,9 +313,6 @@ public abstract class Tile {
             return false;
         }
         itemOnTile = i;
-        if (itemOnTile instanceof StopSign) {
-        	isBlocked = true;
-        }
         if (i instanceof Bomb) {
             ((Bomb) i).itemAction();
         }
@@ -351,7 +327,6 @@ public abstract class Tile {
 			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
 		}
 		itemOnTile = null;
-		isBlocked = false;
 		nextBlock = new HashMap<>();
 		currBlock = new HashMap<>();
 		nextDeath = new HashMap<>();
