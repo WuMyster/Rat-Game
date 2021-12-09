@@ -452,7 +452,7 @@ public class Board {
 				Tile t = board[y][x];
 				t.setTileItem(item);
 				if (item instanceof StopSign) {
-					Main.drawStopSign(y / EXTRA_PADDING, x / EXTRA_PADDING, ((StopSign) item).getState());
+					Main.addStopSign(y / EXTRA_PADDING, x / EXTRA_PADDING, ((StopSign) item).getState());
 				} else if (item instanceof Bomb) { //Should get state
 					Main.drawBomb(y / EXTRA_PADDING, x / EXTRA_PADDING);
 				} else if (item instanceof Poison) {

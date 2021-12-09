@@ -309,21 +309,7 @@ public class Main extends Application {
 	 * @param pos x y coordinates of where item is located on board.
 	 */
 	public static void removeItem(Item item, int[] pos) {
-		ArrayList<int[]> arr = null;
-
-		if (item instanceof Poison) {
-			arr = itemPlace.get(ItemType.POISON);
-		} else if (item instanceof SexChangeToFemale) {
-			arr = sexToFemalePlace;
-		} else if (item instanceof SexChangeToMale) {
-			arr = sexToMalePlace;
-		} else if (item instanceof Sterilisation) {
-			arr = sterilisePlace;
-		} else if (item instanceof Bomb) {
-			arr = bombPlace;
-		} else if (item instanceof StopSign) {
-			arr = stopSignPlace;
-		}
+		ArrayList<int[]> arr = itemPlace.get(ItemType.fromItem(item));
 		
 		if (arr != null) {
 			int[] a = null;
@@ -339,53 +325,6 @@ public class Main extends Application {
 	}
 	
 	/**
-	 * Draws a steraliseIcon on this location on the board.
-	 * @param x x position of the steraliseIcon
-	 * @param y y posision of the steraliseIcon
-	 */
-	public static void drawSterilise(int x, int y) {
-		sterilisePlace.add(new int[] { (int) y, (int) x, -1 });
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Sterilisation.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-	
-	/**
-	 * Draw a bomb on this location on the board.
-	 * @param x x position of the Bomb
-	 * @param y y posision of the Bomb
-	 */
-	public static void drawBomb(int x, int y) {
-		bombPlace.add(new int[] { (int) y, (int) x, Bomb.START_COUNTDOWN });
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Bomb.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-    /**
-     * Updates value of bomb responsible for the remaining time till detonation.
-     * @param n remaining time
-     * @param x x-coordinate of bomb placement
-     * @param y y-coordinate of bomb placement
-     */
-	public static void editBombCountdown(int n, int x, int y) {
-		for (int[] i : bombPlace) {
-			if (i[0] == y && i[1] == x) {
-				i[2] = n;
-			}
-		}
-	}
-	
-	/**
-	 * Draws a sexToMaleIcon on this location on the board.
-	 * @param x x position of the sexToMaleIcon
-	 * @param y y posision of the sexToMaleIcon
-	 */
-	public static void drawSexToMale(int x, int y) {
-		sexToMalePlace.add(new int[] { (int) y, (int) x, -1 });
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(SexChangeToMale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-	
-	/**
 	 * Draws a Poison on this location on the board.
 	 * @param x x position of the Poison
 	 * @param y y posision of the Poison
@@ -393,17 +332,6 @@ public class Main extends Application {
 	public static void drawPoison(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-	
-	/**
-	 * Draws a sexToFemaleIcon on this location on the board.
-	 * @param x x position of the sexToFemaleIcon
-	 * @param y y posision of the sexToFemaleIcon
-	 */
-	public static void drawSexToFemale(int x, int y) {
-		sexToFemalePlace.add(new int[] { (int) y, (int) x, -1 });
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(SexChangeToFemale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
 	/**
@@ -434,17 +362,10 @@ public class Main extends Application {
 	 */
 	private void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		for (int[] i : stopSignPlace) {
-			gc.drawImage(StopSign.getImageState(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
-		}
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);		
 		for (int[] i : bombPlace) {
 			gc.drawImage(Bomb.getImage(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
-//		for (int[] i : poisonPlace) {
-//			gc.drawImage(Poison.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
-//		}
-		
 		for (ItemType it : ItemType.values()) {
 			try {
 				ArrayList<int[]> loc = itemPlace.get(it);
@@ -456,16 +377,6 @@ public class Main extends Application {
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		for (int[] i : sexToFemalePlace) {
-			gc.drawImage(SexChangeToFemale.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
-		}
-		for (int[] i : sexToMalePlace) {
-			gc.drawImage(SexChangeToMale.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
-		}
-		for (int[] i : sterilisePlace) {
-			gc.drawImage(Sterilisation.IMAGE, i[1] * TILE_SIZE, i[0] * TILE_SIZE);
 		}
 	}
 
@@ -485,8 +396,14 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addStopSign((int) x, (int) y)) {
-			drawStopSign((int) x, (int) y, StopSign.MAX_STATES);
+			addStopSign((int) x, (int) y, StopSign.MAX_STATES);
 		}
+	}
+	
+	public static void addStopSign(int x, int y, int states) {
+		itemPlace.putIfAbsent(ItemType.STOPSIGN, new ArrayList<>());
+		itemPlace.get(ItemType.STOPSIGN).add(new int[] {y, x, states});
+		drawStopSign(x, y, states);
 	}
 	
 	/**
@@ -509,6 +426,7 @@ public class Main extends Application {
 	 */
 	public static void damageStopSign(int[] pos, int state) {
 		// Will need to think about this Currently StopSign calls damage
+		ArrayList<int[]> stopSignPlace = itemPlace.get(ItemType.STOPSIGN);
 		if (state != 0) {
 			int[] xyPos = null;
 			for (int[] i : stopSignPlace) {
@@ -532,7 +450,38 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addBomb((int) x, (int) y)) {
-			drawBomb((int) x, (int) y);
+			addBomb((int) x, (int) y);
+		}
+	}
+	
+	public static void addBomb(int x, int y) {
+		itemPlace.putIfAbsent(ItemType.BOMB, new ArrayList<>());
+		itemPlace.get(ItemType.BOMB).add(new int[] {y, x, Bomb.START_COUNTDOWN });
+		drawBomb(x, y);
+	}
+	
+	/**
+	 * Draw a bomb on this location on the board.
+	 * @param x x position of the Bomb
+	 * @param y y posision of the Bomb
+	 */
+	public static void drawBomb(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(Bomb.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+
+    /**
+     * Updates value of bomb responsible for the remaining time till detonation.
+     * @param n remaining time
+     * @param x x-coordinate of bomb placement
+     * @param y y-coordinate of bomb placement
+     */
+	public static void editBombCountdown(int n, int x, int y) {
+		ArrayList<int[]> bombPlace = itemPlace.get(ItemType.BOMB);
+		for (int[] i : bombPlace) {
+			if (i[0] == y && i[1] == x) {
+				i[2] = n;
+			}
 		}
 	}
 
@@ -549,13 +498,13 @@ public class Main extends Application {
 
 		if (m.addPoison((int) x, (int) y)) {
 			addPoison((int) x, (int) y);
-			drawPoison((int) x, (int) y);
 		}
 	}
 	
-	private void addPoison(int x, int y) {
+	private static void addPoison(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.POISON, new ArrayList<>());
-		itemPlace.get(ItemType.POISON).add(new int[] { (int) y, (int) x, -1 });
+		itemPlace.get(ItemType.POISON).add(new int[] {y, x, -1 });
+		drawPoison(x, y);
 	}
 
     /**
@@ -570,8 +519,24 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addSexToFemale((int) x, (int) y)) {
-			drawSexToFemale((int) x, (int) y);
+			addSexToFemale((int) x, (int) y);
 		}
+	}
+	
+	public static void addSexToFemale(int x, int y) {
+		itemPlace.putIfAbsent(ItemType.SEX_TO_FEMALE, new ArrayList<>());
+		itemPlace.get(ItemType.SEX_TO_FEMALE).add(new int[] {y, x, -1});
+		drawSexToFemale(x, y);
+	}
+	
+	/**
+	 * Draws a sexToFemaleIcon on this location on the board.
+	 * @param x x position of the sexToFemaleIcon
+	 * @param y y posision of the sexToFemaleIcon
+	 */
+	public static void drawSexToFemale(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(SexChangeToFemale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     /**
@@ -586,8 +551,24 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addSexToMale((int) x, (int) y)) {
-			drawSexToMale((int) x, (int) y);
+			addSexToMale((int) x, (int) y);
 		}
+	}
+	
+	public static void addSexToMale(int x, int y) {
+		itemPlace.putIfAbsent(ItemType.SEX_TO_MALE, new ArrayList<>());
+		itemPlace.get(ItemType.SEX_TO_MALE).add(new int[] {y, x, -1});
+		drawSexToMale(x, y);
+	}
+	
+	/**
+	 * Draws a sexToMaleIcon on this location on the board.
+	 * @param x x position of the sexToMaleIcon
+	 * @param y y posision of the sexToMaleIcon
+	 */
+	public static void drawSexToMale(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(SexChangeToMale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     /**
@@ -602,8 +583,24 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addSterilise((int) x, (int) y)) {
-			drawSterilise((int) x, (int) y);
+			addSterilise((int) x, (int) y);
 		}
+	}
+	
+	public static void addSterilise(int x, int y) {
+		itemPlace.put(ItemType.STERILISATION, new ArrayList<>());
+		itemPlace.get(ItemType.STERILISATION).add(new int[] {y, x, -1});
+		drawSterilise(x, y);
+	}
+	
+	/**
+	 * Draws a steraliseIcon on this location on the board.
+	 * @param x x position of the steraliseIcon
+	 * @param y y posision of the steraliseIcon
+	 */
+	public static void drawSterilise(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(Sterilisation.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     /**
