@@ -80,6 +80,10 @@ public class Bomb extends Item {
 		}
 		return STATES[n];
 	}
+	
+	public int getState() {
+		return hp;
+	}
 
 	/**
 	 * Item ability triggered through calling this method. Method delayed per
@@ -97,7 +101,7 @@ public class Bomb extends Item {
 			public void run() {
 				hp--;
 				if (hp >= 0) {
-					Main.editBombCountdown(hp, x, y);
+					Main.editBombCountdown(x, y, hp);
 				}
 
 				if (hp < 0) {

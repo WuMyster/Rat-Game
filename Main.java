@@ -1,6 +1,4 @@
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.time.LocalTime;
 
@@ -10,7 +8,6 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -101,37 +98,37 @@ public class Main extends Application {
 	/**
 	 * Draggable image for stop sign.
 	 */
-	ImageView draggableStop = new ImageView();
+	private ImageView draggableStop = new ImageView();
 
 	/**
 	 * Draggable image for bomb.
 	 */
-	ImageView draggableBomb = new ImageView();
+	private ImageView draggableBomb = new ImageView();
 
     /**
      * Draggable image for sex change (Male to Female) item.
      */
-    ImageView draggableSexToFemale = new ImageView();
+	private ImageView draggableSexToFemale = new ImageView();
 
     /**
      * Draggable image for sex change (Female to Male) item.
      */
-    ImageView draggableSexToMale = new ImageView();
+    private ImageView draggableSexToMale = new ImageView();
 
     /**
      * Draggable image for sterilise item.
      */
-    ImageView draggableSterilise = new ImageView();
+    private ImageView draggableSterilise = new ImageView();
 
     /**
      * Draggable image for death rat.
      */
-    ImageView draggableDeathRat = new ImageView();
+    private ImageView draggableDeathRat = new ImageView();
 
 	/**
 	 * Draggable image for poison.
 	 */
-	ImageView draggablePoison = new ImageView();
+    private ImageView draggablePoison = new ImageView();
 
 	/**
 	 * Board of the game
@@ -141,12 +138,12 @@ public class Main extends Application {
 	/**
 	 * Width of the rat in pixels.
 	 */
-	public static int RAT_WIDTH;
+	private static int RAT_WIDTH;
 
 	/**
 	 * Height of the rat in pixels.
 	 */
-	public static int RAT_HEIGHT;
+	private static int RAT_HEIGHT;
 
 	/**
 	 * Canvas of map tiles.
@@ -178,37 +175,10 @@ public class Main extends Application {
 	 */
 	private Label currPoints;
 	
+	/**
+	 * Location of all items.
+	 */
 	private static HashMap<ItemType, ArrayList<int[]>> itemPlace;
-
-	/**
-	 * x y coordinates of all stop signs
-	 */
-	private static ArrayList<int[]> stopSignPlace;
-
-	/**
-	 * x y coordinates of all bomb placements
-	 */
-	private static ArrayList<int[]> bombPlace;
-
-	/**
-	 * x y coordinates of all poison placements
-	 */
-	private static ArrayList<int[]> poisonPlace;
-
-    /**
-     * x y coordinates of all sex change (Male to Female) placements.
-     */
-	private static ArrayList<int[]> sexToFemalePlace;
-
-    /**
-     * x y coordinates of all sex change (Female to Male) placements.
-     */
-	private static ArrayList<int[]> sexToMalePlace;
-
-    /**
-     * x y coordinates of all sterilise item placements.
-     */
-	private static ArrayList<int[]> sterilisePlace;
 
 	/**
 	 * The Rats in the game window which needs to move.
@@ -323,16 +293,6 @@ public class Main extends Application {
 			System.err.println("Item cannot be removed\n" + item);
 		}
 	}
-	
-	/**
-	 * Draws a Poison on this location on the board.
-	 * @param x x position of the Poison
-	 * @param y y posision of the Poison
-	 */
-	public static void drawPoison(int x, int y) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
 
 	/**
 	 * Reacts to item that is dragged onto canvas.
@@ -354,6 +314,8 @@ public class Main extends Application {
 			placeSterilise(event);
 		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
+		} else {
+			System.err.println("Dragging fail!!");
 		}
 	}
 	
@@ -362,10 +324,7 @@ public class Main extends Application {
 	 */
 	private void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);		
-		for (int[] i : bombPlace) {
-			gc.drawImage(Bomb.getImage(i[2]), i[1] * TILE_SIZE, i[0] * TILE_SIZE);
-		}
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 		for (ItemType it : ItemType.values()) {
 			try {
 				ArrayList<int[]> loc = itemPlace.get(it);
@@ -387,9 +346,6 @@ public class Main extends Application {
 	 *              occurred.
 	 * @author Liam O'Reilly
 	 * @author Jing Shiang Gu
-	 * 
-	 *         TODO Can check list, can check tile, I've had it check Tile - J Could
-	 *         also use set, add it and check length
 	 */
 	private void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
@@ -413,7 +369,6 @@ public class Main extends Application {
 	 * @param state the state of the StopSign
 	 */
 	public static void drawStopSign(int x, int y, int state) {
-		stopSignPlace.add(new int[] { (int) y, (int) x, state });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(StopSign.getImageState(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
@@ -450,14 +405,14 @@ public class Main extends Application {
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addBomb((int) x, (int) y)) {
-			addBomb((int) x, (int) y);
+			addBomb((int) x, (int) y, Bomb.START_COUNTDOWN);
 		}
 	}
 	
-	public static void addBomb(int x, int y) {
+	public static void addBomb(int x, int y, int state) {
 		itemPlace.putIfAbsent(ItemType.BOMB, new ArrayList<>());
-		itemPlace.get(ItemType.BOMB).add(new int[] {y, x, Bomb.START_COUNTDOWN });
-		drawBomb(x, y);
+		itemPlace.get(ItemType.BOMB).add(new int[] {y, x, state });
+		drawBomb(x, y, state);
 	}
 	
 	/**
@@ -465,24 +420,25 @@ public class Main extends Application {
 	 * @param x x position of the Bomb
 	 * @param y y posision of the Bomb
 	 */
-	public static void drawBomb(int x, int y) {
+	public static void drawBomb(int x, int y, int state) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Bomb.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(Bomb.getImage(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     /**
      * Updates value of bomb responsible for the remaining time till detonation.
-     * @param n remaining time
      * @param x x-coordinate of bomb placement
      * @param y y-coordinate of bomb placement
+     * @param state remaining time
      */
-	public static void editBombCountdown(int n, int x, int y) {
+	public static void editBombCountdown(int x, int y, int state) {
 		ArrayList<int[]> bombPlace = itemPlace.get(ItemType.BOMB);
 		for (int[] i : bombPlace) {
 			if (i[0] == y && i[1] == x) {
-				i[2] = n;
+				i[2] = state;
 			}
 		}
+		drawBomb(x, y, state);
 	}
 
     /**
@@ -505,6 +461,16 @@ public class Main extends Application {
 		itemPlace.putIfAbsent(ItemType.POISON, new ArrayList<>());
 		itemPlace.get(ItemType.POISON).add(new int[] {y, x, -1 });
 		drawPoison(x, y);
+	}
+	
+	/**
+	 * Draws a Poison on this location on the board.
+	 * @param x x position of the Poison
+	 * @param y y posision of the Poison
+	 */
+	public static void drawPoison(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
     /**
@@ -588,7 +554,7 @@ public class Main extends Application {
 	}
 	
 	public static void addSterilise(int x, int y) {
-		itemPlace.put(ItemType.STERILISATION, new ArrayList<>());
+		itemPlace.putIfAbsent(ItemType.STERILISATION, new ArrayList<>());
 		itemPlace.get(ItemType.STERILISATION).add(new int[] {y, x, -1});
 		drawSterilise(x, y);
 	}
@@ -837,14 +803,7 @@ public class Main extends Application {
 		
 		// These no choice
 		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;
-		stopSignPlace = new ArrayList<>();
-		bombPlace = new ArrayList<>();
-		poisonPlace = new ArrayList<>();
-		sexToFemalePlace = new ArrayList<>();
-		sexToMalePlace = new ArrayList<>();
-		sterilisePlace = new ArrayList<>();
-		
+		RAT_HEIGHT = 45;		
 		itemPlace = new HashMap<>();
 		
 		playerStopGame = false;

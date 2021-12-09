@@ -454,7 +454,7 @@ public class Board {
 				if (item instanceof StopSign) {
 					Main.addStopSign(y / EXTRA_PADDING, x / EXTRA_PADDING, ((StopSign) item).getState());
 				} else if (item instanceof Bomb) { //Should get state
-					Main.drawBomb(y / EXTRA_PADDING, x / EXTRA_PADDING);
+					Main.drawBomb(y / EXTRA_PADDING, x / EXTRA_PADDING, ((Bomb) item).getState());
 				} else if (item instanceof Poison) {
 					Main.drawPoison(y / EXTRA_PADDING, x / EXTRA_PADDING);
 				} else if (item instanceof SexChangeToFemale) {

@@ -17,7 +17,7 @@ public enum ItemType {
 	},
 	BOMB {
 		public void draw(int x, int y, int state) {
-			Main.drawBomb(x, y);
+			Main.drawBomb(x, y, state);
 		}
 	},
 	SEX_TO_MALE {
