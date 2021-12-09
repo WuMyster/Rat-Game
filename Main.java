@@ -546,8 +546,7 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			m.addBomb((int) x, (int) y);
+		if (m.addBomb((int) x, (int) y)) {
 			drawBomb((int) x, (int) y);
 		}
 	}
@@ -563,8 +562,7 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			m.addPoison((int) x, (int) y);
+		if (m.addPoison((int) x, (int) y)) {
 			drawPoison((int) x, (int) y);
 		}
 	}
@@ -580,8 +578,7 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			m.addSexToFemale((int) x, (int) y);
+		if (m.addSexToFemale((int) x, (int) y)) {
 			drawSexToFemale((int) x, (int) y);
 		}
 	}
@@ -597,8 +594,7 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			m.addSexToMale((int) x, (int) y);
+		if (m.addSexToMale((int) x, (int) y)) {
 			drawSexToMale((int) x, (int) y);
 		}
 	}
@@ -614,8 +610,8 @@ public class Main extends Application {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
-		if (Board.isItemPlaceable((int) x, (int) y)) {
-			m.addSterilise((int) x, (int) y);
+		if (m.addSterilise((int) x, (int) y)) {
+			drawSterilise((int) x, (int) y);
 		}
 	}
 

@@ -118,18 +118,13 @@ public class Board {
      * @param y y-coordinate being checked.
      * @return boolean of if item can be placed on tile.
      */
-    public static boolean isItemPlaceable(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        if (t.itemOnTile == null) {
-            if (t instanceof PathTile && !(t instanceof TunnelTile)) {
-                return true;
-            }
-            if (t instanceof JunctionTile) {
-                return true;
-            }
-            return false;
-        }
-        return false;
+    private boolean isPlaceableTile(Tile t) {
+        if (t == null) {
+			return false;
+		}  else if (t instanceof TunnelTile) {
+			return false;
+		}
+        return true;
     }
 
 	/**
@@ -140,12 +135,10 @@ public class Board {
 	 */
 	public boolean addStopSign(int x, int y) {
 		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-		if (t == null) {
-			return false;
-		}  else if (t instanceof TunnelTile) {
-			return false;
+		if (isPlaceableTile(t)) {
+			return t.setTileItem(new StopSign(new int[] {y, x}));
 		}
-		return t.setTileItem(new StopSign(new int[] {y, x}));
+		return false;
 	}
 
 	/**
@@ -154,11 +147,12 @@ public class Board {
 	 * @param y y position of tile on map
 	 * @return if bomb can be placed at that location.
 	 */
-	public void addBomb(int x, int y) {
+	public boolean addBomb(int x, int y) {
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Bomb bomb = new Bomb(new int[] {y, x});
-
-        t.setTileItem(bomb);
+        if (isPlaceableTile(t)) {
+			return t.setTileItem(new Bomb(new int[] {y, x}));
+		}
+        return false;
 	}
 
     /**
@@ -172,34 +166,30 @@ public class Board {
         int startY = y;
         int startX = x;
 
-        Tile t = board[startY][startX];
-        while (t != null) {
-            t.blowUp();
-            t = board[y--][x];
+        while (board[y][x] != null) {
+        	board[y][x].blowUp();
+            y--;
         }
 
-        t = board[startY][startX];
-        y = startY;
+        y = startY + 1;
         x = startX;
-        while (t != null) {
-            t.blowUp();
-            t = board[y++][x];
+        while (board[y][x] != null) {
+        	board[y][x].blowUp();
+            y++;
         }
 
-        t = board[startY][startX];
         y = startY;
-        x = startX;
-        while (t != null) {
-            t.blowUp();
-            t = board[y][x--];
+        x = startX - 1;
+        while (board[y][x] != null) {
+        	board[y][x].blowUp();
+            x--;
         }
 
-        t = board[startY][startX];
         y = startY;
-        x = startX;
-        while (t != null) {
-            t.blowUp();
-            t = board[y][x++];
+        x = startX + 1;
+        while (board[y][x] != null) {
+        	board[y][x].blowUp();
+            x++;
         }
     }
 
@@ -208,23 +198,25 @@ public class Board {
      * @param x x-coordinate of tile.
      * @param y y-coordinate of tile.
      */
-    public void addPoison(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Poison p = new Poison();
-
-        t.setTileItem(p);
-        }
+    public boolean addPoison(int x, int y) {        
+		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+		if (isPlaceableTile(t)) {
+			return t.setTileItem(new Poison());
+		}
+		return false;
+    }
 
     /**
      * Adds sex change (Male to Female) item to tile.
      * @param x x-coordinate of tile.
      * @param y y-coordinate of tile.
      */
-    public void addSexToFemale(int x, int y) {
+    public boolean addSexToFemale(int x, int y) {        
         Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        SexChangeToFemale toFemale = new SexChangeToFemale();
-
-        t.setTileItem(toFemale);
+		if (isPlaceableTile(t)) {
+			return t.setTileItem(new SexChangeToFemale());
+		}
+		return false;
     }
 
     /**
@@ -232,11 +224,12 @@ public class Board {
      * @param x x-coordinate of tile.
      * @param y y-coordinate of tile.
      */
-    public void addSexToMale(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        SexChangeToMale toMale = new SexChangeToMale();
-
-        t.setTileItem(toMale);
+    public boolean addSexToMale(int x, int y) {
+    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+		if (isPlaceableTile(t)) {
+			return t.setTileItem(new SexChangeToMale());
+		}
+		return false;
     }
 
     /**
@@ -244,11 +237,12 @@ public class Board {
      * @param x x-coordinate of tile.
      * @param y y-coordinate of tile.
      */
-    public void addSterilise(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        Sterilisation s = new Sterilisation();
-
-        t.setTileItem(s);
+    public boolean addSterilise(int x, int y) {
+    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+		if (isPlaceableTile(t)) {
+			return t.setTileItem(new Sterilisation());
+		}
+		return false;
     }
 
     /**

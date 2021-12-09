@@ -60,8 +60,7 @@ public class StopSign extends Item {
 	 * @param xyPos
 	 */
 	public StopSign(int[] xyPos) {
-		this.xyPos = new int[] {xyPos[0] / Board.EXTRA_PADDING, 
-				xyPos[1] / Board.EXTRA_PADDING};
+		this.xyPos = xyPos;
 		this.hp = START_HP;
 		currState = START_HP / DIVIDER;
 	}
