@@ -14,6 +14,11 @@ public class StopSign extends Item {
 	public static final String NAME = "StopSign";
 	
 	/**
+	 * Icon of this image.
+	 */
+	public static final Image IMAGE = new Image("/img/StopSign2.png");
+	
+	/**
 	 * Max number of images - 1.
 	 */
 	public static final int MAX_STATES = 2;
@@ -36,7 +41,7 @@ public class StopSign extends Item {
 	private static final Image[] STATES = new Image[] {
 			new Image("/img/StopSign0.png"),
 			new Image("/img/StopSign1.png"),
-			new Image("/img/StopSign2.png")
+			IMAGE
 	};
 	
 	/**

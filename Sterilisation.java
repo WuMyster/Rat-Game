@@ -8,8 +8,14 @@ import javafx.scene.image.Image;
  */
 public class Sterilisation extends Item {
 
+	/**
+	 * Name of the item.
+	 */
 	public static final String NAME = "Steralise";
 	
+	/**
+	 * Icon of this image.
+	 */
 	public static final Image IMAGE = new Image("/img/Sterilise.png");
 	
     /**

@@ -386,7 +386,7 @@ public class Main extends Application {
 	public static void drawStopSign(int x, int y, int state) {
 		stopSignPlace.add(new int[] { (int) y, (int) x, state });
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(StopSign.getImageState(StopSign.MAX_STATES), x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(StopSign.getImageState(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
 	/**
@@ -684,9 +684,51 @@ public class Main extends Application {
 		currPoints.setFont(new Font(20));
 		currLevel.setTextAlignment(TextAlignment.CENTER);
 		root.getChildren().add(currPoints);
+		
+		setUpDraggleableImages(root);
+		setUpHandling();
+		
+		/**
+		 * 	Allows canvas to received dragged object within its bounds.
+		 */
+		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
+			public void handle(DragEvent event) {
+				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb,
+						draggablePoison, draggableSexToFemale, draggableSexToMale,
+						draggableSterilise, draggableDeathRat
+				};
+				
+				// Mark the drag as acceptable if the source was the draggable image.
+				// (for example, we don't want to allow the user to drag things or files into
+				// our application)
+				for (ImageView i : goodImages) {
+					if  (event.getGestureSource() == i) {
+						// Mark the drag event as acceptable by the canvas.
+						event.acceptTransferModes(TransferMode.ANY);
+						// Consume the event. This means we mark it as dealt with.
+						event.consume();
+					}
+				}
+			}
+		});
 
-		// Setup a draggable image.
-		draggableStop.setImage(StopSign.getImageState(StopSign.MAX_STATES));
+		/**
+		 * Allows canvas to react to dragged object when finally dropped.
+		 */
+		itemCanvas.setOnDragDropped(new EventHandler<DragEvent>() {
+			public void handle(DragEvent event) {
+				itemCanvasDragDropOccurred(event);
+				event.consume();
+			}
+		});
+		return root;
+	}
+	
+	/**
+	 * Initiliase draggleable images. Expand VBox.
+	 */
+	private void setUpDraggleableImages(VBox root) {
+		draggableStop.setImage(StopSign.IMAGE);
 		root.getChildren().add(draggableStop);
 
 		draggableBomb.setImage(Bomb.IMAGE);
@@ -706,7 +748,9 @@ public class Main extends Application {
 
 		draggableDeathRat.setImage(DeathRat.IMAGE);
 		root.getChildren().add(draggableDeathRat);
-		
+	}
+	
+	private void setUpHandling() {
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableStop.startDragAndDrop(TransferMode.ANY);
@@ -777,41 +821,6 @@ public class Main extends Application {
 				event.consume();
 			}
 		});
-
-		/**
-		 * 	Allows canvas to received dragged object within its bounds.
-		 */
-		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb,
-						draggablePoison, draggableSexToFemale, draggableSexToMale,
-						draggableSterilise, draggableDeathRat
-				};
-				
-				// Mark the drag as acceptable if the source was the draggable image.
-				// (for example, we don't want to allow the user to drag things or files into
-				// our application)
-				for (ImageView i : goodImages) {
-					if  (event.getGestureSource() == i) {
-						// Mark the drag event as acceptable by the canvas.
-						event.acceptTransferModes(TransferMode.ANY);
-						// Consume the event. This means we mark it as dealt with.
-						event.consume();
-					}
-				}
-			}
-		});
-
-		/**
-		 * Allows canvas to react to dragged object when finally dropped.
-		 */
-		itemCanvas.setOnDragDropped(new EventHandler<DragEvent>() {
-			public void handle(DragEvent event) {
-				itemCanvasDragDropOccurred(event);
-				event.consume();
-			}
-		});
-		return root;
 	}
 
 	/**

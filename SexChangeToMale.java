@@ -14,6 +14,9 @@ public class SexChangeToMale extends Item {
 	 */
 	public static final String NAME = "toMale";
 	
+	/**
+	 * Icon of this item.
+	 */
 	public static final Image IMAGE = new Image("/img/SexChangeToMale.png");
 	
     /**
