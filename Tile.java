@@ -291,6 +291,20 @@ public abstract class Tile {
 	}
 	
 	/**
+	 * Place stop sign on tile.
+	 * @deprecated
+	 */
+	protected boolean placeStopSign() {
+		System.err.println("THIS WAS NOT INCLUDED IN SUBMITTED WORK");
+		if (itemOnTile != null) {
+			return false;
+		}
+		itemOnTile = new StopSign(X_Y_POS);
+		isBlocked = true;
+		return true;
+	}
+	
+	/**
 	 * Give rat[s] items on the tile
 	 */
 	protected void giveRatItem() {
