@@ -182,10 +182,14 @@ public abstract class Tile {
 		}
 		int out = ((StopSign) itemOnTile).numsRatsCanEnter(n);
 		if (!itemOnTile.isAlive()) {
-			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-			itemOnTile = null;
+			removeItem();
 		}
 		return out;
+	}
+	
+	private void removeItem() {
+		Main.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
+		itemOnTile = null;
 	}
 	
 	/**
@@ -233,7 +237,7 @@ public abstract class Tile {
 			if (itemOnTile instanceof Bomb) {
 				((Bomb) itemOnTile).timer.cancel();
 			}
-			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+			removeItem();
 		}
 
         // Create list of rats
@@ -296,8 +300,7 @@ public abstract class Tile {
             if (!aliveRats.isEmpty()) {
                 aliveRats = itemOnTile.itemAction(aliveRats);
                 if (!itemOnTile.isAlive()) {
-                    Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
-                    itemOnTile = null;
+                    removeItem();
                 }
 			}
 		}
@@ -324,9 +327,8 @@ public abstract class Tile {
 	 */
 	private void resetTile() {
 		if (itemOnTile != null) {
-			Main.removeItem(itemOnTile, ORIGINAL_X_Y_POS);
+			removeItem();
 		}
-		itemOnTile = null;
 		nextBlock = new HashMap<>();
 		currBlock = new HashMap<>();
 		nextDeath = new HashMap<>();

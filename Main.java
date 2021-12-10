@@ -278,8 +278,8 @@ public class Main extends Application {
 	 * @param item the item to be removed
 	 * @param pos x y coordinates of where item is located on board.
 	 */
-	public static void removeItem(Item item, int[] pos) {
-		ArrayList<int[]> arr = itemPlace.get(ItemType.fromItem(item));
+	public static void removeItem(ItemType it, int[] pos) {
+		ArrayList<int[]> arr = itemPlace.get(it);
 		
 		if (arr != null) {
 			int[] a = null;
@@ -290,7 +290,7 @@ public class Main extends Application {
 			}
 			arr.remove(a);
 		} else {
-			System.err.println("Item cannot be removed\n" + item);
+			System.err.println("Item cannot be removed\n" + it);
 		}
 	}
 
