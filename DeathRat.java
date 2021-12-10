@@ -34,11 +34,16 @@ public class DeathRat {
 	private static int START_HP = 5;
 	
 	/**
+	 * Time it stays still on tile in tile time.
+	 */
+	private static int STOP_TIME = 5;
+	
+	/**
 	 * Constructor for Death Rat. Does not interact with items other
 	 * than Stop Signs and Bombs.
 	 */
 	public DeathRat() {
-		this.hp = START_HP;
+		this.hp = START_HP + STOP_TIME;
 	}
 	
 	/**
@@ -56,6 +61,19 @@ public class DeathRat {
 	 */
 	public int[] getXyPos() {
 		return xyPos;
+	}
+	
+	/**
+	 * Returns {@code true} if this death rat can move.
+	 * @return true if Death Rat can move
+	 */
+	public boolean canMove() {
+		if (hp <= START_HP) {
+			System.out.println(hp);
+			return true;
+		}
+		hp--;
+		return false;
 	}
 	
 	public boolean isAlive() {
@@ -114,7 +132,7 @@ public class DeathRat {
 	 * @return list of rats that survive attack
 	 */
 	public ArrayList<Rat> killRats(ArrayList<Rat> rs, int move) {	
-		if (rs.size() == 0) {
+		if (rs.size() == 0) { 
 			return rs;
 		}
 		hp -= rs.size();

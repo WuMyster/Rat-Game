@@ -288,6 +288,17 @@ public abstract class Tile {
 	}
 	
 	/**
+	 * Del me
+	 * Debug
+	 */
+	protected void tempSetRats() {
+		aliveRats = new ArrayList<>();
+		for (Direction dir : currBlock.keySet()) {
+			aliveRats.addAll(currBlock.get(dir));
+		}
+	}
+	
+	/**
 	 * Give rat[s] items on the tile
 	 */
 	protected void giveRatItem() {

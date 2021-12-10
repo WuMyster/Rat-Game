@@ -232,7 +232,7 @@ public class Main extends Application {
 		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
-		cycler.play();
+		// cycler.play();
 		
 		scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
@@ -580,6 +580,15 @@ public class Main extends Application {
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
 	}
+	
+	public static void addDeathRat(int x, int y) {
+		
+	}
+	
+	public static void drawDeathRat(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+	}
 
 	/**
 	 * Creates the top menu bar. Contains menu options.
@@ -607,6 +616,12 @@ public class Main extends Application {
 		root.getChildren().addAll(stopGame);
 		stopGame.setOnAction(e -> {
 			playerStopGame = true;
+		});
+		
+		Button move = new Button("Move rats");
+		root.getChildren().addAll(move);
+		move.setOnAction(e -> {
+			runCycle();
 		});
 
 		Label msg = new Label(MessageOfDay.getMsgDay());
