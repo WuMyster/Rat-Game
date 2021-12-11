@@ -155,6 +155,7 @@ public abstract class Tile {
 						System.out.println("Del" + r);
 					}
 				}
+				aliveRats = tmp;
 				currBlock.put(prevDirection, tmp);
 			} else {
 				System.out.println("NULL");

@@ -370,17 +370,16 @@ public class Board {
 		// Movement
 		for (Tile t : allTiles) {
 			t.setCurrRat();
-			t.tempSetRats();
 		}
-//		// First give item to rat(s)
-//		for (Tile t : allTiles) {
-//			t.giveRatItem();
-//		}
+		// First give item to rat(s)
+		for (Tile t : allTiles) {
+			t.giveRatItem();
+		}
 		
-//		// Then have the rats interact with each other
-//		for (Tile t : allTiles) {
-//			t.getRatInteractions();
-//		}
+		// Then have the rats interact with each other
+		for (Tile t : allTiles) {
+			t.getRatInteractions();
+		}
 		
 		for (Tile t : allTiles) {
 			t.correctList();
