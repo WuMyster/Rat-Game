@@ -143,7 +143,7 @@ public abstract class Tile {
 	 * Sorts the rats on this tile to ensure only alive rats are interacting.
 	 */
 	public void correctList() {
-		ArrayList<Rat> tmp1 = aliveRats;
+		// ArrayList<Rat> tmp1 = aliveRats;
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> tmp = new ArrayList<>();
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
@@ -151,18 +151,16 @@ public abstract class Tile {
 				for (Rat r : rs) {
 					if (aliveRats.remove(r)) {
 						tmp.add(r);
-					} else if (r.getAge() < 2) { // For newborn bab rats
-						tmp.add(r);
-						System.out.println("New");
 					} else {
 						System.out.println("Del" + r);
-
 					}
 				}
 				currBlock.put(prevDirection, tmp);
+			} else {
+				System.out.println("NULL");
 			}
 		}
-		aliveRats = tmp1;
+		// aliveRats = tmp1;
 	}
 
 	/**
@@ -274,6 +272,28 @@ public abstract class Tile {
 	public void addRat(DeathRat r, Direction d) {
 		nextDeath.putIfAbsent(d, new ArrayList<DeathRat>());
 		nextDeath.get(d).add(r);
+	}
+
+	protected void setDeathRat() {
+		// Ensures all Death Rats can move
+		for (Direction prevDirection : currDeath.keySet()) {
+			ArrayList<DeathRat> moves = new ArrayList<>();
+			for (DeathRat dr : currDeath.get(prevDirection)) {
+				if (dr.canMove()) {
+					moves.add(dr);
+				} else {
+					nextDeath.putIfAbsent(prevDirection, new ArrayList<>());
+					nextDeath.get(prevDirection).add(dr);
+					Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), 
+							RatType.DEATH, 0);
+				}
+			}
+			currDeath.put(prevDirection, moves);
+		}
+	}
+	
+	protected void killNonMovingRats() {
+		
 	}
 
 	/**

@@ -29,36 +29,18 @@ public class PathTile extends Tile {
 		if (currDeath.isEmpty()) {
 			return new ArrayList<>();
 		}
-		System.out.println(itemOnTile);
-		System.out.println("# alive rats start: " + aliveRats.size());
+		
+		setDeathRat(); // Ensures only moving death rats are considered
+		
 		int beforeDeathInter = aliveRats.size();
 		
-		nextDeath = new HashMap<>(); //Will need to check if this is already reset.
-		// Ensures all Death Rats can move
-		for (Direction prevDirection : currDeath.keySet()) {
-			ArrayList<DeathRat> moves = new ArrayList<>();
-			for (DeathRat dr : currDeath.get(prevDirection)) {
-				if (dr.canMove()) {
-					moves.add(dr);
-					System.out.println("Can move");
-				} else {
-					nextDeath.putIfAbsent(prevDirection, new ArrayList<>());
-					nextDeath.get(prevDirection).add(dr);
-				}
-			}
-			currDeath.put(prevDirection, moves);
-		}
-		
-		System.out.println(currDeath.size());
-		System.out.println("# alive rats: " + aliveRats.size());
 		// Pass in ArrayList of Moving Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
-				System.out.println(dr);
 				aliveRats = dr.killRats(aliveRats, -1);
 			}
 		}
-		System.out.println("# alive rats: " + aliveRats.size());
+		
 		// Now moves death rats
 		ArrayList<DeathRat> drs = new ArrayList<>();
 		for (Direction prevDirection : currDeath.keySet()) {
@@ -85,7 +67,6 @@ public class PathTile extends Tile {
 
 			}
 		}
-		System.out.println("# alive rats: " + aliveRats.size());
 		// Remove fallen rats from list.
 		// Will not automatically move the rats in case other death rats come here.
 		if (aliveRats.isEmpty()) {
@@ -97,8 +78,6 @@ public class PathTile extends Tile {
 		} else {
 			// done by method correctList() in Tile.java
 		}
-		System.out.println("# alive rats: " + aliveRats.size());
-		System.out.println(">>" + drs.size());
 		return drs;
 	}
 

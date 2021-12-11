@@ -376,15 +376,15 @@ public class Board {
 //		for (Tile t : allTiles) {
 //			t.giveRatItem();
 //		}
-//		
+		
 //		// Then have the rats interact with each other
 //		for (Tile t : allTiles) {
 //			t.getRatInteractions();
 //		}
-//		
-//		for (Tile t : allTiles) {
-//			t.correctList();
-//		}
+		
+		for (Tile t : allTiles) {
+			t.correctList();
+		}
 		
 		// Secondly move Death rats to kill any rats in its path
 		for (Tile t : allTiles) {

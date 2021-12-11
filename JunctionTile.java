@@ -200,6 +200,8 @@ public class JunctionTile extends Tile {
 			return new ArrayList<>();
 		}
 
+		setDeathRat(); // Ensures only moving death rats are considered
+		
 		for (Direction dir : bufferNextBlock.keySet()) {
 			ArrayList<Rat> r = bufferNextBlock.get(dir);
 			for (Direction prevDirection : currDeath.keySet()) {
