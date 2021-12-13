@@ -102,15 +102,6 @@ public class Board {
 			createGraph();
 	}
 
-	/**
-	 * Debug only!!
-	 * @return
-	 * @deprecated
-	 */
-	public static Tile[][] getBoard() {
-		return board;
-	}
-
     /**
      * Checks if item can be placed on tile. Can be placed if tile is an instance of path but not
      * a tunnel. Also if tile is a junction.
@@ -257,7 +248,29 @@ public class Board {
 
     public void addDeathRat(int x, int y) {
         placeRat(new DeathRat(), Direction.NORTH, y, x);
-
+    }
+    
+    public boolean addGas(int x, int y ) {
+    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+    	if (isPlaceableTile(t)) {
+    		return t.setTileItem(new Gas());
+    	}
+    	return false;
+    }
+    
+    /**
+     * Attempt to spread gas from an origin x y point.
+     * @param x x position of the gas
+     * @param y y position of the gas
+     * @return 2 lists, first is list of tiles it failed to spread to
+     * and second is list of tiles successfully spread to
+     */
+    public ArrayList<ArrayList<Tile>> trySpreadGas(int x, int y) {
+    	ArrayList<ArrayList<Tile>> out = new ArrayList<>();
+    	
+    	
+    	
+    	return null;
     }
 
 	/**

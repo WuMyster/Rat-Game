@@ -581,13 +581,33 @@ public class Main extends Application {
 		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
 	}
 	
-	public static void addDeathRat(int x, int y) {
-		
-	}
-	
 	public static void drawDeathRat(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	public void placeGas(DragEvent event) {
+		int x = (int) Math.floor(event.getX() / TILE_SIZE);
+		int y = (int) Math.floor(event.getY() / TILE_SIZE);
+		if (m.addGas((int) x, (int) y)) {
+			addSterilise((int) x, (int) y);
+		}
+	}
+	
+	public static void addGas(int x, int y) {
+		itemPlace.putIfAbsent(ItemType.STERILISATION, new ArrayList<>());
+		itemPlace.get(ItemType.STERILISATION).add(new int[] {y, x, -1});
+		drawGas(x, y);
+	}
+	
+	/**
+	 * Draws a steraliseIcon on this location on the board.
+	 * @param x x position of the steraliseIcon
+	 * @param y y posision of the steraliseIcon
+	 */
+	public static void drawGas(int x, int y) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(Gas.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
 	/**

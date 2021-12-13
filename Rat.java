@@ -195,12 +195,15 @@ public class Rat {
 	/**
 	 * Damages the rat and kills it if its health is depleted.
 	 * @param damage - amount of damage dealt to the rat.
+	 * @return {@code true} if the rat died
 	 */
-	public void damageRat(int damage) {
+	public boolean damageRat(int damage) {
 		health -= damage;
 		if(health <= 0) {
 			RatController.killRat(this);
+			return true;
 		}
+		return false;
 	}
 	
 	/**
