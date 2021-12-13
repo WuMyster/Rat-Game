@@ -18,7 +18,6 @@ import java.util.Scanner;
 public class GameMaster extends Application {
 
     Stage window;
-    TableView<Leaderboard> table;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -54,7 +53,10 @@ public class GameMaster extends Application {
         Button leaderboardButton = new Button("Check Leaderboard");
         leaderboardButton.setOnAction(e -> LeaderBoardWindow.displayLeaderboard("Leaderboard"));
         GridPane.setConstraints(leaderboardButton,1,5);
-        leaderboardButton.setOnAction(e -> Leaderboard.showLeaderboard(scores));
+        leaderboardButton.setOnAction(e -> {
+        	System.out.println("Leaderboard not implemented yet");
+        });
+        
 
 
         //message
