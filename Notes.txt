@@ -14,3 +14,8 @@ If alive, kill rats on next tile (going towards, rats going away being bounced b
 
 Move the rest of the rats
 }
+
+
+RatController.java ratInteractions()
+Sort rats into moving, non moving, male not moving, female not moving
+Not moving might be due to 1st or 2nd stage of breeding or pregnancy

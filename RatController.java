@@ -22,6 +22,8 @@ public class RatController {
 	 */
 	private static int points;
 	
+	private static Random nextRand = new Random();
+	
 
 	/**
 	 * Sets the max number of rats allowed before the game ends.
@@ -54,9 +56,7 @@ public class RatController {
 	 * @return The newly constructed baby rat
 	 */
 	public static Rat newBabyRat() {
-		Random nextRand = new Random();
-		Boolean newRatIsMale = nextRand.nextBoolean();
-		Rat r = new Rat(newRatIsMale);
+		Rat r = new Rat(nextRand.nextBoolean()); // boolean to determine gender
 		ratList.add(r);
 		return r;
 	}
@@ -66,7 +66,7 @@ public class RatController {
 	 * @param newRats - an array of strings.
 	 */
 	public static void addRats(String[] newRats) {
-		for(int i = 0; i<newRats.length; i++) {
+		for(int i = 0; i < newRats.length; i++) {
 			ratList.add(stringToRat(newRats[i]));
 		}
 	}
@@ -88,7 +88,7 @@ public class RatController {
 	 */
 	public static void killRat(Rat deadRat) {
 		points += deadRat.getPointsUponDeath();
-		for(int i = 0; i<ratList.size(); i++) {
+		for(int i = 0; i < ratList.size(); i++) {
 			if(ratList.get(i) == deadRat) {
 				ratList.remove(i);
 			}
@@ -103,14 +103,14 @@ public class RatController {
 	private static Rat stringToRat(String ratString) {
 		String[] newRat = ratString.split(",");
 		
-		int newRatAge = Integer.parseInt(newRat[0]);
-		boolean newRatIsMale = Boolean.parseBoolean(newRat[1]);
-		boolean newRatIsPregnant = Boolean.parseBoolean(newRat[2]);
-		int newRatHP = Integer.parseInt(newRat[3]);
-		boolean newRatIsSterile = Boolean.parseBoolean(newRat[4]);
-		boolean newRatIsBreeding = Boolean.parseBoolean(newRat[5]);
-		boolean newRatIsDeathRat = Boolean.parseBoolean(newRat[6]);
-		return new Rat(newRatAge, newRatIsMale, newRatIsPregnant, newRatHP, newRatIsSterile, newRatIsBreeding, newRatIsDeathRat);
+		int age = Integer.parseInt(newRat[0]);
+		boolean isMale = Boolean.parseBoolean(newRat[1]);
+		boolean isPregnant = Boolean.parseBoolean(newRat[2]);
+		int hp = Integer.parseInt(newRat[3]);
+		boolean isSterile = Boolean.parseBoolean(newRat[4]);
+		boolean isBreeding = Boolean.parseBoolean(newRat[5]);
+		boolean isDeath = Boolean.parseBoolean(newRat[6]);
+		return new Rat(age, isMale, isPregnant, hp, isSterile, isBreeding, isDeath);
 	}
 	
 	/**
@@ -118,23 +118,23 @@ public class RatController {
 	 * Sorts rats into stationary rats and moving rats.
 	 * Breeds rats which are breedable.
 	 * @param ratsOnTile - An arraylist of rats on an individual tile
-	 * @return A nested arraylist of rats, where the first index contains rats that aren't moving and the second index contains rats which will be moving
+	 * @return A nested arraylist of rats, where the first index contains rats 
+	 * that aren't moving and the second index contains rats which will be moving
 	 */
 	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile) {
 		
+		// Divide list into rats who are and aren't moving, 0 and 1 are gender of rats ready to mate
 		ArrayList<ArrayList<Rat>> sortedRatsOnTile = sortRats(ratsOnTile);
-		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2);
+		ArrayList<Rat> movingRats = sortedRatsOnTile.get(2); // Rats that aren't ready to mate
+		ArrayList<Rat> stationaryRats = sortedRatsOnTile.get(3); // Not moving for whatever reason
 		
 		ArrayList<ArrayList<Rat>> bredRats = breedRats(sortedRatsOnTile.get(0), sortedRatsOnTile.get(1));
-		ArrayList<Rat> notBred = bredRats.get(1); 
 		
-		while(notBred.size()>0) {
-			movingRats.add(notBred.get(0)); 
-			notBred.remove(0);
-		}
+		stationaryRats.addAll(bredRats.get(0)); // Adding in rats that are mating
+		movingRats.addAll(bredRats.get(1)); // Rats that failed to mate
 		
 		ArrayList<ArrayList<Rat>> stationaryMovingRats = new ArrayList<>();
-		stationaryMovingRats.add(bredRats.get(0)); 
+		stationaryMovingRats.add(stationaryRats); 
 		stationaryMovingRats.add(movingRats);
 		
 		return stationaryMovingRats;
@@ -144,55 +144,47 @@ public class RatController {
 	 * Sorts a list of rats into a nested list with three sub-lists
 	 * =>breedable male rats
 	 * =>breedable female rats
-	 * =>moving rats.
+	 * =>moving rats
+	 * =>Not moving rats.
 	 * @param ratsOnTile - An arraylist of rats
 	 * @return A nested arraylist of rats, where the first index contains breedable male rats, the second contains breedable female rats and the third contains moving rats
 	 */
 	private static ArrayList<ArrayList<Rat>> sortRats(ArrayList<Rat> ratsOnTile) {
 		ArrayList<Rat> male = new ArrayList<>();
 		ArrayList<Rat> female = new ArrayList<>();
+		ArrayList<Rat> stop = new ArrayList<>();
 		ArrayList<Rat> moving = new ArrayList<>();
 		
-		while(ratsOnTile.size() > 0) {
-			ratsOnTile.get(0).incrementAge();
-			Rat nextRat = ratsOnTile.get(0);
-			if(nextRat.isChild()) {
-				moving.add(nextRat);
-			} else if (nextRat.getPregnant()) {
-				nextRat.decrementPregCounter();
-				if(nextRat.getPregCounter() == 5 || nextRat.getPregCounter() == 3 || nextRat.getPregCounter() == 1) {
+		for (Rat r : ratsOnTile) {
+			if (r.isChild()) {
+				moving.add(r);
+			} else if (r.isPregnant()) {
+				int stage = r.getPregCounter();
+				if (stage == 5 || stage == 3 || stage == 1) {
 					moving.add(newBabyRat());
-				}
-				moving.add(nextRat);
-			}
-			else if(nextRat.getIsBreeding() == true) {
-				if(nextRat.getIsMale() == false) {
-					nextRat.setBreedStatus(false);
-					nextRat.setPregnancy(true);
+					stop.add(r);
 				} else {
-					nextRat.setBreedStatus(false);
+					moving.add(r);
 				}
-				moving.add(nextRat);
-			} else if(nextRat.getIsMale() == true) {
-				if(nextRat.getSterile() == false) {
-					male.add(nextRat);
-				} else {
-					moving.add(nextRat);
-				}
+			} else if (r.isBreeding()) {
+				r.changeBreed();
+				stop.add(r);
+			} else if (r.isSterile()) {
+				moving.add(r);
 			} else {
-				if(nextRat.getPregnant() == false && nextRat.getSterile() == false) {
-					female.add(nextRat);
+				if (r.isMale()) {
+					male.add(r);
 				} else {
-					moving.add(nextRat);
+					female.add(r);
 				}
 			}
-			ratsOnTile.remove(0);
 		}
 		
 		ArrayList<ArrayList<Rat>> newRatList = new ArrayList<>();
 		newRatList.add(male);
 		newRatList.add(female);
 		newRatList.add(moving);
+		newRatList.add(stop);
 		return newRatList;
 	}
 	
@@ -206,26 +198,23 @@ public class RatController {
 		
 		ArrayList<Rat> breeding = new ArrayList<>();
 		ArrayList<Rat> notBreeding = new ArrayList<>();
-		while(male.size()>0 && female.size()>0) {
+		
+		int i = 0;
+		while (i != male.size() && i != female.size()) {
+			Rat mRat = male.get(i);
+			Rat fRat = female.get(i);
 			
-			male.get(0).setBreedStatus(true);
-			female.get(0).setBreedStatus(true);
-				
-			breeding.add(male.get(0));
-			breeding.add(female.get(0));
+			mRat.changeBreed();
+			fRat.changeBreed();
 			
-			male.remove(0);
-			female.remove(0);
-			
+			breeding.add(mRat);
+			breeding.add(fRat);
+			i++;
 		}
-		while(male.size()>0) {
-			notBreeding.add(male.get(0));
-			male.remove(0);
-		}
-		while(female.size()>0) {
-			notBreeding.add(female.get(0));
-			female.remove(0);
-		}
+
+		notBreeding.addAll(new ArrayList<>(male.subList(i, male.size())));
+		notBreeding.addAll(new ArrayList<>(female.subList(i, female.size())));
+		
 		ArrayList<ArrayList<Rat>> postBreedRats = new ArrayList<>();
 		postBreedRats.add(breeding);				//0
 		postBreedRats.add(notBreeding);				//1

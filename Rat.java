@@ -4,6 +4,9 @@
  * @version
  */
 public class Rat {
+	
+	private static int ADULT_AGE = 30;
+	
 	private boolean isMale;
 	private boolean isPregnant;
 	private boolean isDeathRat;
@@ -22,11 +25,11 @@ public class Rat {
 	public Rat(boolean isMale) {
 		this.isMale = isMale;
 		this.health = 5;
-		isBreeding = false;
-		isPregnant = false;
-		isDeathRat = false;
-		isSterile = false;
-		age = 0;
+		this.isBreeding = false;
+		this.isPregnant = false;
+		this.isDeathRat = false;
+		this.isSterile = false;
+		this.age = 0;
 	}
 
 	/**
@@ -69,7 +72,7 @@ public class Rat {
 	 * Gets whether the rat is male.
 	 * @return A boolean value - true = male.
 	 */
-	public boolean getIsMale() {
+	public boolean isMale() {
 		return isMale;
 	}
 	
@@ -86,11 +89,13 @@ public class Rat {
 	 * @return an integer of the rats pregnancy counter.
 	 */
 	public int getPregCounter() {
+		isPregnant = pregnancyCounter-- != 0;
 		return pregnancyCounter;
 	}
 	
 	/**
 	 * Decrements the rats pregnancy counter and terminates the pregnancy when the counter depletes.
+	 * @deprecated
 	 */
 	public void decrementPregCounter() {
 		pregnancyCounter -= 1;
@@ -114,7 +119,7 @@ public class Rat {
 	 * Gets whether the rat is pregnant or not.
 	 * @return isPregnant - true = pregnant.
 	 */
-	public boolean getPregnant() {
+	public boolean isPregnant() {
 		return isPregnant;
 	}
 	
@@ -133,16 +138,13 @@ public class Rat {
 	 */
 	public void sterilise() {
 		isSterile = true;
-		if(age<30) {
-			age = 30;
-		}
 	}
 	
 	/**
 	 * Gets whether the rat is sterile.
 	 * @return A boolean value - true = sterile.
 	 */
-	public boolean getSterile() {
+	public boolean isSterile() {
 		return isSterile;
 	}
 	
@@ -158,12 +160,17 @@ public class Rat {
 	 * Gets whether the rat is currently breeding.
 	 * @return A boolean of whether the rat is breeding.
 	 */
-	public boolean getIsBreeding() {
+	public boolean isBreeding() {
 		return isBreeding;
+	}
+	
+	public void changeBreed() {
+		isBreeding = !isBreeding;
 	}
 	
 	/**
 	 * Increments the rat age, making it older.
+	 * @deprecated
 	 */
 	public void incrementAge() {
 		age++;
@@ -182,7 +189,7 @@ public class Rat {
 	 * @return A boolean where true = the rat is a child.
 	 */
 	public boolean isChild() {
-		return age < 30;
+		return age++ < ADULT_AGE;
 	}
 	
 	/**
