@@ -1,0 +1,16 @@
+
+For Board.java runAllTiles()
+
+giveRatsItem -> aliveRats = list of alive rats
+ratInteraction -> moving and not moving rats
+correctList -> moving rats stay in currBlock and not moving rats moved to nextBlock
+getNextDeathRat -> {
+Kill all rats on current tile
+
+##
+If alive, kill rats on invisible next tile (going towards, not moving, moving away in that order)
+If alive, kill rats on next tile (going towards, rats going away being bounced back (if DR dies in the middle of killing some number of rats, make sure rats bounced back are set to the correct direction)
+## Once all DR are dealt with edit currBlock with aliveRats
+
+Move the rest of the rats
+}
