@@ -142,7 +142,8 @@ public class RatController {
 			} else if (r.isPregnant()) {
 				int stage = r.getPregCounter();
 				if (stage == 5 || stage == 1) {
-					moving.add(r);
+					// moving.add(newBabyRat());
+					stop.add(r);
 				} else {
 					moving.add(r);
 				}
