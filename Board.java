@@ -92,7 +92,7 @@ public class Board {
 		this.xHeight = xHeight;
 		this.yHeight = yHeight;
 		try {
-			this.board = new Tile[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
+			Board.board = new Tile[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

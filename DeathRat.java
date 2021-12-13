@@ -69,7 +69,6 @@ public class DeathRat {
 	 */
 	public boolean canMove() {
 		if (hp <= START_HP) {
-			System.out.println(hp);
 			return true;
 		}
 		hp--;

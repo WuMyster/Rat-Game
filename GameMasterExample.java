@@ -17,7 +17,7 @@ public class GameMasterExample {
 			"M;3,1,2", // Should only be on very new levels i.e starting maps
 			"50,true,false,20,false,false,false;3,1,4",
 			"50,false,false,20,false,false,false;1,1,5",
-		
+			"D;3,1,7",
 			
 			//Added more rats
 			"50,true,false,20,false,false,false;3,1,2",
