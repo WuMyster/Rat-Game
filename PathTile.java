@@ -54,6 +54,7 @@ public class PathTile extends Tile {
 					X_Y_POS[1]);
 		} else {
 			// done by method correctList() in Tile.java
+			correctList();
 		}
 		return drs;
 	}

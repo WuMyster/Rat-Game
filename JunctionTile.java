@@ -254,6 +254,7 @@ public class JunctionTile extends Tile {
 			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
 		} else {
 			// Will run correctList from Tile.java
+			correctList();
 		}
 		return drs;
 	}
