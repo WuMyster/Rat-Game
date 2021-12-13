@@ -95,10 +95,15 @@ public class LightTile extends Tile {
 
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
 		for (Rat r : rs.get(0)) {
-			if (r.isPregnant()) {
-				// r.addPregStep();
+			if (r.getPregCounter() > 7) {
+				r.addPregStep();
 			}
-			Direction d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
+			Direction d;
+			if (currBlock.get(directions[0]) == null) {
+				d = directions[1];
+			} else {
+				d = currBlock.get(directions[0]).contains(r) ? directions[0] : directions[1];
+			}
 			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
 			bufferNextBlock.get(d).add(r);
 		}

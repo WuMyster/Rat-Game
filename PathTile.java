@@ -241,17 +241,21 @@ public class PathTile extends Tile {
 	@Override
 	public void getRatInteractions() {
 		super.getRatInteractions();
-		
+
 		// This method should be moved up
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
 		for (Rat r : rs.get(0)) {
-			ArrayList<Rat> rats = currBlock.get(directions[0]);
-			if (rats != null) {
-				Direction d = rats.contains(r) ? directions[0] : directions[1];
-				this.addRat(r, d);
-				Main.addCurrMovement(X_Y_POS, d.opposite(), r.getStatus(), 0);
+			for (Direction dir : directions) {
+				ArrayList<Rat> rats = currBlock.get(dir);
+				if (rats != null) {
+					if (currBlock.get(dir).contains(r)) {
+						this.addRat(r, dir);
+						Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
+					}
+				}
 			}
-		}	
+		}
+		
 		aliveRats = rs.get(1);
 	}
 	

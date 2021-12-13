@@ -5,8 +5,8 @@
  */
 public class Rat {
 	
-	private static int ADULT_AGE = 30;
-	private static int MAX_PREGNANCY = 7;
+	private static int ADULT_AGE = 31;
+	private static int MAX_PREGNANCY = 8;
 	
 	private boolean isMale;
 	private boolean isPregnant;
@@ -94,27 +94,8 @@ public class Rat {
 		return pregnancyCounter;
 	}
 	
-	/**
-	 * Decrements the rats pregnancy counter and terminates the pregnancy when the counter depletes.
-	 * @deprecated
-	 */
-	public void decrementPregCounter() {
-		pregnancyCounter -= 1;
-		if(pregnancyCounter == 0) {
-			isPregnant = false;
-		}
-	}
-	
-	/**
-	 * Set the rat pregnancy to a new boolean value.
-	 * @param newPregnancyState - true = pregnant, false = not pregnant.
-	 * @deprecated
-	 */
-	public void setPregnancy(boolean newPregnancyState) {
-		isPregnant = newPregnancyState;
-		if(isPregnant == true) {
-			pregnancyCounter = 7;
-		}
+	public boolean giveBirth() {
+		return pregnancyCounter == 5 || pregnancyCounter == 2;
 	}
 	
 	/**
@@ -135,6 +116,10 @@ public class Rat {
 	 * @return isPregnant - true = pregnant.
 	 */
 	public boolean isPregnant() {
+		pregnancyCounter -= 1;
+		if (pregnancyCounter <= 0) {
+			isPregnant = false;
+		}
 		return isPregnant;
 	}
 	
@@ -255,15 +240,9 @@ public class Rat {
 	 */
 	private int calculatePointsUponDeath() {
 		int points = 10;
-		if(isBreeding) {
-			points += 10;
-		}
-		if(isPregnant) {
-			points += 10;
-		}
-		if(isChild()) {
-			points += 10;
-		}
+		points += isBreeding ? 10 : 0;
+		points += isPregnant ? 10 : 0;
+		points += isChild() ? 10 : 0;
 		return points;
 	}
 }

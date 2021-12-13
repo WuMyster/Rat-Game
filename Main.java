@@ -613,7 +613,7 @@ public class Main extends Application {
 		root.getChildren().addAll(menuBar);
 		
 		Button stopGame = new Button("Stop and save game");
-		root.getChildren().addAll(stopGame);
+		// root.getChildren().addAll(stopGame);
 		stopGame.setOnAction(e -> {
 			playerStopGame = true;
 		});

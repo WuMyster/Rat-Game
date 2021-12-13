@@ -140,10 +140,10 @@ public class RatController {
 				r.setBreedStatus(false);
 				stop.add(r);
 			} else if (r.isPregnant()) {
-				int stage = r.getPregCounter();
-				if (stage == 5 || stage == 1) {
-					// moving.add(newBabyRat());
+				if (r.giveBirth()) {
+					moving.add(newBabyRat());
 					stop.add(r);
+					System.out.println("Give birth");
 				} else {
 					moving.add(r);
 				}

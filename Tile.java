@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * This class provides a skeletal implementation of the {@code Tile}, it is a
@@ -70,6 +71,8 @@ public abstract class Tile {
 
 	// @Jing, added this to clean up code below.
 	protected final int[] ORIGINAL_X_Y_POS;
+	
+	protected Random rand = new Random();
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
@@ -160,6 +163,13 @@ public abstract class Tile {
 				System.out.println("NULL");
 			}
 		}
+		
+		for (Rat r : tmp1) {
+			Direction d = directions[rand.nextInt(2)];
+			currBlock.putIfAbsent(d, new ArrayList<>());
+			currBlock.get(d).add(r);
+		}
+		
 		// aliveRats = tmp1;
 	}
 

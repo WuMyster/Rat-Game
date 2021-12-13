@@ -14,16 +14,17 @@ public class GameMasterExample {
 	 * List of position of rats
 	 */
 	private static ArrayList<String> rats = new ArrayList<> (Arrays.asList( 
-			"M;3,1,2", // Should only be on very new levels i.e starting maps
-			"50,true,false,20,false,false,false;3,1,4",
-			"50,false,false,20,false,false,false;1,1,5",
-			"D;3,1,7",
+			// Opposite gender rats going at each other 
+//			"M;3,1,2", // Should only be on very new levels i.e starting maps
+			"50,true,false,20,false,false,false;3,1,3"
+			,"50,false,false,20,false,false,false;1,1,5"
+//			"D;3,1,7",
 			
 			//Added more rats
-			"50,true,false,20,false,false,false;3,1,2",
-			"50,false,false,20,false,false,false;3,9,8",
-			"50,false,false,20,false,false,false;2,8,15",
-			"50,true,false,20,false,false,false;1,9,14"
+//			"50,true,false,20,false,false,false;3,1,2",
+			,"50,false,false,20,false,false,false;3,9,9"
+//			"50,false,false,20,false,false,false;2,8,15",
+			,"50,true,false,20,false,false,false;0,9,15"
 			));
 	
 	/**
