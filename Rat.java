@@ -5,8 +5,8 @@
  */
 public class Rat {
 	
-	private static int ADULT_AGE = 31;
-	private static int MAX_PREGNANCY = 8;
+	private static int ADULT_AGE = 11;
+	private static int MAX_PREGNANCY = 10;
 	
 	private boolean isMale;
 	private boolean isPregnant;
@@ -95,7 +95,7 @@ public class Rat {
 	}
 	
 	public boolean giveBirth() {
-		return pregnancyCounter == 5 || pregnancyCounter == 2;
+		return pregnancyCounter == 7 || pregnancyCounter == 3;
 	}
 	
 	/**
