@@ -130,6 +130,11 @@ public class Main extends Application {
 	 */
     private ImageView draggablePoison = new ImageView();
 
+    /**
+	 * Draggable image for poison.
+	 */
+    private ImageView draggableGas = new ImageView();
+    
 	/**
 	 * Board of the game
 	 */
@@ -314,6 +319,8 @@ public class Main extends Application {
 			placeSterilise(event);
 		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
+		} else if (event.getGestureSource() == draggableGas) {
+			placeGas(event);
 		} else {
 			System.err.println("Dragging fail!!");
 		}
@@ -590,13 +597,13 @@ public class Main extends Application {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		if (m.addGas((int) x, (int) y)) {
-			addSterilise((int) x, (int) y);
+			addGas((int) x, (int) y);
 		}
 	}
 	
 	public static void addGas(int x, int y) {
-		itemPlace.putIfAbsent(ItemType.STERILISATION, new ArrayList<>());
-		itemPlace.get(ItemType.STERILISATION).add(new int[] {y, x, -1});
+		itemPlace.putIfAbsent(ItemType.GAS, new ArrayList<>());
+		itemPlace.get(ItemType.GAS).add(new int[] {y, x, -1});
 		drawGas(x, y);
 	}
 	
@@ -680,7 +687,7 @@ public class Main extends Application {
 			public void handle(DragEvent event) {
 				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb,
 						draggablePoison, draggableSexToFemale, draggableSexToMale,
-						draggableSterilise, draggableDeathRat
+						draggableSterilise, draggableDeathRat, draggableGas
 				};
 				// Mark the drag as acceptable if the source was the draggable image.
 				// (for example, we don't want to allow the user to drag things or files into
@@ -732,6 +739,9 @@ public class Main extends Application {
 
 		draggableDeathRat.setImage(DeathRat.IMAGE);
 		root.getChildren().add(draggableDeathRat);
+		
+		draggableGas.setImage(Gas.IMAGE);
+		root.getChildren().add(draggableGas);
 	}
 	
 	private void setUpHandling() {
@@ -783,6 +793,13 @@ public class Main extends Application {
 		draggableDeathRat.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableDeathRat.startDragAndDrop(TransferMode.ANY);
+				db.setContent(content);
+				event.consume();
+			}
+		});
+		draggableGas.setOnDragDetected(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+				Dragboard db = draggableGas.startDragAndDrop(TransferMode.ANY);
 				db.setContent(content);
 				event.consume();
 			}
@@ -917,9 +934,7 @@ public class Main extends Application {
 		} else if (playerStopGame) { // Player stops the game
 			cycler.stop();
 			saveState();
-		} else { // Otherwise keep going
-			System.out.println("Continue");
-		}
+		} // Otherwise keep going
 	}
 	
 	private void saveState() {

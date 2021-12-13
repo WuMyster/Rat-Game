@@ -40,6 +40,7 @@ abstract class Item {
 	 * @return {@code true} if item is alive.
 	 */
 	public boolean isAlive() {
+		System.out.println(hp);
 		return hp > 0;
 	}
 	

@@ -4,6 +4,10 @@ import javafx.scene.image.Image;
 
 public class Gas extends Item {
 	
+	public Gas () {
+		this.hp = 5;
+	}
+	
 	public static final Image IMAGE = new Image("./img/Gas.png");
     /*
     Set on tile

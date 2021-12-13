@@ -29,6 +29,11 @@ public enum ItemType {
 		public void draw(int x, int y, int state) {
 			Main.drawSexToFemale(x, y);
 		}
+	},
+	GAS {
+		public void draw(int x, int y, int state) {
+			Main.drawGas(x, y);
+		}
 	};
 	
 	public abstract void draw(int x, int y, int state);
@@ -46,7 +51,9 @@ public enum ItemType {
 			return SEX_TO_MALE;
 		} else if (i instanceof Poison) {
 			return POISON;
-		}		
+		} else if (i instanceof Gas) {
+			return GAS;
+		}
 		return null;
 	}
 }
