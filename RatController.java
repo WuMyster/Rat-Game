@@ -88,29 +88,7 @@ public class RatController {
 	 */
 	public static void killRat(Rat deadRat) {
 		points += deadRat.getPointsUponDeath();
-		for(int i = 0; i < ratList.size(); i++) {
-			if(ratList.get(i) == deadRat) {
-				ratList.remove(i);
-			}
-		}
-	}
-		
-	/**
-	 * Constructs a rat from a rats toString output.
-	 * @param ratString - A toString output from the Rat class toString() method.
-	 * @return a constructed rat with the same values as in ratString.
-	 */
-	private static Rat stringToRat(String ratString) {
-		String[] newRat = ratString.split(",");
-		
-		int age = Integer.parseInt(newRat[0]);
-		boolean isMale = Boolean.parseBoolean(newRat[1]);
-		boolean isPregnant = Boolean.parseBoolean(newRat[2]);
-		int hp = Integer.parseInt(newRat[3]);
-		boolean isSterile = Boolean.parseBoolean(newRat[4]);
-		boolean isBreeding = Boolean.parseBoolean(newRat[5]);
-		boolean isDeath = Boolean.parseBoolean(newRat[6]);
-		return new Rat(age, isMale, isPregnant, hp, isSterile, isBreeding, isDeath);
+		ratList.remove(deadRat);
 	}
 	
 	/**
@@ -158,17 +136,16 @@ public class RatController {
 		for (Rat r : ratsOnTile) {
 			if (r.isChild()) {
 				moving.add(r);
+			} else if (r.isBreeding()) {
+				r.setBreedStatus(false);
+				stop.add(r);
 			} else if (r.isPregnant()) {
 				int stage = r.getPregCounter();
-				if (stage == 5 || stage == 3 || stage == 1) {
-					moving.add(newBabyRat());
-					stop.add(r);
+				if (stage == 5 || stage == 1) {
+					moving.add(r);
 				} else {
 					moving.add(r);
 				}
-			} else if (r.isBreeding()) {
-				r.changeBreed();
-				stop.add(r);
 			} else if (r.isSterile()) {
 				moving.add(r);
 			} else {
@@ -199,17 +176,17 @@ public class RatController {
 		ArrayList<Rat> breeding = new ArrayList<>();
 		ArrayList<Rat> notBreeding = new ArrayList<>();
 		
-		int i = 0;
-		while (i != male.size() && i != female.size()) {
+		int i;
+		for (i = 0; i != male.size() && i != female.size(); i++) {
 			Rat mRat = male.get(i);
 			Rat fRat = female.get(i);
 			
 			mRat.changeBreed();
 			fRat.changeBreed();
+			fRat.setPregnant();
 			
 			breeding.add(mRat);
 			breeding.add(fRat);
-			i++;
 		}
 
 		notBreeding.addAll(new ArrayList<>(male.subList(i, male.size())));
@@ -219,6 +196,24 @@ public class RatController {
 		postBreedRats.add(breeding);				//0
 		postBreedRats.add(notBreeding);				//1
 		return postBreedRats;
+	}
+
+	/**
+	 * Constructs a rat from a rats toString output.
+	 * @param ratString - A toString output from the Rat class toString() method.
+	 * @return a constructed rat with the same values as in ratString.
+	 */
+	private static Rat stringToRat(String ratString) {
+		String[] newRat = ratString.split(",");
+		
+		int age = Integer.parseInt(newRat[0]);
+		boolean isMale = Boolean.parseBoolean(newRat[1]);
+		boolean isPregnant = Boolean.parseBoolean(newRat[2]);
+		int hp = Integer.parseInt(newRat[3]);
+		boolean isSterile = Boolean.parseBoolean(newRat[4]);
+		boolean isBreeding = Boolean.parseBoolean(newRat[5]);
+		boolean isDeath = Boolean.parseBoolean(newRat[6]);
+		return new Rat(age, isMale, isPregnant, hp, isSterile, isBreeding, isDeath);
 	}
 	
 }

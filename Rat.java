@@ -6,6 +6,7 @@
 public class Rat {
 	
 	private static int ADULT_AGE = 30;
+	private static int MAX_PREGNANCY = 7;
 	
 	private boolean isMale;
 	private boolean isPregnant;
@@ -107,12 +108,18 @@ public class Rat {
 	/**
 	 * Set the rat pregnancy to a new boolean value.
 	 * @param newPregnancyState - true = pregnant, false = not pregnant.
+	 * @deprecated
 	 */
 	public void setPregnancy(boolean newPregnancyState) {
 		isPregnant = newPregnancyState;
 		if(isPregnant == true) {
 			pregnancyCounter = 7;
 		}
+	}
+	
+	public void setPregnant() {
+		isPregnant = true;
+		pregnancyCounter = MAX_PREGNANCY;
 	}
 	
 	/**

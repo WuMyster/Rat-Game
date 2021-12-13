@@ -152,8 +152,6 @@ public abstract class Tile {
 				for (Rat r : rs) {
 					if (tmp1.remove(r)) {
 						tmp.add(r);
-					} else {
-						System.out.println("Del" + r);
 					}
 				}
 				aliveRats.addAll(tmp);
