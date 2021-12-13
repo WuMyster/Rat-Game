@@ -22,9 +22,9 @@ public class GameMasterExample {
 			
 			//Added more rats
 //			"50,true,false,20,false,false,false;3,1,2",
-			,"50,false,false,20,false,false,false;3,9,9"
+//			,"50,false,false,20,false,false,false;3,9,9"
 //			"50,false,false,20,false,false,false;2,8,15",
-			,"50,true,false,20,false,false,false;0,9,15"
+//			,"50,true,false,20,false,false,false;0,9,15"
 			));
 	
 	/**

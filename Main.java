@@ -232,7 +232,7 @@ public class Main extends Application {
 		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
-		// cycler.play();
+		cycler.play();
 		
 		scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
@@ -887,13 +887,18 @@ public class Main extends Application {
 		drawItems();
 
 		// Losing conditions
-		if (!RatController.continueGame() && LocalTime.now().getSecond() - startTime.getSecond() > maxTime) {
+		if (RatController.stopGame()) { // Bad number of rats
 			cycler.stop();
-			System.out.println("Game has finished");
+			System.out.println("Game has finished - invalid number of rats");
+		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) { // Time out of bounds
+			cycler.stop();
+			System.out.println("Game has finished - time ran out");
 			// Pass control back to game master, game has finished
-		} else if (playerStopGame) {
+		} else if (playerStopGame) { // Player stops the game
 			cycler.stop();
 			saveState();
+		} else { // Otherwise keep going
+			System.out.println("Continue");
 		}
 	}
 	

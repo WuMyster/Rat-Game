@@ -23,7 +23,6 @@ public class RatController {
 	private static int points;
 	
 	private static Random nextRand = new Random();
-	
 
 	/**
 	 * Sets the max number of rats allowed before the game ends.
@@ -44,11 +43,10 @@ public class RatController {
 	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
 	 * you should have.
-	 * @return {@code true} if the number of rats do not exceed the max number
-	 * of rats allowed on the map
+	 * @return {@code true} if the game has finished
 	 */
-	public static boolean continueGame() {
-		return ratList.size() < maxNumOfRats && !ratList.isEmpty();
+	public static boolean stopGame() {
+		return ratList.isEmpty() || ratList.size() >= maxNumOfRats;
 	}
 	
 	/**
@@ -143,7 +141,6 @@ public class RatController {
 				if (r.giveBirth()) {
 					moving.add(newBabyRat());
 					stop.add(r);
-					System.out.println("Give birth");
 				} else {
 					moving.add(r);
 				}
