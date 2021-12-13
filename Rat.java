@@ -117,6 +117,14 @@ public class Rat {
 		}
 	}
 	
+	/**
+	 * Changes stage of the pregnancy counter.
+	 * (This is for LightTile)
+	 */
+	public void addPregStep() {
+		pregnancyCounter++;
+	}
+	
 	public void setPregnant() {
 		isPregnant = true;
 		pregnancyCounter = MAX_PREGNANCY;
