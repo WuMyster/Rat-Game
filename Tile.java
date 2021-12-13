@@ -301,10 +301,6 @@ public abstract class Tile {
 			currDeath.put(prevDirection, moves);
 		}
 	}
-	
-	protected void killNonMovingRats() {
-		
-	}
 
 	/**
 	 * Sets list of rats the tile is currently dealing with
