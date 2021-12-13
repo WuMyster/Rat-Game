@@ -42,6 +42,27 @@ public class PathTile extends Tile {
 		}
 		
 		// Now moves death rats
+		ArrayList<DeathRat> drs = moveEachDeathRat();
+		
+		// Remove fallen rats from list.
+		// Will not automatically move the rats in case other death rats come here.
+		if (aliveRats.isEmpty()) {
+			currBlock = new HashMap<>();
+		} else if (aliveRats.size() == beforeDeathInter) {
+			// Interesting as to why there is no change...
+			System.err.println("aliveRats list has not changed! "  + X_Y_POS[0] + " " +
+					X_Y_POS[1]);
+		} else {
+			// done by method correctList() in Tile.java
+		}
+		return drs;
+	}
+	
+	/**
+	 * Move all alive Death Rats and return list of alive Death Rats
+	 * @return list of alive Death Rats
+	 */
+	private ArrayList<DeathRat> moveEachDeathRat() {
 		ArrayList<DeathRat> drs = new ArrayList<>();
 		for (Direction prevDirection : currDeath.keySet()) {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
@@ -64,19 +85,7 @@ public class PathTile extends Tile {
 					drs.add(dr);
 					dr.initalMove(X_Y_POS, prevDirection);
 				}
-
 			}
-		}
-		// Remove fallen rats from list.
-		// Will not automatically move the rats in case other death rats come here.
-		if (aliveRats.isEmpty()) {
-			currBlock = new HashMap<>();
-		} else if (aliveRats.size() == beforeDeathInter) {
-			// Interesting as to why there is no change...
-			System.err.println("aliveRats list has not changed! "  + X_Y_POS[0] + " " +
-					X_Y_POS[1]);
-		} else {
-			// done by method correctList() in Tile.java
 		}
 		return drs;
 	}
@@ -223,6 +232,7 @@ public class PathTile extends Tile {
 			for (Rat r : ratList) {
 				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
 				this.addRat(r, prevDirection);
+				System.out.println("Moved!");
 			}
 		}
 	}
@@ -237,8 +247,8 @@ public class PathTile extends Tile {
 			ArrayList<Rat> rats = currBlock.get(directions[0]);
 			if (rats != null) {
 				Direction d = rats.contains(r) ? directions[0] : directions[1];
-				bufferNextBlock.putIfAbsent(d, new ArrayList<>());
-				bufferNextBlock.get(d).add(r);
+				this.addRat(r, d);
+				Main.addCurrMovement(X_Y_POS, d.opposite(), r.getStatus(), 0);
 			}
 		}	
 		aliveRats = rs.get(1);

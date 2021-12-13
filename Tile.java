@@ -143,19 +143,20 @@ public abstract class Tile {
 	 * Sorts the rats on this tile to ensure only alive rats are interacting.
 	 */
 	public void correctList() {
-		// ArrayList<Rat> tmp1 = aliveRats;
+		ArrayList<Rat> tmp1 = aliveRats;
+		aliveRats = new ArrayList<>();
 		for (Direction prevDirection : currBlock.keySet()) {
 			ArrayList<Rat> tmp = new ArrayList<>();
 			ArrayList<Rat> rs = currBlock.get(prevDirection);
 			if (rs != null) {
 				for (Rat r : rs) {
-					if (aliveRats.remove(r)) {
+					if (tmp1.remove(r)) {
 						tmp.add(r);
 					} else {
 						System.out.println("Del" + r);
 					}
 				}
-				aliveRats = tmp;
+				aliveRats.addAll(tmp);
 				currBlock.put(prevDirection, tmp);
 			} else {
 				System.out.println("NULL");
