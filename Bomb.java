@@ -9,7 +9,7 @@ import java.util.TimerTask;
  * 
  * @author Andrew Wu
  */
-public class Bomb extends Item {
+public class Bomb extends TimeItem {
 
 	/**
 	 * Item name of Bomb.
@@ -55,6 +55,7 @@ public class Bomb extends Item {
 		hp = START_COUNTDOWN; // is never used, only for constructor
 		this.x = xyPos[1];
 		this.y = xyPos[0];
+		timer = new Timer();
 	}
 
 	/**
@@ -89,13 +90,8 @@ public class Bomb extends Item {
 	 * Item ability triggered through calling this method. Method delayed per
 	 * second, updating the current time left on detonation. Once count down reaches
 	 * 0, will invoke a method to detonate.
-	 * 
-	 * @param x x-coordinate bomb was placed on
-	 * @param y y-coordinate bomb was placed on
-	 * @return true if bomb detonates successfully.
 	 */
-	public boolean itemAction() {
-		this.timer = new Timer();
+	public void itemAction() {
 
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
@@ -110,7 +106,6 @@ public class Bomb extends Item {
 				}
 			}
 		}, 0, 1000);
-		return true;
 	}
 
 	@Override

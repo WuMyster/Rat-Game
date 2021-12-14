@@ -140,6 +140,9 @@ public abstract class Tile {
 	 */
 	public void getRatInteractions() {
 		bufferNextBlock = new HashMap<>();
+		
+		
+		
 	}
 
 	/**
@@ -242,8 +245,8 @@ public abstract class Tile {
      */
 	public void blowUp() {
 		if (itemOnTile != null) {
-			if (itemOnTile instanceof Bomb) {
-				((Bomb) itemOnTile).timer.cancel();
+			if (itemOnTile instanceof TimeItem) {
+				((TimeItem) itemOnTile).timer.cancel();
 			}
 			removeItem();
 		}
@@ -260,6 +263,13 @@ public abstract class Tile {
             }
         }
 		resetTile();
+	}
+	
+	public void clearGas() {
+		if (itemOnTile instanceof Gas) {
+			((Gas) itemOnTile).timer.cancel();
+		}
+		removeItem();
 	}
 
 	/**
@@ -353,8 +363,8 @@ public abstract class Tile {
             return false;
         }
         itemOnTile = i;
-        if (i instanceof Bomb) {
-            ((Bomb) i).itemAction();
+        if (i instanceof TimeItem) {
+            ((TimeItem) i).itemAction();
         }
         return true;
     }

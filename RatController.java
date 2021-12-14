@@ -29,7 +29,7 @@ public class RatController {
 	 * @param max - the maximum number of rats allowed
 	 */
 	public static void setRatController(int max) {
-		maxNumOfRats = max;
+		maxNumOfRats = 200;
 	}
 
 	/**

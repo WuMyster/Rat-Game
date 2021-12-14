@@ -295,7 +295,7 @@ public class Main extends Application {
 			}
 			arr.remove(a);
 		} else {
-			System.err.println("Item cannot be removed\n" + it);
+			// System.err.println("Item cannot be removed\n" + it);
 		}
 	}
 

@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.scene.image.Image;
 
-public class Gas extends Item {
-	
-	private final int X;
-	private final int Y;
+public class Gas extends TimeItem {
 	
 	public static final Image IMAGE = new Image("./img/Gas.png");
 
@@ -34,13 +34,12 @@ public class Gas extends Item {
     /**
      * Tiles the tile was supposed to spread to but failed.
      */
-    private ArrayList<int[]> nextLocs = new ArrayList<>();
+    private ArrayList<int[]> nextLocs = new ArrayList<>();    
     
+    private boolean tickStarted = false;
 
 	public Gas (int x, int y) {
-		this.hp = 5;
-		this.X = x;
-		this.Y = y;
+		this.hp = 50;
 		locs.put(new int[] {x, y}, 0);
 		nextLocs.add(new int[] {x, y});
 	}
@@ -69,14 +68,35 @@ public class Gas extends Item {
     	    		nextLocsBuffer.add(tSucc);
     	    	}
     		}
-    		
 	    	nextLocs = nextLocsBuffer;
 	    	nextLocsBuffer = new ArrayList<>();
-	    	
-	    	
-	    	
     	}
     }
+    
+    public void itemAction() {
+    	if (!tickStarted) {
+    		tickStarted = true;
+			this.timer = new Timer();
+	
+			timer.scheduleAtFixedRate(new TimerTask() {
+				public void run() {
+					System.out.println(">>>>>>>>>>>>>>>>>");
+					hp--;
+					if (hp >= 0) {
+						if (hp % 5 == 0) {
+							spreadGas();
+							System.out.println("Spread");
+						}
+					} else {
+						System.out.println("Cancelled!");
+						timer.cancel();
+						Board.clearGas(locs.keySet());
+					}
+				}
+			}, 0, 1000);
+			
+    	}
+	}
 
 	@Override
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
@@ -87,10 +107,8 @@ public class Gas extends Item {
             		out.add(rat);
             	}
             }
-        }
-		
-		spreadGas();
-		
+        }	
+		// spreadGas();
 		return out;
 	}
 	
