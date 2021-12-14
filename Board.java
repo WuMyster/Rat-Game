@@ -271,8 +271,8 @@ public class Board {
     	return t.setTileItem(gas);
     }
     
-    public static void clearGas(Set<int[]> lis) {
-    	for (int[] i : lis) {
+    public static void clearGas(ArrayList<int[]> del) {
+    	for (int[] i : del) {
     		try {
     			board[i[1] * EXTRA_PADDING][i[0] * EXTRA_PADDING].clearGas();
     			System.out.println("Gas cancelled:" + i[0] + " " + i[1]);

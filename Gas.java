@@ -39,38 +39,37 @@ public class Gas extends TimeItem {
     private boolean tickStarted = false;
 
 	public Gas (int x, int y) {
-		this.hp = 50;
-		locs.put(new int[] {x, y}, 0);
-		nextLocs.add(new int[] {x, y});
+		this.hp = 20;
+		int[] tmp = new int[] {x, y};
+		locs.put(tmp, 0);
+		nextLocs.add(tmp);
 	}
 	
     public void spreadGas() {
+    		
+		ArrayList<int[]> nextLocsBuffer = new ArrayList<>();
+		
+		for (int[] tNext : nextLocs) {
+			ArrayList<ArrayList<int[]>> tiles = Board.spreadGas(tNext[0], tNext[1], this);
+			
+			boolean redoLoc = false;
+			for (int[] tFail : tiles.get(0)) {
+				if (!locs.containsKey(tFail)) {
+					redoLoc = true;
+				}
+			}
+			if (redoLoc) {
+				nextLocsBuffer.add(tNext);
+			}
+			
+			for (int[] tSucc : tiles.get(1)) {
+	    		locs.put(tSucc, locs.get(tNext) + 1);
+	    		nextLocsBuffer.add(tSucc);
+	    	}
+		}
+    	nextLocs = nextLocsBuffer;
+    	nextLocsBuffer = new ArrayList<>();
     	
-    	if (currRadius != maxRadius) {
-    		
-    		ArrayList<int[]> nextLocsBuffer = new ArrayList<>();
-    		
-    		for (int[] tNext : nextLocs) {
-    			ArrayList<ArrayList<int[]>> tiles = Board.spreadGas(tNext[0], tNext[1], this);
-    			
-    			boolean redoLoc = false;
-    			for (int[] tFail : tiles.get(0)) {
-    				if (!locs.containsKey(tFail)) {
-    					redoLoc = true;
-    				}
-    			}
-    			if (redoLoc) {
-    				nextLocsBuffer.add(tNext);
-    			}
-    			
-    			for (int[] tSucc : tiles.get(1)) {
-    	    		locs.put(tSucc, currRadius);
-    	    		nextLocsBuffer.add(tSucc);
-    	    	}
-    		}
-	    	nextLocs = nextLocsBuffer;
-	    	nextLocsBuffer = new ArrayList<>();
-    	}
     }
     
     public void itemAction() {
@@ -80,21 +79,27 @@ public class Gas extends TimeItem {
 	
 			timer.scheduleAtFixedRate(new TimerTask() {
 				public void run() {
-					System.out.println(">>>>>>>>>>>>>>>>>");
 					hp--;
-					if (hp >= 0) {
+					if (hp >= 10) { // Growing
 						if (hp % 5 == 0) {
 							spreadGas();
 							System.out.println("Spread");
 						}
+					} else if (hp >= 0) { //Shrinking
+						ArrayList<int[]> del = new ArrayList<>();
+						for (int[] t : locs.keySet()) {
+							if (locs.get(t) == hp / 5 + 1) {
+								del.add(t);
+							}
+						}
+						Board.clearGas(del);
 					} else {
-						System.out.println("Cancelled!");
+						System.out.println("All Cancelled!");
 						timer.cancel();
-						Board.clearGas(locs.keySet());
+						Board.clearGas(new ArrayList<int[]>(locs.keySet()));
 					}
 				}
 			}, 0, 1000);
-			
     	}
 	}
 

@@ -267,9 +267,8 @@ public abstract class Tile {
 	
 	public void clearGas() {
 		if (itemOnTile instanceof Gas) {
-			((Gas) itemOnTile).timer.cancel();
+			removeItem();
 		}
-		removeItem();
 	}
 
 	/**
