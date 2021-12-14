@@ -259,15 +259,26 @@ public class Board {
     }
     
     /**
+     * [Called from Gas.java, all necessary checks should be already done].
+     * Returns true if gas item can be added to this.
+     * @param t		Tile to add the Gas item on
+     * @param gas	Gas item to be added
+     * @return		{@code true} if gas item can be added to this
+     */
+    public boolean addGas(Tile t, Gas gas) {
+    	return t.setTileItem(gas);
+    }
+    
+    /**
      * Attempt to spread gas from an origin x y point.
      * @param x x position of the gas
      * @param y y position of the gas
      * @return 2 lists, first is list of tiles it failed to spread to
      * and second is list of tiles successfully spread to
      */
-    public static ArrayList<ArrayList<Tile>> spreadGas(int x, int y, Gas gas) {
-    	ArrayList<Tile> hasGas = new ArrayList<>();
-    	ArrayList<Tile> failedGas = new ArrayList<>();
+    public static ArrayList<ArrayList<int[]>> spreadGas(int x, int y, Gas gas) {
+    	ArrayList<int[]> hasGas = new ArrayList<>();
+    	ArrayList<int[]> failedGas = new ArrayList<>();
     	
     	y *= Board.getExtraPadding();
         x *= Board.getExtraPadding();
@@ -278,10 +289,10 @@ public class Board {
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING - 1);
-        		hasGas.add(t);
+        		hasGas.add(new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING - 1});
         		System.out.println("North success");
         	} else {
-        		failedGas.add(t);
+        		failedGas.add(new int[] {x / EXTRA_PADDING - 1, y / EXTRA_PADDING});
         		System.out.println("North failed");
         	}
         }
@@ -290,10 +301,10 @@ public class Board {
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING + 1);
-        		hasGas.add(t);
+        		hasGas.add(new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING + 1});
         		System.out.println("South success");
         	} else {
-        		failedGas.add(t);
+        		failedGas.add(new int[] {x / EXTRA_PADDING - 1, y / EXTRA_PADDING});
         		System.out.println("South failed");
         	}
         }
@@ -302,10 +313,10 @@ public class Board {
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING - 1, y / EXTRA_PADDING);
-        		hasGas.add(t);
+        		hasGas.add(new int[] {x / EXTRA_PADDING - 1, y / EXTRA_PADDING});
         		System.out.println("West success");
         	} else {
-        		failedGas.add(t);
+        		failedGas.add(new int[] {x / EXTRA_PADDING - 1, y / EXTRA_PADDING});
         		System.out.println("West failed");
         	}
         }
@@ -314,14 +325,14 @@ public class Board {
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING + 1, y / EXTRA_PADDING);
-        		hasGas.add(t);
+        		hasGas.add(new int[] {x / EXTRA_PADDING + 1, y / EXTRA_PADDING});
         		System.out.println("East success");
         	} else {
-        		failedGas.add(t);
+        		failedGas.add(new int[] {x / EXTRA_PADDING + 1, y / EXTRA_PADDING});
         		System.out.println("East failed");
         	}
         }
-        ArrayList<ArrayList<Tile>> out = new ArrayList<>();
+        ArrayList<ArrayList<int[]>> out = new ArrayList<>();
     	out.add(failedGas);
     	out.add(hasGas);
     	return out;

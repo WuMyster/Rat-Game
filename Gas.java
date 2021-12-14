@@ -25,38 +25,56 @@ public class Gas extends Item {
     private int currRadius = 0;
 
     private static final int GAS_EXPAND_TIME = 700; // milliseconds
-    
-	public Gas (int x, int y) {
-		this.hp = 5;
-		this.X = x;
-		this.Y = y;
-	}
 	
     /**
      * The specific tile this gas is on and the spread distance.
      */
-    private HashMap<Tile, Integer> locs = new HashMap<>();
+    private HashMap<int[], Integer> locs = new HashMap<>();
     
     /**
      * Tiles the tile was supposed to spread to but failed.
      */
-    private ArrayList<Tile> failedLocs = new ArrayList<>();
+    private ArrayList<int[]> nextLocs = new ArrayList<>();
     
+
+	public Gas (int x, int y) {
+		this.hp = 5;
+		this.X = x;
+		this.Y = y;
+		locs.put(new int[] {x, y}, 0);
+		nextLocs.add(new int[] {x, y});
+	}
+	
     public void spreadGas() {
+    	
     	if (currRadius != maxRadius) {
     		
-	    	ArrayList<ArrayList<Tile>> tiles = Board.spreadGas(X, Y, this);
+    		ArrayList<int[]> nextLocsBuffer = new ArrayList<>();
+    		
+    		for (int[] tNext : nextLocs) {
+    			ArrayList<ArrayList<int[]>> tiles = Board.spreadGas(tNext[0], tNext[1], this);
+    			
+    			boolean redoLoc = false;
+    			for (int[] tFail : tiles.get(0)) {
+    				if (!locs.containsKey(tFail)) {
+    					redoLoc = true;
+    				}
+    			}
+    			if (redoLoc) {
+    				nextLocsBuffer.add(tNext);
+    			}
+    			
+    			for (int[] tSucc : tiles.get(1)) {
+    	    		locs.put(tSucc, currRadius);
+    	    		nextLocsBuffer.add(tSucc);
+    	    	}
+    		}
+    		
+	    	nextLocs = nextLocsBuffer;
+	    	nextLocsBuffer = new ArrayList<>();
 	    	
-	    	for (Tile t : tiles.get(0)) { // Checking failed list
-	    		if (!locs.containsKey(t)) {
-	    			failedLocs.add(t);
-	    		}
-	    	}
 	    	
-	    	for (Tile t : tiles.get(1)) {
-	    		locs.put(t, currRadius);
-	    	}
-	    	currRadius++;
+	    	
     	}
     }
 
