@@ -238,19 +238,23 @@ public class Board {
     }
 
     /**
-     * Returns tile location.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
-     * @return tile
+     * Adds a new Death Rat on tie from specified coordinates. Won't return 
+     * boolean like other items because DR can always be added.
+     * 
+     * @param x x position of tile
+     * @param y y position of tile
      */
-    public static Tile getTile(int x, int y) {
-        return board[y * Board.getExtraPadding()][x * Board.getExtraPadding()];
-    }
-
     public void addDeathRat(int x, int y) {
         placeRat(new DeathRat(), Direction.NORTH, y, x);
     }
     
+    /**
+     * Adds a new Gas item on tile from specified coordinates.
+     * 
+     * @param x x position of tile
+     * @param y y position of tile
+     * @return {@code true} if gas can be placed here.
+     */
     public boolean addGas(int x, int y ) {
     	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
     	if (isPlaceableTile(t)) {
@@ -260,28 +264,15 @@ public class Board {
     }
     
     /**
-     * [Called from Gas.java, all necessary checks should be already done].
-     * Returns true if gas item can be added to this.
-     * @param t		Tile to add the Gas item on
-     * @param gas	Gas item to be added
-     * @return		{@code true} if gas item can be added to this
-     * @deprecated
+     * Removes item from tile. Should only be used to remove Gas.
+     * 
+     * @param del list of positions of the item.
      */
-    public boolean addGas(Tile t, Gas gas) {
-    	return t.setTileItem(gas);
-    }
-    
     public static void clearGas(ArrayList<int[]> del) {
     	for (int[] i : del) {
-    		try {
-    			board[i[1] * EXTRA_PADDING][i[0] * EXTRA_PADDING].clearGas();
-    			System.out.println("Gas cancelled:" + i[0] + " " + i[1]);
-    		} catch (NullPointerException e) {
-    			System.out.println("Failed cancel: " + i[0] + " " + i[1]);
-    		}
+    		board[i[1] * EXTRA_PADDING][i[0] * EXTRA_PADDING].clearGas();
     	}
     }
-    
     /**
      * Attempt to spread gas from an origin x y point.
      * @param x x position of the gas
@@ -304,10 +295,8 @@ public class Board {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING - 1);
         		hasGas.add(place);
-//        		System.out.println("North success");
         	} else {
         		failedGas.add(place);
-//        		System.out.println("North failed");
         	}
         }
 
@@ -317,10 +306,8 @@ public class Board {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING + 1);
         		hasGas.add(place);
-//        		System.out.println("South success");
         	} else {
         		failedGas.add(place);
-//        		System.out.println("South failed");
         	}
         }
         
@@ -330,10 +317,8 @@ public class Board {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING - 1, y / EXTRA_PADDING);
         		hasGas.add(place);
-//        		System.out.println("West success");
         	} else {
         		failedGas.add(place);
-//        		System.out.println("West failed");
         	}
         }
         
@@ -343,10 +328,8 @@ public class Board {
         	if (t.setTileItem(gas)) {
         		Main.addGas(x / EXTRA_PADDING + 1, y / EXTRA_PADDING);
         		hasGas.add(place);
-//        		System.out.println("East success");
         	} else {
         		failedGas.add(place);
-//        		System.out.println("East failed");
         	}
         }
         ArrayList<ArrayList<int[]>> out = new ArrayList<>();
@@ -386,9 +369,7 @@ public class Board {
 							Main.TILE_SIZE);
 				} else if (board[i][j] instanceof TunnelTile) {
 					Image t = new Image("/img/tile.png");
-					
-					// Only checks for left right
-					
+									
 					
 					// Check for NESW entrance
 					if (board[i - EXTRA_PADDING][j] != null) {
