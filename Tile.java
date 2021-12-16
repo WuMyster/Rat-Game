@@ -140,9 +140,6 @@ public abstract class Tile {
 	 */
 	public void getRatInteractions() {
 		bufferNextBlock = new HashMap<>();
-		
-		
-		
 	}
 
 	/**
@@ -172,8 +169,6 @@ public abstract class Tile {
 			currBlock.putIfAbsent(d, new ArrayList<>());
 			currBlock.get(d).add(r);
 		}
-		
-		// aliveRats = tmp1;
 	}
 
 	/**
@@ -320,17 +315,10 @@ public abstract class Tile {
 
 		currDeath = nextDeath;
 		nextDeath = new HashMap<>();
-	}
-	
-	/**
-	 * Del me
-	 * Debug
-	 */
-	protected void tempSetRats() {
-		aliveRats = new ArrayList<>();
-		for (Direction dir : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(dir));
-		}
+		
+		giveRatItem();
+		getRatInteractions();
+		correctList(); // Make sure only moving rats are considered
 	}
 	
 	/**

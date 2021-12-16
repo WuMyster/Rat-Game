@@ -410,22 +410,11 @@ public class Board {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
 		deathRatBuffer = new ArrayList<>();
 		
-		// Movement
+		// Movement/ make sure it's interacting with correct Rats
+		// Give the rat item and keep alive rats
+		// Have the rats interact with each other
 		for (Tile t : allTiles) {
 			t.setCurrRat();
-		}
-		// First give item to rat(s)
-		for (Tile t : allTiles) {
-			t.giveRatItem();
-		}
-		
-		// Then have the rats interact with each other
-		for (Tile t : allTiles) {
-			t.getRatInteractions();
-		}
-		
-		for (Tile t : allTiles) {
-			t.correctList();
 		}
 		
 		// Secondly move Death rats to kill any rats in its path

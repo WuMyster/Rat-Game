@@ -9,18 +9,22 @@ public enum Direction {
 	 * Direction and number associated  for North
 	 */
 	NORTH(1), 
+	
 	/**
 	 * Direction and number associated  for South
 	 */
 	SOUTH(0), 
+	
 	/**
 	 * Direction and number associated  for East
 	 */
 	EAST(3), 
+	
 	/**
 	 * Direction and number associated for West
 	 */
 	WEST(2);
+	
 	
 	/**
 	 * Number that corresponds to the opposing direction
