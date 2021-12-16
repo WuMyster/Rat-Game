@@ -98,47 +98,47 @@ public class Main extends Application {
 	/**
 	 * Draggable image for stop sign.
 	 */
-	private ImageView draggableStop = new ImageView();
+	private static ImageView draggableStop = new ImageView();
 
 	/**
 	 * Draggable image for bomb.
 	 */
-	private ImageView draggableBomb = new ImageView();
+	private static ImageView draggableBomb = new ImageView();
 
     /**
      * Draggable image for sex change (Male to Female) item.
      */
-	private ImageView draggableSexToFemale = new ImageView();
+	private static ImageView draggableSexToFemale = new ImageView();
 
     /**
      * Draggable image for sex change (Female to Male) item.
      */
-    private ImageView draggableSexToMale = new ImageView();
+    private static ImageView draggableSexToMale = new ImageView();
 
     /**
      * Draggable image for sterilise item.
      */
-    private ImageView draggableSterilise = new ImageView();
+    private static ImageView draggableSterilise = new ImageView();
 
     /**
      * Draggable image for death rat.
      */
-    private ImageView draggableDeathRat = new ImageView();
+    private static ImageView draggableDeathRat = new ImageView();
 
 	/**
 	 * Draggable image for poison.
 	 */
-    private ImageView draggablePoison = new ImageView();
+    private static ImageView draggablePoison = new ImageView();
 
     /**
 	 * Draggable image for poison.
 	 */
-    private ImageView draggableGas = new ImageView();
+    private static ImageView draggableGas = new ImageView();
     
 	/**
 	 * Board of the game
 	 */
-	private Board m;
+	private static Board m;
 
 	/**
 	 * Width of the rat in pixels.
@@ -153,17 +153,17 @@ public class Main extends Application {
 	/**
 	 * Canvas of map tiles.
 	 */
-	private Canvas mapCanvas;
+	private static Canvas mapCanvas;
 
 	/**
 	 * Grey background.
 	 */
-	private Canvas baseCanvas;
+	private static Canvas baseCanvas;
 
 	/**
 	 * Canvas for all rat classes + death rat.
 	 */
-	private Canvas ratCanvas;
+	private static Canvas ratCanvas;
 
 	/**
 	 * Canvas for all items not including death rat.
@@ -173,12 +173,12 @@ public class Main extends Application {
 	/**
 	 * Level number of current level.
 	 */
-	private Label currLevel;
+	private static Label currLevel;
 
 	/**
 	 * Number of points accumulated in level so far.
 	 */
-	private Label currPoints;
+	private static Label currPoints;
 	
 	/**
 	 * Location of all items.
@@ -193,40 +193,40 @@ public class Main extends Application {
 	/**
 	 * Iterating over moving the rat.
 	 */
-	private Timeline ratMoveTimeline;
+	private static Timeline ratMoveTimeline;
 
 	/**
 	 * The main cycle that runs the game.
 	 */
-	private Timeline cycler;
+	private static Timeline cycler;
 
 	/**
 	 * Number of steps rat has taken during current iteration of rat movement. 2x
 	 * for baby rats and death rats.
 	 */
-	private int step;
+	private static int step;
 
 	/**
 	 * Time when the game started.
 	 */
-	private LocalTime startTime;
+	private static LocalTime startTime;
 
 	/**
 	 * Max time to complete game in seconds.
 	 */
-	private int maxTime;
+	private static int maxTime;
 	
 	/**
 	 * Players name.
 	 */
-	private String playerName;
+	private static String playerName;
 	
 	/**
 	 * If user themselves has told the game to stop.
 	 */
-	private boolean playerStopGame;
+	private static boolean playerStopGame;
 	
-	private static Stage currWindow;
+	public static Stage currWindow;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -238,7 +238,7 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 	
-	public void gameScreen() {
+	public static void gameScreen() {
 		BorderPane root = createGameGUI(GameMaster.getMap(), GameMaster.getRats(), 
 				GameMaster.getItems(), GameMaster.getMaxTime(), GameMaster.getMaxRats(),
 				GameMaster.getName());
@@ -312,7 +312,7 @@ public class Main extends Application {
 	 * @param event The drag event itself which contains data about the drag that
 	 *              occured.
 	 */
-	public void itemCanvasDragDropOccurred(DragEvent event) {		
+	public static void itemCanvasDragDropOccurred(DragEvent event) {		
 		if (event.getGestureSource() == draggableStop) {
 			placeStopSign(event);
 		} else if (event.getGestureSource() == draggableBomb) {
@@ -337,7 +337,7 @@ public class Main extends Application {
 	/**
 	 * Redraws all items.
 	 */
-	private void drawItems() {
+	private static void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 		for (ItemType it : ItemType.values()) {
@@ -362,7 +362,7 @@ public class Main extends Application {
 	 * @author Liam O'Reilly
 	 * @author Jing Shiang Gu
 	 */
-	private void placeStopSign(DragEvent event) {
+	private static void placeStopSign(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -415,7 +415,7 @@ public class Main extends Application {
      *              occurred.
      * @author Andrew Wu
      */
-	private void placeBomb(DragEvent event) {
+	private static void placeBomb(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -463,7 +463,7 @@ public class Main extends Application {
      *              occurred.
      * @author Andrew Wu
      */
-	private void placePoison(DragEvent event) {
+	private static void placePoison(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -495,7 +495,7 @@ public class Main extends Application {
      *              occurred.
      * @author Andrew Wu
      */
-	private void placeSexToFemale(DragEvent event) {
+	private static void placeSexToFemale(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -527,7 +527,7 @@ public class Main extends Application {
      *              occurred.
      * @author Andrew Wu
      */
-	private void placeSexToMale(DragEvent event) {
+	private static void placeSexToMale(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -559,7 +559,7 @@ public class Main extends Application {
      *              occurred.
      * @author Andrew Wu
      */
-	private void placeSterilise(DragEvent event) {
+	private static void placeSterilise(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
 
@@ -590,7 +590,7 @@ public class Main extends Application {
      * @param event The drag event itself which contains data about the drag that
      *              occurred.
      */
-	private void placeDeathRat(DragEvent event) {
+	private static void placeDeathRat(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
@@ -601,7 +601,7 @@ public class Main extends Application {
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
-	public void placeGas(DragEvent event) {
+	public static void placeGas(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		if (m.addGas((int) x, (int) y)) {
@@ -630,7 +630,7 @@ public class Main extends Application {
 	 * 
 	 * @return the menu
 	 */
-	private HBox createTopMenu() {
+	private static HBox createTopMenu() {
 		HBox root = new HBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
@@ -670,7 +670,7 @@ public class Main extends Application {
 	 * 
 	 * @return the right menu
 	 */
-	private VBox createRightMenu() {
+	private static VBox createRightMenu() {
 		VBox root = new VBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
@@ -726,7 +726,7 @@ public class Main extends Application {
 	/**
 	 * Initiliase draggleable images. Expand VBox.
 	 */
-	private void setUpDraggleableImages(VBox root) {
+	private static void setUpDraggleableImages(VBox root) {
 		draggableStop.setImage(StopSign.IMAGE);
 		root.getChildren().add(draggableStop);
 
@@ -752,7 +752,7 @@ public class Main extends Application {
 		root.getChildren().add(draggableGas);
 	}
 	
-	private void setUpHandling() {
+	private static void setUpHandling() {
 		ClipboardContent content = new ClipboardContent();
 		content.putString("Hello");
 		
@@ -825,15 +825,15 @@ public class Main extends Application {
 	 * @param name name of the player
 	 * @return the GUI
 	 */
-	private BorderPane createGameGUI(String map, ArrayList<String> rats,
+	private static BorderPane createGameGUI(String map, ArrayList<String> rats,
 			ArrayList<String> items, int maxTime, int maxRats, String name) {
 			
 		setInitialValues();
 		
-		this.playerName = name;
+		playerName = name;
 		
 		startTime = LocalTime.now();
-		this.maxTime = maxTime;
+		maxTime = maxTime;
 		RatController.setRatController(maxRats);
 		
 		BorderPane root = null;
@@ -859,7 +859,7 @@ public class Main extends Application {
 		return root;
 	}
 	
-	private void setInitialValues() {
+	private static void setInitialValues() {
 		
 		// These no choice
 		RAT_WIDTH = 30;
@@ -874,7 +874,7 @@ public class Main extends Application {
 	 * 
 	 * @return Game canvas
 	 */
-	private Pane createCenterMap() {
+	private static Pane createCenterMap() {
 		Pane root = new Pane();
 		// Creating canvases
 		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -898,7 +898,7 @@ public class Main extends Application {
 	/**
 	 * Draws map onto screen
 	 */
-	private void drawMap() {
+	private static void drawMap() {
 		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		m.drawBoard(gc);
@@ -923,7 +923,7 @@ public class Main extends Application {
 	 * currently allows rats to move around. TODO Check if time is over TODO Level
 	 * from Game Master
 	 */
-	private void runCycle() {
+	private static void runCycle() {
 		currMovement = new HashMap<>();
 		step = 0;
 		m.runAllTiles();
@@ -945,14 +945,14 @@ public class Main extends Application {
 		} // Otherwise keep going
 	}
 	
-	private void saveState() {
+	private static void saveState() {
 		m.saveState(playerName + ".txt");
 	}
 
 	/**
 	 * Criteria for Rat movements.
 	 */
-	private void moveRat() {
+	private static void moveRat() {
 		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
 		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
@@ -960,7 +960,7 @@ public class Main extends Application {
 	/**
 	 * Goes through each type of rats to draw them onto canvas
 	 */
-	private void goThroughRat() {
+	private static void goThroughRat() {
 		GraphicsContext gc = ratCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		step += 1;
@@ -975,7 +975,7 @@ public class Main extends Application {
 	 * @param smallerList type of rat you're dealing with
 	 * @param ratImage    image of rat
 	 */
-	private void drawRat(RatType rt) {
+	private static void drawRat(RatType rt) {
 		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);
 		if (smallerList != null) {
 			GraphicsContext gc = ratCanvas.getGraphicsContext2D();
