@@ -266,8 +266,9 @@ public class Board {
     /**
      * Attempt to spread gas from an origin x y point.
      * 
-     * @param x x position of the gas
-     * @param y y position of the gas
+     * @param x 	x position of the gas
+     * @param y 	y position of the gas
+     * @param hp	hp of the new gas item
      */
     public static void spreadGas(int x, int y, int hp) {    
     	
@@ -313,7 +314,6 @@ public class Board {
 	public void drawBoard(GraphicsContext gc) {
 		
 		Image grassImage = new Image("Grass.png");
-		//Image tileImage = new Image("Tile.png");
 		Image[] tunnelImagesEntrance = new Image[4];
 		for(int i = 0; i < 4; i++) {
 			tunnelImagesEntrance[i] = new Image("/img/Tunnel" + i + ".png");
@@ -453,13 +453,7 @@ public class Board {
 			Rat createR;
 			String[] spl = str.split(";");
 			String[] splD = spl[1].split(",");
-			Direction d = null;
-			switch (Integer.parseInt(splD[0])) {
-			case (0) -> d = Direction.NORTH;
-			case (1) -> d = Direction.EAST;
-			case (2) -> d = Direction.SOUTH;
-			case (3) -> d = Direction.WEST;
-			}
+			Direction d = Direction.toD(Integer.parseInt(splD[0]));
 			if (spl[0].split(",")[0].equals(DeathRat.NAME)) {
 				if (spl[0].length() == 1) {
 					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2])); // Only for new start of levels

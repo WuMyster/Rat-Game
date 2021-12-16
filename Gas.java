@@ -39,29 +39,45 @@ public class Gas extends TimeItem {
      */
     private static final int GAS_EXPAND_TIME = 1000; // milliseconds
 	
-
+	/**
+	 * Constructs a gas item from an xy position.
+	 * 
+	 * @param x 	x position of the gas item
+	 * @param y 	y position of the gas item
+	 */
 	public Gas (int x, int y) {
 		this.hp = START_HP + EXTRA_HP  * RADIUS;
 		this.x = x;
 		this.y = y;
 	}
 	
+	/**
+	 * Constructs a gas item from an xy position with given hp.
+	 * 
+	 * @param xyPos xy position of the gas
+	 * @param hp 	hp of the gas item
+	 */
 	public Gas (int[] xyPos, int hp) {
 		this.hp = hp;
 		this.x = xyPos[0];
 		this.y = xyPos[1];
 	}
 	
+	/**
+	 * Constructs a gas item from a x y position with a given hp.
+	 * @param x 	x position of the gas item
+	 * @param y		y position of the gas item
+	 * @param hp	hp of the gas item
+	 */
 	public Gas (int x, int y, int hp) {
 		this.hp = hp;
 		this.x = x;
 		this.y = y;
 	}
-	
-    public void spreadGas() {
-    	Board.spreadGas(x, y, hp);    	
-    }
     
+	/**
+	 * Method to deal with spreading and clearing of this gas item.
+	 */
     public void itemAction() {
     	this.timer = new Timer();
     	
@@ -69,13 +85,11 @@ public class Gas extends TimeItem {
 			public void run() {
 				hp--;
 				
-				if (hp == 0) {
+				if (hp == 0) { // Clear gas
 					timer.cancel();
 					Board.clearGas(x, y);
-				} else if (hp <= START_HP) {
-					
-				} else if (hp % EXTRA_HP == 0) {
-					spreadGas();
+				} else if (hp % EXTRA_HP == 0 && hp != START_HP) {
+					Board.spreadGas(x, y, hp);    
 				}
 			}
 		}, 0, GAS_EXPAND_TIME);

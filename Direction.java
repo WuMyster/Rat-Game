@@ -49,6 +49,7 @@ public enum Direction {
 	 * @return the direction that is its number
 	 */
 	public static Direction toD(int i) {
+		System.out.print(Direction.values() [i]);
 		return Direction.values() [i];
 	}
 	
