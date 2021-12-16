@@ -114,8 +114,8 @@ public abstract class Tile {
 	 */
 	public Tile(int[] xyPos) {
 		this.X_Y_POS = xyPos;
-		this.ORIGINAL_X_Y_POS = new int[] { X_Y_POS[0] / Board.getExtraPadding(),
-				X_Y_POS[1] / Board.getExtraPadding() };
+		this.ORIGINAL_X_Y_POS = new int[] { X_Y_POS[0] / Board.EXTRA_PADDING,
+				X_Y_POS[1] / Board.EXTRA_PADDING };
 		resetTile();
 	}
 

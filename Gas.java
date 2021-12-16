@@ -20,17 +20,28 @@ public class Gas extends TimeItem {
     private final int DAMAGE = 100;
 
     /**
-     * Max amount of tiles gas spread to in each direction.
+     * Number of tiles gas spread to in all possible directions.
      */
-    private static final int MAX_RADIUS = 3;
+    private static final int RADIUS = 3;
     
-    private static final int START_HP = 15;
+    /**
+     * Extra hp for each Gas cloud radious. TODO fix definition
+     */
+    private static final int EXTRA_HP = 5;
+    
+    /**
+     * Initial hp of Gas.
+     */
+    private static final int START_HP = 5;
 
-    private static final int GAS_EXPAND_TIME = 700; // milliseconds
+    /**
+     * Time between each tick for each Gas item
+     */
+    private static final int GAS_EXPAND_TIME = 1000; // milliseconds
 	
 
 	public Gas (int x, int y) {
-		this.hp = START_HP;
+		this.hp = START_HP + EXTRA_HP  * RADIUS;
 		this.x = x;
 		this.y = y;
 	}
@@ -58,16 +69,16 @@ public class Gas extends TimeItem {
 			public void run() {
 				hp--;
 				
-				if (hp % 5 == 0) { // Growing
-					spreadGas();
-				} else if (hp > 5) { // Not growing or shrinking
-					
-				} else {
+				if (hp == 0) {
 					timer.cancel();
 					Board.clearGas(x, y);
+				} else if (hp <= START_HP) {
+					
+				} else if (hp % EXTRA_HP == 0) {
+					spreadGas();
 				}
 			}
-		}, 0, 1000);
+		}, 0, GAS_EXPAND_TIME);
 	}
 
 	@Override

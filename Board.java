@@ -265,67 +265,44 @@ public class Board {
     }
     /**
      * Attempt to spread gas from an origin x y point.
+     * 
      * @param x x position of the gas
      * @param y y position of the gas
-     * @return 2 lists, first is list of tiles it failed to spread to
-     * and second is list of tiles successfully spread to
      */
-    public static ArrayList<ArrayList<int[]>> spreadGas(int x, int y, int hp) {
-    	ArrayList<int[]> hasGas = new ArrayList<>();
-    	ArrayList<int[]> failedGas = new ArrayList<>();
+    public static void spreadGas(int x, int y, int hp) {    
     	
-    	y *= EXTRA_PADDING;
-        x *= EXTRA_PADDING;
+    	int boardX = x * EXTRA_PADDING;
+        int boardY = y * EXTRA_PADDING;
 
         Tile t;
         
-        t = board[y - EXTRA_PADDING][x];
+        t = board[boardY - EXTRA_PADDING][boardX];
         if (isPlaceableTile(t)) {
-        	int[] place = new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING - 1};
-        	if (t.setTileItem(new Gas(x / EXTRA_PADDING, y / EXTRA_PADDING - 1, hp))) {
-        		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING - 1);
-        		hasGas.add(place);
-        	} else {
-        		failedGas.add(place);
+        	if (t.setTileItem(new Gas(x, y - 1, hp))) {
+        		Main.addGas(x, y - 1);
         	}
         }
 
-        t = board[y + EXTRA_PADDING][x];
+        t = board[boardY + EXTRA_PADDING][boardX];
         if (isPlaceableTile(t)) {
-        	int[] place = new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING + 1};
-        	if (t.setTileItem(new Gas(x / EXTRA_PADDING, y / EXTRA_PADDING + 1, hp))) {
-        		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING + 1);
-        		hasGas.add(place);
-        	} else {
-        		failedGas.add(place);
+        	if (t.setTileItem(new Gas(x, y + 1, hp))) {
+        		Main.addGas(x, y + 1);
         	}
         }
         
-        t = board[y][x - EXTRA_PADDING];
+        t = board[boardY][boardX - EXTRA_PADDING];
         if (isPlaceableTile(t)) {
-        	int[] place = new int[] {x / EXTRA_PADDING - 1, y / EXTRA_PADDING};
-        	if (t.setTileItem(new Gas(x / EXTRA_PADDING - 1, y / EXTRA_PADDING, hp))) {
-        		Main.addGas(x / EXTRA_PADDING - 1, y / EXTRA_PADDING);
-        		hasGas.add(place);
-        	} else {
-        		failedGas.add(place);
+        	if (t.setTileItem(new Gas(x - 1, y , hp))) {
+        		Main.addGas(x - 1, y);
         	}
         }
         
-        t = board[y][x + EXTRA_PADDING];
+        t = board[boardY][boardX + EXTRA_PADDING];
         if (isPlaceableTile(t)) {
-        	int[] place = new int[] {x / EXTRA_PADDING + 1, y / EXTRA_PADDING};
-        	if (t.setTileItem(new Gas(x / EXTRA_PADDING + 1, y / EXTRA_PADDING, hp))) {
-        		Main.addGas(x / EXTRA_PADDING + 1, y / EXTRA_PADDING);
-        		hasGas.add(place);
-        	} else {
-        		failedGas.add(place);
+        	if (t.setTileItem(new Gas(x + 1, y, hp))) {
+        		Main.addGas(x + 1, y);
         	}
         }
-        ArrayList<ArrayList<int[]>> out = new ArrayList<>();
-    	out.add(failedGas);
-    	out.add(hasGas);
-    	return out;
     }
 
 	/**
