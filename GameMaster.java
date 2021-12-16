@@ -16,27 +16,56 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GameMaster {
-
-	static Stage window;
     
+	/**
+	 * Information from players file.
+	 */
     private static ArrayList<String> playerInfo = new ArrayList<>();
     
+    /**
+     * List of rat positions.
+     */
     private static ArrayList<String> rats = new ArrayList<>();
     
+    /**
+     * List of item positions
+     */
     private static ArrayList<String> items = new ArrayList<>();
     
+    /**
+     * Max time available to finish game.
+     */
     private static int maxTime = Integer.MAX_VALUE;
     
+    /**
+     * Max number of rats to lose the game.
+     */
     private static int maxRats = Integer.MAX_VALUE;
     
+    /**
+     * String of the map.
+     */
     private static String map = null;
     
+    /**
+     * Name of player.
+     */
     private static String playerName = null;
     
+    /**
+     * x y size of the map.
+     */
     private static int[] mapSize = null;
 
+    /**
+     * Max level the player has achieved
+     */
     private static int maxLevel = Integer.MAX_VALUE;
     
+    /**
+     * Creates and returns a Game Master Scene
+     * @return Game Master Scene
+     */
     public static Scene startGameMaster() {
 
         GridPane grid = new GridPane();
@@ -64,8 +93,6 @@ public class GameMaster {
         	System.out.println("Leaderboard not implemented yet");
         });
         
-
-
         //message
         String message = MessageOfDay.getMsgDay();
 
@@ -77,34 +104,67 @@ public class GameMaster {
         return scene;
     }
     
+    /**
+     * Returns max number of rats
+     * @return
+     */
     public static int getMaxRats() {
     	return maxRats;
     }
     
+    /**
+     * Returns x y size of the map.
+     * @return x y size of the map
+     */
     public static int[] getMapSize() {
     	return mapSize;
     }
     
+    /**
+     * Returns the map.
+     * @return the map
+     */
     public static String getMap() {
     	return map;
     }
     
+    /**
+     * Returns list of rats on the board.
+     * @return list of rats on the board
+     */
     public static ArrayList<String> getRats() {
     	return rats;
     }
     
+    /**
+     * Returns list of items already present on board.
+     * @return list of items already present on board
+     */
     public static ArrayList<String> getItems() {
     	return items;
     }
     
+    /**
+     * Returns max time to finish game.
+     * @return max time to finish game
+     */
     public static int getMaxTime() {
     	return maxTime;
     }
     
+    /**
+     * Returns name of player.
+     * @return name of player
+     */
     public static String getName() {
     	return playerName;
     }
     
+    /**
+     * Gets the information of the level and set up values before calling
+     * game window.
+     * @param lvlNum the level selected
+     */
     private static void loadGame(int lvlNum) {
     	// For now, assume no ongoing game
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
@@ -133,6 +193,11 @@ public class GameMaster {
     	Main.gameScreen();
     }
     
+    /**
+     * Returns an list of information from a file
+     * @param filename	the file to get information from
+     * @return			list of new line seperarated information
+     */
     private static ArrayList<String> getInfoFromFile(String filename) {
     	ArrayList<String> out = new ArrayList<>();
     	File file = null;
@@ -155,6 +220,9 @@ public class GameMaster {
         return out;
     }
     
+    /**
+     * Sets up the level page to select level of the game.
+     */
     private static void lvlPage() {
     	maxLevel = Integer.valueOf(playerInfo.get(0));
     	
@@ -178,22 +246,7 @@ public class GameMaster {
     }
 
     private static void getPlayer(TextField playerInput) {
-    	File file = null;
-    	Scanner in = null;
     	playerName = playerInput.getText();
-        try {
-            file = new File("./player/" + playerName + ".txt");
-            in = new Scanner(file);
-            while (in.hasNextLine()) {
-            	playerInfo.add(in.nextLine());
-            }
-            System.out.println("Success!");
-            lvlPage();
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't access file...");
-            e.printStackTrace();
-        } finally {
-        	in.close();
-        }
+    	playerInfo = getInfoFromFile("./player/" + playerName + ".txt");
     }
 }
