@@ -37,18 +37,10 @@ public class GameMaster extends Application {
         TextField playerInput = new TextField("Enter player name...");
         GridPane.setConstraints(playerInput, 1, 0);
 
-        //Level label
-        Label levelLabel = new Label("Player Level: ");
-        GridPane.setConstraints(levelLabel, 0, 1);
-
-        //Level input
-        TextField levelInput = new TextField("Enter player level...");
-        GridPane.setConstraints(levelInput, 1, 1);
-
         Button loginButton = new Button("Load Player");
         GridPane.setConstraints(loginButton, 1, 3);
-        loginButton.setOnAction(e -> isInt(levelInput, levelInput.getText()));
-        loginButton.setOnAction(e -> getPlayer(playerInput,levelInput));
+        loginButton.setOnAction(e -> getPlayer(playerInput));
+        
 
         Button leaderboardButton = new Button("Check Leaderboard");
         leaderboardButton.setOnAction(e -> LeaderBoardWindow.displayLeaderboard("Leaderboard"));
@@ -63,39 +55,53 @@ public class GameMaster extends Application {
         String message = MessageOfDay.getMsgDay();
 
 
-        grid.getChildren().addAll(playerLabel, playerInput, levelLabel, levelInput, loginButton, leaderboardButton);
+        grid.getChildren().addAll(playerLabel, playerInput, loginButton, leaderboardButton);
 
         Scene scene = new Scene(grid, 300, 200);
 
         window.setScene(scene);
         window.show();
     }
-
-    private boolean isInt(TextField input, String message){
-        try{
-            int level = Integer.parseInt(input.getText());
-            System.out.println("User level is: " + level);
-            return true;
-        }catch(NumberFormatException e){
-            System.out.println("Error: " + message + " is not a number");
-            return false;
-        }
-
+    
+    private void loadMap(int lvlNum) {
+    	System.out.println(lvlNum);
+    }
+    
+    private void nextPage() {
+    	GridPane grid = new GridPane();
+    	
+    	Button lvl = new Button("1");
+    	lvl.setOnAction(e -> loadMap(1));
+    	grid.getChildren().add(lvl);
+    	GridPane.setConstraints(lvl, 0, 0);
+    	
+    	lvl = new Button("2");
+    	lvl.setOnAction(e -> loadMap(2));
+    	grid.getChildren().add(lvl);
+    	GridPane.setConstraints(lvl, 1, 0);
+    	
+    	Scene scene = new Scene(grid, 300, 200);
+    	window.setScene(scene);
+    	window.show();
     }
 
-    private void getPlayer(TextField playerInput, TextField levelInput) {
+    private void getPlayer(TextField playerInput) {
+    	File file = null;
+    	Scanner in = null;
+    	ArrayList<String> input = new ArrayList<>();
         try {
-            File myObj = new File("filename.txt");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String name = myReader.nextLine();
-                int level = myReader.nextInt();
-                //forward to create game class
+            file = new File(playerInput.getText() + ".txt");
+            in = new Scanner(file);
+            while (in.hasNextLine()) {
+                input.add(in.nextLine());
             }
-            myReader.close();
+            System.out.println("Success!");
+            nextPage();
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't access file...");
             e.printStackTrace();
+        } finally {
+        	in.close();
         }
     }
 
