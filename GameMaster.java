@@ -129,7 +129,7 @@ public class GameMaster {
     	for (int i = 0; i < repeat; i++) {
     		items.add(information.get(counter++));
     	}
-    	System.out.println("Finished reading file");
+    	System.out.println("Finished reading file"); 
     }
     
     private static ArrayList<String> getInfoFromFile(String filename) {
