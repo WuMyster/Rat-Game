@@ -81,9 +81,10 @@ public class RatController {
 	}
 	
 	/**
-	 * Takes in a Rat class toString() value and adds it to the rat list.
-	 * @param newRat - the formatted rat string.
-	 * @return Returns a single constructed rat
+	 * Takes in a boolean to create a baby rat of specific gender.
+	 * 
+	 * @param gender	New Baby rat gender
+	 * @return 			New baby rat
 	 */
 	public static Rat addRat(Boolean gender) {
 		Rat r = new Rat(gender);

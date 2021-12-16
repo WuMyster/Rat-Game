@@ -20,7 +20,7 @@ public class GameMasterExample {
 			,"F;3,5,5"
 			,"M;3,9,9"
 			,"F;1,5,12"
-			,"M;3,1,2"
+			,"M;2,1,2"
 			
 			
 //			"50,true,false,20,false,false,false;1,1,3"
