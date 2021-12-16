@@ -44,6 +44,13 @@ public class Gas extends TimeItem {
 		nextLocs.add(tmp);
 	}
 	
+	public Gas (int[] xyPos, int hp) {
+		this.hp = hp;
+		int[] tmp = new int[] {xyPos[0], xyPos[1]};
+		locs.put(tmp, 0);
+		nextLocs.add(tmp);
+	}
+	
     public void spreadGas() {
     		
 		ArrayList<int[]> nextLocsBuffer = new ArrayList<>();

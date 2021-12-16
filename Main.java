@@ -464,7 +464,7 @@ public class Main extends Application {
 		}
 	}
 	
-	private static void addPoison(int x, int y) {
+	public static void addPoison(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.POISON, new ArrayList<>());
 		itemPlace.get(ItemType.POISON).add(new int[] {y, x, -1 });
 		drawPoison(x, y);
@@ -640,7 +640,7 @@ public class Main extends Application {
 		root.getChildren().addAll(menuBar);
 		
 		Button stopGame = new Button("Stop and save game");
-		// root.getChildren().addAll(stopGame);
+		root.getChildren().addAll(stopGame);
 		stopGame.setOnAction(e -> {
 			playerStopGame = true;
 		});

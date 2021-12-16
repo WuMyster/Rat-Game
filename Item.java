@@ -12,6 +12,14 @@ abstract class Item {
 	protected int hp;
 	
 	/**
+	 * Most items
+	 * @return
+	 */
+	protected int getState() {
+		return -1;
+	}
+	
+	/**
 	 * Creates and returns an item from given string.
 	 * @param item item name of item
 	 * @param hp hp remaining of item
@@ -31,7 +39,10 @@ abstract class Item {
 			return new Sterilisation(hp);
 		} else if (item.equals(StopSign.NAME)) {
 			return new StopSign(xyPos, hp);
+		} else if (item.equals(Gas.NAME)) {
+			return new Gas(xyPos, hp);
 		}
+		System.err.println("Item name doesn't exist!");
 		return null;
 	}
 

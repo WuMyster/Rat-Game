@@ -31,7 +31,9 @@ public class GameMasterExample {
 	 * List of positions of items
 	 */
 	private static ArrayList<String> items = new ArrayList<> (Arrays.asList(
-			//"StopSign,1;2,2"
+			"StopSign,5;1,1"
+			,"Gas,16;5,1"
+			,"Gas,16;5,2"
 			));
 	
 	/**

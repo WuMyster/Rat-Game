@@ -520,25 +520,16 @@ public class Board {
 				String[] it = i.split(";");
 				String[] desc = it[0].split(",");
 				String[] loc = it[1].split(",");
-				int x = Integer.parseInt(loc[0]);
-				int y = Integer.parseInt(loc[1]);
+				int x = Integer.parseInt(loc[1]) * EXTRA_PADDING;
+				int y = Integer.parseInt(loc[0]) * EXTRA_PADDING;
 				Item item = Item.toItem(desc[0], Integer.parseInt(desc[1]), 
-						new int[] {y, x});
+						new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING});
 				
 				Tile t = board[y][x];
 				t.setTileItem(item);
-				if (item instanceof StopSign) {
-					Main.addStopSign(y / EXTRA_PADDING, x / EXTRA_PADDING, ((StopSign) item).getState());
-				} else if (item instanceof Bomb) { //Should get state
-					Main.drawBomb(y / EXTRA_PADDING, x / EXTRA_PADDING, ((Bomb) item).getState());
-				} else if (item instanceof Poison) {
-					Main.drawPoison(y / EXTRA_PADDING, x / EXTRA_PADDING);
-				} else if (item instanceof SexChangeToFemale) {
-					Main.drawSexToFemale(y / EXTRA_PADDING, x / EXTRA_PADDING);
-				} else if (item instanceof SexChangeToMale) {
-					Main.drawSexToMale(y / EXTRA_PADDING, x / EXTRA_PADDING);
-				} else if (item instanceof Sterilisation) {
-					Main.drawSterilise(y / EXTRA_PADDING, x / EXTRA_PADDING);
+				ItemType.fromItem(item).add(x / EXTRA_PADDING, y / EXTRA_PADDING, item.getState());
+				if (item instanceof TimeItem) {
+					((TimeItem) item).itemAction();
 				}
 			}
 		}
