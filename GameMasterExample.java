@@ -7,7 +7,7 @@ public class GameMasterExample {
 	 * Different maps currently available
 	 */
 	// private static String map = "GGGGGGGGGGGGGGGGGGPPPPJPPJPPJPPPPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGPGGGTGGPGGTGGGPGGJPPJJPPJPPJJPPJGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPGGTGGGPGGGTGGPGGPPPJPPPJPPPJPPPGGGGGGGGGGGGGGGGGG";
-	private static String map = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
+	   private static String map = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
 	// private static String map = "GGGGGGGGGGGGGGGGGGPPPPPPPJPPPPPPPGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGJPPPPPPJPPPPPPJGGPGGGGGGPGGGGGGPGGJTTTTTTJTTTTTTJGGPGGGGGGPGGGGGGPGGPPPPPPPJPPPPPPPGGGGGGGGGGGGGGGGGG";
 	
 	/**
@@ -15,15 +15,22 @@ public class GameMasterExample {
 	 */
 	private static ArrayList<String> rats = new ArrayList<> (Arrays.asList( 
 			// Opposite gender rats going at each other 
-//			"M;3,1,2", // Should only be on very new levels i.e starting maps
-			"50,true,false,20,false,false,false;1,1,3"
-			,"50,false,false,20,false,false,false;2,1,5"
+			"M;3,1,2" // Should only be on very new levels i.e starting maps
+			
+			,"F;3,5,5"
+			,"M;3,9,9"
+			,"F;1,5,12"
+			,"M;3,1,2"
+			
+			
+//			"50,true,false,20,false,false,false;1,1,3"
+//			,"50,false,false,20,false,false,false;2,1,5"
 //			"D;3,1,7",
 			
 			//Added more rats
 //			"50,true,false,20,false,false,false;3,1,2",
 //			,"50,false,false,20,false,false,false;3,9,9"
-//			"50,false,false,20,false,false,false;2,8,15",
+//			,"50,false,false,20,false,false,false;2,8,15"
 //			,"50,true,false,20,false,false,false;0,9,15"
 			));
 	
@@ -31,7 +38,7 @@ public class GameMasterExample {
 	 * List of positions of items
 	 */
 	private static ArrayList<String> items = new ArrayList<> (Arrays.asList(
-			"StopSign,5;1,1"
+//			"StopSign,5;1,1"
 //			,"Gas,16;5,1"
 //			,"Gas,16;5,2"
 			));
@@ -44,7 +51,7 @@ public class GameMasterExample {
 	/**
 	 * Max number of rats before game ends.
 	 */
-	private static int maxRats = 10;
+	private static int maxRats = 50;
 	
 	/**
 	 * Name of player

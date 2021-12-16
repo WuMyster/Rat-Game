@@ -81,6 +81,17 @@ public class RatController {
 	}
 	
 	/**
+	 * Takes in a Rat class toString() value and adds it to the rat list.
+	 * @param newRat - the formatted rat string.
+	 * @return Returns a single constructed rat
+	 */
+	public static Rat addRat(Boolean gender) {
+		Rat r = new Rat(gender);
+		ratList.add(r);
+		return r;
+	}
+	
+	/**
 	 * Removes a specific rat from rats.
 	 * @param deadRat - the rat to be killed by the rat controller.
 	 */
