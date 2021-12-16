@@ -1,4 +1,4 @@
 # Rats-Game
 
-Final submission to the course work given in CS-230
+Final submission to some course work 
 I (deShortOne have continued on this project in the branch Main-J
