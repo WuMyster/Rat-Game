@@ -73,14 +73,6 @@ public class Board {
 	 */
 	public final static int EXTRA_PADDING = 2;
 
-    /**
-     * Returns extra padding
-     * @return extra padding number
-     */
-    public static int getExtraPadding() {
-        return EXTRA_PADDING;
-    }
-
 	/**
 	 * Constructs a {@code Board} from input string.
 	 * 
@@ -100,7 +92,7 @@ public class Board {
 		allTiles = new ArrayList<>();
 		createBoard();
 		eliminateEmpties();
-			createGraph();
+		createGraph();
 	}
 
     /**
@@ -153,8 +145,8 @@ public class Board {
      * @param y y-coordinate bomb was placed on
      */
     public static void detonate(int x, int y) {
-        y *= Board.getExtraPadding();
-        x *= Board.getExtraPadding();
+        y *= EXTRA_PADDING;
+        x *= EXTRA_PADDING;
         int startY = y;
         int startX = x;
 
@@ -268,10 +260,8 @@ public class Board {
      * 
      * @param del list of positions of the item.
      */
-    public static void clearGas(ArrayList<int[]> del) {
-    	for (int[] i : del) {
-    		board[i[1] * EXTRA_PADDING][i[0] * EXTRA_PADDING].clearGas();
-    	}
+    public static void clearGas(int x, int y) {
+    	board[y * EXTRA_PADDING][x * EXTRA_PADDING].clearGas();
     }
     /**
      * Attempt to spread gas from an origin x y point.
@@ -280,19 +270,19 @@ public class Board {
      * @return 2 lists, first is list of tiles it failed to spread to
      * and second is list of tiles successfully spread to
      */
-    public static ArrayList<ArrayList<int[]>> spreadGas(int x, int y, Gas gas) {
+    public static ArrayList<ArrayList<int[]>> spreadGas(int x, int y, int hp) {
     	ArrayList<int[]> hasGas = new ArrayList<>();
     	ArrayList<int[]> failedGas = new ArrayList<>();
     	
-    	y *= Board.getExtraPadding();
-        x *= Board.getExtraPadding();
+    	y *= EXTRA_PADDING;
+        x *= EXTRA_PADDING;
 
         Tile t;
         
         t = board[y - EXTRA_PADDING][x];
         if (isPlaceableTile(t)) {
         	int[] place = new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING - 1};
-        	if (t.setTileItem(gas)) {
+        	if (t.setTileItem(new Gas(x / EXTRA_PADDING, y / EXTRA_PADDING - 1, hp))) {
         		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING - 1);
         		hasGas.add(place);
         	} else {
@@ -303,7 +293,7 @@ public class Board {
         t = board[y + EXTRA_PADDING][x];
         if (isPlaceableTile(t)) {
         	int[] place = new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING + 1};
-        	if (t.setTileItem(gas)) {
+        	if (t.setTileItem(new Gas(x / EXTRA_PADDING, y / EXTRA_PADDING + 1, hp))) {
         		Main.addGas(x / EXTRA_PADDING, y / EXTRA_PADDING + 1);
         		hasGas.add(place);
         	} else {
@@ -314,7 +304,7 @@ public class Board {
         t = board[y][x - EXTRA_PADDING];
         if (isPlaceableTile(t)) {
         	int[] place = new int[] {x / EXTRA_PADDING - 1, y / EXTRA_PADDING};
-        	if (t.setTileItem(gas)) {
+        	if (t.setTileItem(new Gas(x / EXTRA_PADDING - 1, y / EXTRA_PADDING, hp))) {
         		Main.addGas(x / EXTRA_PADDING - 1, y / EXTRA_PADDING);
         		hasGas.add(place);
         	} else {
@@ -325,7 +315,7 @@ public class Board {
         t = board[y][x + EXTRA_PADDING];
         if (isPlaceableTile(t)) {
         	int[] place = new int[] {x / EXTRA_PADDING + 1, y / EXTRA_PADDING};
-        	if (t.setTileItem(gas)) {
+        	if (t.setTileItem(new Gas(x / EXTRA_PADDING + 1, y / EXTRA_PADDING, hp))) {
         		Main.addGas(x / EXTRA_PADDING + 1, y / EXTRA_PADDING);
         		hasGas.add(place);
         	} else {

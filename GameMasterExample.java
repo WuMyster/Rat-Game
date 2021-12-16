@@ -32,8 +32,8 @@ public class GameMasterExample {
 	 */
 	private static ArrayList<String> items = new ArrayList<> (Arrays.asList(
 			"StopSign,5;1,1"
-			,"Gas,16;5,1"
-			,"Gas,16;5,2"
+//			,"Gas,16;5,1"
+//			,"Gas,16;5,2"
 			));
 	
 	/**

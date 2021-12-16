@@ -11,6 +11,9 @@ public class Gas extends TimeItem {
 	
 	public static final String NAME = "Gas";
 
+	private final int x;
+	private final int y;
+	
     /**
      * Damage gas does to a rat.
      */
@@ -25,87 +28,46 @@ public class Gas extends TimeItem {
 
     private static final int GAS_EXPAND_TIME = 700; // milliseconds
 	
-    /**
-     * The specific tile this gas is on and the spread distance.
-     */
-    private HashMap<int[], Integer> locs = new HashMap<>();
-    
-    /**
-     * Tiles the tile was supposed to spread to but failed.
-     */
-    private ArrayList<int[]> nextLocs = new ArrayList<>();    
-    
-    private boolean tickStart = true;
 
 	public Gas (int x, int y) {
-		this.hp = START_HP + MAX_RADIUS;
-		int[] tmp = new int[] {x, y};
-		locs.put(tmp, 0);
-		nextLocs.add(tmp);
+		this.hp = START_HP;
+		this.x = x;
+		this.y = y;
 	}
 	
 	public Gas (int[] xyPos, int hp) {
 		this.hp = hp;
-		int[] tmp = new int[] {xyPos[0], xyPos[1]};
-		locs.put(tmp, 0);
-		nextLocs.add(tmp);
+		this.x = xyPos[0];
+		this.y = xyPos[1];
+	}
+	
+	public Gas (int x, int y, int hp) {
+		this.hp = hp;
+		this.x = x;
+		this.y = y;
 	}
 	
     public void spreadGas() {
-    		
-		ArrayList<int[]> nextLocsBuffer = new ArrayList<>();
-		if (nextLocs.isEmpty()) {
-			nextLocsBuffer.add(new ArrayList<int[]>(locs.keySet()).get(0));
-		} else {
-			for (int[] tNext : nextLocs) {
-				ArrayList<ArrayList<int[]>> tiles = Board.spreadGas(tNext[0], tNext[1], this);
-				
-				boolean redoLoc = false;
-				for (int[] tFail : tiles.get(0)) {
-					if (!locs.containsKey(tFail)) {
-						redoLoc = true;
-					}
-				}
-				if (redoLoc) {
-					nextLocsBuffer.add(tNext);
-				}
-				
-				for (int[] tSucc : tiles.get(1)) {
-		    		locs.put(tSucc, locs.get(tNext) + 1);
-		    		nextLocsBuffer.add(tSucc);
-		    	}
-			}
-		}
-    	nextLocs = nextLocsBuffer;
-    	nextLocsBuffer = new ArrayList<>();
-    	
+    	Board.spreadGas(x, y, hp);    	
     }
     
     public void itemAction() {
-    	if (tickStart) {
-    		tickStart = false;
-			this.timer = new Timer();
-	
-			timer.scheduleAtFixedRate(new TimerTask() {
-				public void run() {
-					hp--;
-					if (hp > START_HP) { // Growing
-						spreadGas();
-					} else if (hp > 0) { //Shrinking
-						ArrayList<int[]> del = new ArrayList<>();
-						for (int[] t : locs.keySet()) {
-							if (locs.get(t) == hp / (START_HP / (MAX_RADIUS - 1)) + 1) {
-								del.add(t);
-							}
-						}
-						Board.clearGas(del);
-					} else {
-						timer.cancel();
-						Board.clearGas(new ArrayList<int[]>(locs.keySet()));
-					}
+    	this.timer = new Timer();
+    	
+		timer.scheduleAtFixedRate(new TimerTask() {
+			public void run() {
+				hp--;
+				
+				if (hp % 5 == 0) { // Growing
+					spreadGas();
+				} else if (hp > 5) { // Not growing or shrinking
+					
+				} else {
+					timer.cancel();
+					Board.clearGas(x, y);
 				}
-			}, 0, 1000);
-    	}
+			}
+		}, 0, 1000);
 	}
 
 	@Override
