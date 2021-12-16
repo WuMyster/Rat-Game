@@ -225,24 +225,32 @@ public class Main extends Application {
 	 * If user themselves has told the game to stop.
 	 */
 	private boolean playerStopGame;
+	
+	private static Stage currWindow;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		currWindow = primaryStage;
 		
-		Scene scene = null;
+		Scene scene = GameMaster.startGameMaster();
 		
-		BorderPane root = createGameGUI(GameMasterExample.getMap(), GameMasterExample.getRats(), 
-				GameMasterExample.getItems(), GameMasterExample.getMaxTime(), GameMasterExample.getMaxRats(),
-				GameMasterExample.getName());
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+	
+	public void gameScreen() {
+		BorderPane root = createGameGUI(GameMaster.getMap(), GameMaster.getRats(), 
+				GameMaster.getItems(), GameMaster.getMaxTime(), GameMaster.getMaxRats(),
+				GameMaster.getName());
 		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
 		
-		scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		currWindow.setScene(scene);
+		currWindow.show();
 	}
 
 	/**

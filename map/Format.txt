@@ -1,0 +1,6 @@
+Int x Int y of map size
+Int max num of rats for lose condition
+Int max time for lose condition
+String of map
+Int of number of rats
+String of rats
