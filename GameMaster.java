@@ -1,7 +1,12 @@
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -276,6 +281,26 @@ public class GameMaster {
     	} else {
     		System.out.println("Player doesn't exist!");
     		// playerInfo = getInfoFromFile("./player/" + playerName + ".txt");
+    		
+    		GridPane newPlayer = new GridPane();
+    		Label question = new Label("Player doesn't exist\n" + 
+    				"Would you like to create\na new player?");
+    		question.setAlignment(Pos.CENTER);
+    		GridPane.setConstraints(question, 0, 0, 2, 1);
+    		
+    		Button yes = new Button("Yes");
+    		GridPane.setConstraints(yes, 0, 1);
+    		
+    		Button no = new Button("No");
+    		GridPane.setConstraints(no, 1, 1);
+    		
+    		newPlayer.getChildren().addAll(question, yes, no);
+    		
+    		Scene confirmNewPlayer = new Scene(newPlayer, 150, 100);
+    		Stage getConfirm = new Stage();
+    		getConfirm.setScene(confirmNewPlayer);
+    		getConfirm.initModality(Modality.APPLICATION_MODAL);
+    		getConfirm.showAndWait();
     	}
     }
 }
