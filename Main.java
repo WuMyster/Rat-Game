@@ -830,10 +830,10 @@ public class Main extends Application {
 			
 		setInitialValues();
 		
-		playerName = name;
+		Main.playerName = name;
 		
-		startTime = LocalTime.now();
-		maxTime = maxTime;
+		Main.startTime = LocalTime.now();
+		Main.maxTime = maxTime;
 		RatController.setRatController(maxRats);
 		
 		BorderPane root = null;
@@ -946,7 +946,7 @@ public class Main extends Application {
 	}
 	
 	private static void saveState() {
-		m.saveState(playerName + ".txt");
+		m.saveState("./player/" + playerName + ".txt");
 	}
 
 	/**

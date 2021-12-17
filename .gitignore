@@ -10,12 +10,8 @@ CS230_Rats.iml
 .idea/checkstyle-idea.xml
 .idea/libraries/lib.xml
 out/production/CS230_Rats/.idea/libraries/lib.xml
-out/production/CS230_Rats/Classes people are doing.txt
-out/production/CS230_Rats/Grass.png
-out/production/CS230_Rats/Rat.png
-out/production/CS230_Rats/README.md
-out/production/CS230_Rats/Stop_Sign.png
-out/production/CS230_Rats/Tile.png
+
+* - Copy.txt
 
 # Ignore javadoc files
 Docs/

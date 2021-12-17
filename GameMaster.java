@@ -106,7 +106,7 @@ public class GameMaster {
     
     /**
      * Returns max number of rats
-     * @return
+     * @return max number if rats
      */
     public static int getMaxRats() {
     	return maxRats;
@@ -163,7 +163,7 @@ public class GameMaster {
     /**
      * Gets the information of the level and set up values before calling
      * game window.
-     * @param lvlNum the level selected
+     * @param lvlNum 	the level selected
      */
     private static void createNewGame(int lvlNum) {
     	// For now, assume no ongoing game
@@ -184,6 +184,11 @@ public class GameMaster {
     	}
     }
     
+    /**
+     * Loads common information about the map.
+     * 
+     * @param lvlNum	map level number
+     */
     private static void loadMapInfo(int lvlNum) {
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
@@ -192,11 +197,14 @@ public class GameMaster {
 		
 		maxRats = Integer.valueOf(information.get(1));
 		
-		maxTime = Integer.valueOf(information.get(2));
+		maxTime = 120; //Integer.valueOf(information.get(2));
 		
 		map = information.get(3);
     }
     
+    /**
+     * Loads game already saved in players file.
+     */
     private static void loadPrevGame() {
     	// 0 is taken up by max level achieved by player
     	loadMapInfo(Integer.valueOf(playerInfo.get(1)));
@@ -215,9 +223,9 @@ public class GameMaster {
     }
     
     /**
-     * Returns an list of information from a file
-     * @param filename	the file to get information from
-     * @return			list of new line seperarated information
+     * Returns an list of information from a file.
+     * @param filename	the filename to get information from
+     * @return			list of new line separated information
      */
     private static ArrayList<String> getInfoFromFile(String filename) {
     	ArrayList<String> out = new ArrayList<>();
@@ -237,10 +245,14 @@ public class GameMaster {
         } finally {
         	in.close();
         }  	
-        
         return out;
     }
     
+    /**
+     * Returns a list of information from a file.
+     * @param file	file to get information from
+     * @return		lost of new line separated information
+     */
     private static ArrayList<String> getInfoFromFile(File file) {
     	ArrayList<String> out = new ArrayList<>();
     	Scanner in = null;
@@ -314,7 +326,6 @@ public class GameMaster {
     		lvlPage();
     	} else {
     		Stage getConfirm = new Stage();
-    		System.out.println("Player doesn't exist!");
     		
     		GridPane newPlayer = new GridPane();
     		Label question = new Label("Player doesn't exist\n" + 
