@@ -7,7 +7,6 @@ public enum ItemType {
 
 		public void add(int x, int y, int state) {
 			Main.addPoison(x, y);
-			
 		}
 	},
 	STOPSIGN {

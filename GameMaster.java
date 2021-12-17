@@ -166,7 +166,6 @@ public class GameMaster {
      * @param lvlNum 	the level selected
      */
     private static void createNewGame(int lvlNum) {
-    	// For now, assume no ongoing game
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
     	if (playerInfo.size() == 1) { // No ongoing game
@@ -238,7 +237,6 @@ public class GameMaster {
             	out.add(in.nextLine());
             }
             System.out.println("Success!");
-            lvlPage();
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't access file... Except this is not caught...");
             e.printStackTrace();
@@ -301,7 +299,6 @@ public class GameMaster {
         		y++;
         	}
     	}
-    	System.out.println(">>" + playerInfo.size());
     	if (playerInfo.size() > 1) {
     		Button continuePrevGame = new Button("Load previous game");
     		continuePrevGame.setOnAction(e -> loadPrevGame());
@@ -321,7 +318,7 @@ public class GameMaster {
     private static void getPlayer(TextField playerInput) {
     	playerName = playerInput.getText();
     	File f = new File("./player/" + playerName + ".txt");
-    	if (f.exists() && !f.isDirectory()) {
+    	if (f.isFile()) {
     		playerInfo = getInfoFromFile(f);
     		lvlPage();
     	} else {

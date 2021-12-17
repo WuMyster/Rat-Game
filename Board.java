@@ -473,7 +473,7 @@ public class Board {
 				int x = Integer.parseInt(loc[1]) * EXTRA_PADDING;
 				int y = Integer.parseInt(loc[0]) * EXTRA_PADDING;
 				Item item = Item.toItem(desc[0], Integer.parseInt(desc[1]), 
-						new int[] {x / EXTRA_PADDING, y / EXTRA_PADDING});
+						new int[] {y / EXTRA_PADDING, x / EXTRA_PADDING});
 				
 				Tile t = board[y][x];
 				t.setTileItem(item);
