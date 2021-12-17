@@ -1,17 +1,10 @@
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -94,7 +87,7 @@ public class GameMaster {
         });
         
         //message
-        String message = MessageOfDay.getMsgDay();
+//        String message = MessageOfDay.getMsgDay();
 
 
         grid.getChildren().addAll(playerLabel, playerInput, loginButton, leaderboardButton);
@@ -211,12 +204,30 @@ public class GameMaster {
             System.out.println("Success!");
             lvlPage();
         } catch (FileNotFoundException e) {
-            System.out.println("Couldn't access file...");
+            System.out.println("Couldn't access file... Except this is not caught...");
             e.printStackTrace();
         } finally {
         	in.close();
         }  	
         
+        return out;
+    }
+    
+    private static ArrayList<String> getInfoFromFile(File file) {
+    	ArrayList<String> out = new ArrayList<>();
+    	Scanner in = null;
+        try {
+            in = new Scanner(file);
+            while (in.hasNextLine()) {
+            	out.add(in.nextLine());
+            }
+            System.out.println("Success!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't access file... Except this is not caught...");
+            e.printStackTrace();
+        } finally {
+        	in.close();
+        }  	
         return out;
     }
     
@@ -228,17 +239,28 @@ public class GameMaster {
     	
     	GridPane grid = new GridPane();
     	
-    	Button lvl = new Button("1");
-    	lvl.setOnAction(e -> loadGame(1));
-    	lvl.setDisable(1 > maxLevel);
-    	grid.getChildren().add(lvl);
-    	GridPane.setConstraints(lvl, 0, 0);
+    	Label pageName = new Label("Select levels");
+    	int maxX = 2;
+    	grid.getChildren().add(pageName);
+    	GridPane.setConstraints(pageName, 0, 0, maxX, 1);
     	
-    	lvl = new Button("2");
-    	lvl.setOnAction(e -> loadGame(2));
-    	lvl.setDisable(2 > maxLevel);
-    	grid.getChildren().add(lvl);
-    	GridPane.setConstraints(lvl, 1, 0);
+    	// Should get max number of levels from somewhere
+    	int x = 0;
+    	int y = 1;
+    	
+    	for (int i = 1; i < 4; i++) { // 4 is max number of levels
+    		Button lvl = new Button(String.valueOf(i));
+        	lvl.setOnAction(e ->  {
+        		loadGame(Integer.valueOf(lvl.getText()));
+        	});
+        	lvl.setDisable(i > maxLevel);
+        	grid.getChildren().add(lvl);
+        	GridPane.setConstraints(lvl, x++, y);
+        	if (x == maxX) {
+        		x = 0;
+        		y++;
+        	}
+    	}
     	
     	Scene scene = new Scene(grid, 300, 200);
     	Main.currWindow.setScene(scene);
@@ -247,6 +269,13 @@ public class GameMaster {
 
     private static void getPlayer(TextField playerInput) {
     	playerName = playerInput.getText();
-    	playerInfo = getInfoFromFile("./player/" + playerName + ".txt");
+    	File f = new File("./player/" + playerName + ".txt");
+    	if (f.exists() && !f.isDirectory()) {
+    		playerInfo = getInfoFromFile(f);
+    		lvlPage();
+    	} else {
+    		System.out.println("Player doesn't exist!");
+    		// playerInfo = getInfoFromFile("./player/" + playerName + ".txt");
+    	}
     }
 }
