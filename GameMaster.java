@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -163,31 +165,52 @@ public class GameMaster {
      * game window.
      * @param lvlNum the level selected
      */
-    private static void loadGame(int lvlNum) {
+    private static void createNewGame(int lvlNum) {
     	// For now, assume no ongoing game
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
-    	int counter = 0;
+    	if (playerInfo.size() == 1) { // No ongoing game
+    		loadMapInfo(lvlNum);
+    		
+	    	int counter = 4;
+			
+	    	int repeat = Integer.valueOf(information.get(counter++));
+	    	for (int i = 0; i < repeat; i++) {
+	    		rats.add(information.get(counter++));
+	    	}
+	    	// For now assume no items on board of new game
+	    	System.out.println("Finished reading file");
+	    	Main.gameScreen();
+    	}
+    }
+    
+    private static void loadMapInfo(int lvlNum) {
+    	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
-    	String[] mSize = information.get(counter++).split(" ");
+    	String[] mSize = information.get(0).split(" ");
 		mapSize = new int[] {Integer.valueOf(mSize[0]), Integer.valueOf(mSize[1])};
 		
-		maxRats = Integer.valueOf(information.get(counter++));
+		maxRats = Integer.valueOf(information.get(1));
 		
-		maxTime = Integer.valueOf(information.get(counter++));
+		maxTime = Integer.valueOf(information.get(2));
 		
-		map = information.get(counter++);
-		
-    	int repeat = Integer.valueOf(information.get(counter++));
+		map = information.get(3);
+    }
+    
+    private static void loadPrevGame() {
+    	// 0 is taken up by max level achieved by player
+    	loadMapInfo(Integer.valueOf(playerInfo.get(1)));
+    	
+    	int counter = 2;
+    	int repeat = Integer.valueOf(playerInfo.get(counter++));
     	for (int i = 0; i < repeat; i++) {
-    		rats.add(information.get(counter++));
+    		rats.add(playerInfo.get(counter++));
     	}
     	
-    	repeat = Integer.valueOf(information.get(counter++));
+    	repeat = Integer.valueOf(playerInfo.get(counter++));
     	for (int i = 0; i < repeat; i++) {
-    		items.add(information.get(counter++));
+    		items.add(playerInfo.get(counter++));
     	}
-    	System.out.println("Finished reading file");
     	Main.gameScreen();
     }
     
@@ -256,7 +279,7 @@ public class GameMaster {
     	for (int i = 1; i < 4; i++) { // 4 is max number of levels
     		Button lvl = new Button(String.valueOf(i));
         	lvl.setOnAction(e ->  {
-        		loadGame(Integer.valueOf(lvl.getText()));
+        		createNewGame(Integer.valueOf(lvl.getText()));
         	});
         	lvl.setDisable(i > maxLevel);
         	grid.getChildren().add(lvl);
@@ -266,12 +289,23 @@ public class GameMaster {
         		y++;
         	}
     	}
+    	System.out.println(">>" + playerInfo.size());
+    	if (playerInfo.size() > 1) {
+    		Button continuePrevGame = new Button("Load previous game");
+    		continuePrevGame.setOnAction(e -> loadPrevGame());
+    		GridPane.setConstraints(continuePrevGame, x, y);
+    		grid.getChildren().add(continuePrevGame);
+    	}
     	
     	Scene scene = new Scene(grid, 300, 200);
     	Main.currWindow.setScene(scene);
     	Main.currWindow.show();
     }
 
+    /**
+     * Attempts to get the information about the player.
+     * @param playerInput 	name of the player
+     */
     private static void getPlayer(TextField playerInput) {
     	playerName = playerInput.getText();
     	File f = new File("./player/" + playerName + ".txt");
@@ -279,8 +313,8 @@ public class GameMaster {
     		playerInfo = getInfoFromFile(f);
     		lvlPage();
     	} else {
+    		Stage getConfirm = new Stage();
     		System.out.println("Player doesn't exist!");
-    		// playerInfo = getInfoFromFile("./player/" + playerName + ".txt");
     		
     		GridPane newPlayer = new GridPane();
     		Label question = new Label("Player doesn't exist\n" + 
@@ -289,18 +323,42 @@ public class GameMaster {
     		GridPane.setConstraints(question, 0, 0, 2, 1);
     		
     		Button yes = new Button("Yes");
+    		yes.setOnAction(e -> {
+    			createNewPlayer(playerName);
+    			getConfirm.close();
+    			lvlPage();
+    		});
     		GridPane.setConstraints(yes, 0, 1);
     		
     		Button no = new Button("No");
+    		no.setOnAction(e -> getConfirm.close());
     		GridPane.setConstraints(no, 1, 1);
     		
     		newPlayer.getChildren().addAll(question, yes, no);
     		
     		Scene confirmNewPlayer = new Scene(newPlayer, 150, 100);
-    		Stage getConfirm = new Stage();
+    		
     		getConfirm.setScene(confirmNewPlayer);
     		getConfirm.initModality(Modality.APPLICATION_MODAL);
     		getConfirm.showAndWait();
     	}
+    }
+    
+    /**
+     * Creates a new player with default values.
+     * @param name	name of the palyer
+     */
+    private static void createNewPlayer(String name) {
+    	File file = new File("./player/" + name + ".txt");
+    	
+    	try {
+			file.createNewFile();
+			FileWriter writer = new FileWriter(file);
+    		writer.write("1");
+    		writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	playerInfo.add("1");
     }
 }
