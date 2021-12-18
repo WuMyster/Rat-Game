@@ -196,7 +196,7 @@ public class GameMaster {
 		
 		maxRats = Integer.valueOf(information.get(1));
 		
-		maxTime = 120; //Integer.valueOf(information.get(2));
+		maxTime = Integer.valueOf(information.get(2));
 		
 		map = information.get(3);
     }
@@ -354,11 +354,10 @@ public class GameMaster {
     
     /**
      * Creates a new player with default values.
-     * @param name	name of the palyer
+     * @param name	name of the player
      */
     private static void createNewPlayer(String name) {
     	File file = new File("./player/" + name + ".txt");
-    	
     	try {
 			file.createNewFile();
 			FileWriter writer = new FileWriter(file);
