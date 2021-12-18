@@ -227,10 +227,10 @@ public abstract class Tile {
 	 */
 	public String getItem() {
 		if (itemOnTile == null) {
-			return "";
+			return null;
 		}
 		return itemOnTile.toString() + ";" + ORIGINAL_X_Y_POS[0] + "," +
-				ORIGINAL_X_Y_POS[1] + "\n";
+				ORIGINAL_X_Y_POS[1];
 	}
 
     /**

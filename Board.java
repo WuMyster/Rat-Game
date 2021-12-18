@@ -490,18 +490,36 @@ public class Board {
 	 * @param filename the file to save to
 	 */
 	public void saveState(String filename) {
+		
+		// Should get # rats from RatController but RatController not keeping
+		// # rats correct atm
+		ArrayList<String> rats = new ArrayList<>();
+		for (Tile t : allTiles) {
+			rats.addAll(t.getRats());
+		}
+		
+		ArrayList<String> items = new ArrayList<>();
+		for (Tile t : allTiles) {
+			String tmp = t.getItem();
+			if (tmp != null) {
+				items.add(tmp);
+			}
+		}
+		
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(filename);
+			out.println(GameMaster.getMaxLevel()); // Max level completed
+			out.println(GameMaster.getLvlNum()); // Current level
 			
-			for (Tile t : allTiles) {
-				ArrayList<String> rats = t.getRats();
-				for (String r : rats) {
-					out.print(r + "\n");
-				}
+			out.println(rats.size());
+			for (String r : rats) {
+				out.println(r);
 			}
-			for (Tile t : allTiles) {
-				out.print(t.getItem());
+			
+			out.println(items.size());
+			for (String i : items) {
+				out.println(i);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

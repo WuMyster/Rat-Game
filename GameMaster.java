@@ -62,6 +62,8 @@ public class GameMaster {
      */
     private static int maxLevel = Integer.MAX_VALUE;
     
+    private static int lvlNum = Integer.MIN_VALUE;
+    
     /**
      * Creates and returns a Game Master Scene
      * @return Game Master Scene
@@ -102,6 +104,14 @@ public class GameMaster {
         Scene scene = new Scene(grid, 300, 200);
 
         return scene;
+    }
+
+    public static int getLvlNum() {
+    	return lvlNum;
+    }
+    
+    public static int getMaxLevel() {
+    	return maxLevel;
     }
     
     /**
@@ -165,11 +175,11 @@ public class GameMaster {
      * game window.
      * @param lvlNum 	the level selected
      */
-    private static void createNewGame(int lvlNum) {
+    private static void createNewGame() {
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
     	if (playerInfo.size() == 1) { // No ongoing game
-    		loadMapInfo(lvlNum);
+    		loadMapInfo();
     		
 	    	int counter = 4;
 			
@@ -188,7 +198,7 @@ public class GameMaster {
      * 
      * @param lvlNum	map level number
      */
-    private static void loadMapInfo(int lvlNum) {
+    private static void loadMapInfo() {
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
     	String[] mSize = information.get(0).split(" ");
@@ -206,7 +216,8 @@ public class GameMaster {
      */
     private static void loadPrevGame() {
     	// 0 is taken up by max level achieved by player
-    	loadMapInfo(Integer.valueOf(playerInfo.get(1)));
+    	lvlNum = Integer.valueOf(playerInfo.get(0));
+    	loadMapInfo();
     	
     	int counter = 2;
     	int repeat = Integer.valueOf(playerInfo.get(counter++));
@@ -289,7 +300,8 @@ public class GameMaster {
     	for (int i = 1; i < 4; i++) { // 4 is max number of levels
     		Button lvl = new Button(String.valueOf(i));
         	lvl.setOnAction(e ->  {
-        		createNewGame(Integer.valueOf(lvl.getText()));
+        		lvlNum = Integer.valueOf(lvl.getText());
+        		createNewGame();
         	});
         	lvl.setDisable(i > maxLevel);
         	grid.getChildren().add(lvl);
@@ -301,7 +313,9 @@ public class GameMaster {
     	}
     	if (playerInfo.size() > 1) {
     		Button continuePrevGame = new Button("Load previous game");
-    		continuePrevGame.setOnAction(e -> loadPrevGame());
+    		continuePrevGame.setOnAction(e -> {
+    			loadPrevGame();
+    			});
     		GridPane.setConstraints(continuePrevGame, x, y);
     		grid.getChildren().add(continuePrevGame);
     	}
