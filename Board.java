@@ -511,6 +511,7 @@ public class Board {
 			out = new PrintWriter(filename);
 			out.println(GameMaster.getMaxLevel()); // Max level completed
 			out.println(GameMaster.getLvlNum()); // Current level
+			out.println(RatController.getPoints()); // Points accumulated so far in game
 			
 			out.println(rats.size());
 			for (String r : rats) {

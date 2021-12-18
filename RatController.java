@@ -28,8 +28,9 @@ public class RatController {
 	 * Sets the max number of rats allowed before the game ends.
 	 * @param max - the maximum number of rats allowed
 	 */
-	public static void setRatController(int max) {
-		maxNumOfRats = 200;
+	public static void setRatController(int max, int points) {
+		maxNumOfRats = max;
+		RatController.points = points;
 	}
 
 	/**

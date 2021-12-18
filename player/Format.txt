@@ -1,0 +1,13 @@
+Int max level achieved so far
+
+# If there is no ongoing game
+
+Int max level achieved so far
+Int current level they're playing
+Int points accumulated so far
+Int number of rats
+String rat information (0 to many)
+Int number of items on board
+String item information (0 to many)
+
+# If there is ongoing game

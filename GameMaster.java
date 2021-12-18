@@ -68,6 +68,11 @@ public class GameMaster {
     private static int lvlNum = Integer.MIN_VALUE;
     
     /**
+     * Number of points achieved so far in the game.
+     */
+    private static int pointsAccumulated = Integer.MIN_VALUE;
+    
+    /**
      * Value from confirmation window.
      */
     private static boolean answer;
@@ -114,16 +119,24 @@ public class GameMaster {
         return scene;
     }
 
+    /**
+     * Returns the current level number.
+     * @return current level number
+     */
     public static int getLvlNum() {
     	return lvlNum;
     }
     
+    /**
+     * Returns the max level achieved by the player.
+     * @return max level achieved by player
+     */
     public static int getMaxLevel() {
     	return maxLevel;
     }
     
     /**
-     * Returns max number of rats
+     * Returns max number of rats.
      * @return max number if rats
      */
     public static int getMaxRats() {
@@ -179,6 +192,14 @@ public class GameMaster {
     }
     
     /**
+     * Returns points earned in game so far.
+     * @return
+     */
+    public static int getPoints() {
+    	return pointsAccumulated;
+    }
+    
+    /**
      * Gets the information of the level and set up values before calling
      * game window.
      * @param lvlNum 	the level selected
@@ -195,19 +216,42 @@ public class GameMaster {
     		}
     	}
     	
-    	if (playerInfo.size() == 1) { // No ongoing game
-    		loadMapInfo();
-    		
-	    	int counter = 4;
-			
-	    	int repeat = Integer.valueOf(information.get(counter++));
-	    	for (int i = 0; i < repeat; i++) {
-	    		rats.add(information.get(counter++));
-	    	}
-	    	// For now assume no items on board of new game
-	    	System.out.println("Finished reading file");
-	    	Main.gameScreen();
+		loadMapInfo();
+		
+		pointsAccumulated = 0;
+		
+    	int counter = 4;
+		
+    	int repeat = Integer.valueOf(information.get(counter++));
+    	for (int i = 0; i < repeat; i++) {
+    		rats.add(information.get(counter++));
     	}
+    	// For now assume no items on board of new game
+    	System.out.println("Finished reading file");
+    	Main.gameScreen();
+    }
+    
+    /**
+     * Loads game already saved in players file.
+     */
+    private static void loadPrevGame() {
+    	// 0 is taken up by max level achieved by player
+    	lvlNum = Integer.valueOf(playerInfo.get(0));
+    	loadMapInfo();
+    	
+    	pointsAccumulated = Integer.valueOf(playerInfo.get(2));
+    	
+    	int counter = 3;
+    	int repeat = Integer.valueOf(playerInfo.get(counter++));
+    	for (int i = 0; i < repeat; i++) {
+    		rats.add(playerInfo.get(counter++));
+    	}
+    	
+    	repeat = Integer.valueOf(playerInfo.get(counter++));
+    	for (int i = 0; i < repeat; i++) {
+    		items.add(playerInfo.get(counter++));
+    	}
+    	Main.gameScreen();
     }
     
     /**
@@ -226,27 +270,6 @@ public class GameMaster {
 		maxTime = Integer.valueOf(information.get(2));
 		
 		map = information.get(3);
-    }
-    
-    /**
-     * Loads game already saved in players file.
-     */
-    private static void loadPrevGame() {
-    	// 0 is taken up by max level achieved by player
-    	lvlNum = Integer.valueOf(playerInfo.get(0));
-    	loadMapInfo();
-    	
-    	int counter = 2;
-    	int repeat = Integer.valueOf(playerInfo.get(counter++));
-    	for (int i = 0; i < repeat; i++) {
-    		rats.add(playerInfo.get(counter++));
-    	}
-    	
-    	repeat = Integer.valueOf(playerInfo.get(counter++));
-    	for (int i = 0; i < repeat; i++) {
-    		items.add(playerInfo.get(counter++));
-    	}
-    	Main.gameScreen();
     }
     
     /**
@@ -362,10 +385,20 @@ public class GameMaster {
     	}
     }
     
+    /**
+     * Returns the confirmation of what the user wants.
+     * @return {@code true} if user had selected yes in confirmWindow()
+     */
     private static boolean getAnswer() {
     	return answer;
     }
     
+    /**
+     * Handles a confirmation window and returns {@code true} if
+     * the user selects yes, {@code false} otherwise.
+     * @param msg 	message to display to user
+     * @return		{@code true} if user selects yes
+     */
     private static boolean confirmWindow(String msg) {
     	
     	Stage getConfirm = new Stage();

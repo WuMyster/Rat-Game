@@ -239,9 +239,7 @@ public class Main extends Application {
 	}
 	
 	public static void gameScreen() {
-		BorderPane root = createGameGUI(GameMaster.getMap(), GameMaster.getRats(), 
-				GameMaster.getItems(), GameMaster.getMaxTime(), GameMaster.getMaxRats(),
-				GameMaster.getName());
+		BorderPane root = createGameGUI();
 		
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
@@ -817,24 +815,19 @@ public class Main extends Application {
 	/**
 	 * Creates game GUI.
 	 * 
-	 * @param map the map design
-	 * @param rats list of rats and their positions
-	 * @param items list of items and their positions
-	 * @param maxTime maximum amount of time to finish the game
-	 * @param maxRats maximum number of rats before the game ends
-	 * @param name name of the player
 	 * @return the GUI
 	 */
-	private static BorderPane createGameGUI(String map, ArrayList<String> rats,
-			ArrayList<String> items, int maxTime, int maxRats, String name) {
+	private static BorderPane createGameGUI() {
 			
 		setInitialValues();
 		
-		Main.playerName = name;
+		Main.playerName = GameMaster.getName();
 		
 		Main.startTime = LocalTime.now();
-		Main.maxTime = maxTime;
-		RatController.setRatController(maxRats);
+		Main.maxTime = GameMaster.getMaxTime();
+		RatController.setRatController(GameMaster.getMaxRats(),
+				GameMaster.getPoints());
+		// RatController.se
 		
 		BorderPane root = null;
 		
@@ -850,9 +843,9 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 
-		m = new Board(map, 17, 11);
-		m.setUpRats(rats);
-		m.setUpItems(items);
+		m = new Board(GameMaster.getMap(), 17, 11);
+		m.setUpRats(GameMaster.getRats());
+		m.setUpItems(GameMaster.getItems());
 		drawMap();
 		moveRat();
 
