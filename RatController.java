@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 import java.util.Random;
 /**
- * This class stores an arraylist of the rats on the board, dealing with rat interactions (breeding) and killing the rats.
+ * Has a list of all alive rats, deals with rat interactions (breeding) and killing rats.
+ * 
  * @author Ollie Jarrett
- * @version
  */
 public class RatController {
 	
@@ -22,11 +22,16 @@ public class RatController {
 	 */
 	private static int points;
 	
+	/**
+	 * Random generator.
+	 */
 	private static Random nextRand = new Random();
 
 	/**
-	 * Sets the max number of rats allowed before the game ends.
-	 * @param max - the maximum number of rats allowed
+	 * Sets values of different elements.
+	 * 
+	 * @param max		maximum number of rats allowed
+	 * @param points 	points already earned from game
 	 */
 	public static void setRatController(int max, int points) {
 		maxNumOfRats = max;
@@ -35,7 +40,7 @@ public class RatController {
 
 	/**
 	 * Returns points earned from killing rats.
-	 * @return An integer representing the points earned.
+	 * @return 	number of points earned
 	 */
 	public static int getPoints() {
 		return points;
@@ -52,7 +57,7 @@ public class RatController {
 	
 	/**
 	 * Adds a new baby rat of random sex to the ratList.
-	 * @return The newly constructed baby rat
+	 * @return newly constructed baby rat
 	 */
 	public static Rat newBabyRat() {
 		Rat r = new Rat(nextRand.nextBoolean()); // boolean to determine gender
@@ -62,7 +67,7 @@ public class RatController {
 	
 	/**
 	 * Takes in a list of toString rat values and adds them to the rat list.
-	 * @param newRats - an array of strings.
+	 * @param newRats 	list of rat information as strings
 	 */
 	public static void addRats(String[] newRats) {
 		for(int i = 0; i < newRats.length; i++) {
@@ -72,8 +77,9 @@ public class RatController {
 	
 	/**
 	 * Takes in a Rat class toString() value and adds it to the rat list.
-	 * @param newRat - the formatted rat string.
-	 * @return Returns a single constructed rat
+	 * 
+	 * @param newRat	formatted rat string
+	 * @return 			a constructed {@code rat}
 	 */
 	public static Rat addRat(String newRat) {
 		Rat r = stringToRat(newRat);
@@ -84,8 +90,8 @@ public class RatController {
 	/**
 	 * Takes in a boolean to create a baby rat of specific gender.
 	 * 
-	 * @param gender	New Baby rat gender
-	 * @return 			New baby rat
+	 * @param gender	new Baby rat gender
+	 * @return 			new baby {@code rat}
 	 */
 	public static Rat addRat(Boolean gender) {
 		Rat r = new Rat(gender);
@@ -95,7 +101,8 @@ public class RatController {
 	
 	/**
 	 * Removes a specific rat from rats.
-	 * @param deadRat - the rat to be killed by the rat controller.
+	 * 
+	 * @param deadRat	the rat to be killed
 	 */
 	public static void killRat(Rat deadRat) {
 		points += deadRat.getPointsUponDeath();
@@ -103,12 +110,11 @@ public class RatController {
 	}
 	
 	/**
-	 * Deals with rat to rat interactions.
-	 * Sorts rats into stationary rats and moving rats.
-	 * Breeds rats which are breedable.
-	 * @param ratsOnTile - An arraylist of rats on an individual tile
-	 * @return A nested arraylist of rats, where the first index contains rats 
-	 * that aren't moving and the second index contains rats which will be moving
+	 * Returns list of list of stationary rats and list of moving rats.
+	 *
+	 * @param ratsOnTile	list of rats that are interacting with each other
+	 * @return 				list of rats where first list is stationary rats and 
+	 * 					second list is moving rats
 	 */
 	public static ArrayList<ArrayList<Rat>> ratInteractions(ArrayList<Rat> ratsOnTile) {
 		
@@ -130,13 +136,12 @@ public class RatController {
 	}
 	
 	/**
-	 * Sorts a list of rats into a nested list with three sub-lists
-	 * =>breedable male rats
-	 * =>breedable female rats
-	 * =>moving rats
-	 * =>Not moving rats.
-	 * @param ratsOnTile - An arraylist of rats
-	 * @return A nested arraylist of rats, where the first index contains breedable male rats, the second contains breedable female rats and the third contains moving rats
+	 * Returns nested list of rats of different movement status.
+	 * 
+	 * @param ratsOnTile	list of rats interacting
+	 * @return 				list of rats 0) male rats that can breed, 
+	 * 					1) female rats that can breed, 2) rats that will not move,
+	 * 					3) list of rats moving
 	 */
 	private static ArrayList<ArrayList<Rat>> sortRats(ArrayList<Rat> ratsOnTile) {
 		ArrayList<Rat> male = new ArrayList<>();
@@ -145,21 +150,21 @@ public class RatController {
 		ArrayList<Rat> moving = new ArrayList<>();
 		
 		for (Rat r : ratsOnTile) {
-			if (r.isChild()) {
+			if (r.isChild()) {			// If child
 				moving.add(r);
-			} else if (r.isBreeding()) {
+			} else if (r.isBreeding()) { // If breeding
 				r.setBreedStatus(false);
 				stop.add(r);
-			} else if (r.isPregnant()) {
+			} else if (r.isPregnant()) { // If pregnant
 				if (r.giveBirth()) {
 					moving.add(newBabyRat());
 					stop.add(r);
 				} else {
 					moving.add(r);
 				}
-			} else if (r.isSterile()) {
+			} else if (r.isSterile()) {	// If sterile
 				moving.add(r);
-			} else {
+			} else {					// Otherwise attempt to breed
 				if (r.isMale()) {
 					male.add(r);
 				} else {
@@ -178,9 +183,10 @@ public class RatController {
 	
 	/**
 	 * Takes in two lists of rats and breeds as many as it can.
-	 * @param male - A list of male rats.
-	 * @param female - A list of female rats.
-	 * @return A nested list of rats with 2 indexes, the rats who're breeding and those who aren't.
+	 * 
+	 * @param male 		list of male rats ready to breed
+	 * @param female	list of female rats ready to breed
+	 * @return 			List of rats who are breeding and list of rats not breeding
 	 */
 	private static ArrayList<ArrayList<Rat>> breedRats(ArrayList<Rat> male, ArrayList<Rat> female) {
 		
@@ -210,9 +216,9 @@ public class RatController {
 	}
 
 	/**
-	 * Constructs a rat from a rats toString output.
-	 * @param ratString - A toString output from the Rat class toString() method.
-	 * @return a constructed rat with the same values as in ratString.
+	 * Creates a rat from a rats toString output.
+	 * @param ratString 	String format of Rat
+	 * @return {@code Rat} from specified input
 	 */
 	private static Rat stringToRat(String ratString) {
 		String[] newRat = ratString.split(",");
