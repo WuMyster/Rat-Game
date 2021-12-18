@@ -58,11 +58,19 @@ public class GameMaster {
     private static int[] mapSize = null;
 
     /**
-     * Max level the player has achieved
+     * Max level the player has achieved.
      */
     private static int maxLevel = Integer.MAX_VALUE;
     
+    /**
+     * Current level number game is on.
+     */
     private static int lvlNum = Integer.MIN_VALUE;
+    
+    /**
+     * Value from confirmation window.
+     */
+    private static boolean answer;
     
     /**
      * Creates and returns a Game Master Scene
@@ -336,34 +344,51 @@ public class GameMaster {
     		playerInfo = getInfoFromFile(f);
     		lvlPage();
     	} else {
-    		Stage getConfirm = new Stage();
-    		
-    		GridPane newPlayer = new GridPane();
-    		Label question = new Label("Player doesn't exist\n" + 
+    		boolean createNewPlayer = confirmWindow("Player doesn't exist\n" + 
     				"Would you like to create\na new player?");
-    		question.setAlignment(Pos.CENTER);
-    		GridPane.setConstraints(question, 0, 0, 2, 1);
-    		
-    		Button yes = new Button("Yes");
-    		yes.setOnAction(e -> {
+    		if (createNewPlayer) {
     			createNewPlayer(playerName);
-    			getConfirm.close();
     			lvlPage();
-    		});
-    		GridPane.setConstraints(yes, 0, 1);
-    		
-    		Button no = new Button("No");
-    		no.setOnAction(e -> getConfirm.close());
-    		GridPane.setConstraints(no, 1, 1);
-    		
-    		newPlayer.getChildren().addAll(question, yes, no);
-    		
-    		Scene confirmNewPlayer = new Scene(newPlayer, 150, 100);
-    		
-    		getConfirm.setScene(confirmNewPlayer);
-    		getConfirm.initModality(Modality.APPLICATION_MODAL);
-    		getConfirm.showAndWait();
+    		}
     	}
+    }
+    
+    private static boolean getAnswer() {
+    	return answer;
+    }
+    
+    private static boolean confirmWindow(String msg) {
+    	
+    	Stage getConfirm = new Stage();
+		
+		GridPane newPlayer = new GridPane();
+		Label question = new Label(msg);
+		question.setAlignment(Pos.CENTER);
+		GridPane.setConstraints(question, 0, 0, 2, 1);
+		
+		Button yes = new Button("Yes");
+		yes.setOnAction(e -> {
+			GameMaster.answer = true;
+			getConfirm.close();
+		});
+		GridPane.setConstraints(yes, 0, 1);
+		
+		Button no = new Button("No");
+		no.setOnAction(e -> {
+			GameMaster.answer = false;
+			getConfirm.close();
+		});
+		GridPane.setConstraints(no, 1, 1);
+		
+		newPlayer.getChildren().addAll(question, yes, no);
+		
+		Scene confirmNewPlayer = new Scene(newPlayer, 150, 100);
+		
+		getConfirm.setScene(confirmNewPlayer);
+		getConfirm.initModality(Modality.APPLICATION_MODAL);
+		getConfirm.showAndWait();
+		
+    	return getAnswer();
     }
     
     /**
