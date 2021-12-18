@@ -186,6 +186,15 @@ public class GameMaster {
     private static void createNewGame() {
     	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
     	
+    	if (playerInfo.size() != 1) {
+    		boolean overwritePreviousGame = confirmWindow(
+    				"Starting a new game will\noverwrite your\nprevious game\n" + 
+    				"Do you want to overwrite?");
+    		if (!overwritePreviousGame) {
+    			return;
+    		}
+    	}
+    	
     	if (playerInfo.size() == 1) { // No ongoing game
     		loadMapInfo();
     		
