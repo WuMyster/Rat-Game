@@ -199,6 +199,11 @@ public class Main extends Application {
 	 * Iterating over moving the rat.
 	 */
 	private static Timeline ratMoveTimeline;
+	
+	/**
+	 * Output of how many rats are on the board.
+	 */
+	private static Timeline ratNumberIndicator;
 
 	/**
 	 * The main cycle that runs the game.
@@ -233,7 +238,9 @@ public class Main extends Application {
 	
 	public static Stage currWindow;
 	
-	private static StackedBarChart<Number, String> sceneRatIndicator;
+	private static StackedBarChart<Number, String> sbcRatIndicator;
+	
+	private static Stage stageRatIndicator = new Stage();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -246,18 +253,18 @@ public class Main extends Application {
 	}
 	
 	public static void gameScreen() {
-		BorderPane root = createGameGUI();
-		
-		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
-		cycler.setCycleCount(Animation.INDEFINITE);
-		cycler.play();
-		
-		
-		
-		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+		BorderPane gameRoot = createGameGUI();		
+		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
 		currWindow.setScene(scene);
 		currWindow.show();
+	
+		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
+		cycler.setCycleCount(Animation.INDEFINITE);
+		cycler.play();
+
+		
+		ratNumberIndicator.play();
 	}
 
 	/**
@@ -669,8 +676,6 @@ public class Main extends Application {
 		Label msg = new Label(MessageOfDay.getMsgDay());
 		root.getChildren().add(msg);
 
-		root.getChildren().add(sceneRatIndicator);
-
 		return root;
 	}
 
@@ -850,7 +855,7 @@ public class Main extends Application {
 		m.setUpRats(GameMaster.getRats());
 		m.setUpItems(GameMaster.getItems());
 		drawMap();
-		moveRat();
+		setTimeLines();
 
 		return root;
 	}
@@ -863,13 +868,10 @@ public class Main extends Application {
 	}
 	
 	private static void setRatGenderDifference() {
-		 NumberAxis xAxis = new NumberAxis();
-		 CategoryAxis yAxis = new CategoryAxis();
+		NumberAxis xAxis = new NumberAxis();
+		CategoryAxis yAxis = new CategoryAxis();
 		
-		 sceneRatIndicator = new StackedBarChart<>(xAxis, yAxis);
-		
-		sceneRatIndicator.maxHeight(30);
-		sceneRatIndicator.minWidth(100);
+		sbcRatIndicator = new StackedBarChart<>(xAxis, yAxis);
 		
 		XYChart.Series<Number, String> maleNumber = new XYChart.Series<>();
 		maleNumber.getData().add((new XYChart.Data<>(0, "Bob")));
@@ -880,31 +882,37 @@ public class Main extends Application {
 		XYChart.Series<Number, String> rest = new XYChart.Series<>();
 		rest.getData().add(new XYChart.Data<>(0, "Bob"));
 		
-		sceneRatIndicator.getData().add(maleNumber);
-		sceneRatIndicator.getData().add(femaleNumber);
-		sceneRatIndicator.getData().add(rest);
+		sbcRatIndicator.getData().add(maleNumber);
+		sbcRatIndicator.getData().add(femaleNumber);
+		sbcRatIndicator.getData().add(rest);
 		
-		Timeline tl = new Timeline();
-		tl.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
-			@Override
+		stageRatIndicator.setScene(new Scene(sbcRatIndicator, 300, 200));
+		stageRatIndicator.show();
+		createRatIndicator();
+	}
+	
+	private static void createRatIndicator( ) {
+		ratNumberIndicator = new Timeline();
+		ratNumberIndicator.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent actionEvent) {
-				double a = RatController.getMaleCounter();
-				double b = RatController.getFemaleCounter();
-				double c = 100 - a - b;
-				double[] fd = {a, b, c};
-				
-				int counter = 0;
-				for (XYChart.Series<Number, String> series : sceneRatIndicator.getData()) {
-					for (XYChart.Data<Number, String> data : series.getData()) {
-						data.setXValue(fd[counter++]);
-					}
-				}
+				setRatIndicator();
 			}
 		}));
-		tl.setCycleCount(Animation.INDEFINITE);
-		tl.play();
+		ratNumberIndicator.setCycleCount(Animation.INDEFINITE);
+	}
+	
+	private static void setRatIndicator() {
+		double a = RatController.getMaleCounter();
+		double b = RatController.getFemaleCounter();
+		double c = 100 - a - b;
+		double[] fd = {a, b, c};
 		
-		System.out.println();
+		int counter = 0;
+		for (XYChart.Series<Number, String> series : sbcRatIndicator.getData()) {
+			for (XYChart.Data<Number, String> data : series.getData()) {
+				data.setXValue(fd[counter++]);
+			}
+		}
 	}
 
 	/**
@@ -968,18 +976,23 @@ public class Main extends Application {
 		ratMoveTimeline.play();
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		drawItems();
-		// setRatGenderDifference();
 
 		// Losing conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			cycler.stop();
+			ratNumberIndicator.stop();
+			setRatIndicator();
 			System.out.println("Game has finished - invalid number of rats");
 		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) { // Time out of bounds
 			cycler.stop();
+			ratNumberIndicator.stop();
+			setRatIndicator();
 			System.out.println("Game has finished - time ran out");
 			// Pass control back to game master, game has finished
 		} else if (playerStopGame) { // Player stops the game
 			cycler.stop();
+			ratNumberIndicator.stop();
+			setRatIndicator();
 			saveState();
 		} // Otherwise keep going
 	}
@@ -991,9 +1004,9 @@ public class Main extends Application {
 	/**
 	 * Criteria for Rat movements.
 	 */
-	private static void moveRat() {
+	private static void setTimeLines() {
 		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
-		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);		
+		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
 	}
 
 	/**
