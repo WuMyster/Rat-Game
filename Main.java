@@ -231,6 +231,8 @@ public class Main extends Application {
 	private static boolean playerStopGame;
 	
 	public static Stage currWindow;
+	
+	private static StackedBarChart<Number, String> sceneRatIndicator;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -664,6 +666,8 @@ public class Main extends Application {
 		Label msg = new Label(MessageOfDay.getMsgDay());
 		root.getChildren().add(msg);
 
+		root.getChildren().add(sceneRatIndicator);
+
 		return root;
 	}
 
@@ -722,6 +726,7 @@ public class Main extends Application {
 				event.consume();
 			}
 		});
+		
 		return root;
 	}
 	
@@ -824,6 +829,7 @@ public class Main extends Application {
 	private static BorderPane createGameGUI() {
 			
 		setInitialValues();
+		setRatGenderDifference();
 		
 		Main.playerName = GameMaster.getName();
 		
@@ -854,25 +860,19 @@ public class Main extends Application {
 	}
 	
 	private static void setRatGenderDifference() {
-		
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 		
-		StackedBarChart<String, Number> hup = new StackedBarChart<>(xAxis, yAxis);
+		sceneRatIndicator = new StackedBarChart<>(yAxis, xAxis);
 		
-		XYChart.Series<String, Number> maleNumber = new XYChart.Series<>();
-		maleNumber.getData().add(new XYChart.Data<>("Bob", RatController.getMaleCounter()));
+		XYChart.Series<Number, String> maleNumber = new XYChart.Series<>();
+		maleNumber.getData().add(new XYChart.Data<>(RatController.getMaleCounter(), "Bob"));
 		
-		XYChart.Series<String, Number> femaleNumber = new XYChart.Series<>();
-		femaleNumber.getData().add(new XYChart.Data<>("Bob", RatController.getFemaleCounter()));
+		XYChart.Series<Number, String> femaleNumber = new XYChart.Series<>();
+		femaleNumber.getData().add(new XYChart.Data<>(RatController.getFemaleCounter(), "Bob"));
 		
-		hup.getData().add(maleNumber);
-		hup.getData().add(femaleNumber);
-		
-		Scene scene = new Scene(hup, 800, 600);
-		Stage indicatorOfRat = new Stage();
-		indicatorOfRat.setScene(scene);
-		indicatorOfRat.show();
+		sceneRatIndicator.getData().add(maleNumber);
+		sceneRatIndicator.getData().add(femaleNumber);
 	}
 
 	/**
