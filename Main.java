@@ -6,6 +6,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -250,6 +251,8 @@ public class Main extends Application {
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
+		
+		
 		
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
@@ -860,19 +863,48 @@ public class Main extends Application {
 	}
 	
 	private static void setRatGenderDifference() {
-		CategoryAxis xAxis = new CategoryAxis();
-		NumberAxis yAxis = new NumberAxis();
+		 NumberAxis xAxis = new NumberAxis();
+		 CategoryAxis yAxis = new CategoryAxis();
 		
-		sceneRatIndicator = new StackedBarChart<>(yAxis, xAxis);
+		 sceneRatIndicator = new StackedBarChart<>(xAxis, yAxis);
+		
+		sceneRatIndicator.maxHeight(30);
+		sceneRatIndicator.minWidth(100);
 		
 		XYChart.Series<Number, String> maleNumber = new XYChart.Series<>();
-		maleNumber.getData().add(new XYChart.Data<>(RatController.getMaleCounter(), "Bob"));
+		maleNumber.getData().add((new XYChart.Data<>(0, "Bob")));
 		
 		XYChart.Series<Number, String> femaleNumber = new XYChart.Series<>();
-		femaleNumber.getData().add(new XYChart.Data<>(RatController.getFemaleCounter(), "Bob"));
+		femaleNumber.getData().add(new XYChart.Data<>(0, "Bob"));
+		
+		XYChart.Series<Number, String> rest = new XYChart.Series<>();
+		rest.getData().add(new XYChart.Data<>(0, "Bob"));
 		
 		sceneRatIndicator.getData().add(maleNumber);
 		sceneRatIndicator.getData().add(femaleNumber);
+		sceneRatIndicator.getData().add(rest);
+		
+		Timeline tl = new Timeline();
+		tl.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				double a = RatController.getMaleCounter();
+				double b = RatController.getFemaleCounter();
+				double c = 100 - a - b;
+				double[] fd = {a, b, c};
+				
+				int counter = 0;
+				for (XYChart.Series<Number, String> series : sceneRatIndicator.getData()) {
+					for (XYChart.Data<Number, String> data : series.getData()) {
+						data.setXValue(fd[counter++]);
+					}
+				}
+			}
+		}));
+		tl.setCycleCount(Animation.INDEFINITE);
+		tl.play();
+		
+		System.out.println();
 	}
 
 	/**
@@ -936,7 +968,7 @@ public class Main extends Application {
 		ratMoveTimeline.play();
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		drawItems();
-		setRatGenderDifference();
+		// setRatGenderDifference();
 
 		// Losing conditions
 		if (RatController.stopGame()) { // Bad number of rats
@@ -961,7 +993,7 @@ public class Main extends Application {
 	 */
 	private static void moveRat() {
 		ratMoveTimeline = new Timeline(new KeyFrame(Duration.millis(TIME_BETWEEN_STEPS), event -> goThroughRat()));
-		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);
+		ratMoveTimeline.setCycleCount(NORMAL_RAT_SPEED);		
 	}
 
 	/**
