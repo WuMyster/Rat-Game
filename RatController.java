@@ -56,18 +56,13 @@ public class RatController {
 		return points;
 	}
 	
-	/**
-	 * Returns list of number of male rats and female rats as a percentage.
-	 * 
-	 * @return	list of percentage of male rats and female rats
-	 */
-	public static int[] getCounter() {
-		int[] out = new int[2];
-		out[0] = (maleCounter * 100) / maxNumOfRats;
-		out[1] = (femaleCounter * 100) / maxNumOfRats;
-		return out;
+	public static int getMaleCounter() {
+		return (maleCounter * 100) / maxNumOfRats;
 	}
 	
+	public static int getFemaleCounter() {
+		return (femaleCounter * 100) / maxNumOfRats;
+	}
 	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
 	 * you should have.

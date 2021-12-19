@@ -11,6 +11,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -143,12 +147,12 @@ public class Main extends Application {
 	/**
 	 * Width of the rat in pixels.
 	 */
-	private static int RAT_WIDTH;
+	private static int RAT_WIDTH = 30;
 
 	/**
 	 * Height of the rat in pixels.
 	 */
-	private static int RAT_HEIGHT;
+	private static int RAT_HEIGHT = 45;
 
 	/**
 	 * Canvas of map tiles.
@@ -827,21 +831,11 @@ public class Main extends Application {
 		Main.maxTime = GameMaster.getMaxTime();
 		RatController.setRatController(GameMaster.getMaxRats(),
 				GameMaster.getPoints());
-		// RatController.se
 		
-		BorderPane root = null;
-		
-		root = new BorderPane();
+		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
-		try {
-			
-		} catch (NullPointerException n) {
-			n.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		m = new Board(GameMaster.getMap(), 17, 11);
 		m.setUpRats(GameMaster.getRats());
@@ -854,12 +848,31 @@ public class Main extends Application {
 	
 	private static void setInitialValues() {
 		
-		// These no choice
-		RAT_WIDTH = 30;
-		RAT_HEIGHT = 45;		
+		// These no choice		
 		itemPlace = new HashMap<>();
-		
 		playerStopGame = false;
+	}
+	
+	private static void setRatGenderDifference() {
+		
+		CategoryAxis xAxis = new CategoryAxis();
+		NumberAxis yAxis = new NumberAxis();
+		
+		StackedBarChart<String, Number> hup = new StackedBarChart<>(xAxis, yAxis);
+		
+		XYChart.Series<String, Number> maleNumber = new XYChart.Series<>();
+		maleNumber.getData().add(new XYChart.Data<>("Bob", RatController.getMaleCounter()));
+		
+		XYChart.Series<String, Number> femaleNumber = new XYChart.Series<>();
+		femaleNumber.getData().add(new XYChart.Data<>("Bob", RatController.getFemaleCounter()));
+		
+		hup.getData().add(maleNumber);
+		hup.getData().add(femaleNumber);
+		
+		Scene scene = new Scene(hup, 800, 600);
+		Stage indicatorOfRat = new Stage();
+		indicatorOfRat.setScene(scene);
+		indicatorOfRat.show();
 	}
 
 	/**
@@ -923,6 +936,7 @@ public class Main extends Application {
 		ratMoveTimeline.play();
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		drawItems();
+		setRatGenderDifference();
 
 		// Losing conditions
 		if (RatController.stopGame()) { // Bad number of rats
