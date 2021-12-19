@@ -26,6 +26,16 @@ public class RatController {
 	 * Random generator.
 	 */
 	private static Random nextRand = new Random();
+	
+	/**
+	 * Number of male rats on the board.
+	 */
+	private static int maleCounter;
+	
+	/**
+	 * Number of female rats on the board.
+	 */
+	private static int femaleCounter;	
 
 	/**
 	 * Sets values of different elements.
@@ -47,6 +57,18 @@ public class RatController {
 	}
 	
 	/**
+	 * Returns list of number of male rats and female rats as a percentage.
+	 * 
+	 * @return	list of percentage of male rats and female rats
+	 */
+	public static int[] getCounter() {
+		int[] out = new int[2];
+		out[0] = (maleCounter * 100) / maxNumOfRats;
+		out[1] = (femaleCounter * 100) / maxNumOfRats;
+		return out;
+	}
+	
+	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
 	 * you should have.
 	 * @return {@code true} if the game has finished
@@ -60,7 +82,9 @@ public class RatController {
 	 * @return newly constructed baby rat
 	 */
 	public static Rat newBabyRat() {
-		Rat r = new Rat(nextRand.nextBoolean()); // boolean to determine gender
+		boolean gender = nextRand.nextBoolean();
+		increaseRatCounter(gender);
+		Rat r = new Rat(gender); // boolean to determine gender
 		ratList.add(r);
 		return r;
 	}
@@ -71,7 +95,9 @@ public class RatController {
 	 */
 	public static void addRats(String[] newRats) {
 		for(int i = 0; i < newRats.length; i++) {
-			ratList.add(stringToRat(newRats[i]));
+			Rat r = stringToRat(newRats[i]);
+			increaseRatCounter(r.isMale());
+			ratList.add(r);
 		}
 	}
 	
@@ -83,6 +109,7 @@ public class RatController {
 	 */
 	public static Rat addRat(String newRat) {
 		Rat r = stringToRat(newRat);
+		increaseRatCounter(r.isMale());
 		ratList.add(r);
 		return r;
 	}
@@ -95,6 +122,7 @@ public class RatController {
 	 */
 	public static Rat addRat(Boolean gender) {
 		Rat r = new Rat(gender);
+		increaseRatCounter(r.isMale());
 		ratList.add(r);
 		return r;
 	}
@@ -106,6 +134,7 @@ public class RatController {
 	 */
 	public static void killRat(Rat deadRat) {
 		points += deadRat.getPointsUponDeath();
+		decreaseRatCuonter(deadRat.isMale());
 		ratList.remove(deadRat);
 	}
 	
@@ -213,6 +242,27 @@ public class RatController {
 		postBreedRats.add(breeding);				//0
 		postBreedRats.add(notBreeding);				//1
 		return postBreedRats;
+	}
+	
+	/**
+	 * Increases the counter of the different gender of rats.
+	 * 
+	 * @param gender	{@code true} if rat is male
+	 */
+	private static void increaseRatCounter(boolean gender) {
+		if (gender) {
+			maleCounter++;
+		} else {
+			femaleCounter++;
+		}
+	}
+	
+	private static void decreaseRatCuonter(boolean gender) {
+		if (gender) {
+			maleCounter--;
+		} else {
+			femaleCounter--;
+		}
 	}
 
 	/**
