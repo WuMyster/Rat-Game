@@ -236,10 +236,21 @@ public class Main extends Application {
 	 */
 	private static boolean playerStopGame;
 	
+	/**
+	 * Main current window being displayed.
+	 */
 	public static Stage currWindow;
 	
+	/**
+	 * Stacked barchart showing the number of male and female rats alive
+	 * on the board.
+	 */
 	private static StackedBarChart<Number, String> sbcRatIndicator;
 	
+	/**
+	 * Window for showing the barchart above. Will hopefully be removed 
+	 * if I can change the size of the barchart + other changes.
+	 */
 	private static Stage stageRatIndicator = new Stage();
 
 	@Override
@@ -252,6 +263,10 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 	
+	/**
+	 * Creates and displays the game window, the rat alive indicator
+	 * and starts the game.
+	 */
 	public static void gameScreen() {
 		BorderPane gameRoot = createGameGUI();		
 		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -384,7 +399,14 @@ public class Main extends Application {
 			addStopSign((int) x, (int) y, StopSign.MAX_STATES);
 		}
 	}
-	
+	 
+	/**
+	 * Adds a StopSign to the board and draws it.
+	 * 
+	 * @param x 		x position of the StopSign
+	 * @param y 		y position of the StopSign
+	 * @param states	the state of the StopSign
+	 */
 	public static void addStopSign(int x, int y, int states) {
 		itemPlace.putIfAbsent(ItemType.STOPSIGN, new ArrayList<>());
 		itemPlace.get(ItemType.STOPSIGN).add(new int[] {y, x, states});
@@ -393,9 +415,9 @@ public class Main extends Application {
 	
 	/**
 	 * Draws a stop sign on this location on the board.
-	 * @param x x position of the StopSign
-	 * @param y y posision of the StopSign
-	 * @param state the state of the StopSign
+	 * @param x 		x position of the StopSign
+	 * @param y 		y posision of the StopSign
+	 * @param state 	the state of the StopSign
 	 */
 	public static void drawStopSign(int x, int y, int state) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
@@ -403,9 +425,9 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Update the graphical state of the Stop Sign.
+	 * Update the graphical state of the StopSign.
 	 * 
-	 * @param pos   xy position of the Stop Sign
+	 * @param pos   xy position of the StopSign
 	 * @param state the state it is in
 	 */
 	public static void damageStopSign(int[] pos, int state) {
@@ -438,6 +460,14 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * Adds a Bomb Object onto the board with specified x y coorindates
+	 * and draws it.
+	 * 
+	 * @param x		x position of the Bomb
+	 * @param y		y position of the Bomb
+	 * @param state	state of the Bomb
+	 */
 	public static void addBomb(int x, int y, int state) {
 		itemPlace.putIfAbsent(ItemType.BOMB, new ArrayList<>());
 		itemPlace.get(ItemType.BOMB).add(new int[] {y, x, state });
@@ -446,8 +476,9 @@ public class Main extends Application {
 	
 	/**
 	 * Draw a bomb on this location on the board.
-	 * @param x x position of the Bomb
-	 * @param y y posision of the Bomb
+	 * @param x 	x position of the Bomb
+	 * @param y 	y position of the Bomb
+	 * @param state	state of the Bomb
 	 */
 	public static void drawBomb(int x, int y, int state) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
@@ -518,6 +549,12 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * Adds a SexToFemale Object onto the board from speicifed x y coordinates.
+	 * 
+	 * @param x	x position of the SexToFemale
+	 * @param y y position of the SexToFemale
+	 */
 	public static void addSexToFemale(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.SEX_TO_FEMALE, new ArrayList<>());
 		itemPlace.get(ItemType.SEX_TO_FEMALE).add(new int[] {y, x, -1});
@@ -550,6 +587,12 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * Adds a SexToMale object using specified x y coorindates on the board.
+	 * 
+	 * @param x	x position of the SexToMale
+	 * @param y y position of the SexToMale
+	 */
 	public static void addSexToMale(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.SEX_TO_MALE, new ArrayList<>());
 		itemPlace.get(ItemType.SEX_TO_MALE).add(new int[] {y, x, -1});
@@ -582,6 +625,12 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * Adds a Sterilisation object to board with specified x y coordinates.
+	 * 
+	 * @param x x coordinates of the Sterilisation
+	 * @param y	y coordinates of the Sterilisation
+	 */
 	public static void addSterilise(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.STERILISATION, new ArrayList<>());
 		itemPlace.get(ItemType.STERILISATION).add(new int[] {y, x, -1});
@@ -610,11 +659,23 @@ public class Main extends Application {
 		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
 	}
 	
+	/**
+	 * Draws a Death Rat onto screen. Initial drawing of the Death rat.
+	 * 
+	 * @param x x position of the DeathRat
+	 * @param y y position of the DeathRat
+	 */
 	public static void drawDeathRat(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
+	/**
+     * React when an object is dragged onto the canvas.
+     *
+     * @param event The drag event itself which contains data about the drag that
+     *              occurred.
+     */
 	public static void placeGas(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
@@ -623,6 +684,12 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * Adds a Gas Object to the board from specified x y coordinates.
+	 * 
+	 * @param x x position of the gas
+	 * @param y y position of the gas
+	 */
 	public static void addGas(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.GAS, new ArrayList<>());
 		itemPlace.get(ItemType.GAS).add(new int[] {y, x, -1});
@@ -630,9 +697,9 @@ public class Main extends Application {
 	}
 	
 	/**
-	 * Draws a steraliseIcon on this location on the board.
-	 * @param x x position of the steraliseIcon
-	 * @param y y posision of the steraliseIcon
+	 * Draws a gas icon on this location on the board.
+	 * @param x x position of the gas icon
+	 * @param y y posision of the gas icon
 	 */
 	public static void drawGas(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
@@ -837,7 +904,7 @@ public class Main extends Application {
 	private static BorderPane createGameGUI() {
 			
 		setInitialValues();
-		setRatGenderDifference();
+		createRatIndicator();
 		
 		Main.playerName = GameMaster.getName();
 		
@@ -867,7 +934,10 @@ public class Main extends Application {
 		playerStopGame = false;
 	}
 	
-	private static void setRatGenderDifference() {
+	/**
+	 * Creates the window for showing the rat indicator.
+	 */
+	private static void createRatIndicator() {
 		NumberAxis xAxis = new NumberAxis();
 		CategoryAxis yAxis = new CategoryAxis();
 		
@@ -886,12 +956,17 @@ public class Main extends Application {
 		sbcRatIndicator.getData().add(femaleNumber);
 		sbcRatIndicator.getData().add(rest);
 		
+		stageRatIndicator.setX(200);
+		stageRatIndicator.setY(200);
 		stageRatIndicator.setScene(new Scene(sbcRatIndicator, 300, 200));
 		stageRatIndicator.show();
-		createRatIndicator();
+		ratIndicatorTimeline();
 	}
 	
-	private static void createRatIndicator( ) {
+	/**
+	 * Sets the timeline for the rat indicator update, WIP.
+	 */
+	private static void ratIndicatorTimeline( ) {
 		ratNumberIndicator = new Timeline();
 		ratNumberIndicator.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent actionEvent) {
@@ -901,6 +976,9 @@ public class Main extends Application {
 		ratNumberIndicator.setCycleCount(Animation.INDEFINITE);
 	}
 	
+	/**
+	 * Sets the values for the rat indicator window.
+	 */
 	private static void setRatIndicator() {
 		double a = RatController.getMaleCounter();
 		double b = RatController.getFemaleCounter();
@@ -979,22 +1057,22 @@ public class Main extends Application {
 
 		// Losing conditions
 		if (RatController.stopGame()) { // Bad number of rats
-			cycler.stop();
-			ratNumberIndicator.stop();
-			setRatIndicator();
+			stopGame();
 			System.out.println("Game has finished - invalid number of rats");
 		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) { // Time out of bounds
-			cycler.stop();
-			ratNumberIndicator.stop();
-			setRatIndicator();
+			stopGame();
 			System.out.println("Game has finished - time ran out");
 			// Pass control back to game master, game has finished
 		} else if (playerStopGame) { // Player stops the game
-			cycler.stop();
-			ratNumberIndicator.stop();
-			setRatIndicator();
+			stopGame();
 			saveState();
 		} // Otherwise keep going
+	}
+	
+	private static void stopGame() {
+		cycler.stop();
+		ratNumberIndicator.stop();
+		setRatIndicator();
 	}
 	
 	private static void saveState() {
