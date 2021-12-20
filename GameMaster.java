@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -115,7 +116,61 @@ public class GameMaster {
         Main.currWindow.setScene(scene);
         Main.currWindow.show();
     }
+    
+    public static void gameEndTooManyRats() {
+    	String msg = "There are too many rats!";
+    	gameEnd(msg);
+    }
+    
+    public static void gameEndTimeEnd() {
+    	String msg = "You ran out of time!";
+    	gameEnd(msg);
+    }
+    
+    public static void gameEndWin() {    	
+    	PrintWriter out = null;
+    	try {
+    		out = new PrintWriter("./player/" + playerName + ".txt");
+    		out.print(maxLevel + 1);
+    	} catch (FileNotFoundException e) {
+    		e.printStackTrace();
+    	} finally {
+    		out.close();
+    	}
 
+    	String msg = "Congratulations!\nYou've finished the game";
+    	gameEnd(msg);
+    }
+
+    /**
+     * 
+     */
+    private static void gameEnd(String msg) {
+    	GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(8);
+        grid.setHgap(10);
+
+        Label mes = new Label(msg);
+        GridPane.setConstraints(mes, 0, 0, 2, 1);
+        
+        Button lvlPage = new Button("Level menu");
+        GridPane.setConstraints(lvlPage, 0, 1);
+        lvlPage.setOnAction(e -> lvlPage());
+        
+        Button nextLevel = new Button("Next level");
+        GridPane.setConstraints(nextLevel, 1, 1);
+        nextLevel.setOnAction(null);
+        
+        grid.getChildren().addAll(mes, lvlPage, nextLevel);
+
+        Scene scene = new Scene(grid, 300, 200);
+
+        Main.currWindow.setScene(scene);
+        Main.currWindow.show();
+    	
+    }
+    
     /**
      * Returns the current level number.
      * @return current level number

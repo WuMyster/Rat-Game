@@ -1005,9 +1005,6 @@ public class GameGUI {
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		m.drawBoard(gc);
 	}
-	
-	
-	
 
 	/**
 	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
@@ -1023,10 +1020,15 @@ public class GameGUI {
 		drawItems();
 		setRatIndicator();
 		
-		// Losing conditions
+		// Stop conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			stopGame();
 			System.out.println("Game has finished - invalid number of rats");
+			if (RatController.getFemaleCounter() + RatController.getMaleCounter() == 0) {
+				GameMaster.gameEndWin();
+			} else {
+				GameMaster.gameEndTooManyRats();
+			}
 		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) { // Time out of bounds
 			stopGame();
 			System.out.println("Game has finished - time ran out");
