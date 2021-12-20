@@ -953,7 +953,7 @@ public class Main extends Application {
 	 */
 	private static void createRatIndicator() {
 		CategoryAxis xAxis = new CategoryAxis();
-		NumberAxis yAxis = new NumberAxis();
+		NumberAxis yAxis = new NumberAxis(0, GameMaster.getMaxRats(), 1);
 		
 		sbcRatIndicator = new StackedBarChart<>(xAxis, yAxis);
 		
@@ -964,7 +964,7 @@ public class Main extends Application {
 		femaleNumber.getData().add(new XYChart.Data<>("Bob", 0));
 		
 		XYChart.Series<String, Number> rest = new XYChart.Series<>();
-		rest.getData().add(new XYChart.Data<>("Bob", GameMaster.getMaxRats()));
+		rest.getData().add(new XYChart.Data<>("Bob", 0));
 		
 		sbcRatIndicator.getData().add(maleNumber);
 		sbcRatIndicator.getData().add(femaleNumber);
