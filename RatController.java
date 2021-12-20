@@ -152,7 +152,7 @@ public class RatController {
 	 */
 	public static void killRat(Rat deadRat) {
 		points += deadRat.getPointsUponDeath();
-		decreaseRatCuonter(deadRat.isMale());
+		decreaseRatCounter(deadRat.isMale());
 		ratList.remove(deadRat);
 	}
 	
@@ -275,7 +275,7 @@ public class RatController {
 		}
 	}
 	
-	private static void decreaseRatCuonter(boolean gender) {
+	private static void decreaseRatCounter(boolean gender) {
 		if (gender) {
 			maleCounter--;
 		} else {
@@ -293,11 +293,11 @@ public class RatController {
 		
 		int age = Integer.parseInt(newRat[0]);
 		boolean isMale = Boolean.parseBoolean(newRat[1]);
-		boolean isPregnant = Boolean.parseBoolean(newRat[2]);
-		int hp = Integer.parseInt(newRat[3]);
-		boolean isSterile = Boolean.parseBoolean(newRat[4]);
-		boolean isBreeding = Boolean.parseBoolean(newRat[5]);
-		return new Rat(age, isMale, isPregnant, hp, isSterile, isBreeding);
+		int hp = Integer.parseInt(newRat[2]);
+		boolean isSterile = Boolean.parseBoolean(newRat[3]);
+		boolean isBreeding = Boolean.parseBoolean(newRat[4]);
+		int pregStage = Integer.parseInt(newRat[5]);
+		return new Rat(age, isMale, hp, isSterile, isBreeding, pregStage);
 	}
 	
 }

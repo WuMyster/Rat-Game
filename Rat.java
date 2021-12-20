@@ -146,8 +146,8 @@ public class Rat {
 	 * @return isPregnant - true = pregnant.
 	 */
 	public boolean isPregnant() {
-		pregnancyCounter -= 1;
-		return pregnancyCounter != 0;
+		pregnancyCounter--;
+		return pregnancyCounter > 0;
 	}
 	
 	/**
