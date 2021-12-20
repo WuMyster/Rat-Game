@@ -69,10 +69,17 @@ public abstract class Tile {
 	 */
 	protected final int[] X_Y_POS;
 
-	// @Jing, added this to clean up code below.
+	/**
+	 * Basic XY position of the tile from the board.
+	 */
 	protected final int[] ORIGINAL_X_Y_POS;
 	
+	/**
+	 * Random generator.
+	 */
 	protected Random rand = new Random();
+	
+	protected boolean detontate = false;
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
@@ -134,6 +141,45 @@ public abstract class Tile {
 		}
 		this.directions = direction;
 	}
+
+	/**
+	 * Sets list of rats the tile is currently dealing with
+	 */
+	public void setCurrRat() {
+		currBlock = nextBlock;
+		nextBlock = new HashMap<>();
+
+		currDeath = nextDeath;
+		nextDeath = new HashMap<>();
+		
+        // Create list of rats
+        aliveRats = new ArrayList<>();
+        for (Direction dir : currBlock.keySet()) {
+            aliveRats.addAll(currBlock.get(dir));
+        }
+		
+		if (detontate) {
+			blowUpTile();
+		} else {
+			giveRatItem();
+			getRatInteractions();
+			correctList(); // Make sure only moving rats are considered
+		}
+	}
+	
+	/**
+	 * Give rat[s] items on the tile
+	 */
+	protected void giveRatItem() {
+		if (itemOnTile != null) {
+            if (!aliveRats.isEmpty()) {
+                aliveRats = itemOnTile.itemAction(aliveRats);
+                if (!itemOnTile.isAlive()) {
+                    removeItem();
+                }
+			}
+		}
+	}
 	
 	/**
 	 * Have the rats on this tile interact with each other.
@@ -193,11 +239,6 @@ public abstract class Tile {
 		return out;
 	}
 	
-	private void removeItem() {
-		Main.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
-		itemOnTile = null;
-	}
-	
 	/**
 	 * Returns a list of rats and their position in string format.
 	 * @return list of rats and their positions in string format
@@ -232,32 +273,12 @@ public abstract class Tile {
 		return itemOnTile.toString() + ";" + ORIGINAL_X_Y_POS[0] + "," +
 				ORIGINAL_X_Y_POS[1];
 	}
-
-    /**
-     * Blows up a tile by:
-     * - removing any existing item (if a bomb, also cancels the detonation timer)
-     * - kills the rats present on the tile
-     */
+	
+	/**
+	 * Sets tile to be blown up.
+	 */
 	public void blowUp() {
-		if (itemOnTile != null) {
-			if (itemOnTile instanceof TimeItem) {
-				((TimeItem) itemOnTile).timer.cancel();
-			}
-			removeItem();
-		}
-
-        // Create list of rats
-        aliveRats = new ArrayList<>();
-        for (Direction dir : currBlock.keySet()) {
-            aliveRats.addAll(currBlock.get(dir));
-        }
-
-        if (!aliveRats.isEmpty()) {
-            for (int i = 0; i < aliveRats.size(); i++) {
-                RatController.killRat(aliveRats.get(i));
-            }
-        }
-		resetTile();
+		detontate = true;
 	}
 	
 	public void clearGas() {
@@ -306,40 +327,6 @@ public abstract class Tile {
 		}
 	}
 
-	/**
-	 * Sets list of rats the tile is currently dealing with
-	 */
-	public void setCurrRat() {
-		currBlock = nextBlock;
-		nextBlock = new HashMap<>();
-
-		currDeath = nextDeath;
-		nextDeath = new HashMap<>();
-		
-		giveRatItem();
-		getRatInteractions();
-		correctList(); // Make sure only moving rats are considered
-	}
-	
-	/**
-	 * Give rat[s] items on the tile
-	 */
-	protected void giveRatItem() {
-		// Create list of rats
-		aliveRats = new ArrayList<>();
-		for (Direction dir : currBlock.keySet()) {
-			aliveRats.addAll(currBlock.get(dir));
-		}
-		if (itemOnTile != null) {
-            if (!aliveRats.isEmpty()) {
-                aliveRats = itemOnTile.itemAction(aliveRats);
-                if (!itemOnTile.isAlive()) {
-                    removeItem();
-                }
-			}
-		}
-	}
-
     /**
      * Sets item on tile.
      * @param i item to be placed on tile.
@@ -367,6 +354,30 @@ public abstract class Tile {
 		currBlock = new HashMap<>();
 		nextDeath = new HashMap<>();
 		currDeath = new HashMap<>();
+	}
+
+
+    /**
+     * Blows up a tile by:
+     * - removing any existing item
+     * - kills the rats present on the tile
+     */
+	private void blowUpTile() {
+		if (itemOnTile != null) {
+			removeItem();
+		}
+        for (int i = 0; i < aliveRats.size(); i++) {
+            RatController.killRat(aliveRats.get(i));
+        }
+		resetTile();
+	}
+	
+	private void removeItem() {
+		if (itemOnTile instanceof TimeItem) {
+			((TimeItem) itemOnTile).timer.cancel();
+		}
+		Main.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
+		itemOnTile = null;
 	}
 
 }
