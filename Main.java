@@ -272,9 +272,6 @@ public class Main extends Application {
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
-
-		
-		ratNumberIndicator.play();
 	}
 
 	/**
@@ -977,28 +974,8 @@ public class Main extends Application {
 		sbcRatIndicator.setMinHeight(CANVAS_HEIGHT);
 		sbcRatIndicator.setLegendVisible(false);
 		
-		// Hides y axis
-		sbcRatIndicator.getYAxis().setTickLabelsVisible(false);
-		sbcRatIndicator.getYAxis().setOpacity(0);
-		
-		// Hides x axis
 		sbcRatIndicator.getXAxis().setTickLabelsVisible(false);
-		sbcRatIndicator.getXAxis().setTickMarkVisible(false);
-		
-		ratIndicatorTimeline();
-	}
-	
-	/**
-	 * Sets the timeline for the rat indicator update, WIP.
-	 */
-	private static void ratIndicatorTimeline( ) {
-		ratNumberIndicator = new Timeline();
-		ratNumberIndicator.getKeyFrames().add(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent actionEvent) {
-				setRatIndicator();
-			}
-		}));
-		ratNumberIndicator.setCycleCount(Animation.INDEFINITE);
+		sbcRatIndicator.getXAxis().setTickMarkVisible(false);	 
 	}
 	
 	/**
@@ -1079,7 +1056,8 @@ public class Main extends Application {
 		ratMoveTimeline.play();
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		drawItems();
-
+		setRatIndicator();
+		
 		// Losing conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			stopGame();
