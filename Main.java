@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -740,9 +741,6 @@ public class Main extends Application {
 			runCycle();
 		});
 
-		Label msg = new Label(MessageOfDay.getMsgDay());
-		root.getChildren().add(msg);
-
 		return root;
 	}
 
@@ -751,7 +749,7 @@ public class Main extends Application {
 	 * 
 	 * @return the right menu
 	 */
-	private static VBox createRightMenu() {
+	private static Node createRightMenu() {
 		VBox root = new VBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
@@ -917,6 +915,7 @@ public class Main extends Application {
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
+		root.setBottom(createBottomDisplay());
 
 		m = new Board(GameMaster.getMap(), 17, 11);
 		m.setUpRats(GameMaster.getRats());
@@ -932,6 +931,28 @@ public class Main extends Application {
 		// These no choice		
 		itemPlace = new HashMap<>();
 		playerStopGame = false;
+	}
+	
+	/**
+	 * Creates the bottom display, used to display the message of the day.
+	 * @return HBox of the bottom display.
+	 */
+	private static Node createBottomDisplay() {
+		HBox root = new HBox();
+
+		Label msg = new Label(MessageOfDay.getMsgDay());
+		root.getChildren().add(msg);
+		return root;
+	}
+	
+	/**
+	 * Creates the left display, used to display the number of rat indicators.
+	 * @return
+	 */
+	private static Node createLeftDisplay() {
+		VBox root = new VBox();
+		
+		return null;
 	}
 	
 	/**
@@ -998,7 +1019,7 @@ public class Main extends Application {
 	 * 
 	 * @return Game canvas
 	 */
-	private static Pane createCenterMap() {
+	private static Node createCenterMap() {
 		Pane root = new Pane();
 		// Creating canvases
 		baseCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
