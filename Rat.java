@@ -5,15 +5,44 @@
  */
 public class Rat {
 	
+	/**
+	 * Age of when the rat becomes an adult.
+	 */
 	private static int ADULT_AGE = 11;
+	
+	/**
+	 * Pregnancy stages of a rat giving birth.
+	 */
 	private static int MAX_PREGNANCY = 10;
 	
+	/**
+	 * True if rat is male.
+	 */
 	private boolean isMale;
-	private boolean isPregnant;
+	
+	/**
+	 * True if rat cannot breed anymore.
+	 */
 	private boolean isSterile;
+	
+	/**
+	 * True if the rat is breeding.
+	 */
 	private boolean isBreeding;
+	
+	/**
+	 * Age of the rat.
+	 */
 	private int age;
+	
+	/**
+	 * The health of the rat.
+	 */
 	private int health;
+	
+	/**
+	 * The pregnancy number of the rat.
+	 */
 	private int pregnancyCounter;
 	
 	
@@ -25,10 +54,9 @@ public class Rat {
 	public Rat(boolean isMale) {
 		this.isMale = isMale;
 		this.health = 5;
-		this.isBreeding = false;
-		this.isPregnant = false;
 		this.isSterile = false;
 		this.age = 0;
+		resetRat();
 	}
 
 	/**
@@ -41,13 +69,13 @@ public class Rat {
 	 * @param isSterile - whether the rat is sterile - True = sterile, False = not sterile.
 	 * @param isDeathRat - whether the rat is a death rat.
 	 */
-	public Rat(int age, boolean isMale, boolean isPregnant, int hp, boolean isSterile, boolean isBreeding) {
+	public Rat(int age, boolean isMale, int hp, boolean isSterile, boolean isBreeding, int pregnancyCounter) {
 		this.isMale = isMale;
 		this.health = hp;
 		this.isBreeding = isBreeding;
-		this.isPregnant = isPregnant;
 		this.isSterile = isSterile;
 		this.age = age;
+		this.pregnancyCounter = pregnancyCounter;
 	}
 	
 	/**
@@ -76,9 +104,9 @@ public class Rat {
 	 */
 	public void setIsMale(boolean newIsMale) {
 		if (isMale != newIsMale) {
-			System.out.println("ASDF");
 			RatController.changeValue(newIsMale);
 			isMale = newIsMale;
+			resetRat();
 		}
 	}
 	
@@ -87,10 +115,13 @@ public class Rat {
 	 * @return an integer of the rats pregnancy counter.
 	 */
 	public int getPregCounter() {
-		isPregnant = pregnancyCounter-- != 0;
 		return pregnancyCounter;
 	}
 	
+	/**
+	 * Returns {@code true} if this rat is giving birth.
+	 * @return {@code true} if rat is giving birth
+	 */
 	public boolean giveBirth() {
 		return pregnancyCounter == 6 || pregnancyCounter == 2;
 	}
@@ -103,8 +134,10 @@ public class Rat {
 		pregnancyCounter++;
 	}
 	
+	/**
+	 * Sets this rat to be pregnant.
+	 */
 	public void setPregnant() {
-		isPregnant = true;
 		pregnancyCounter = MAX_PREGNANCY;
 	}
 	
@@ -114,10 +147,7 @@ public class Rat {
 	 */
 	public boolean isPregnant() {
 		pregnancyCounter -= 1;
-		if (pregnancyCounter <= 0) {
-			isPregnant = false;
-		}
-		return isPregnant;
+		return pregnancyCounter != 0;
 	}
 	
 	/**
@@ -210,10 +240,10 @@ public class Rat {
 		String output = "";
 		output += age + ",";
 		output += isMale + ",";
-		output += isPregnant + ",";
 		output += health + ",";
 		output += isSterile + ",";
 		output += isBreeding + ",";
+		output += pregnancyCounter + ",";
 		return output;
 	}
 	
@@ -224,8 +254,13 @@ public class Rat {
 	private int calculatePointsUponDeath() {
 		int points = 10;
 		points += isBreeding ? 10 : 0;
-		points += isPregnant ? 10 : 0;
+		points += isPregnant() ? 10 : 0;
 		points += isChild() ? 10 : 0;
 		return points;
+	}
+	
+	private void resetRat() {
+		this.isBreeding = false;
+		this.pregnancyCounter = 0;
 	}
 }
