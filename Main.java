@@ -246,7 +246,7 @@ public class Main extends Application {
 	 * Stacked barchart showing the number of male and female rats alive
 	 * on the board.
 	 */
-	private static StackedBarChart<Number, String> sbcRatIndicator;
+	private static StackedBarChart<String, Number> sbcRatIndicator;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -955,19 +955,19 @@ public class Main extends Application {
 	 * Creates the window for showing the rat indicator.
 	 */
 	private static void createRatIndicator() {
-		NumberAxis xAxis = new NumberAxis();
-		CategoryAxis yAxis = new CategoryAxis();
+		CategoryAxis xAxis = new CategoryAxis();
+		NumberAxis yAxis = new NumberAxis();
 		
 		sbcRatIndicator = new StackedBarChart<>(xAxis, yAxis);
 		
-		XYChart.Series<Number, String> maleNumber = new XYChart.Series<>();
-		maleNumber.getData().add((new XYChart.Data<>(0, "Bob")));
+		XYChart.Series<String, Number> maleNumber = new XYChart.Series<>();
+		maleNumber.getData().add((new XYChart.Data<>("Bob", 0)));
 		
-		XYChart.Series<Number, String> femaleNumber = new XYChart.Series<>();
-		femaleNumber.getData().add(new XYChart.Data<>(0, "Bob"));
+		XYChart.Series<String, Number> femaleNumber = new XYChart.Series<>();
+		femaleNumber.getData().add(new XYChart.Data<>("Bob", 0));
 		
-		XYChart.Series<Number, String> rest = new XYChart.Series<>();
-		rest.getData().add(new XYChart.Data<>(0, "Bob"));
+		XYChart.Series<String, Number> rest = new XYChart.Series<>();
+		rest.getData().add(new XYChart.Data<>("Bob", 0));
 		
 		sbcRatIndicator.getData().add(maleNumber);
 		sbcRatIndicator.getData().add(femaleNumber);
@@ -1001,9 +1001,9 @@ public class Main extends Application {
 		double[] fd = {a, b, c};
 		
 		int counter = 0;
-		for (XYChart.Series<Number, String> series : sbcRatIndicator.getData()) {
-			for (XYChart.Data<Number, String> data : series.getData()) {
-				data.setXValue(fd[counter++]);
+		for (XYChart.Series<String, Number> series : sbcRatIndicator.getData()) {
+			for (XYChart.Data<String, Number> data : series.getData()) {
+				data.setYValue(fd[counter++]);
 			}
 		}
 	}
