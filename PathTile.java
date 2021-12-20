@@ -225,17 +225,6 @@ public class PathTile extends Tile {
 				}
 			}
 		}
-		
-		//For non-moving rats
-		for (Direction prevDirection : bufferNextBlock.keySet()) {
-			ArrayList<Rat> ratList = bufferNextBlock.get(prevDirection);
-			//Similar to above but no need to check for stop signs
-			for (Rat r : ratList) {
-				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
-				this.addRat(r, prevDirection);
-				System.out.println("Moved!");
-			}
-		}
 	}
 
 	@Override

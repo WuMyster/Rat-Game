@@ -5,6 +5,7 @@ import java.util.Random;
 
 /**
  * Tile that has 3 or more tiles connected to it.
+ * 
  * @author Jing Shiang Gu
  */
 public class JunctionTile extends Tile {
@@ -79,39 +80,27 @@ public class JunctionTile extends Tile {
 				}
 			}
 		}
-		// For non-moving rats
-		for (Direction prevDirection : bufferNextBlock.keySet()) {
-			ArrayList<Rat> ratList = bufferNextBlock.get(prevDirection);
-			// Similar to above but no need to check for stop signs
-			for (Rat r : ratList) {
-				Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), r.getStatus(), 0);
-				this.addRat(r, prevDirection.opposite());
-			}
-		}
 	}
-	
+
 	@Override
 	public void getRatInteractions() {
 		super.getRatInteractions();
-		
+
 		// This implementation should be moved up
-		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);	
-		
+		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
+
 		ArrayList<Rat> asdf = rs.get(0);
 		for (Rat r : asdf) {
-			Direction d = null;
-			
 			for (Direction dir : directions) {
-				ArrayList<Rat> a = currBlock.get(dir);
-				if (a == null) {
-					
-				} else if (a.contains(r)) {
-					d = dir;
+				ArrayList<Rat> rats = currBlock.get(dir);
+				if (rats != null) {
+					if (currBlock.get(dir).contains(r)) {
+						this.addRat(r, dir);
+						Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
+					}
 				}
 			}
-			bufferNextBlock.putIfAbsent(d, new ArrayList<>());
-			bufferNextBlock.get(d).add(r);
-		}	
+		}
 		aliveRats = rs.get(1);
 	}
 
@@ -119,7 +108,7 @@ public class JunctionTile extends Tile {
 	public void getAcceleratedDirection(Rat r, Direction prevDirection) {
 		this.addRat(r, prevDirection.opposite());
 	}
-	
+
 	/**
 	 * Set up a predetermined route for each rat, so no rat will pass by a death rat
 	 */
@@ -145,7 +134,7 @@ public class JunctionTile extends Tile {
 			}
 		}
 	}
-	
+
 	@Override
 	public void moveDeathRat(DeathRat dr, Direction prevDirectionDR) {
 
@@ -157,7 +146,7 @@ public class JunctionTile extends Tile {
 				}
 			}
 		}
-		
+
 		// For now assign random directions to every rat
 		createBuffer();
 		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
@@ -195,13 +184,13 @@ public class JunctionTile extends Tile {
 	public ArrayList<DeathRat> getNextDeathRat() {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 		// TODO
- 
+
 		if (currDeath.isEmpty()) {
 			return new ArrayList<>();
 		}
 
 		setDeathRat(); // Ensures only moving death rats are considered
-		
+
 		for (Direction dir : bufferNextBlock.keySet()) {
 			ArrayList<Rat> r = bufferNextBlock.get(dir);
 			for (Direction prevDirection : currDeath.keySet()) {
