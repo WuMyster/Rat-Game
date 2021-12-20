@@ -959,6 +959,8 @@ public class Main extends Application {
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis(0, GameMaster.getMaxRats(), 1);
 		
+		xAxis.setTickLabelsVisible(false);
+		
 		sbcRatIndicator = new StackedBarChart<>(xAxis, yAxis);
 		
 		XYChart.Series<String, Number> maleNumber = new XYChart.Series<>();
@@ -968,7 +970,7 @@ public class Main extends Application {
 		femaleNumber.getData().add(new XYChart.Data<>("Bob", 0));
 		
 		XYChart.Series<String, Number> rest = new XYChart.Series<>();
-		rest.getData().add(new XYChart.Data<>("Bob", 0));
+		rest.getData().add(new XYChart.Data<>("Bob",GameMaster.getMaxRats()));
 		
 		sbcRatIndicator.getData().add(maleNumber);
 		sbcRatIndicator.getData().add(femaleNumber);
@@ -976,10 +978,7 @@ public class Main extends Application {
 		
 		sbcRatIndicator.setMaxWidth(20);
 		sbcRatIndicator.setMinHeight(CANVAS_HEIGHT);
-		sbcRatIndicator.setLegendVisible(false);
-		
-		sbcRatIndicator.getXAxis().setTickLabelsVisible(false);
-		sbcRatIndicator.getXAxis().setTickMarkVisible(false);	 
+		sbcRatIndicator.setLegendVisible(false);	 
 	}
 	
 	/**

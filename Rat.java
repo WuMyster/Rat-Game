@@ -10,7 +10,6 @@ public class Rat {
 	
 	private boolean isMale;
 	private boolean isPregnant;
-	private boolean isDeathRat;
 	private boolean isSterile;
 	private boolean isBreeding;
 	private int age;
@@ -28,7 +27,6 @@ public class Rat {
 		this.health = 5;
 		this.isBreeding = false;
 		this.isPregnant = false;
-		this.isDeathRat = false;
 		this.isSterile = false;
 		this.age = 0;
 	}
@@ -41,15 +39,13 @@ public class Rat {
 	 * @param isPregnant - whether the rat is currently pregnant.
 	 * @param hp - the rats health.
 	 * @param isSterile - whether the rat is sterile - True = sterile, False = not sterile.
-	 * @param isBreeding - whether the rat is currently bleeding.
 	 * @param isDeathRat - whether the rat is a death rat.
 	 */
-	public Rat(int age, boolean isMale, boolean isPregnant, int hp, boolean isSterile, boolean isBreeding, boolean isDeathRat) {
+	public Rat(int age, boolean isMale, boolean isPregnant, int hp, boolean isSterile, boolean isBreeding) {
 		this.isMale = isMale;
 		this.health = hp;
 		this.isBreeding = isBreeding;
 		this.isPregnant = isPregnant;
-		this.isDeathRat = isDeathRat;
 		this.isSterile = isSterile;
 		this.age = age;
 	}
@@ -62,9 +58,6 @@ public class Rat {
 	public RatType getStatus() {
 		if (isChild()) {
 			return RatType.BABY;
-		} 
-		if (isDeathRat) {
-			return RatType.DEATH;
 		}
 		return isMale ? RatType.MALE : RatType.FEMALE;
 	}
@@ -82,7 +75,11 @@ public class Rat {
 	 * @param newIsMale - whether the rat should be male after the interaction.
 	 */
 	public void setIsMale(boolean newIsMale) {
-		isMale = newIsMale;
+		if (isMale != newIsMale) {
+			System.out.println("ASDF");
+			RatController.changeValue(newIsMale);
+			isMale = newIsMale;
+		}
 	}
 	
 	/**
@@ -124,14 +121,6 @@ public class Rat {
 	}
 	
 	/**
-	 * Gets whether the rat is a death rat.
-	 * @return isDeathRat - true = the rat is a death rat.
-	 */
-	public boolean getDeathRat() {
-		return isDeathRat;
-	}
-	
-	/**
 	 * Sterilises the rat.
 	 * Adult rats will become sterile and can no longer breed.
 	 * Child rats will become sterile adults afterwards.
@@ -166,14 +155,6 @@ public class Rat {
 	
 	public void changeBreed() {
 		isBreeding = !isBreeding;
-	}
-	
-	/**
-	 * Increments the rat age, making it older.
-	 * @deprecated
-	 */
-	public void incrementAge() {
-		age++;
 	}
 	
 	/**
@@ -233,7 +214,6 @@ public class Rat {
 		output += health + ",";
 		output += isSterile + ",";
 		output += isBreeding + ",";
-		output += isDeathRat;
 		return output;
 	}
 	

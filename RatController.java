@@ -56,13 +56,36 @@ public class RatController {
 		return points;
 	}
 	
+	/**
+	 * Returns number of male rats on the board.
+	 * @return number of male rats on the board
+	 */
 	public static int getMaleCounter() {
 		return maleCounter;
 	}
 	
+	/**
+	 * Returns number of female rats on the board.
+	 * @return number of female rats on the board
+	 */
 	public static int getFemaleCounter() {
 		return femaleCounter;
 	}
+	
+	/**
+	 * Changes the counter of male and female rats.
+	 * @param gender {@code true} if the rat turned from female to male
+	 */
+	public static void changeValue(boolean gender) {
+		if (gender) {
+			maleCounter++;
+			femaleCounter--;
+		} else {
+			maleCounter--;
+			femaleCounter++;
+		}
+	}
+	
 	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
 	 * you should have.
@@ -274,8 +297,7 @@ public class RatController {
 		int hp = Integer.parseInt(newRat[3]);
 		boolean isSterile = Boolean.parseBoolean(newRat[4]);
 		boolean isBreeding = Boolean.parseBoolean(newRat[5]);
-		boolean isDeath = Boolean.parseBoolean(newRat[6]);
-		return new Rat(age, isMale, isPregnant, hp, isSterile, isBreeding, isDeath);
+		return new Rat(age, isMale, isPregnant, hp, isSterile, isBreeding);
 	}
 	
 }
