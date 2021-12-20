@@ -79,6 +79,9 @@ public abstract class Tile {
 	 */
 	protected Random rand = new Random();
 	
+	/**
+	 * Determines if this tile needs to be blown.
+	 */
 	protected boolean detontate = false;
 
 	/**
@@ -319,7 +322,7 @@ public abstract class Tile {
 				} else {
 					nextDeath.putIfAbsent(prevDirection, new ArrayList<>());
 					nextDeath.get(prevDirection).add(dr);
-					Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), 
+					GameGUI.addCurrMovement(X_Y_POS, prevDirection.opposite(), 
 							RatType.DEATH, 0);
 				}
 			}
@@ -376,7 +379,7 @@ public abstract class Tile {
 		if (itemOnTile instanceof TimeItem) {
 			((TimeItem) itemOnTile).timer.cancel();
 		}
-		Main.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
+		GameGUI.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
 		itemOnTile = null;
 	}
 

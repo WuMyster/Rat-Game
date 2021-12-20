@@ -97,7 +97,7 @@ public class Bomb extends TimeItem {
 			public void run() {
 				hp--;
 				if (hp >= 0) {
-					Main.editBombCountdown(x, y, hp);
+					GameGUI.editBombCountdown(x, y, hp);
 				}
 
 				if (hp < 0) {

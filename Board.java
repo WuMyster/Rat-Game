@@ -280,28 +280,28 @@ public class Board {
         t = board[boardY - EXTRA_PADDING][boardX];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x, y - 1, hp))) {
-        		Main.addGas(x, y - 1);
+        		GameGUI.addGas(x, y - 1);
         	}
         }
 
         t = board[boardY + EXTRA_PADDING][boardX];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x, y + 1, hp))) {
-        		Main.addGas(x, y + 1);
+        		GameGUI.addGas(x, y + 1);
         	}
         }
         
         t = board[boardY][boardX - EXTRA_PADDING];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x - 1, y , hp))) {
-        		Main.addGas(x - 1, y);
+        		GameGUI.addGas(x - 1, y);
         	}
         }
         
         t = board[boardY][boardX + EXTRA_PADDING];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x + 1, y, hp))) {
-        		Main.addGas(x + 1, y);
+        		GameGUI.addGas(x + 1, y);
         	}
         }
     }
@@ -330,10 +330,10 @@ public class Board {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 				if (board[i][j] == null) {
 					gc.drawImage(grassImage, 
-							x++ * Main.TILE_SIZE, 
-							y * Main.TILE_SIZE, 
-							Main.TILE_SIZE,
-							Main.TILE_SIZE);
+							x++ * GameGUI.TILE_SIZE, 
+							y * GameGUI.TILE_SIZE, 
+							GameGUI.TILE_SIZE,
+							GameGUI.TILE_SIZE);
 				} else if (board[i][j] instanceof TunnelTile) {
 					Image t = new Image("/img/tile.png");
 									
@@ -364,10 +364,10 @@ public class Board {
 						}
 					} 
 					gc.drawImage(t, 
-							x++ * Main.TILE_SIZE, 
-							y * Main.TILE_SIZE, 
-							Main.TILE_SIZE,
-							Main.TILE_SIZE);
+							x++ * GameGUI.TILE_SIZE, 
+							y * GameGUI.TILE_SIZE, 
+							GameGUI.TILE_SIZE,
+							GameGUI.TILE_SIZE);
 				} else {
 					x++;
 				}
@@ -429,7 +429,7 @@ public class Board {
 		
 		// Now adding in death rat movements
 		for (DeathRat dr : deathRatBuffer) {
-			Main.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
+			GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
 		}
 	}
 	

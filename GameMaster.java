@@ -81,7 +81,7 @@ public class GameMaster {
      * Creates and returns a Game Master Scene
      * @return Game Master Scene
      */
-    public static Scene startGameMaster() {
+    public static void startGameMaster() {
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -108,15 +108,12 @@ public class GameMaster {
         	System.out.println("Leaderboard not implemented yet");
         });
         
-        //message
-//        String message = MessageOfDay.getMsgDay();
-
-
         grid.getChildren().addAll(playerLabel, playerInput, loginButton, leaderboardButton);
 
         Scene scene = new Scene(grid, 300, 200);
 
-        return scene;
+        Main.currWindow.setScene(scene);
+        Main.currWindow.show();
     }
 
     /**
@@ -228,7 +225,7 @@ public class GameMaster {
     	}
     	// For now assume no items on board of new game
     	System.out.println("Finished reading file");
-    	Main.gameScreen();
+    	Main.startGameGUI();
     }
     
     /**
@@ -251,7 +248,7 @@ public class GameMaster {
     	for (int i = 0; i < repeat; i++) {
     		items.add(playerInfo.get(counter++));
     	}
-    	Main.gameScreen();
+    	Main.startGameGUI();
     }
     
     /**

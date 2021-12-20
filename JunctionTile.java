@@ -51,10 +51,10 @@ public class JunctionTile extends Tile {
 						for (; i < ratsGoForward; i++) {
 							RatType status = ratList.get(i).getStatus();
 							if (status == RatType.BABY) {
-								Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
+								GameGUI.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
 								tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 							} else {
-								Main.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
+								GameGUI.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
 								tile.addRat(ratList.get(i), goTo.opposite());
 							}
 						}
@@ -70,10 +70,10 @@ public class JunctionTile extends Tile {
 					for (Rat r : ratList) {
 						RatType status = r.getStatus();
 						if (status == RatType.BABY) {
-							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
+							GameGUI.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
 							tile.getAcceleratedDirection(r, goTo.opposite());
 						} else {
-							Main.addCurrMovement(X_Y_POS, goTo, r.getStatus(), 4);
+							GameGUI.addCurrMovement(X_Y_POS, goTo, r.getStatus(), 4);
 							tile.addRat(r, goTo.opposite());
 						}
 					}
@@ -96,7 +96,7 @@ public class JunctionTile extends Tile {
 				if (rats != null) {
 					if (currBlock.get(dir).contains(r)) {
 						this.addRat(r, dir);
-						Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
+						GameGUI.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
 					}
 				}
 			}
@@ -155,7 +155,7 @@ public class JunctionTile extends Tile {
 			for (Rat r : ratsToDoom) {
 				if (r.getStatus() == RatType.BABY) {
 					if (dr.killRat(r, 2)) {
-						Main.addCurrMovement(X_Y_POS, prevDirectionDR, RatType.BABY, 2);
+						GameGUI.addCurrMovement(X_Y_POS, prevDirectionDR, RatType.BABY, 2);
 					} else {
 						slowerRats.add(r);
 					}
@@ -168,7 +168,7 @@ public class JunctionTile extends Tile {
 		ratsToDoom = new ArrayList<>();
 		for (Rat r : slowerRats) {
 			if (dr.killRat(r, 3)) {
-				Main.addCurrMovement(X_Y_POS, prevDirectionDR, r.getStatus(), 1);
+				GameGUI.addCurrMovement(X_Y_POS, prevDirectionDR, r.getStatus(), 1);
 			} else {
 				ratsToDoom.add(r);
 			}

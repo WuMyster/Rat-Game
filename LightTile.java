@@ -41,7 +41,7 @@ public class LightTile extends Tile {
 		if (currList != null) {
 			for (int i = 0; i < currList.size(); i++) {
 				if (dr.killRat(currList.get(i), 1)) {
-					Main.addCurrMovement(X_Y_POS, prevDirection, currList.get(i).getStatus(), 2);
+					GameGUI.addCurrMovement(X_Y_POS, prevDirection, currList.get(i).getStatus(), 2);
 				} else {
 					escaped.add(currList.get(i));
 				}
@@ -57,7 +57,7 @@ public class LightTile extends Tile {
 				
 				for (Rat r : ratList) {
 					if (dr.killRat(r, 2)) {
-						Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0, 2);
+						GameGUI.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0, 2);
 					} else {
 						escaped.add(r);
 					}
@@ -74,7 +74,7 @@ public class LightTile extends Tile {
 			if (currList != null) {
 				for (int i = 0; i < currList.size(); i++) {
 					if (dr.killRat(currList.get(i), 1)) {
-						Main.addCurrMovement(X_Y_POS, prevDirection.opposite(), currList.get(i).getStatus(), 2);
+						GameGUI.addCurrMovement(X_Y_POS, prevDirection.opposite(), currList.get(i).getStatus(), 2);
 					} else {
 						escaped.add(currList.get(i));
 					}
@@ -130,7 +130,7 @@ public class LightTile extends Tile {
 				Direction goTo = prevDirection.opposite();
 				Tile tile = neighbourTiles.get(goTo);
 				for (int i = 0; i < ratList.size(); i++) {
-					Main.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
+					GameGUI.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
 					tile.addRat(ratList.get(i), goTo.opposite());
 				}
 			}
@@ -138,7 +138,7 @@ public class LightTile extends Tile {
 		
 		for (Direction dir : bufferNextBlock.keySet()) {
 			for (Rat r : bufferNextBlock.get(dir)) {
-				Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
+				GameGUI.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
 				this.addRat(r, dir);
 			}
 		}

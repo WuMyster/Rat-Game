@@ -107,7 +107,7 @@ public class PathTile extends Tile {
 			for (Rat r : currList) {
 				if (r.getStatus() == RatType.BABY) {
 					if (dr.killRat(r, 2)) {
-						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
+						GameGUI.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
 					} else {
 						// Should be moved afterwards if more death rats come
 						escaped.add(r); 
@@ -123,7 +123,7 @@ public class PathTile extends Tile {
 			escaped = new ArrayList<>();
 			for (Rat r : currList) {
 				if (dr.killRat(r, 3)) {
-					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
+					GameGUI.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
 				} else {
 					escaped.add(r);
 				}
@@ -149,7 +149,7 @@ public class PathTile extends Tile {
 				Rat r = currList.get(i);
 				if (r.getStatus() == RatType.BABY) {
 					if (dr.killRat(currList.get(i), 2)) {
-						Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
+						GameGUI.addCurrMovement(X_Y_POS, dirToDeath.opposite(), RatType.BABY, 2);
 					} else {
 						escaped.add(r);
 					}
@@ -164,7 +164,7 @@ public class PathTile extends Tile {
 			for (i = 0; i < currList.size(); i++) {
 				Rat r = currList.get(i);
 				if (dr.killRat(currList.get(i), 3)) {
-					Main.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
+					GameGUI.addCurrMovement(X_Y_POS, dirToDeath.opposite(), r.getStatus(), 1);
 				} else {
 					escaped.add(r);
 				}
@@ -212,10 +212,10 @@ public class PathTile extends Tile {
 					ratsGoForward = tile.numsRatsCanEnter(this, ratList.size());
 					for (; i < ratsGoForward; i++) {
 						if (ratList.get(i).isChild()) {
-							Main.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
+							GameGUI.addCurrMovement(X_Y_POS, goTo, RatType.BABY, 4);
 							tile.getAcceleratedDirection(ratList.get(i), goTo.opposite());
 						} else {
-							Main.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
+							GameGUI.addCurrMovement(X_Y_POS, goTo, ratList.get(i).getStatus(), 4);
 							tile.addRat(ratList.get(i), goTo.opposite());
 						}
 					}
@@ -239,7 +239,7 @@ public class PathTile extends Tile {
 				if (rats != null) {
 					if (currBlock.get(dir).contains(r)) {
 						this.addRat(r, dir);
-						Main.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
+						GameGUI.addCurrMovement(X_Y_POS, dir.opposite(), r.getStatus(), 0);
 					}
 				}
 			}

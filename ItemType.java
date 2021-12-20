@@ -2,66 +2,65 @@
 public enum ItemType {
 	POISON {
 		public void draw(int x, int y, int state) {
-			Main.drawPoison(x, y);
+			GameGUI.drawPoison(x, y);
 		}
 
 		public void add(int x, int y, int state) {
-			Main.addPoison(x, y);
+			GameGUI.addPoison(x, y);
 		}
 	},
 	STOPSIGN {
 		public void draw(int x, int y, int state) {
-			Main.drawStopSign(x, y, state);
+			GameGUI.drawStopSign(x, y, state);
 		}
 
 		public void add(int x, int y, int state) {
-			Main.addStopSign(x, y, state);
+			GameGUI.addStopSign(x, y, state);
 		}
 	},
 	STERILISATION {
 		public void draw(int x, int y, int state) {
-			Main.drawSterilise(x, y);
+			GameGUI.drawSterilise(x, y);
 		}
 
 		public void add(int x, int y, int state) {
-			Main.addSterilise(x, y);
+			GameGUI.addSterilise(x, y);
 		}
 	},
 	BOMB {
 		public void draw(int x, int y, int state) {
-			Main.drawBomb(x, y, state);
+			GameGUI.drawBomb(x, y, state);
 		}
 
-		@Override
 		public void add(int x, int y, int state) {
-			Main.addBomb(x, y, state);
+			GameGUI.addBomb(x, y, state);
 		}
 	},
 	SEX_TO_MALE {
 		public void draw(int x, int y, int state) {
-			Main.drawSexToMale(x, y);
+			GameGUI.drawSexToMale(x, y);
 		}
 
 		public void add(int x, int y, int state) {
-			Main.addSexToMale(x, y);
+			GameGUI.addSexToMale(x, y);
 		}
 	},
 	SEX_TO_FEMALE {
 		public void draw(int x, int y, int state) {
-			Main.drawSexToFemale(x, y);
+			GameGUI.drawSexToFemale(x, y);
 		}
 
 		public void add(int x, int y, int state) {
-			Main.addSexToFemale(x, y);
+			GameGUI.addSexToFemale(x, y);
 		}
 	},
 	GAS {
 		public void draw(int x, int y, int state) {
-			Main.drawGas(x, y);
+			GameGUI.drawGas(x, y);
 		}
 
 		public void add(int x, int y, int state) {
-			Main.addGas(x, y);
+			GameGUI.addGas(x, y);
 		}
 	};
 	
