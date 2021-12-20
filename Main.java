@@ -967,13 +967,23 @@ public class Main extends Application {
 		femaleNumber.getData().add(new XYChart.Data<>("Bob", 0));
 		
 		XYChart.Series<String, Number> rest = new XYChart.Series<>();
-		rest.getData().add(new XYChart.Data<>("Bob", 0));
+		rest.getData().add(new XYChart.Data<>("Bob", GameMaster.getMaxRats()));
 		
 		sbcRatIndicator.getData().add(maleNumber);
 		sbcRatIndicator.getData().add(femaleNumber);
 		sbcRatIndicator.getData().add(rest);
 		
 		sbcRatIndicator.setMaxWidth(20);
+		sbcRatIndicator.setMinHeight(CANVAS_HEIGHT);
+		sbcRatIndicator.setLegendVisible(false);
+		
+		// Hides y axis
+		sbcRatIndicator.getYAxis().setTickLabelsVisible(false);
+		sbcRatIndicator.getYAxis().setOpacity(0);
+		
+		// Hides x axis
+		sbcRatIndicator.getXAxis().setTickLabelsVisible(false);
+		sbcRatIndicator.getXAxis().setTickMarkVisible(false);
 		
 		ratIndicatorTimeline();
 	}
