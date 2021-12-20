@@ -6,9 +6,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -49,12 +49,12 @@ public class Main extends Application {
 	/**
 	 * Width of the window in pixels.
 	 */
-	private static final int WINDOW_WIDTH = 960;
+	private static final int WINDOW_WIDTH = 1150;
 
 	/**
 	 * Height of the window in pixels.
 	 */
-	private static final int WINDOW_HEIGHT = 600;
+	private static final int WINDOW_HEIGHT = 650;
 
 	/**
 	 * Width of the game canvas in pixels.
@@ -64,7 +64,7 @@ public class Main extends Application {
 	/**
 	 * Height of the game canvas in pixels.
 	 */
-	private static final int CANVAS_HEIGHT = 550;
+	private static final int CANVAS_HEIGHT = 600;
 
 	/**
 	 * Height and width of a Tile in pixels.
@@ -266,6 +266,8 @@ public class Main extends Application {
 		BorderPane gameRoot = createGameGUI();		
 		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
 		
+		currWindow.setX(200);
+		currWindow.setY(20);
 		currWindow.setScene(scene);
 		currWindow.show();
 	
@@ -934,6 +936,8 @@ public class Main extends Application {
 
 		Label msg = new Label(MessageOfDay.getMsgDay());
 		root.getChildren().add(msg);
+		root.setAlignment(Pos.TOP_CENTER);
+		
 		return root;
 	}
 	
@@ -1074,7 +1078,6 @@ public class Main extends Application {
 	
 	private static void stopGame() {
 		cycler.stop();
-		ratNumberIndicator.stop();
 		setRatIndicator();
 	}
 	
