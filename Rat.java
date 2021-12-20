@@ -92,7 +92,7 @@ public class Rat {
 	}
 	
 	public boolean giveBirth() {
-		return pregnancyCounter == 7 || pregnancyCounter == 3;
+		return pregnancyCounter == 6 || pregnancyCounter == 2;
 	}
 	
 	/**
