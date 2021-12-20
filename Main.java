@@ -247,12 +247,6 @@ public class Main extends Application {
 	 * on the board.
 	 */
 	private static StackedBarChart<Number, String> sbcRatIndicator;
-	
-	/**
-	 * Window for showing the barchart above. Will hopefully be removed 
-	 * if I can change the size of the barchart + other changes.
-	 */
-	private static Stage stageRatIndicator = new Stage();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -916,6 +910,7 @@ public class Main extends Application {
 		root.setTop(createTopMenu());
 		root.setRight(createRightMenu());
 		root.setBottom(createBottomDisplay());
+		root.setLeft(createLeftDisplay());
 
 		m = new Board(GameMaster.getMap(), 17, 11);
 		m.setUpRats(GameMaster.getRats());
@@ -952,7 +947,8 @@ public class Main extends Application {
 	private static Node createLeftDisplay() {
 		VBox root = new VBox();
 		
-		return null;
+		root.getChildren().add(sbcRatIndicator);
+		return root;
 	}
 	
 	/**
@@ -977,10 +973,8 @@ public class Main extends Application {
 		sbcRatIndicator.getData().add(femaleNumber);
 		sbcRatIndicator.getData().add(rest);
 		
-		stageRatIndicator.setX(200);
-		stageRatIndicator.setY(200);
-		stageRatIndicator.setScene(new Scene(sbcRatIndicator, 300, 200));
-		stageRatIndicator.show();
+		sbcRatIndicator.setMaxWidth(20);
+		
 		ratIndicatorTimeline();
 	}
 	
