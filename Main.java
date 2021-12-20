@@ -984,7 +984,7 @@ public class Main extends Application {
 	private static void setRatIndicator() {
 		double a = RatController.getMaleCounter();
 		double b = RatController.getFemaleCounter();
-		double c = 100 - a - b;
+		double c = GameMaster.getMaxRats() - a - b;
 		double[] fd = {a, b, c};
 		
 		int counter = 0;

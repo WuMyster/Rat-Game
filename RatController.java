@@ -57,11 +57,11 @@ public class RatController {
 	}
 	
 	public static int getMaleCounter() {
-		return (maleCounter * 100) / maxNumOfRats;
+		return maleCounter;
 	}
 	
 	public static int getFemaleCounter() {
-		return (femaleCounter * 100) / maxNumOfRats;
+		return femaleCounter;
 	}
 	/**
 	 * Will need to compare number of rats on the map to the max number of rats 
