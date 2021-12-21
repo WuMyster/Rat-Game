@@ -289,7 +289,7 @@ public class RatController {
 	 * @return {@code Rat} from specified input
 	 */
 	private static Rat stringToRat(String ratString) {
-		String[] newRat = ratString.split(",");
+		String[] newRat = ratString.split(Main.FILE_SUB_SEPERATOR);
 		
 		int age = Integer.parseInt(newRat[0]);
 		boolean isMale = Boolean.parseBoolean(newRat[1]);

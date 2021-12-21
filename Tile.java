@@ -247,19 +247,19 @@ public abstract class Tile {
 	 * @return list of rats and their positions in string format
 	 */
 	public ArrayList<String> getRats() {
-		String here = ORIGINAL_X_Y_POS[0] + "," +
+		String here = ORIGINAL_X_Y_POS[0] + Main.FILE_SUB_SEPERATOR +
 				ORIGINAL_X_Y_POS[1];
 		ArrayList<String> out = new ArrayList<>();
 		for (Direction d : nextBlock.keySet()) {
 			for (Rat r : nextBlock.get(d)) {
-				String dir = d.toInt() + "," + here;
-				out.add(r + ";" + dir);
+				String dir = d.toInt() + Main.FILE_SUB_SEPERATOR + here;
+				out.add(r + Main.FILE_MAIN_SEPERATOR + dir);
 			}
 		}
 		for (Direction d : nextDeath.keySet()) {
 			for (DeathRat dr : nextDeath.get(d)) {
 				String dir = d.toInt() + "," + here;
-				out.add(dr + ";" + dir);
+				out.add(dr + Main.FILE_MAIN_SEPERATOR + dir);
 			}
 		}
 		return out;
@@ -273,8 +273,8 @@ public abstract class Tile {
 		if (itemOnTile == null) {
 			return null;
 		}
-		return itemOnTile.toString() + ";" + ORIGINAL_X_Y_POS[0] + "," +
-				ORIGINAL_X_Y_POS[1];
+		return itemOnTile.toString() + Main.FILE_MAIN_SEPERATOR + ORIGINAL_X_Y_POS[0] + 
+				Main.FILE_SUB_SEPERATOR + ORIGINAL_X_Y_POS[1];
 	}
 	
 	/**

@@ -10,7 +10,7 @@ class Poison extends Item {
 
 	public static final String NAME = "Poison";
 	
-	public static final Image IMAGE = new Image("Poison.png");
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "Poison.png");
 	
     /**
      * Health point of item.
@@ -39,7 +39,7 @@ class Poison extends Item {
 	
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

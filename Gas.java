@@ -6,12 +6,25 @@ import java.util.TimerTask;
 import javafx.scene.image.Image;
 
 public class Gas extends TimeItem {
-	
-	public static final Image IMAGE = new Image("./img/Gas.png");
-	
-	public static final String NAME = "Gas";
 
+	/**
+	 * Name of the item.
+	 */
+	public static final String NAME = "Gas";
+	
+	/**
+	 * Image of the Gas Item.
+	 */
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "Gas.png");
+	
+	/**
+	 * x pos of the Gas item.
+	 */
 	private final int x;
+	
+	/**
+	 * y pos of the Gas item.
+	 */
 	private final int y;
 	
     /**
@@ -25,7 +38,7 @@ public class Gas extends TimeItem {
     private static final int RADIUS = 3;
     
     /**
-     * Extra hp for each Gas cloud radious. TODO fix definition
+     * Extra hp for each Gas cloud radius.
      */
     private static final int EXTRA_HP = 5;
     
@@ -35,9 +48,9 @@ public class Gas extends TimeItem {
     private static final int START_HP = 5;
 
     /**
-     * Time between each tick for each Gas item
+     * Time between each tick for each Gas item in milliseconds.
      */
-    private static final int GAS_EXPAND_TIME = 1000; // milliseconds
+    private static final int GAS_EXPAND_TIME = 1000;
 	
 	/**
 	 * Constructs a gas item from an xy position.
@@ -110,7 +123,7 @@ public class Gas extends TimeItem {
 	
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

@@ -238,12 +238,12 @@ public class Rat {
 	 */
 	public String toString() {
 		String output = "";
-		output += age + ",";
-		output += isMale + ",";
-		output += health + ",";
-		output += isSterile + ",";
-		output += isBreeding + ",";
-		output += pregnancyCounter + ",";
+		output += age + Main.FILE_SUB_SEPERATOR;
+		output += isMale + Main.FILE_SUB_SEPERATOR;
+		output += health + Main.FILE_SUB_SEPERATOR;
+		output += isSterile + Main.FILE_SUB_SEPERATOR;
+		output += isBreeding + Main.FILE_SUB_SEPERATOR;
+		output += pregnancyCounter + Main.FILE_SUB_SEPERATOR;
 		return output;
 	}
 	

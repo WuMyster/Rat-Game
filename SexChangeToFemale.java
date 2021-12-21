@@ -13,7 +13,7 @@ public class SexChangeToFemale extends Item {
 	 */
 	public static final String NAME = "toFemale";
 	
-	public static final Image IMAGE = new Image("SexChangeToFemale.png");
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "SexChangeToFemale.png");
 	
     /**
      * Health point of item.
@@ -41,7 +41,7 @@ public class SexChangeToFemale extends Item {
 	
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

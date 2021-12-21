@@ -47,11 +47,6 @@ public enum RatType {
 	private final static String ERR_MSG = "Images are missing, please redownload file, make sure you save a copy of your save files!";
 	
 	/**
-	 * Places where Rat images are found.
-	 */
-	private final static String IMAGE_LOC = "./img/";
-	
-	/**
 	 * Extension of image files.
 	 */
 	private final static String FILE_TYPE = ".png";	
@@ -66,7 +61,7 @@ public enum RatType {
 		this.speed = speed;
 		try {
 			for(int i = 0; i < 4; i++) {
-				image[i] = new Image(IMAGE_LOC + imagePic + i + FILE_TYPE);
+				image[i] = new Image(Main.IMAGE_FILE_LOC + imagePic + i + FILE_TYPE);
 			}
 		} catch (NullPointerException e) {
 			System.err.println(ERR_MSG);

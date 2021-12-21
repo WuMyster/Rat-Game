@@ -78,11 +78,21 @@ public class GameMaster {
      */
     private static boolean answer;
     
+    private static int maxNumOfLevels;
+    
+    private final static String START_NAME = "lvl";
+    
     /**
      * Creates and returns a Game Master Scene
      * @return Game Master Scene
      */
     public static void startGameMaster() {
+    	
+    	maxNumOfLevels = 1;
+    	File f = new File(Main.MAP_FILE_LOC + START_NAME + maxNumOfLevels++ + ".txt");
+    	while (f.exists()) {
+    		f = new File(Main.MAP_FILE_LOC + START_NAME + maxNumOfLevels++ + ".txt");
+    	}
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -136,7 +146,7 @@ public class GameMaster {
     		
     		PrintWriter out = null;
         	try {
-        		out = new PrintWriter("./player/" + playerName + ".txt");
+        		out = new PrintWriter(Main.PLAYER_FILE_LOC + playerName + ".txt");
         		out.print(String.valueOf(maxLevel));
         	} catch (FileNotFoundException e) {
         		e.printStackTrace();
@@ -275,7 +285,7 @@ public class GameMaster {
      * @param currLvl 	the level selected
      */
     private static void createNewGame() {
-    	ArrayList<String> information = getInfoFromFile("./map/lvl" + currLvl + ".txt");
+    	ArrayList<String> information = getInfoFromFile(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
     	
     	if (playerInfo.size() != 1) {
     		boolean overwritePreviousGame = confirmWindow(
@@ -330,7 +340,7 @@ public class GameMaster {
      * @param currLvl	map level number
      */
     private static void loadMapInfo() {
-    	ArrayList<String> information = getInfoFromFile("./map/lvl" + currLvl + ".txt");
+    	ArrayList<String> information = getInfoFromFile(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
     	
     	String[] mSize = information.get(0).split(" ");
 		mapSize = new int[] {Integer.valueOf(mSize[0]), Integer.valueOf(mSize[1])};
@@ -406,8 +416,7 @@ public class GameMaster {
     	// Should get max number of levels from somewhere
     	int x = 0;
     	int y = 1;
-    	
-    	for (int i = 1; i < 4; i++) { // 4 is max number of levels
+    	for (int i = 1; i < maxNumOfLevels - 1; i++) { // 4 is max number of levels
     		Button lvl = new Button(String.valueOf(i));
         	lvl.setOnAction(e ->  {
         		currLvl = Integer.valueOf(lvl.getText());
@@ -440,7 +449,7 @@ public class GameMaster {
      * @param playerInput 	name of the player
      */
     private static void getPlayer() {
-    	File f = new File("./player/" + playerName + ".txt");
+    	File f = new File(Main.PLAYER_FILE_LOC + playerName + ".txt");
     	if (f.isFile()) {
     		playerInfo = getInfoFromFile(f);
     		lvlPage();
@@ -507,7 +516,7 @@ public class GameMaster {
      * @param name	name of the player
      */
     private static void writePlayerInfo(String maxLvl) {
-    	File file = new File("./player/" + playerName + ".txt");
+    	File file = new File(Main.PLAYER_FILE_LOC + playerName + ".txt");
     	try {
 			file.createNewFile();
 			FileWriter writer = new FileWriter(file);

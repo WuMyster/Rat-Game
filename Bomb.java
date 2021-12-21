@@ -29,14 +29,14 @@ public class Bomb extends TimeItem {
 	/**
 	 * Icon of item.
 	 */
-	public static final Image IMAGE = new Image("img/ItemBomb.png");
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "ItemBomb.png");
 
 	/**
 	 * Array holding the variations of countdown images for the bomb.
 	 */
 	public static final Image[] STATES = new Image[] { 
-			new Image("img/ItemBomb1.png"), new Image("img/ItemBomb2.png"),
-			new Image("img/ItemBomb3.png"), new Image("img/ItemBomb4.png")};
+			new Image(Main.IMAGE_FILE_LOC + "ItemBomb1.png"), new Image(Main.IMAGE_FILE_LOC + "ItemBomb2.png"),
+			new Image(Main.IMAGE_FILE_LOC + "ItemBomb3.png"), new Image(Main.IMAGE_FILE_LOC + "ItemBomb4.png")};
 
 	/**
 	 * X position of bomb
@@ -82,6 +82,9 @@ public class Bomb extends TimeItem {
 		return STATES[n];
 	}
 	
+	/**
+	 * Returns state of the Bomb.
+	 */
 	public int getState() {
 		return hp;
 	}
@@ -116,7 +119,7 @@ public class Bomb extends TimeItem {
 
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

@@ -16,7 +16,7 @@ public class Sterilisation extends Item {
 	/**
 	 * Icon of this image.
 	 */
-	public static final Image IMAGE = new Image("/img/Sterilise.png");
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "/Sterilise.png");
 	
     /**
      * Health point of item.
@@ -43,7 +43,7 @@ public class Sterilisation extends Item {
 	
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

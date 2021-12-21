@@ -16,7 +16,7 @@ public class StopSign extends Item {
 	/**
 	 * Icon of this image.
 	 */
-	public static final Image IMAGE = new Image("/img/StopSign2.png");
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "StopSign2.png");
 	
 	/**
 	 * Max number of images - 1.
@@ -39,8 +39,8 @@ public class StopSign extends Item {
 	 * TODO change divider so all images are used
 	 */
 	private static final Image[] STATES = new Image[] {
-			new Image("/img/StopSign0.png"),
-			new Image("/img/StopSign1.png"),
+			new Image(Main.IMAGE_FILE_LOC + "StopSign0.png"),
+			new Image(Main.IMAGE_FILE_LOC + "StopSign1.png"),
 			IMAGE
 	};
 	
@@ -127,7 +127,7 @@ public class StopSign extends Item {
 	 */
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

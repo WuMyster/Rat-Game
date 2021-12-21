@@ -313,14 +313,14 @@ public class Board {
 	 */
 	public void drawBoard(GraphicsContext gc) {
 		
-		Image grassImage = new Image("Grass.png");
+		Image grassImage = new Image(Main.IMAGE_FILE_LOC + "Grass.png");
 		Image[] tunnelImagesEntrance = new Image[4];
 		for(int i = 0; i < 4; i++) {
-			tunnelImagesEntrance[i] = new Image("/img/Tunnel" + i + ".png");
+			tunnelImagesEntrance[i] = new Image(Main.IMAGE_FILE_LOC + "Tunnel" + i + ".png");
 		}
 		Image[] tunnelImages = new Image[2];
 		for(int i = 0; i < 2; i++) {
-			tunnelImages[i] = new Image("/img/TunnelF" + i + ".png");
+			tunnelImages[i] = new Image(Main.IMAGE_FILE_LOC + "TunnelF" + i + ".png");
 		}
 		
 		int x = 0;
@@ -335,7 +335,7 @@ public class Board {
 							GameGUI.TILE_SIZE,
 							GameGUI.TILE_SIZE);
 				} else if (board[i][j] instanceof TunnelTile) {
-					Image t = new Image("/img/tile.png");
+					Image t = new Image(Main.IMAGE_FILE_LOC + "tile.png");
 									
 					
 					// Check for NESW entrance
@@ -440,14 +440,14 @@ public class Board {
 	public void setUpRats(ArrayList<String> rats) {
 		for (String str : rats) {
 			Rat createR;
-			String[] spl = str.split(";");
-			String[] splD = spl[1].split(",");
+			String[] spl = str.split(Main.FILE_MAIN_SEPERATOR);
+			String[] splD = spl[1].split(Main.FILE_SUB_SEPERATOR);
 			Direction d = Direction.toD(Integer.parseInt(splD[0]));
-			if (spl[0].split(",")[0].equals(DeathRat.NAME)) {
+			if (spl[0].split(Main.FILE_SUB_SEPERATOR)[0].equals(DeathRat.NAME)) {
 				if (spl[0].length() == 1) {
 					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2])); // Only for new start of levels
 				} else {
-					placeRat(new DeathRat(Integer.parseInt(spl[0].split(",")[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+					placeRat(new DeathRat(Integer.parseInt(spl[0].split(Main.FILE_SUB_SEPERATOR)[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 				}
 			} else {
 				if (spl[0].length() == 1) {
@@ -467,9 +467,9 @@ public class Board {
 	public void setUpItems(ArrayList<String> items) {
 		if (items != null) {
 			for (String i : items) {
-				String[] it = i.split(";");
-				String[] desc = it[0].split(",");
-				String[] loc = it[1].split(",");
+				String[] it = i.split(Main.FILE_MAIN_SEPERATOR);
+				String[] desc = it[0].split(Main.FILE_SUB_SEPERATOR);
+				String[] loc = it[1].split(Main.FILE_SUB_SEPERATOR);
 				int x = Integer.parseInt(loc[1]) * EXTRA_PADDING;
 				int y = Integer.parseInt(loc[0]) * EXTRA_PADDING;
 				Item item = Item.toItem(desc[0], Integer.parseInt(desc[1]), 

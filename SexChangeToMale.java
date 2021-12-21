@@ -17,7 +17,7 @@ public class SexChangeToMale extends Item {
 	/**
 	 * Icon of this item.
 	 */
-	public static final Image IMAGE = new Image("/img/SexChangeToMale.png");
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "SexChangeToMale.png");
 	
     /**
      * Sets item health to 1.
@@ -45,7 +45,7 @@ public class SexChangeToMale extends Item {
 	
 	@Override
 	public String toString() {
-		String out = NAME + "," + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
 		return out;
 	}
 }

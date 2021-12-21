@@ -4,9 +4,15 @@ import javafx.scene.image.Image;
 
 public class DeathRat {
 	
+	/**
+	 * Name of DeathRat.
+	 */
 	public static final String NAME = "D";
 	
-	public static final Image IMAGE = new Image("img/ItemDeathRat.png");
+	/**
+	 * Icon of Death Rat.
+	 */
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "ItemDeathRat.png");
 	
 	/**
 	 * XY position on the board the death rat starts from.
@@ -37,6 +43,11 @@ public class DeathRat {
 	 * Time it stays still on tile in tile time.
 	 */
 	private static int STOP_TIME = 5;
+	
+	/**
+	 * Default distance of the Death Rat.
+	 */
+	private static int DEFAULT_MOVE = 4;
 	
 	/**
 	 * Constructor for Death Rat. Does not interact with items other
@@ -104,7 +115,7 @@ public class DeathRat {
 	public void initalMove(int[] xyPos, Direction d) {
 		this.xyPos = xyPos;
 		this.d = d;
-		this.move = 4; // TODO chang to constant
+		this.move = DEFAULT_MOVE;
 	}
 	
 	/**
@@ -148,6 +159,6 @@ public class DeathRat {
 	}	
 	
 	public String toString() {
-		return String.valueOf(hp);
+		return NAME + Main.FILE_SUB_SEPERATOR + String.valueOf(hp);
 	}
 }
