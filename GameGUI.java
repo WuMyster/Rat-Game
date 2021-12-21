@@ -720,7 +720,7 @@ public class GameGUI {
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
 
-		currLevel = new Label("Level xx");
+		currLevel = new Label("Level\n" + String.valueOf(GameMaster.getLvlNum()));
 		currLevel.setFont(new Font(20));
 		currLevel.setTextAlignment(TextAlignment.CENTER);
 		root.getChildren().add(currLevel);
@@ -1023,7 +1023,6 @@ public class GameGUI {
 		// Stop conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			stopGame();
-			System.out.println("Game has finished - invalid number of rats");
 			if (RatController.getFemaleCounter() + RatController.getMaleCounter() == 0) {
 				GameMaster.gameEndWin();
 			} else {
@@ -1031,8 +1030,7 @@ public class GameGUI {
 			}
 		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) { // Time out of bounds
 			stopGame();
-			System.out.println("Game has finished - time ran out");
-			// Pass control back to game master, game has finished
+			GameMaster.gameEndTimeEnd();
 		} else if (playerStopGame) { // Player stops the game
 			stopGame();
 			saveState();

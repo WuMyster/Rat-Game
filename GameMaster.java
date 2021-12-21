@@ -66,7 +66,7 @@ public class GameMaster {
     /**
      * Current level number game is on.
      */
-    private static int lvlNum = Integer.MIN_VALUE;
+    private static int currLvl = Integer.MIN_VALUE;
     
     /**
      * Number of points achieved so far in the game.
@@ -99,7 +99,10 @@ public class GameMaster {
 
         Button loginButton = new Button("Load Player");
         GridPane.setConstraints(loginButton, 1, 3);
-        loginButton.setOnAction(e -> GameMaster.getPlayer(playerInput));
+        loginButton.setOnAction(e -> {
+        	playerName = playerInput.getText();
+        	GameMaster.getPlayer();
+        });
         
 
         Button leaderboardButton = new Button("Check Leaderboard");
@@ -119,33 +122,43 @@ public class GameMaster {
     
     public static void gameEndTooManyRats() {
     	String msg = "There are too many rats!";
-    	gameEnd(msg);
+    	gameEnd(msg, false);
     }
     
     public static void gameEndTimeEnd() {
     	String msg = "You ran out of time!";
-    	gameEnd(msg);
+    	gameEnd(msg, false);
     }
-    
-    public static void gameEndWin() {    	
-    	PrintWriter out = null;
-    	try {
-    		out = new PrintWriter("./player/" + playerName + ".txt");
-    		out.print(maxLevel + 1);
-    	} catch (FileNotFoundException e) {
-    		e.printStackTrace();
-    	} finally {
-    		out.close();
-    	}
 
+	public static void gameEndWin() {
+    	if (currLvl == maxLevel) {
+    		maxLevel++;
+    		
+    		PrintWriter out = null;
+        	try {
+        		out = new PrintWriter("./player/" + playerName + ".txt");
+        		out.print(String.valueOf(maxLevel));
+        	} catch (FileNotFoundException e) {
+        		e.printStackTrace();
+        	} finally {
+        		out.close();
+        	}
+    	}
+    	
     	String msg = "Congratulations!\nYou've finished the game";
-    	gameEnd(msg);
+    	gameEnd(msg, true);
     }
 
     /**
-     * 
+     * End of game screen, allows user to choose menu level or
+     * redo level/ next level depending on if they've finished the level.
      */
-    private static void gameEnd(String msg) {
+    private static void gameEnd(String msg, boolean good) {
+    	
+    	// Clears the user profile
+    	playerInfo = new ArrayList<>();
+    	playerInfo.add(String.valueOf(maxLevel));
+    	
     	GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(8);
@@ -158,17 +171,22 @@ public class GameMaster {
         GridPane.setConstraints(lvlPage, 0, 1);
         lvlPage.setOnAction(e -> lvlPage());
         
-        Button nextLevel = new Button("Next level");
+        Button nextLevel;
+        if (good) {
+        	// Need to check if there is a next level
+	        nextLevel = new Button("Next level");
+	        nextLevel.setOnAction(null);
+        } else {
+        	nextLevel = new Button("Redo level");
+	        nextLevel.setOnAction(e -> createNewGame());
+        }
         GridPane.setConstraints(nextLevel, 1, 1);
-        nextLevel.setOnAction(null);
-        
         grid.getChildren().addAll(mes, lvlPage, nextLevel);
 
         Scene scene = new Scene(grid, 300, 200);
 
         Main.currWindow.setScene(scene);
         Main.currWindow.show();
-    	
     }
     
     /**
@@ -176,7 +194,7 @@ public class GameMaster {
      * @return current level number
      */
     public static int getLvlNum() {
-    	return lvlNum;
+    	return currLvl;
     }
     
     /**
@@ -254,10 +272,10 @@ public class GameMaster {
     /**
      * Gets the information of the level and set up values before calling
      * game window.
-     * @param lvlNum 	the level selected
+     * @param currLvl 	the level selected
      */
     private static void createNewGame() {
-    	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
+    	ArrayList<String> information = getInfoFromFile("./map/lvl" + currLvl + ".txt");
     	
     	if (playerInfo.size() != 1) {
     		boolean overwritePreviousGame = confirmWindow(
@@ -288,7 +306,7 @@ public class GameMaster {
      */
     private static void loadPrevGame() {
     	// 0 is taken up by max level achieved by player
-    	lvlNum = Integer.valueOf(playerInfo.get(0));
+    	currLvl = Integer.valueOf(playerInfo.get(0));
     	loadMapInfo();
     	
     	pointsAccumulated = Integer.valueOf(playerInfo.get(2));
@@ -309,10 +327,10 @@ public class GameMaster {
     /**
      * Loads common information about the map.
      * 
-     * @param lvlNum	map level number
+     * @param currLvl	map level number
      */
     private static void loadMapInfo() {
-    	ArrayList<String> information = getInfoFromFile("./map/lvl" + lvlNum + ".txt");
+    	ArrayList<String> information = getInfoFromFile("./map/lvl" + currLvl + ".txt");
     	
     	String[] mSize = information.get(0).split(" ");
 		mapSize = new int[] {Integer.valueOf(mSize[0]), Integer.valueOf(mSize[1])};
@@ -392,7 +410,7 @@ public class GameMaster {
     	for (int i = 1; i < 4; i++) { // 4 is max number of levels
     		Button lvl = new Button(String.valueOf(i));
         	lvl.setOnAction(e ->  {
-        		lvlNum = Integer.valueOf(lvl.getText());
+        		currLvl = Integer.valueOf(lvl.getText());
         		createNewGame();
         	});
         	lvl.setDisable(i > maxLevel);
@@ -421,8 +439,7 @@ public class GameMaster {
      * Attempts to get the information about the player.
      * @param playerInput 	name of the player
      */
-    private static void getPlayer(TextField playerInput) {
-    	playerName = playerInput.getText();
+    private static void getPlayer() {
     	File f = new File("./player/" + playerName + ".txt");
     	if (f.isFile()) {
     		playerInfo = getInfoFromFile(f);
@@ -431,7 +448,7 @@ public class GameMaster {
     		boolean createNewPlayer = confirmWindow("Player doesn't exist\n" + 
     				"Would you like to create\na new player?");
     		if (createNewPlayer) {
-    			createNewPlayer(playerName);
+    			writePlayerInfo("1");
     			lvlPage();
     		}
     	}
@@ -489,16 +506,16 @@ public class GameMaster {
      * Creates a new player with default values.
      * @param name	name of the player
      */
-    private static void createNewPlayer(String name) {
-    	File file = new File("./player/" + name + ".txt");
+    private static void writePlayerInfo(String maxLvl) {
+    	File file = new File("./player/" + playerName + ".txt");
     	try {
 			file.createNewFile();
 			FileWriter writer = new FileWriter(file);
-    		writer.write("1");
+    		writer.write(maxLvl);
     		writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	playerInfo.add("1");
+    	playerInfo.add(maxLvl);
     }
 }
