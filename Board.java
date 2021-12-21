@@ -45,12 +45,11 @@ public class Board {
 	 */
 	private static ArrayList<DeathRat> deathRatBuffer;
 
-	// ? Is final in the correct place? Should this be public?
 	/**
 	 * Constants of Tile letters from string to Grass Tile, current implementation
 	 * sets this to be {@code null}.
 	 */
-	private static final char GRASS_TILE = 'G';
+	private final static char GRASS_TILE = 'G';
 
 	/**
 	 * Constants of Tile letters from string to Path Tile.
@@ -63,7 +62,7 @@ public class Board {
 	private final static char JUNCTION_TILE = 'J';
 
 	/**
-	 * Constants of Tile letters from string to Tunnel Tile. TODO
+	 * Constants of Tile letters from string to Tunnel Tile.
 	 */
 	private final static char TUNNEL_TILE = 'T';
 
@@ -445,9 +444,16 @@ public class Board {
 			Direction d = Direction.toD(Integer.parseInt(splD[0]));
 			if (spl[0].split(Main.FILE_SUB_SEPERATOR)[0].equals(DeathRat.NAME)) {
 				if (spl[0].length() == 1) {
-					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2])); // Only for new start of levels
+					placeRat(new DeathRat(), 
+							d, 
+							Integer.parseInt(splD[1]), 
+							Integer.parseInt(splD[2]));
 				} else {
-					placeRat(new DeathRat(Integer.parseInt(spl[0].split(Main.FILE_SUB_SEPERATOR)[1])), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+					placeRat(new DeathRat(
+							Integer.parseInt(spl[0].split(Main.FILE_SUB_SEPERATOR)[1])), 
+							d, 
+							Integer.parseInt(splD[1]), 
+							Integer.parseInt(splD[2]));
 				}
 			} else {
 				if (spl[0].length() == 1) {
@@ -455,7 +461,8 @@ public class Board {
 				} else {
 					createR = RatController.addRat(spl[0]);
 				}
-				placeRat(createR, d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				placeRat(createR, d, Integer.parseInt(splD[1]), 
+						Integer.parseInt(splD[2]));
 			}
 		}
 	}
@@ -477,7 +484,9 @@ public class Board {
 				
 				Tile t = board[y][x];
 				t.setTileItem(item);
-				ItemType.fromItem(item).add(x / EXTRA_PADDING, y / EXTRA_PADDING, item.getState());
+				ItemType.fromItem(item).add(x / EXTRA_PADDING, 
+						y / EXTRA_PADDING, 
+						item.getState());
 				if (item instanceof TimeItem) {
 					((TimeItem) item).itemAction();
 				}
@@ -541,7 +550,9 @@ public class Board {
 				case PATH_TILE -> board[i][j] = new PathTile(i, j);
 				case JUNCTION_TILE -> board[i][j] = new JunctionTile(i, j);
 				case TUNNEL_TILE -> board[i][j] = new TunnelTile(i, j);
-				default -> { System.out.println("Map error!"); System.exit(0);}
+				default -> { 
+					System.out.println("Map error!"); 
+					System.exit(0);}
 				}
 				board[i][++j] = new LightTile(i, j);
 			}
@@ -562,18 +573,18 @@ public class Board {
 				if (board[i][j] instanceof LightTile) {
 					int counter = 0;
 					if (i != 0) {
-						counter += check(board[i - 1][j]) ? 1 : 0;
+						counter += isPlaceableTile(board[i - 1][j]) ? 1 : 0;
 					}
 					if (i != yHeight * EXTRA_PADDING - 1) {
-						counter += check(board[i + 1][j]) ? 1 : 0;
+						counter += isPlaceableTile(board[i + 1][j]) ? 1 : 0;
 					}
 
 					if (j != 0) {
-						counter += check(board[i][j - 1]) ? 1 : 0;
+						counter += isPlaceableTile(board[i][j - 1]) ? 1 : 0;
 					}
 					
 					if (j != xHeight * EXTRA_PADDING - 1) {
-						counter += check(board[i][j + 1]) ? 1 : 0;
+						counter += isPlaceableTile(board[i][j + 1]) ? 1 : 0;
 					}
 
 					if (counter < 2) {
@@ -582,21 +593,6 @@ public class Board {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Checks if item can be added to this tile.
-	 * 
-	 * @param t tile to check
-	 * @return {@code true} if item can be placed on this tile
-	 */
-	private boolean check(Tile t) {
-		if (t == null) {
-			return false;
-		} else if (t instanceof LightTile) {
-			return false;
-		}
-		return true;
 	}
 
 	/**
