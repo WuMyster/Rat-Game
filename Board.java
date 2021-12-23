@@ -573,18 +573,18 @@ public class Board {
 				if (board[i][j] instanceof LightTile) {
 					int counter = 0;
 					if (i != 0) {
-						counter += isPlaceableTile(board[i - 1][j]) ? 1 : 0;
+						counter += check(board[i - 1][j]) ? 1 : 0;
 					}
 					if (i != yHeight * EXTRA_PADDING - 1) {
-						counter += isPlaceableTile(board[i + 1][j]) ? 1 : 0;
+						counter += check(board[i + 1][j]) ? 1 : 0;
 					}
 
 					if (j != 0) {
-						counter += isPlaceableTile(board[i][j - 1]) ? 1 : 0;
+						counter += check(board[i][j - 1]) ? 1 : 0;
 					}
 					
 					if (j != xHeight * EXTRA_PADDING - 1) {
-						counter += isPlaceableTile(board[i][j + 1]) ? 1 : 0;
+						counter += check(board[i][j + 1]) ? 1 : 0;
 					}
 
 					if (counter < 2) {
@@ -594,7 +594,21 @@ public class Board {
 			}
 		}
 	}
-
+	
+	/**
+	 * Checks if item can be added to this tile.
+	 * 
+	 * @param t tile to check
+	 * @return {@code true} if item can be placed on this tile
+	 */
+	private boolean check(Tile t) {
+		if (t == null) {
+			return false;
+		} else if (t instanceof LightTile) {
+			return false;
+		}
+		return true;
+	}
 	/**
 	 * Converts the map into a graph.
 	 */
