@@ -180,6 +180,11 @@ public class GameGUI {
 	private static Label currPoints;
 	
 	/**
+	 * Time left to finish the game.
+	 */
+	private static Label currTime;
+	
+	/**
 	 * Location of all items.
 	 */
 	private static HashMap<ItemType, ArrayList<int[]>> itemPlace;
@@ -198,17 +203,17 @@ public class GameGUI {
 	 * The main cycle that runs the game.
 	 */
 	private static Timeline cycler;
+	
+	/**
+	 * Time limit of the game.
+	 */
+	private static Timeline timeLimit;
 
 	/**
 	 * Number of steps rat has taken during current iteration of rat movement. 2x
 	 * for baby rats and death rats.
 	 */
 	private static int step;
-
-	/**
-	 * Time when the game started.
-	 */
-	private static LocalTime startTime;
 
 	/**
 	 * Max time to complete game in seconds.
@@ -247,6 +252,11 @@ public class GameGUI {
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
 		cycler.play();
+		
+		timeLimit = new Timeline(new KeyFrame(Duration.seconds(1), event -> decrementTimer()));
+		timeLimit.setCycleCount(Animation.INDEFINITE); //Know this isn't infinite, but will think about this
+														// Can it call method when count is over?
+		timeLimit.play();
 	}
 
 	/**
@@ -674,11 +684,12 @@ public class GameGUI {
 	}
 
 	/**
-	 * Creates the top menu bar. Contains menu options.
+	 * Creates the top menu bar. Contains menu options and timer.
+	 * Will need to reorganise.
 	 * 
 	 * @return the menu
 	 */
-	private static HBox createTopMenu() {
+	private static Pane createTopMenu() {
 		HBox root = new HBox();
 		root.setSpacing(10);
 		root.setPadding(new Insets(10, 10, 10, 10));
@@ -701,11 +712,8 @@ public class GameGUI {
 			playerStopGame = true;
 		});
 		
-		Button move = new Button("Move rats");
-		root.getChildren().addAll(move);
-		move.setOnAction(e -> {
-			runCycle();
-		});
+		currTime = new Label("Time xx");
+		root.getChildren().add(currTime);
 
 		return root;
 	}
@@ -872,7 +880,6 @@ public class GameGUI {
 		
 		GameGUI.playerName = GameMaster.getName();
 		
-		GameGUI.startTime = LocalTime.now();
 		GameGUI.maxTime = GameMaster.getMaxTime();
 		RatController.setRatController(GameMaster.getMaxRats(),
 				GameMaster.getPoints());
@@ -1028,22 +1035,36 @@ public class GameGUI {
 			} else {
 				GameMaster.gameEndTooManyRats();
 			}
-		} else if (LocalTime.now().getSecond() - startTime.getSecond() > maxTime) { // Time out of bounds
-			stopGame();
-			GameMaster.gameEndTimeEnd();
 		} else if (playerStopGame) { // Player stops the game
 			stopGame();
 			saveState();
 		} // Otherwise keep going
 	}
 	
+	private static void decrementTimer() {
+		maxTime--;
+		currTime.setText(String.valueOf(maxTime));
+		if (maxTime == 0) { // Game over
+			stopGame();
+			GameMaster.gameEndTimeEnd();
+		}
+		
+	}
+	
+	/**
+	 * Stops the game
+	 */
 	private static void stopGame() {
 		cycler.stop();
+		timeLimit.stop();
 		setRatIndicator();
 	}
 	
+	/**
+	 * Saves the state of the game
+	 */
 	private static void saveState() {
-		m.saveState("./player/" + playerName + ".txt");
+		m.saveState(Main.PLAYER_FILE_LOC + playerName + ".txt");
 	}
 
 	/**
