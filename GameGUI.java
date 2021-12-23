@@ -104,36 +104,36 @@ public class GameGUI {
 	 */
 	private static ImageView draggableBomb = new ImageView();
 
-    /**
-     * Draggable image for sex change (Male to Female) item.
-     */
+	/**
+	 * Draggable image for sex change (Male to Female) item.
+	 */
 	private static ImageView draggableSexToFemale = new ImageView();
 
-    /**
-     * Draggable image for sex change (Female to Male) item.
-     */
-    private static ImageView draggableSexToMale = new ImageView();
+	/**
+	 * Draggable image for sex change (Female to Male) item.
+	 */
+	private static ImageView draggableSexToMale = new ImageView();
 
-    /**
-     * Draggable image for sterilise item.
-     */
-    private static ImageView draggableSterilise = new ImageView();
+	/**
+	 * Draggable image for sterilise item.
+	 */
+	private static ImageView draggableSterilise = new ImageView();
 
-    /**
-     * Draggable image for death rat.
-     */
-    private static ImageView draggableDeathRat = new ImageView();
+	/**
+	 * Draggable image for death rat.
+	 */
+	private static ImageView draggableDeathRat = new ImageView();
 
 	/**
 	 * Draggable image for poison.
 	 */
-    private static ImageView draggablePoison = new ImageView();
+	private static ImageView draggablePoison = new ImageView();
 
-    /**
+	/**
 	 * Draggable image for poison.
 	 */
-    private static ImageView draggableGas = new ImageView();
-    
+	private static ImageView draggableGas = new ImageView();
+
 	/**
 	 * Board of the game
 	 */
@@ -178,12 +178,12 @@ public class GameGUI {
 	 * Number of points accumulated in level so far.
 	 */
 	private static Label currPoints;
-	
+
 	/**
 	 * Time left to finish the game.
 	 */
 	private static Label currTime;
-	
+
 	/**
 	 * Location of all items.
 	 */
@@ -203,7 +203,7 @@ public class GameGUI {
 	 * The main cycle that runs the game.
 	 */
 	private static Timeline cycler;
-	
+
 	/**
 	 * Time limit of the game.
 	 */
@@ -219,44 +219,43 @@ public class GameGUI {
 	 * Max time to complete game in seconds.
 	 */
 	private static int maxTime;
-	
+
 	/**
 	 * Players name.
 	 */
 	private static String playerName;
-	
+
 	/**
 	 * If user themselves has told the game to stop.
 	 */
 	private static boolean playerStopGame;
-	
+
 	/**
-	 * Stacked barchart showing the number of male and female rats alive
-	 * on the board.
+	 * Stacked barchart showing the number of male and female rats alive on the
+	 * board.
 	 */
 	private static StackedBarChart<String, Number> sbcRatIndicator;
 
 	/**
-	 * Creates and displays the game window, the rat alive indicator
-	 * and starts the game.
+	 * Creates and displays the game window, the rat alive indicator and starts the
+	 * game.
 	 */
 	public static void startGameScreen() {
-		BorderPane gameRoot = createGameGUI();		
+		BorderPane gameRoot = createGameGUI();
 		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
-		
+
 		Main.currWindow.setX(200);
 		Main.currWindow.setY(20);
 		Main.currWindow.setScene(scene);
 		Main.currWindow.show();
-	
+
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);
-		cycler.play();
-		
+
 		timeLimit = new Timeline(new KeyFrame(Duration.seconds(1), event -> decrementTimer()));
-		timeLimit.setCycleCount(Animation.INDEFINITE); //Know this isn't infinite, but will think about this
+		timeLimit.setCycleCount(Animation.INDEFINITE); // Know this isn't infinite, but will think about this
 														// Can it call method when count is over?
-		timeLimit.play();
+		playGame();
 	}
 
 	/**
@@ -280,10 +279,10 @@ public class GameGUI {
 	/**
 	 * Adds to list of Rat movements on the game canvas.
 	 * 
-	 * @param pos  xy position of the rat
-	 * @param dir  direction the rat is facing
-	 * @param rt   type of rat
-	 * @param move movement status of rat
+	 * @param pos   xy position of the rat
+	 * @param dir   direction the rat is facing
+	 * @param rt    type of rat
+	 * @param move  movement status of rat
 	 * @param steps move limit of the rat
 	 */
 	public static void addCurrMovement(int[] pos, Direction dir, RatType rt, int move, int steps) {
@@ -294,12 +293,13 @@ public class GameGUI {
 
 	/**
 	 * Removes items from board.
+	 * 
 	 * @param item the item to be removed
-	 * @param pos x y coordinates of where item is located on board.
+	 * @param pos  x y coordinates of where item is located on board.
 	 */
 	public static void removeItem(ItemType it, int[] pos) {
 		ArrayList<int[]> arr = itemPlace.get(it);
-		
+
 		if (arr != null) {
 			int[] a = null;
 			for (int[] i : arr) {
@@ -315,10 +315,11 @@ public class GameGUI {
 
 	/**
 	 * Reacts to item that is dragged onto canvas.
+	 * 
 	 * @param event The drag event itself which contains data about the drag that
 	 *              occured.
 	 */
-	public static void itemCanvasDragDropOccurred(DragEvent event) {		
+	public static void itemCanvasDragDropOccurred(DragEvent event) {
 		if (event.getGestureSource() == draggableStop) {
 			placeStopSign(event);
 		} else if (event.getGestureSource() == draggableBomb) {
@@ -339,13 +340,13 @@ public class GameGUI {
 			System.err.println("Dragging fail!!");
 		}
 	}
-	
+
 	/**
 	 * Redraws all items.
 	 */
 	private static void drawItems() {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		for (ItemType it : ItemType.values()) {
 			try {
 				ArrayList<int[]> loc = itemPlace.get(it);
@@ -376,25 +377,26 @@ public class GameGUI {
 			addStopSign((int) x, (int) y, StopSign.MAX_STATES);
 		}
 	}
-	 
+
 	/**
 	 * Adds a StopSign to the board and draws it.
 	 * 
-	 * @param x 		x position of the StopSign
-	 * @param y 		y position of the StopSign
-	 * @param states	the state of the StopSign
+	 * @param x      x position of the StopSign
+	 * @param y      y position of the StopSign
+	 * @param states the state of the StopSign
 	 */
 	public static void addStopSign(int x, int y, int states) {
 		itemPlace.putIfAbsent(ItemType.STOPSIGN, new ArrayList<>());
-		itemPlace.get(ItemType.STOPSIGN).add(new int[] {y, x, states});
+		itemPlace.get(ItemType.STOPSIGN).add(new int[] { y, x, states });
 		drawStopSign(x, y, states);
 	}
-	
+
 	/**
 	 * Draws a stop sign on this location on the board.
-	 * @param x 		x position of the StopSign
-	 * @param y 		y posision of the StopSign
-	 * @param state 	the state of the StopSign
+	 * 
+	 * @param x     x position of the StopSign
+	 * @param y     y posision of the StopSign
+	 * @param state the state of the StopSign
 	 */
 	public static void drawStopSign(int x, int y, int state) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
@@ -421,13 +423,13 @@ public class GameGUI {
 		}
 	}
 
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     * @author Andrew Wu
-     */
+	/**
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 * @author Andrew Wu
+	 */
 	private static void placeBomb(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
@@ -436,38 +438,40 @@ public class GameGUI {
 			addBomb((int) x, (int) y, Bomb.START_COUNTDOWN);
 		}
 	}
-	
+
 	/**
-	 * Adds a Bomb Object onto the board with specified x y coorindates
-	 * and draws it.
+	 * Adds a Bomb Object onto the board with specified x y coorindates and draws
+	 * it.
 	 * 
-	 * @param x		x position of the Bomb
-	 * @param y		y position of the Bomb
-	 * @param state	state of the Bomb
+	 * @param x     x position of the Bomb
+	 * @param y     y position of the Bomb
+	 * @param state state of the Bomb
 	 */
 	public static void addBomb(int x, int y, int state) {
 		itemPlace.putIfAbsent(ItemType.BOMB, new ArrayList<>());
-		itemPlace.get(ItemType.BOMB).add(new int[] {y, x, state });
+		itemPlace.get(ItemType.BOMB).add(new int[] { y, x, state });
 		drawBomb(x, y, state);
 	}
-	
+
 	/**
 	 * Draw a bomb on this location on the board.
-	 * @param x 	x position of the Bomb
-	 * @param y 	y position of the Bomb
-	 * @param state	state of the Bomb
+	 * 
+	 * @param x     x position of the Bomb
+	 * @param y     y position of the Bomb
+	 * @param state state of the Bomb
 	 */
 	public static void drawBomb(int x, int y, int state) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(Bomb.getImage(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
 
-    /**
-     * Updates value of bomb responsible for the remaining time till detonation.
-     * @param x x-coordinate of bomb placement
-     * @param y y-coordinate of bomb placement
-     * @param state remaining time
-     */
+	/**
+	 * Updates value of bomb responsible for the remaining time till detonation.
+	 * 
+	 * @param x     x-coordinate of bomb placement
+	 * @param y     y-coordinate of bomb placement
+	 * @param state remaining time
+	 */
 	public static void editBombCountdown(int x, int y, int state) {
 		ArrayList<int[]> bombPlace = itemPlace.get(ItemType.BOMB);
 		for (int[] i : bombPlace) {
@@ -478,13 +482,13 @@ public class GameGUI {
 		drawBomb(x, y, state);
 	}
 
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     * @author Andrew Wu
-     */
+	/**
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 * @author Andrew Wu
+	 */
 	private static void placePoison(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
@@ -493,15 +497,16 @@ public class GameGUI {
 			addPoison((int) x, (int) y);
 		}
 	}
-	
+
 	public static void addPoison(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.POISON, new ArrayList<>());
-		itemPlace.get(ItemType.POISON).add(new int[] {y, x, -1 });
+		itemPlace.get(ItemType.POISON).add(new int[] { y, x, -1 });
 		drawPoison(x, y);
 	}
-	
+
 	/**
 	 * Draws a Poison on this location on the board.
+	 * 
 	 * @param x x position of the Poison
 	 * @param y y posision of the Poison
 	 */
@@ -510,13 +515,13 @@ public class GameGUI {
 		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     * @author Andrew Wu
-     */
+	/**
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 * @author Andrew Wu
+	 */
 	private static void placeSexToFemale(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
@@ -525,21 +530,22 @@ public class GameGUI {
 			addSexToFemale((int) x, (int) y);
 		}
 	}
-	
+
 	/**
 	 * Adds a SexToFemale Object onto the board from speicifed x y coordinates.
 	 * 
-	 * @param x	x position of the SexToFemale
+	 * @param x x position of the SexToFemale
 	 * @param y y position of the SexToFemale
 	 */
 	public static void addSexToFemale(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.SEX_TO_FEMALE, new ArrayList<>());
-		itemPlace.get(ItemType.SEX_TO_FEMALE).add(new int[] {y, x, -1});
+		itemPlace.get(ItemType.SEX_TO_FEMALE).add(new int[] { y, x, -1 });
 		drawSexToFemale(x, y);
 	}
-	
+
 	/**
 	 * Draws a sexToFemaleIcon on this location on the board.
+	 * 
 	 * @param x x position of the sexToFemaleIcon
 	 * @param y y posision of the sexToFemaleIcon
 	 */
@@ -548,13 +554,13 @@ public class GameGUI {
 		gc.drawImage(SexChangeToFemale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     * @author Andrew Wu
-     */
+	/**
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 * @author Andrew Wu
+	 */
 	private static void placeSexToMale(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
@@ -563,21 +569,22 @@ public class GameGUI {
 			addSexToMale((int) x, (int) y);
 		}
 	}
-	
+
 	/**
 	 * Adds a SexToMale object using specified x y coorindates on the board.
 	 * 
-	 * @param x	x position of the SexToMale
+	 * @param x x position of the SexToMale
 	 * @param y y position of the SexToMale
 	 */
 	public static void addSexToMale(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.SEX_TO_MALE, new ArrayList<>());
-		itemPlace.get(ItemType.SEX_TO_MALE).add(new int[] {y, x, -1});
+		itemPlace.get(ItemType.SEX_TO_MALE).add(new int[] { y, x, -1 });
 		drawSexToMale(x, y);
 	}
-	
+
 	/**
 	 * Draws a sexToMaleIcon on this location on the board.
+	 * 
 	 * @param x x position of the sexToMaleIcon
 	 * @param y y posision of the sexToMaleIcon
 	 */
@@ -586,13 +593,13 @@ public class GameGUI {
 		gc.drawImage(SexChangeToMale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     * @author Andrew Wu
-     */
+	/**
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 * @author Andrew Wu
+	 */
 	private static void placeSterilise(DragEvent event) {
 		double x = Math.floor(event.getX() / TILE_SIZE);
 		double y = Math.floor(event.getY() / TILE_SIZE);
@@ -601,21 +608,22 @@ public class GameGUI {
 			addSterilise((int) x, (int) y);
 		}
 	}
-	
+
 	/**
 	 * Adds a Sterilisation object to board with specified x y coordinates.
 	 * 
 	 * @param x x coordinates of the Sterilisation
-	 * @param y	y coordinates of the Sterilisation
+	 * @param y y coordinates of the Sterilisation
 	 */
 	public static void addSterilise(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.STERILISATION, new ArrayList<>());
-		itemPlace.get(ItemType.STERILISATION).add(new int[] {y, x, -1});
+		itemPlace.get(ItemType.STERILISATION).add(new int[] { y, x, -1 });
 		drawSterilise(x, y);
 	}
-	
+
 	/**
 	 * Draws a steraliseIcon on this location on the board.
+	 * 
 	 * @param x x position of the steraliseIcon
 	 * @param y y posision of the steraliseIcon
 	 */
@@ -624,18 +632,18 @@ public class GameGUI {
 		gc.drawImage(Sterilisation.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 
-    /**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     */
+	/**
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 */
 	private static void placeDeathRat(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
 	}
-	
+
 	/**
 	 * Draws a Death Rat onto screen. Initial drawing of the Death rat.
 	 * 
@@ -646,13 +654,13 @@ public class GameGUI {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
-	
+
 	/**
-     * React when an object is dragged onto the canvas.
-     *
-     * @param event The drag event itself which contains data about the drag that
-     *              occurred.
-     */
+	 * React when an object is dragged onto the canvas.
+	 *
+	 * @param event The drag event itself which contains data about the drag that
+	 *              occurred.
+	 */
 	public static void placeGas(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
@@ -660,7 +668,7 @@ public class GameGUI {
 			addGas((int) x, (int) y);
 		}
 	}
-	
+
 	/**
 	 * Adds a Gas Object to the board from specified x y coordinates.
 	 * 
@@ -669,12 +677,13 @@ public class GameGUI {
 	 */
 	public static void addGas(int x, int y) {
 		itemPlace.putIfAbsent(ItemType.GAS, new ArrayList<>());
-		itemPlace.get(ItemType.GAS).add(new int[] {y, x, -1});
+		itemPlace.get(ItemType.GAS).add(new int[] { y, x, -1 });
 		drawGas(x, y);
 	}
-	
+
 	/**
 	 * Draws a gas icon on this location on the board.
+	 * 
 	 * @param x x position of the gas icon
 	 * @param y y posision of the gas icon
 	 */
@@ -684,8 +693,8 @@ public class GameGUI {
 	}
 
 	/**
-	 * Creates the top menu bar. Contains menu options and timer.
-	 * Will need to reorganise.
+	 * Creates the top menu bar. Contains menu options and timer. Will need to
+	 * reorganise.
 	 * 
 	 * @return the menu
 	 */
@@ -698,20 +707,42 @@ public class GameGUI {
 
 		Menu menuFile = new Menu("File");
 
-		MenuItem add = new MenuItem("Save");
-		menuFile.getItems().add(add);
+		MenuItem save = new MenuItem("Save");
+		save.setOnAction(e -> saveState());
+		
+		menuFile.getItems().add(save);
 
 		Menu optionFile = new Menu("Option");
+		MenuItem play = new MenuItem("Play");
+		play.setDisable(true);
+		save.setDisable(true);		
+
+		MenuItem stop = new MenuItem("Stop");
+		stop.setOnAction(e -> {
+			stopGame();
+			stop.setDisable(true);
+			play.setDisable(false);
+			save.setDisable(false);
+		});
+
+		play.setOnAction(e -> {
+			playGame();
+			stop.setDisable(false);
+			play.setDisable(true);
+			save.setDisable(true);
+		});
+
+		optionFile.getItems().addAll(play, stop);
 
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
-		
+
 		Button stopGame = new Button("Stop and save game");
 		root.getChildren().addAll(stopGame);
 		stopGame.setOnAction(e -> {
 			playerStopGame = true;
 		});
-		
+
 		currTime = new Label("Time xx");
 		root.getChildren().add(currTime);
 
@@ -737,24 +768,22 @@ public class GameGUI {
 		currPoints.setFont(new Font(20));
 		currLevel.setTextAlignment(TextAlignment.CENTER);
 		root.getChildren().add(currPoints);
-		
+
 		setUpDraggleableImages(root);
 		setUpHandling();
-		
+
 		/**
-		 * 	Allows canvas to received dragged object within its bounds.
+		 * Allows canvas to received dragged object within its bounds.
 		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
-				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb,
-						draggablePoison, draggableSexToFemale, draggableSexToMale,
-						draggableSterilise, draggableDeathRat, draggableGas
-				};
+				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb, draggablePoison,
+						draggableSexToFemale, draggableSexToMale, draggableSterilise, draggableDeathRat, draggableGas };
 				// Mark the drag as acceptable if the source was the draggable image.
 				// (for example, we don't want to allow the user to drag things or files into
 				// our application)
 				for (ImageView i : goodImages) {
-					if  (event.getGestureSource() == i) {
+					if (event.getGestureSource() == i) {
 						// Mark the drag event as acceptable by the canvas.
 						event.acceptTransferModes(TransferMode.ANY);
 						// Consume the event. This means we mark it as dealt with.
@@ -773,10 +802,10 @@ public class GameGUI {
 				event.consume();
 			}
 		});
-		
+
 		return root;
 	}
-	
+
 	/**
 	 * Initiliase draggleable images. Expand VBox.
 	 */
@@ -801,15 +830,15 @@ public class GameGUI {
 
 		draggableDeathRat.setImage(DeathRat.IMAGE);
 		root.getChildren().add(draggableDeathRat);
-		
+
 		draggableGas.setImage(Gas.IMAGE);
 		root.getChildren().add(draggableGas);
 	}
-	
+
 	private static void setUpHandling() {
 		ClipboardContent content = new ClipboardContent();
 		content.putString("Hello");
-		
+
 		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				Dragboard db = draggableStop.startDragAndDrop(TransferMode.ANY);
@@ -874,16 +903,15 @@ public class GameGUI {
 	 * @return the GUI
 	 */
 	private static BorderPane createGameGUI() {
-			
+
 		setInitialValues();
 		createRatIndicator();
-		
+
 		GameGUI.playerName = GameMaster.getName();
-		
+
 		GameGUI.maxTime = GameMaster.getMaxTime();
-		RatController.setRatController(GameMaster.getMaxRats(),
-				GameMaster.getPoints());
-		
+		RatController.setRatController(GameMaster.getMaxRats(), GameMaster.getPoints());
+
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
 		root.setTop(createTopMenu());
@@ -899,16 +927,17 @@ public class GameGUI {
 
 		return root;
 	}
-	
+
 	private static void setInitialValues() {
-		
-		// These no choice		
+
+		// These no choice
 		itemPlace = new HashMap<>();
 		playerStopGame = false;
 	}
-	
+
 	/**
 	 * Creates the bottom display, used to display the message of the day.
+	 * 
 	 * @return HBox of the bottom display.
 	 */
 	private static Node createBottomDisplay() {
@@ -917,50 +946,51 @@ public class GameGUI {
 		Label msg = new Label(MessageOfDay.getMsgDay());
 		root.getChildren().add(msg);
 		root.setAlignment(Pos.TOP_CENTER);
-		
+
 		return root;
 	}
-	
+
 	/**
 	 * Creates the left display, used to display the number of rat indicators.
+	 * 
 	 * @return
 	 */
 	private static Node createLeftDisplay() {
 		VBox root = new VBox();
-		
+
 		root.getChildren().add(sbcRatIndicator);
 		return root;
 	}
-	
+
 	/**
 	 * Creates the window for showing the rat indicator.
 	 */
 	private static void createRatIndicator() {
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis(0, GameMaster.getMaxRats(), 1);
-		
+
 		xAxis.setTickLabelsVisible(false);
-		
+
 		sbcRatIndicator = new StackedBarChart<>(xAxis, yAxis);
-		
+
 		XYChart.Series<String, Number> maleNumber = new XYChart.Series<>();
 		maleNumber.getData().add((new XYChart.Data<>("Bob", 0)));
-		
+
 		XYChart.Series<String, Number> femaleNumber = new XYChart.Series<>();
 		femaleNumber.getData().add(new XYChart.Data<>("Bob", 0));
-		
+
 		XYChart.Series<String, Number> rest = new XYChart.Series<>();
-		rest.getData().add(new XYChart.Data<>("Bob",GameMaster.getMaxRats()));
-		
+		rest.getData().add(new XYChart.Data<>("Bob", GameMaster.getMaxRats()));
+
 		sbcRatIndicator.getData().add(maleNumber);
 		sbcRatIndicator.getData().add(femaleNumber);
 		sbcRatIndicator.getData().add(rest);
-		
+
 		sbcRatIndicator.setMaxWidth(20);
 		sbcRatIndicator.setMinHeight(CANVAS_HEIGHT);
-		sbcRatIndicator.setLegendVisible(false);	 
+		sbcRatIndicator.setLegendVisible(false);
 	}
-	
+
 	/**
 	 * Sets the values for the rat indicator window.
 	 */
@@ -968,8 +998,8 @@ public class GameGUI {
 		double a = RatController.getMaleCounter();
 		double b = RatController.getFemaleCounter();
 		double c = GameMaster.getMaxRats() - a - b;
-		double[] fd = {a, b, c};
-		
+		double[] fd = { a, b, c };
+
 		int counter = 0;
 		for (XYChart.Series<String, Number> series : sbcRatIndicator.getData()) {
 			for (XYChart.Data<String, Number> data : series.getData()) {
@@ -1026,7 +1056,7 @@ public class GameGUI {
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		drawItems();
 		setRatIndicator();
-		
+
 		// Stop conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			stopGame();
@@ -1040,7 +1070,7 @@ public class GameGUI {
 			saveState();
 		} // Otherwise keep going
 	}
-	
+
 	private static void decrementTimer() {
 		maxTime--;
 		currTime.setText(String.valueOf(maxTime));
@@ -1048,11 +1078,10 @@ public class GameGUI {
 			stopGame();
 			GameMaster.gameEndTimeEnd();
 		}
-		
 	}
-	
+
 	/**
-	 * Stops the game
+	 * Stops the game.
 	 */
 	private static void stopGame() {
 		cycler.stop();
@@ -1060,6 +1089,14 @@ public class GameGUI {
 		setRatIndicator();
 	}
 	
+	/**
+	 * Starts/ continues the game.
+	 */
+	private static void playGame() {
+		cycler.play();
+		timeLimit.play();
+	}
+
 	/**
 	 * Saves the state of the game
 	 */
