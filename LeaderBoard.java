@@ -14,18 +14,20 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
- * @author Salim
+ * Leaderboard for high scores.
+ * 
+ * @author Jing
  */
 
 public class LeaderBoard {
 
 	/**
-	 * List of playerscores.
+	 * List of all player's scores.
 	 */
 	private static ArrayList<PlayerScore> scores = new ArrayList<>();
 
 	/**
-	 * ObservableList of playerinformation.
+	 * ObservableList of player information that is put onto table.
 	 */
 	private static ObservableList<PlayerScore> data;
 	
@@ -71,7 +73,7 @@ public class LeaderBoard {
 
 	/**
 	 * Returns the leaderboard scene with correct information.
-	 * @return
+	 * @return the leaderboard
 	 */
 	public static Pane getLeaderBoard() {
 		TableView<PlayerScore> table = new TableView<>();
@@ -79,15 +81,15 @@ public class LeaderBoard {
 		name.setCellValueFactory(
 				new PropertyValueFactory<>("name"));
 		
-		TableColumn<PlayerScore, String> score = new TableColumn<>("Score");
+		TableColumn<PlayerScore, Integer> score = new TableColumn<>("Score");
 		score.setCellValueFactory(
 				new PropertyValueFactory<>("score"));
 		
-		TableColumn<PlayerScore, String> time = new TableColumn<>("Time");
+		TableColumn<PlayerScore, Integer> time = new TableColumn<>("Time");
 		time.setCellValueFactory(
 				new PropertyValueFactory<>("time"));
 		
-		TableColumn<PlayerScore, String> level = new TableColumn<>("Level");
+		TableColumn<PlayerScore, Integer> level = new TableColumn<>("Level");
 		level.setCellValueFactory(
 				new PropertyValueFactory<>("level"));
 

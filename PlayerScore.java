@@ -1,13 +1,17 @@
-import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * A class for games played containing information about the player and the
+ * game they played.
+ * 
+ * @author Jing
+ *
+ */
 public class PlayerScore implements Comparable<PlayerScore> {
 
 	/**
 	 * Name of player.
 	 */
-	private String name1;
-	
-	private final SimpleStringProperty name;
+	private final String name;
 	
 	/**
 	 * Score achieved by player.
@@ -33,8 +37,7 @@ public class PlayerScore implements Comparable<PlayerScore> {
 	 * @param level			level completed
 	 */
 	public PlayerScore(String name, int score, int timeCompleted, int level) {
-		this.name1 = name;
-		this.name = new SimpleStringProperty(name);
+		this.name = name;
 		this.score = score;
 		this.timeCompleted = timeCompleted;
 		this.level = level;
@@ -46,48 +49,46 @@ public class PlayerScore implements Comparable<PlayerScore> {
 	 */
 	public PlayerScore(String input) {
 		String[] in = input.split(Main.FILE_SUB_SEPERATOR);
-		this.name1 = in[0];
-		this.name = new SimpleStringProperty(name1);
+		this.name = in[0];
 		this.score = Integer.valueOf(in[1]);
 		this.timeCompleted = Integer.valueOf(in[2]);
 		this.level = Integer.valueOf(in[3]);
 	}
 	
+	/**
+	 * Returns name of player.
+	 * @return name of player
+	 */
 	public String getName() {
-		return name.get();
-	}
-	
-	public String getScore() {
-		return String.valueOf(score);
-	}
-	
-	public String getTime() {
-		return String.valueOf(timeCompleted);
-	}
-	
-	public String getLevel() {
-		return String.valueOf(level);
+		return name;
 	}
 	
 	/**
-	 * Returns the score achieved by player.
-	 * 
-	 * @return score
+	 * Returns score achieved by player.
+	 * @return score achieved by player
 	 */
-	public int getScore1() {
+	public Integer getScore() {
 		return score;
+	}
+	
+	/**
+	 * Returns time taken by player to finish game.
+	 * @return time taken by player to finish game
+	 */
+	public Integer getTime() {
+		return timeCompleted;
+	}
+	
+	/**
+	 * Returns level achieved for points earned.
+	 * @return level achieved for points earned
+	 */
+	public Integer getLevel() {
+		return level;
 	}
 	
 	@Override
 	public int compareTo(PlayerScore p2) {
-		return Integer.compare(p2.getScore1(), getScore1());
-	}
-	
-	@Override
-	public String toString() {
-		return name1 + Main.FILE_SUB_SEPERATOR + 
-				score + Main.FILE_SUB_SEPERATOR + 
-				timeCompleted + Main.FILE_SUB_SEPERATOR + 
-				level;
+		return Integer.compare(p2.getScore(), getScore());
 	}
 }
