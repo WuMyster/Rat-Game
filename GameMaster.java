@@ -114,7 +114,7 @@ public class GameMaster {
         	playerName = playerInput.getText();
         	GameMaster.getPlayer();
         });
-        
+        LeaderBoard.startLeaderBoard();
         Pane leaderboard = LeaderBoard.getLeaderBoard();
         GridPane.setConstraints(leaderboard, 0, 3, 2, 1);
         
