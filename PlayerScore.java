@@ -59,7 +59,7 @@ public class PlayerScore implements Comparable<PlayerScore> {
 	
 	@Override
 	public int compareTo(PlayerScore p2) {
-		return Integer.compare(getScore(), p2.getScore());
+		return Integer.compare(p2.getScore(), getScore());
 	}
 	
 	@Override
