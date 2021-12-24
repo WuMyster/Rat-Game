@@ -183,9 +183,10 @@ public class GameMaster {
         	}
     	}
     	
-    	String msg = "Congratulations!\nYou've finished the game";
+    	int pos = LeaderBoard.addData() + 1;
+    	String msg = "You are in position " + pos+ "\n";
     	gameEnd(msg, true);
-    	System.out.println(" >> " + LeaderBoard.addData());
+    	msg += "Congratulations!\\nYou've finished the game";
     }
 	
     /**
@@ -333,6 +334,9 @@ public class GameMaster {
     			return;
     		}
     	}
+    	String tmp = playerInfo.get(0);
+    	playerInfo = new ArrayList<>();
+    	playerInfo.add(tmp);
     	
 		loadMapInfo();
 		
@@ -360,6 +364,8 @@ public class GameMaster {
     	pointsAccumulated = Integer.valueOf(playerInfo.get(2));
     	maxTime = Integer.valueOf(playerInfo.get(3));
     	
+    	rats = new ArrayList<>();
+    	
     	int counter = 4;
     	int repeat = Integer.valueOf(playerInfo.get(counter++));
     	for (int i = 0; i < repeat; i++) {
@@ -375,8 +381,6 @@ public class GameMaster {
     
     /**
      * Loads common information about the map.
-     * 
-     * @param currLvl	map level number
      */
     private static void loadMapInfo() {
     	ArrayList<String> information = getInfoFromFile(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
