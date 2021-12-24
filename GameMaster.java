@@ -3,8 +3,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -108,23 +110,19 @@ public class GameMaster {
         GridPane.setConstraints(playerInput, 1, 0);
 
         Button loginButton = new Button("Load Player");
-        GridPane.setConstraints(loginButton, 1, 3);
+        GridPane.setConstraints(loginButton, 1, 2);
         loginButton.setOnAction(e -> {
         	playerName = playerInput.getText();
         	GameMaster.getPlayer();
         });
         
-
-        Button leaderboardButton = new Button("Check Leaderboard");
-        leaderboardButton.setOnAction(e -> LeaderBoardWindow.displayLeaderboard("Leaderboard"));
-        GridPane.setConstraints(leaderboardButton,1,5);
-        leaderboardButton.setOnAction(e -> {
-        	System.out.println("Leaderboard not implemented yet");
-        });
+        Pane leaderboard = LeaderBoard.getLeaderBoard();
+        GridPane.setConstraints(leaderboard, 0, 3, 2, 1);
         
-        grid.getChildren().addAll(playerLabel, playerInput, loginButton, leaderboardButton);
+        grid.getChildren().addAll(playerLabel, playerInput, loginButton, 
+        		leaderboard);
 
-        Scene scene = new Scene(grid, 300, 200);
+        Scene scene = new Scene(grid, 355, 200);
 
         Main.currWindow.setScene(scene);
         Main.currWindow.show();

@@ -1,38 +1,59 @@
+import java.io.File;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.Collections;
+import java.util.Scanner;
+
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+
 /**
  * @author Salim
  */
 
 public class LeaderBoard {
 
-    public int scoring() {
-    	
-    	int points;
-        if (GameMaster.getTimer() < GameMaster.getExpectedTime()) { // needs GameMaster to be implemented
-            points = RatController.getPoints();
-            points += (GameMaster.getExpectedTime() - GameMaster.getTimer());
-        } else {
-        	points = 0;
-        }
-        return points;
-    }
+	private static ArrayList<PlayerScore> scores = new ArrayList<>();
+	
+	public void createLeaderBoard() {
 
-    //ArrayList<Integer> scores = new ArrayList<Integer>(); // In GameMaster
+		Scanner s = null;
+		try {
+			s = new Scanner(new File("Leaderboard.txt"));
+			while (s.hasNext()) {
+				scores.add(new PlayerScore(s.next()));
+			}
+		} catch (Exception e) {
+			System.out.println("No file found");
+		} finally {
+			s.close();
+		}
 
-    public void addPoints() {
-        ArrayList<Integer> scores = new ArrayList<Integer>();
-        scores.add(scoring());
-    }
+		Collections.sort(scores);
+		Collections.reverse(scores);
+	}
 
-    public void sortList(ArrayList<Integer> scores) {
-        Collections.sort(scores, Collections.reverseOrder()); //sorts arraylist from highest to lowest score
-    }
-
-    public void showLeaderboard(ArrayList<Integer> scores) {
-
-        for (int i = 0; i < 10; i++) { // only top 10 scores are kept
-            System.out.println(scores.get(i));
-        }
-    }
+	public static Pane getLeaderBoard() {		
+		TableView<String> table = new TableView<>();
+		TableColumn<String, String> name = new TableColumn<>("Name");
+		TableColumn<String, Integer> score = new TableColumn<>("Score");
+		TableColumn<String, Integer> time = new TableColumn<>("Time");
+		TableColumn<String, Integer> level = new TableColumn<>("Level");
+		
+		table.getColumns().add(name);
+		table.getColumns().add(score);
+		table.getColumns().add(time);
+		table.getColumns().add(level);
+		
+		
+		VBox tableUI = new VBox();
+		tableUI.setSpacing(5);
+		tableUI.setPadding(new Insets(10, 0, 0, 10));
+		tableUI.getChildren().add(table);
+		
+		return tableUI;
+	}
 }
