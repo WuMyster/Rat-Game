@@ -185,7 +185,7 @@ public class GameMaster {
     	
     	String msg = "Congratulations!\nYou've finished the game";
     	gameEnd(msg, true);
-    	System.out.println(" > " + LeaderBoard.addData());
+    	System.out.println(" >> " + LeaderBoard.addData());
     }
 	
     /**
@@ -212,9 +212,18 @@ public class GameMaster {
         
         Button nextLevel;
         if (good) {
-        	// Need to check if there is a next level
-	        nextLevel = new Button("Next level");
-	        nextLevel.setOnAction(null);
+        	if (currLvl != maxLevel - 1) {
+        		nextLevel = new Button("Next level");
+    	        nextLevel.setOnAction(e -> {
+    	        	currLvl++;
+    	        	createNewGame();
+    	        });
+        	} else {
+        		nextLevel = new Button("Log out");
+        		nextLevel.setOnAction(e -> {
+        			GameMaster.startGameMaster();
+        		});
+        	}
         } else {
         	nextLevel = new Button("Redo level");
 	        nextLevel.setOnAction(e -> createNewGame());

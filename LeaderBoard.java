@@ -41,6 +41,7 @@ public class LeaderBoard {
 	 * Reads inputs of previous high scores into list.
 	 */
 	public static void startLeaderBoard() {
+		scores = new ArrayList<>();
 		Scanner s = null;
 		File f = new File(Main.PLAYER_FILE_LOC + "Leaderboard.txt");
 		try {
@@ -79,7 +80,7 @@ public class LeaderBoard {
 		PlayerScore ps = new PlayerScore(
 				GameMaster.getName(),
 				calculateScore(),
-				GameGUI.getRemainingTime(),
+				GameMaster.getMaxTime() - GameGUI.getRemainingTime(),
 				GameMaster.getLvlNum()
 				);
 		scores.add(ps);
@@ -99,14 +100,11 @@ public class LeaderBoard {
 		Collections.sort(scores);
 		try {
 			PrintWriter out = new PrintWriter(Main.PLAYER_FILE_LOC + "Leaderboard.txt");
-			
 			for(PlayerScore ps : scores) {
 				out.println(ps);
 			}
-			
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
