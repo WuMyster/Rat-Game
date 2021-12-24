@@ -64,10 +64,29 @@ public enum ItemType {
 		}
 	};
 	
+	/**
+	 * Adds and draws the item onto the board.
+	 * 
+	 * @param x		x position of the item
+	 * @param y		y position of the item
+	 * @param state	state of the item on the board
+	 */
+	public abstract void add(int x, int y, int state);	
+	
+	/**
+	 * Draws the item onto the board.
+	 * @param x		x position of the item
+	 * @param y		y position of the item
+	 * @param state	state of the item on the board
+	 */
 	public abstract void draw(int x, int y, int state);
 	
-	public abstract void add(int x, int y, int state);
-	
+	/**
+	 * Converts an {@code Item} to an enum of its type.
+	 * 
+	 * @param i	item
+	 * @return	enum of the item
+	 */
 	public static ItemType fromItem(Item i) {
 		if (i instanceof StopSign) {
 			return STOPSIGN;
