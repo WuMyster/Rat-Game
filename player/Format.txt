@@ -5,6 +5,7 @@ Int max level achieved so far
 Int max level achieved so far
 Int current level they're playing
 Int points accumulated so far
+Int time left
 Int number of rats
 String rat information (0 to many)
 Int number of items on board

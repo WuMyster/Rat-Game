@@ -17,7 +17,23 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Deals with all interactions outside of the game.
+ * 
+ * @author 2010573
+ *
+ */
 public class GameMaster {
+	
+	/**
+	 * Width of the window.
+	 */
+	private static int WINDOW_WIDTH = 255;
+	
+	/**
+	 * Height of the window.
+	 */
+	private static int WINDOW_HEIGHT = 205;
     
 	/**
 	 * Information from players file.
@@ -79,8 +95,14 @@ public class GameMaster {
      */
     private static boolean answer;
     
+    /**
+     * Maximum number of levels.
+     */
     private static int maxNumOfLevels;
     
+    /**
+     * Start name for level files.
+     */
     private final static String START_NAME = "lvl";
     
     /**
@@ -121,7 +143,7 @@ public class GameMaster {
         grid.getChildren().addAll(playerLabel, playerInput, loginButton, 
         		leaderboard);
 
-        Scene scene = new Scene(grid, 355, 200);
+        Scene scene = new Scene(grid, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         Main.currWindow.setScene(scene);
         Main.currWindow.show();
@@ -317,8 +339,9 @@ public class GameMaster {
     	loadMapInfo();
     	
     	pointsAccumulated = Integer.valueOf(playerInfo.get(2));
+    	maxTime = Integer.valueOf(playerInfo.get(3));
     	
-    	int counter = 3;
+    	int counter = 4;
     	int repeat = Integer.valueOf(playerInfo.get(counter++));
     	for (int i = 0; i < repeat; i++) {
     		rats.add(playerInfo.get(counter++));

@@ -1,4 +1,3 @@
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,27 +66,27 @@ public class GameGUI {
 	/**
 	 * Position multiplier of where rat is.
 	 */
-	public static final int RAT_POSITION = 25;
+	private static final int RAT_POSITION = 25;
 
 	/**
 	 * Time in miliseconds between each rat steps. 100
 	 */
-	public static final int TIME_BETWEEN_STEPS = 10;
+	private static final int TIME_BETWEEN_STEPS = 10;
 
 	/**
 	 * Time between each cycle in miliseconds. 4
 	 */
-	public static final int CYCLE_TIME = 500;
+	private static final int CYCLE_TIME = 500;
 
 	/**
 	 * Speed of adult rat. Baby rats are 2x.
 	 */
-	public static final int NORMAL_RAT_SPEED = 25;
+	private static final int NORMAL_RAT_SPEED = 25;
 
 	/**
 	 * Offset needed to center the Rat along the x axis in pixels.
 	 */
-	public static final int TILE_X_OFFSET = 10;
+	private static final int TILE_X_OFFSET = 10;
 
 	/**
 	 * Offset needed to center the Rat along the y axis in pixels.
@@ -690,6 +689,10 @@ public class GameGUI {
 	public static void drawGas(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(Gas.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	public static int getRemainingTime() {
+		return maxTime;
 	}
 
 	/**
