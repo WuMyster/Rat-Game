@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -70,6 +71,52 @@ public class LeaderBoard {
 			data.add(scores.get(i));
 		}
 	}
+	
+	/**
+	 * Adds information from the game and put into leaderboard.
+	 */
+	public static int addData() {
+		PlayerScore ps = new PlayerScore(
+				GameMaster.getName(),
+				calculateScore(),
+				GameGUI.getRemainingTime(),
+				GameMaster.getLvlNum()
+				);
+		scores.add(ps);
+		writeLeaders();
+		
+		int out = 0;
+		while (scores.get(out) != ps) {
+			out++;
+		}
+		return out;
+	}
+	
+	/**
+	 * Writes the leaderboard to a text file.
+	 */
+	private static void writeLeaders() {
+		Collections.sort(scores);
+		try {
+			PrintWriter out = new PrintWriter(Main.PLAYER_FILE_LOC + "Leaderboard.txt");
+			
+			for(PlayerScore ps : scores) {
+				out.println(ps);
+			}
+			
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static int calculateScore() {
+		int out = 0;
+		out += RatController.getPoints() * 
+				GameGUI.getRemainingTime();
+		return out;
+	}	
 
 	/**
 	 * Returns the leaderboard scene with correct information.

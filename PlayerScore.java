@@ -91,4 +91,12 @@ public class PlayerScore implements Comparable<PlayerScore> {
 	public int compareTo(PlayerScore p2) {
 		return Integer.compare(p2.getScore(), getScore());
 	}
+	
+	@Override
+	public String toString() {
+		return name + Main.FILE_SUB_SEPERATOR + 
+				score + Main.FILE_SUB_SEPERATOR + 
+				timeCompleted + Main.FILE_SUB_SEPERATOR + 
+				level;
+	}
 }

@@ -149,16 +149,25 @@ public class GameMaster {
         Main.currWindow.show();
     }
     
+    /**
+     * Bad end. Too many rats caused game to end.
+     */
     public static void gameEndTooManyRats() {
     	String msg = "There are too many rats!";
     	gameEnd(msg, false);
     }
     
+    /**
+     * Bad end. Time has run out.
+     */
     public static void gameEndTimeEnd() {
     	String msg = "You ran out of time!";
     	gameEnd(msg, false);
     }
 
+    /**
+     * Good end. Killed all rats within time.
+     */
 	public static void gameEndWin() {
     	if (currLvl == maxLevel) {
     		maxLevel++;
@@ -176,8 +185,9 @@ public class GameMaster {
     	
     	String msg = "Congratulations!\nYou've finished the game";
     	gameEnd(msg, true);
+    	System.out.println(" > " + LeaderBoard.addData());
     }
-
+	
     /**
      * End of game screen, allows user to choose menu level or
      * redo level/ next level depending on if they've finished the level.
