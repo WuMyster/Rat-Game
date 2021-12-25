@@ -127,7 +127,7 @@ public class GameMaster {
         GridPane.setConstraints(playerLabel, 0, 0);
 
         //Player input
-        TextField playerInput = new TextField("C"); //("Enter player name...");
+        TextField playerInput = new TextField("Enter player name...");
         GridPane.setConstraints(playerInput, 1, 0);
 
         Button loginButton = new Button("Load Player");

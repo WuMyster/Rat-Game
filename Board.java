@@ -101,10 +101,10 @@ public class Board {
 				for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
 					if (board[i][j] instanceof JunctionTile) {
 						mapDesign += JUNCTION_TILE;
-					} else if (board[i][j] instanceof PathTile) {
-						mapDesign += PATH_TILE;
 					} else if (board[i][j] instanceof TunnelTile) {
 						mapDesign += TUNNEL_TILE;
+					} else if (board[i][j] instanceof PathTile) {
+						mapDesign += PATH_TILE;
 					} else {
 						mapDesign += GRASS_TILE;
 					}
