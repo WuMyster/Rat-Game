@@ -356,7 +356,7 @@ public class GameMaster {
      */
     private static void loadPrevGame() {
     	// 0 is taken up by max level achieved by player
-    	currLvl = Integer.valueOf(playerInfo.get(0));
+    	currLvl = Integer.valueOf(playerInfo.get(1));
     	loadMapInfo();
     	
     	pointsAccumulated = Integer.valueOf(playerInfo.get(2));
@@ -391,6 +391,13 @@ public class GameMaster {
 		maxTime = Integer.valueOf(information.get(2));
 		
 		map = information.get(3);
+		
+		int counter = 4;
+		
+    	int repeat = Integer.valueOf(information.get(counter++));
+    	for (int i = 0; i < repeat; i++) {
+    		rats.add(information.get(counter++));
+    	}
     }
     
     /**
