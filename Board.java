@@ -68,7 +68,6 @@ public class Board {
 
 	/**
 	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
-	 * FIXME -> Will need to make sure all tiles have CORRECT xy pos excluding LightTile.
 	 */
 	public final static int EXTRA_PADDING = 2;
 
@@ -610,6 +609,7 @@ public class Board {
 		}
 		return true;
 	}
+	
 	/**
 	 * Converts the map into a graph.
 	 */
@@ -618,7 +618,6 @@ public class Board {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 
 				if (board[i][j] != null) {
-					allTiles.add(board[i][j]);
 					ArrayList<Tile> tiles = new ArrayList<>(4);
 					ArrayList<Direction> direction = new ArrayList<>(4);
 
@@ -653,12 +652,44 @@ public class Board {
 							direction.add(Direction.WEST);
 						}
 					}
+			
+					// Check if Tile is of correct type
+					if (board[i][j] instanceof TunnelTile) {
+						if (tiles.size() == 2) {
+							// Good
+						} else if (tiles.size() == 1) {
+							// End/ Dead end
+							tiles.add(tiles.get(0));
+							direction.add(direction.get(0));
+						}
+					} else if (board[i][j] instanceof JunctionTile) {
+						if (tiles.size() > 2) {
+							// Good
+						} else {
+							// Should be PathTile
+							board[i][j] = new PathTile(i, j);
+						}
+					} 
+					// Separate in case JunctionTile turned PathTile
+					// and need to check number of tiles/ directions
+					if (board[i][j] instanceof PathTile) {
+						if (tiles.size() == 2) {
+							// Good
+						} else if (tiles.size() == 1) {
+							// End/ Dead end
+							tiles.add(tiles.get(0));
+							direction.add(direction.get(0));
+						} else {
+							// Has more directions, should be JunctionTile
+							board[i][j] = new JunctionTile(i, j);
+						}
+					}
+					
+					allTiles.add(board[i][j]);
 					board[i][j].setNeighbourTiles(tiles.toArray(
 							new Tile[2]), direction.toArray(new Direction[2]));
 				}
 			}
 		}
-
 	}
-
 }
