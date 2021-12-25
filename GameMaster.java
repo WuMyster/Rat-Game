@@ -391,13 +391,6 @@ public class GameMaster {
 		maxTime = Integer.valueOf(information.get(2));
 		
 		map = information.get(3);
-		
-		int counter = 4;
-		
-    	int repeat = Integer.valueOf(information.get(counter++));
-    	for (int i = 0; i < repeat; i++) {
-    		rats.add(information.get(counter++));
-    	}
     }
     
     /**
