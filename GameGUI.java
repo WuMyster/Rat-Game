@@ -242,11 +242,8 @@ public class GameGUI {
 	public static void startGameScreen() {
 		BorderPane gameRoot = createGameGUI();
 		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-		Main.currWindow.setX(200);
-		Main.currWindow.setY(20);
-		Main.currWindow.setScene(scene);
-		Main.currWindow.show();
+		
+		Main.setWindow(scene);
 
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
 		cycler.setCycleCount(Animation.INDEFINITE);

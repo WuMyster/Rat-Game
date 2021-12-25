@@ -145,8 +145,7 @@ public class GameMaster {
 
         Scene scene = new Scene(grid, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        Main.currWindow.setScene(scene);
-        Main.currWindow.show();
+        Main.setWindow(scene);
     }
     
     /**
@@ -234,8 +233,7 @@ public class GameMaster {
 
         Scene scene = new Scene(grid, 300, 200);
 
-        Main.currWindow.setScene(scene);
-        Main.currWindow.show();
+        Main.setWindow(scene);
     }
     
     /**
@@ -483,8 +481,8 @@ public class GameMaster {
     	}
     	
     	Scene scene = new Scene(grid, 300, 200);
-    	Main.currWindow.setScene(scene);
-    	Main.currWindow.show();
+
+    	Main.setWindow(scene);
     }
 
     /**

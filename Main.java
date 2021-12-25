@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -37,7 +38,7 @@ public class Main extends Application {
 	/**
 	 * Main current window being displayed.
 	 */
-	public static Stage currWindow;
+	private static Stage currWindow;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -50,6 +51,17 @@ public class Main extends Application {
 	 */
 	public static void startGameGUI() {
 		GameGUI.startGameScreen();
+	}
+	
+	/**
+	 * Shows the window.
+	 * 
+	 * @param scene	scene to display
+	 */
+	public static void setWindow(Scene scene) {
+		currWindow.setScene(scene);
+		currWindow.show();
+		currWindow.centerOnScreen();
 	}
 
 	/**
