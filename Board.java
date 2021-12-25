@@ -1,10 +1,8 @@
 import java.util.ArrayList;
-import java.util.Set;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -15,6 +13,11 @@ import java.io.PrintWriter;
  */
 public class Board {
 
+	/**
+	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
+	 */
+	public final static int EXTRA_PADDING = 2;
+	
 	/**
 	 * The map in string format.
 	 */
@@ -65,11 +68,11 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile.
 	 */
 	private final static char TUNNEL_TILE = 'T';
-
+	
 	/**
-	 * Number of tiles in between each visible tile +1 (so 2 means 1 extra tile in between)
+	 * If there was an error with the map, should rewrite it.
 	 */
-	public final static int EXTRA_PADDING = 2;
+	private boolean rewrite = false;
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -91,6 +94,24 @@ public class Board {
 		createBoard();
 		eliminateEmpties();
 		createGraph();
+		if (rewrite) {
+			rewrite = false;
+			mapDesign = "";
+			for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
+				for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
+					if (board[i][j] instanceof JunctionTile) {
+						mapDesign += JUNCTION_TILE;
+					} else if (board[i][j] instanceof PathTile) {
+						mapDesign += PATH_TILE;
+					} else if (board[i][j] instanceof TunnelTile) {
+						mapDesign += TUNNEL_TILE;
+					} else {
+						mapDesign += GRASS_TILE;
+					}
+				}
+			}
+			GameMaster.rewriteMap(mapDesign);
+		}
 	}
 
     /**
@@ -662,28 +683,34 @@ public class Board {
 							tiles.add(tiles.get(0));
 							direction.add(direction.get(0));
 						}
-					} else if (board[i][j] instanceof JunctionTile) {
-						if (tiles.size() > 2) {
-							// Good
-						} else {
-							// Should be PathTile
-							board[i][j] = new PathTile(i, j);
+					} else {
+						if (board[i][j] instanceof JunctionTile) {
+							if (tiles.size() > 2) {
+								// Good
+							} else {
+								// Should be PathTile
+								board[i][j] = new PathTile(i, j);
+								rewrite = true;
+							}
 						}
-					} 
-					// Separate in case JunctionTile turned PathTile
-					// and need to check number of tiles/ directions
-					if (board[i][j] instanceof PathTile) {
-						if (tiles.size() == 2) {
-							// Good
-						} else if (tiles.size() == 1) {
-							// End/ Dead end
-							tiles.add(tiles.get(0));
-							direction.add(direction.get(0));
-						} else {
-							// Has more directions, should be JunctionTile
-							board[i][j] = new JunctionTile(i, j);
+
+						// Separate in case JunctionTile turned PathTile
+						// and need to check number of tiles/ directions
+						if (board[i][j] instanceof PathTile) {
+							if (tiles.size() == 2) {
+								// Good
+							} else if (tiles.size() == 1) {
+								// End/ Dead end
+								tiles.add(tiles.get(0));
+								direction.add(direction.get(0));
+							} else {
+								// Has more directions, should be JunctionTile
+								board[i][j] = new JunctionTile(i, j);
+								rewrite = true;
+							}
 						}
 					}
+					
 					
 					allTiles.add(board[i][j]);
 					board[i][j].setNeighbourTiles(tiles.toArray(

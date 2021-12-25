@@ -127,7 +127,7 @@ public class GameMaster {
         GridPane.setConstraints(playerLabel, 0, 0);
 
         //Player input
-        TextField playerInput = new TextField("Enter player name...");
+        TextField playerInput = new TextField("C"); //("Enter player name...");
         GridPane.setConstraints(playerInput, 1, 0);
 
         Button loginButton = new Button("Load Player");
@@ -315,6 +315,23 @@ public class GameMaster {
     public static int getPoints() {
     	return pointsAccumulated;
     }
+	
+	public static void rewriteMap(String map) {
+		ArrayList<String> information = getInfoFromFile(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
+		information.set(3, map);
+		
+		try {
+			PrintWriter p = new PrintWriter(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
+			
+			for (String in : information) {
+				p.println(in);
+			}
+			
+			p.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
     
     /**
      * Gets the information of the level and set up values before calling
