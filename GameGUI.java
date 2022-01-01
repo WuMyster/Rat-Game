@@ -25,6 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
@@ -226,6 +228,7 @@ public class GameGUI {
 
 	/**
 	 * If user themselves has told the game to stop.
+	 * True if game is stopped.
 	 */
 	private static boolean playerStopGame;
 
@@ -242,6 +245,19 @@ public class GameGUI {
 	public static void startGameScreen() {
 		BorderPane gameRoot = createGameGUI();
 		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+	            if (ke.getCode() == KeyCode.ESCAPE) {
+	                if (playerStopGame) {
+	                	playGame();
+	                } else {
+	                	stopGame();
+	                }
+	                
+	            }
+			}
+	    });
 		
 		Main.setWindow(scene);
 
