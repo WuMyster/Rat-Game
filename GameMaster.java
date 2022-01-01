@@ -212,7 +212,7 @@ public class GameMaster {
         
         Button nextLevel;
         if (good) {
-        	if (currLvl != maxLevel - 1) {
+        	if (currLvl < maxLevel) {
         		nextLevel = new Button("Next level");
     	        nextLevel.setOnAction(e -> {
     	        	currLvl++;
