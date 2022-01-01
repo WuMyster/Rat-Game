@@ -347,7 +347,7 @@ public class Board {
 		
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
-				if (board[i][j] == null) {
+				if (board[i][j] == null || board[i][j] instanceof JunctionTile) {
 					gc.drawImage(grassImage, 
 							x++ * GameGUI.TILE_SIZE, 
 							y * GameGUI.TILE_SIZE, 
@@ -686,7 +686,7 @@ public class Board {
 					} else {
 						if (board[i][j] instanceof JunctionTile) {
 							if (tiles.size() > 2) {
-								// Good
+								board[i][j] = new JunctionTile(i, j);
 							} else {
 								// Should be PathTile
 								board[i][j] = new PathTile(i, j);
@@ -706,6 +706,7 @@ public class Board {
 							} else {
 								// Has more directions, should be JunctionTile
 								board[i][j] = new JunctionTile(i, j);
+								System.out.println("Junction");
 								rewrite = true;
 							}
 						}
