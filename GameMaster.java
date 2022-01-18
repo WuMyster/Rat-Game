@@ -315,23 +315,6 @@ public class GameMaster {
     public static int getPoints() {
     	return pointsAccumulated;
     }
-	
-	public static void rewriteMap(String map) {
-		ArrayList<String> information = getInfoFromFile(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
-		information.set(3, map);
-		
-		try {
-			PrintWriter p = new PrintWriter(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
-			
-			for (String in : information) {
-				p.println(in);
-			}
-			
-			p.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
     
     /**
      * Gets the information of the level and set up values before calling

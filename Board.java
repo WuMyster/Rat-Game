@@ -68,11 +68,6 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile.
 	 */
 	private final static char TUNNEL_TILE = 'T';
-	
-	/**
-	 * If there was an error with the map, should rewrite it.
-	 */
-	private boolean rewrite = false;
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -94,24 +89,6 @@ public class Board {
 		createBoard();
 		eliminateEmpties();
 		createGraph();
-		if (rewrite) {
-			rewrite = false;
-			mapDesign = "";
-			for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
-				for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
-					if (board[i][j] instanceof JunctionTile) {
-						mapDesign += JUNCTION_TILE;
-					} else if (board[i][j] instanceof TunnelTile) {
-						mapDesign += TUNNEL_TILE;
-					} else if (board[i][j] instanceof PathTile) {
-						mapDesign += PATH_TILE;
-					} else {
-						mapDesign += GRASS_TILE;
-					}
-				}
-			}
-			GameMaster.rewriteMap(mapDesign);
-		}
 	}
 
     /**
@@ -347,7 +324,7 @@ public class Board {
 		
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i += EXTRA_PADDING) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j += EXTRA_PADDING) {
-				if (board[i][j] == null || board[i][j] instanceof JunctionTile) {
+				if (board[i][j] == null) {
 					gc.drawImage(grassImage, 
 							x++ * GameGUI.TILE_SIZE, 
 							y * GameGUI.TILE_SIZE, 
@@ -672,46 +649,7 @@ public class Board {
 							tiles.add(board[i][j - 1]);
 							direction.add(Direction.WEST);
 						}
-					}
-			
-					// Check if Tile is of correct type
-					if (board[i][j] instanceof TunnelTile) {
-						if (tiles.size() == 2) {
-							// Good
-						} else if (tiles.size() == 1) {
-							// End/ Dead end
-							tiles.add(tiles.get(0));
-							direction.add(direction.get(0));
-						}
-					} else {
-						if (board[i][j] instanceof JunctionTile) {
-							if (tiles.size() > 2) {
-								board[i][j] = new JunctionTile(i, j);
-							} else {
-								// Should be PathTile
-								board[i][j] = new PathTile(i, j);
-								rewrite = true;
-							}
-						}
-
-						// Separate in case JunctionTile turned PathTile
-						// and need to check number of tiles/ directions
-						if (board[i][j] instanceof PathTile) {
-							if (tiles.size() == 2) {
-								// Good
-							} else if (tiles.size() == 1) {
-								// End/ Dead end
-								tiles.add(tiles.get(0));
-								direction.add(direction.get(0));
-							} else {
-								// Has more directions, should be JunctionTile
-								board[i][j] = new JunctionTile(i, j);
-								System.out.println("Junction");
-								rewrite = true;
-							}
-						}
-					}
-					
+					}					
 					
 					allTiles.add(board[i][j]);
 					board[i][j].setNeighbourTiles(tiles.toArray(
