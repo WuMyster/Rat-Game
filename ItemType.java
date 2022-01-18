@@ -1,66 +1,53 @@
+import javafx.scene.image.Image;
 
 public enum ItemType {
 	POISON {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawPoison(x, y);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addPoison(x, y);
+		@Override
+		public Image getImage(int state) {
+			return Poison.IMAGE;
 		}
 	},
 	STOPSIGN {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawStopSign(x, y, state);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addStopSign(x, y, state);
+		@Override
+		public Image getImage(int state) {
+			return StopSign.getImageState(state);
 		}
 	},
 	STERILISATION {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawSterilise(x, y);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addSterilise(x, y);
+		@Override
+		public Image getImage(int state) {
+			return Sterilisation.IMAGE;
 		}
 	},
 	BOMB {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawBomb(x, y, state);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addBomb(x, y, state);
+		@Override
+		public Image getImage(int state) {
+			return Bomb.getImage(state);
 		}
 	},
 	SEX_TO_MALE {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawSexToMale(x, y);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addSexToMale(x, y);
+		@Override
+		public Image getImage(int state) {
+			return SexChangeToMale.IMAGE;
 		}
 	},
 	SEX_TO_FEMALE {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawSexToFemale(x, y);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addSexToFemale(x, y);
+		@Override
+		public Image getImage(int state) {
+			return SexChangeToFemale.IMAGE;
 		}
 	},
 	GAS {
-		public void draw(int x, int y, int state) {
-			GameGUI.drawGas(x, y);
-		}
 
-		public void add(int x, int y, int state) {
-			GameGUI.addGas(x, y);
+		@Override
+		public Image getImage(int state) {
+			return Gas.IMAGE;
 		}
 	};
 	
@@ -71,7 +58,9 @@ public enum ItemType {
 	 * @param y		y position of the item
 	 * @param state	state of the item on the board
 	 */
-	public abstract void add(int x, int y, int state);	
+	public void add(int x, int y, int state) {
+		GameGUI.addItemToMap(this, x, y, state);
+	}
 	
 	/**
 	 * Draws the item onto the board.
@@ -79,7 +68,11 @@ public enum ItemType {
 	 * @param y		y position of the item
 	 * @param state	state of the item on the board
 	 */
-	public abstract void draw(int x, int y, int state);
+	public void draw(int x, int y, int state) {
+		GameGUI.drawItemToMap(this, x, y, state);
+	}
+	
+	public abstract Image getImage(int state);
 	
 	/**
 	 * Converts an {@code Item} to an enum of its type.

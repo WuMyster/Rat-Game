@@ -106,35 +106,27 @@ public class Board {
 		}
         return true;
     }
-
-	/**
-	 * Adds effect of stop sign to tile
-	 * @param x x position of tile on map
-	 * @param y y position of tile on map
-	 * @return {@code true} if stop sign can be placed
-	 */
-	public boolean addStopSign(int x, int y) {
-		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
+    
+    public boolean addItemToTile(ItemType it, int x, int y) {
+    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (isPlaceableTile(t)) {
-			return t.setTileItem(new StopSign(new int[] {y, x}));
+			Item i;
+			switch (it) {
+			case STOPSIGN -> i = new StopSign(new int[] {y, x});
+			case BOMB -> i = new Bomb(new int[] {y, x});
+			case GAS -> i = new Gas(x, y);
+			case POISON -> i = new Poison();
+			case SEX_TO_FEMALE -> i = new SexChangeToFemale();
+			case SEX_TO_MALE -> i = new SexChangeToMale();
+			case STERILISATION -> i = new Sterilisation();
+			default -> throw new IllegalArgumentException("Unexpected value: " + it);
+			}
+			return t.setTileItem(i);
 		}
-		return false;
-	}
-
-	/**
-	 * Adds bomb to tile.
-	 * @param x x position of tile on map
-	 * @param y y position of tile on map
-	 * @return if bomb can be placed at that location.
-	 */
-	public boolean addBomb(int x, int y) {
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-        if (isPlaceableTile(t)) {
-			return t.setTileItem(new Bomb(new int[] {y, x}));
-		}
-        return false;
-	}
-
+    	
+    	return false;
+    }
+    
     /**
      * Blows up tiles from origin in a row until "null" Tile reached.
      * @param x x-coordinate bomb was placed on
@@ -172,59 +164,7 @@ public class Board {
             x++;
         }
     }
-
-    /**
-     * Adds poison item to tile.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
-     */
-    public boolean addPoison(int x, int y) {        
-		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-		if (isPlaceableTile(t)) {
-			return t.setTileItem(new Poison());
-		}
-		return false;
-    }
-
-    /**
-     * Adds sex change (Male to Female) item to tile.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
-     */
-    public boolean addSexToFemale(int x, int y) {        
-        Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-		if (isPlaceableTile(t)) {
-			return t.setTileItem(new SexChangeToFemale());
-		}
-		return false;
-    }
-
-    /**
-     * Adds sex change (Female to Male) item to tile.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
-     */
-    public boolean addSexToMale(int x, int y) {
-    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-		if (isPlaceableTile(t)) {
-			return t.setTileItem(new SexChangeToMale());
-		}
-		return false;
-    }
-
-    /**
-     * Adds sterilise item to tile.
-     * @param x x-coordinate of tile.
-     * @param y y-coordinate of tile.
-     */
-    public boolean addSterilise(int x, int y) {
-    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-		if (isPlaceableTile(t)) {
-			return t.setTileItem(new Sterilisation());
-		}
-		return false;
-    }
-
+    
     /**
      * Adds a new Death Rat on tie from specified coordinates. Won't return 
      * boolean like other items because DR can always be added.
@@ -234,21 +174,6 @@ public class Board {
      */
     public void addDeathRat(int x, int y) {
         placeRat(new DeathRat(), Direction.NORTH, y, x);
-    }
-    
-    /**
-     * Adds a new Gas item on tile from specified coordinates.
-     * 
-     * @param x x position of tile
-     * @param y y position of tile
-     * @return {@code true} if gas can be placed here.
-     */
-    public boolean addGas(int x, int y ) {
-    	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
-    	if (isPlaceableTile(t)) {
-    		return t.setTileItem(new Gas(x, y));
-    	}
-    	return false;
     }
     
     /**
@@ -276,28 +201,28 @@ public class Board {
         t = board[boardY - EXTRA_PADDING][boardX];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x, y - 1, hp))) {
-        		GameGUI.addGas(x, y - 1);
+        		GameGUI.addItemToMap(ItemType.GAS, x, y - 1, -1);
         	}
         }
 
         t = board[boardY + EXTRA_PADDING][boardX];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x, y + 1, hp))) {
-        		GameGUI.addGas(x, y + 1);
+        		GameGUI.addItemToMap(ItemType.GAS, x, y + 1, -1);
         	}
         }
         
         t = board[boardY][boardX - EXTRA_PADDING];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x - 1, y , hp))) {
-        		GameGUI.addGas(x - 1, y);
+        		GameGUI.addItemToMap(ItemType.GAS, x - 1, y, -1);
         	}
         }
         
         t = board[boardY][boardX + EXTRA_PADDING];
         if (isPlaceableTile(t)) {
         	if (t.setTileItem(new Gas(x + 1, y, hp))) {
-        		GameGUI.addGas(x + 1, y);
+        		GameGUI.addItemToMap(ItemType.GAS, x + 1, y, -1);
         	}
         }
     }

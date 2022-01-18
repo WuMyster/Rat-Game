@@ -333,24 +333,51 @@ public class GameGUI {
 	 */
 	public static void itemCanvasDragDropOccurred(DragEvent event) {
 		if (event.getGestureSource() == draggableStop) {
-			placeStopSign(event);
+			placeItemOnMap(ItemType.STOPSIGN, event);
 		} else if (event.getGestureSource() == draggableBomb) {
-			placeBomb(event);
+			placeItemOnMap(ItemType.BOMB, event);
 		} else if (event.getGestureSource() == draggablePoison) {
-			placePoison(event);
+			placeItemOnMap(ItemType.POISON, event);
 		} else if (event.getGestureSource() == draggableSexToFemale) {
-			placeSexToFemale(event);
+			placeItemOnMap(ItemType.SEX_TO_FEMALE, event);
 		} else if (event.getGestureSource() == draggableSexToMale) {
-			placeSexToMale(event);
+			placeItemOnMap(ItemType.SEX_TO_MALE, event);
 		} else if (event.getGestureSource() == draggableSterilise) {
-			placeSterilise(event);
+			placeItemOnMap(ItemType.STERILISATION, event);
 		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
 		} else if (event.getGestureSource() == draggableGas) {
-			placeGas(event);
+			placeItemOnMap(ItemType.GAS, event);
 		} else {
 			System.err.println("Dragging fail!!");
 		}
+	}
+	
+	private static void placeItemOnMap(ItemType it, DragEvent event) {
+		int x = (int) Math.floor(event.getX() / TILE_SIZE);
+		int y = (int) Math.floor(event.getY() / TILE_SIZE);
+
+		if (m.addItemToTile(it, x, y)) {
+			int state;
+			switch (it) {
+			case STOPSIGN -> state = StopSign.MAX_STATES;
+			case BOMB -> state = Bomb.START_COUNTDOWN;
+			default -> state = -1;
+			}
+			
+			addItemToMap(it, x, y, state);
+		}
+	}
+	
+	public static void addItemToMap(ItemType it, int x, int y, int state) {
+		itemPlace.putIfAbsent(it, new ArrayList<>());
+		itemPlace.get(it).add(new int[] { y, x, state });
+		drawItemToMap(it, x, y, state);
+	}
+	
+	public static void drawItemToMap(ItemType it, int x, int y, int state) {
+		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
+		gc.drawImage(it.getImage(state), x * TILE_SIZE, y * TILE_SIZE);
 	}
 
 	/**
@@ -374,48 +401,6 @@ public class GameGUI {
 	}
 
 	/**
-	 * React when an object is dragged onto the canvas.
-	 * 
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Liam O'Reilly
-	 * @author Jing Shiang Gu
-	 */
-	private static void placeStopSign(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (m.addStopSign((int) x, (int) y)) {
-			addStopSign((int) x, (int) y, StopSign.MAX_STATES);
-		}
-	}
-
-	/**
-	 * Adds a StopSign to the board and draws it.
-	 * 
-	 * @param x      x position of the StopSign
-	 * @param y      y position of the StopSign
-	 * @param states the state of the StopSign
-	 */
-	public static void addStopSign(int x, int y, int states) {
-		itemPlace.putIfAbsent(ItemType.STOPSIGN, new ArrayList<>());
-		itemPlace.get(ItemType.STOPSIGN).add(new int[] { y, x, states });
-		drawStopSign(x, y, states);
-	}
-
-	/**
-	 * Draws a stop sign on this location on the board.
-	 * 
-	 * @param x     x position of the StopSign
-	 * @param y     y posision of the StopSign
-	 * @param state the state of the StopSign
-	 */
-	public static void drawStopSign(int x, int y, int state) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(StopSign.getImageState(state), x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-	/**
 	 * Update the graphical state of the StopSign.
 	 * 
 	 * @param pos   xy position of the StopSign
@@ -436,48 +421,6 @@ public class GameGUI {
 	}
 
 	/**
-	 * React when an object is dragged onto the canvas.
-	 *
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Andrew Wu
-	 */
-	private static void placeBomb(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (m.addBomb((int) x, (int) y)) {
-			addBomb((int) x, (int) y, Bomb.START_COUNTDOWN);
-		}
-	}
-
-	/**
-	 * Adds a Bomb Object onto the board with specified x y coorindates and draws
-	 * it.
-	 * 
-	 * @param x     x position of the Bomb
-	 * @param y     y position of the Bomb
-	 * @param state state of the Bomb
-	 */
-	public static void addBomb(int x, int y, int state) {
-		itemPlace.putIfAbsent(ItemType.BOMB, new ArrayList<>());
-		itemPlace.get(ItemType.BOMB).add(new int[] { y, x, state });
-		drawBomb(x, y, state);
-	}
-
-	/**
-	 * Draw a bomb on this location on the board.
-	 * 
-	 * @param x     x position of the Bomb
-	 * @param y     y position of the Bomb
-	 * @param state state of the Bomb
-	 */
-	public static void drawBomb(int x, int y, int state) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Bomb.getImage(state), x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-	/**
 	 * Updates value of bomb responsible for the remaining time till detonation.
 	 * 
 	 * @param x     x-coordinate of bomb placement
@@ -491,157 +434,7 @@ public class GameGUI {
 				i[2] = state;
 			}
 		}
-		drawBomb(x, y, state);
-	}
-
-	/**
-	 * React when an object is dragged onto the canvas.
-	 *
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Andrew Wu
-	 */
-	private static void placePoison(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (m.addPoison((int) x, (int) y)) {
-			addPoison((int) x, (int) y);
-		}
-	}
-
-	public static void addPoison(int x, int y) {
-		itemPlace.putIfAbsent(ItemType.POISON, new ArrayList<>());
-		itemPlace.get(ItemType.POISON).add(new int[] { y, x, -1 });
-		drawPoison(x, y);
-	}
-
-	/**
-	 * Draws a Poison on this location on the board.
-	 * 
-	 * @param x x position of the Poison
-	 * @param y y posision of the Poison
-	 */
-	public static void drawPoison(int x, int y) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Poison.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-	/**
-	 * React when an object is dragged onto the canvas.
-	 *
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Andrew Wu
-	 */
-	private static void placeSexToFemale(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (m.addSexToFemale((int) x, (int) y)) {
-			addSexToFemale((int) x, (int) y);
-		}
-	}
-
-	/**
-	 * Adds a SexToFemale Object onto the board from speicifed x y coordinates.
-	 * 
-	 * @param x x position of the SexToFemale
-	 * @param y y position of the SexToFemale
-	 */
-	public static void addSexToFemale(int x, int y) {
-		itemPlace.putIfAbsent(ItemType.SEX_TO_FEMALE, new ArrayList<>());
-		itemPlace.get(ItemType.SEX_TO_FEMALE).add(new int[] { y, x, -1 });
-		drawSexToFemale(x, y);
-	}
-
-	/**
-	 * Draws a sexToFemaleIcon on this location on the board.
-	 * 
-	 * @param x x position of the sexToFemaleIcon
-	 * @param y y posision of the sexToFemaleIcon
-	 */
-	public static void drawSexToFemale(int x, int y) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(SexChangeToFemale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-	/**
-	 * React when an object is dragged onto the canvas.
-	 *
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Andrew Wu
-	 */
-	private static void placeSexToMale(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (m.addSexToMale((int) x, (int) y)) {
-			addSexToMale((int) x, (int) y);
-		}
-	}
-
-	/**
-	 * Adds a SexToMale object using specified x y coorindates on the board.
-	 * 
-	 * @param x x position of the SexToMale
-	 * @param y y position of the SexToMale
-	 */
-	public static void addSexToMale(int x, int y) {
-		itemPlace.putIfAbsent(ItemType.SEX_TO_MALE, new ArrayList<>());
-		itemPlace.get(ItemType.SEX_TO_MALE).add(new int[] { y, x, -1 });
-		drawSexToMale(x, y);
-	}
-
-	/**
-	 * Draws a sexToMaleIcon on this location on the board.
-	 * 
-	 * @param x x position of the sexToMaleIcon
-	 * @param y y posision of the sexToMaleIcon
-	 */
-	public static void drawSexToMale(int x, int y) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(SexChangeToMale.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-	/**
-	 * React when an object is dragged onto the canvas.
-	 *
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 * @author Andrew Wu
-	 */
-	private static void placeSterilise(DragEvent event) {
-		double x = Math.floor(event.getX() / TILE_SIZE);
-		double y = Math.floor(event.getY() / TILE_SIZE);
-
-		if (m.addSterilise((int) x, (int) y)) {
-			addSterilise((int) x, (int) y);
-		}
-	}
-
-	/**
-	 * Adds a Sterilisation object to board with specified x y coordinates.
-	 * 
-	 * @param x x coordinates of the Sterilisation
-	 * @param y y coordinates of the Sterilisation
-	 */
-	public static void addSterilise(int x, int y) {
-		itemPlace.putIfAbsent(ItemType.STERILISATION, new ArrayList<>());
-		itemPlace.get(ItemType.STERILISATION).add(new int[] { y, x, -1 });
-		drawSterilise(x, y);
-	}
-
-	/**
-	 * Draws a steraliseIcon on this location on the board.
-	 * 
-	 * @param x x position of the steraliseIcon
-	 * @param y y posision of the steraliseIcon
-	 */
-	public static void drawSterilise(int x, int y) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Sterilisation.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+		drawItemToMap(ItemType.BOMB, x, y, state);
 	}
 
 	/**
@@ -665,43 +458,6 @@ public class GameGUI {
 	public static void drawDeathRat(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
-	}
-
-	/**
-	 * React when an object is dragged onto the canvas.
-	 *
-	 * @param event The drag event itself which contains data about the drag that
-	 *              occurred.
-	 */
-	public static void placeGas(DragEvent event) {
-		int x = (int) Math.floor(event.getX() / TILE_SIZE);
-		int y = (int) Math.floor(event.getY() / TILE_SIZE);
-		if (m.addGas((int) x, (int) y)) {
-			addGas((int) x, (int) y);
-		}
-	}
-
-	/**
-	 * Adds a Gas Object to the board from specified x y coordinates.
-	 * 
-	 * @param x x position of the gas
-	 * @param y y position of the gas
-	 */
-	public static void addGas(int x, int y) {
-		itemPlace.putIfAbsent(ItemType.GAS, new ArrayList<>());
-		itemPlace.get(ItemType.GAS).add(new int[] { y, x, -1 });
-		drawGas(x, y);
-	}
-
-	/**
-	 * Draws a gas icon on this location on the board.
-	 * 
-	 * @param x x position of the gas icon
-	 * @param y y posision of the gas icon
-	 */
-	public static void drawGas(int x, int y) {
-		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(Gas.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
 	public static int getRemainingTime() {
