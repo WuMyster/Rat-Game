@@ -32,6 +32,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -145,10 +146,16 @@ public class GameGUI {
 	private final static ImageView draggableGas = new ImageView(Gas.IMAGE);
 
 	/**
-	 * List of all draggable images.
+	 * List of all draggable images. Ensure order of draggables is the same as ItemType.
+	 * DeathRat treated like normal item, but ain't in ItemType so be added at the end
 	 */
-	private final static ImageView[] itemIconLis = new ImageView[] {draggableStop, draggableBomb,
-			draggableSexToFemale, draggableSexToMale, draggableSterilise, draggableDeathRat, draggablePoison};
+	private final static ImageView[] itemIconLis = new ImageView[] {draggablePoison, draggableStop, draggableSterilise,
+			draggableBomb, draggableSexToMale, draggableSexToFemale, draggableGas, draggableDeathRat};
+	
+	/**
+	 * List of labels of number of how many items left.
+	 */
+	private static Label[] itemCounter = new Label[itemIconLis.length];
 	
 	/**
 	 * Board of the game
@@ -383,7 +390,7 @@ public class GameGUI {
 			case BOMB -> state = Bomb.START_COUNTDOWN;
 			default -> state = -1;
 			}
-			
+			Inventory.removeItem(it);
 			addItemToMap(it, x, y, state);
 		}
 	}
@@ -495,6 +502,17 @@ public class GameGUI {
 	}
 	
 	/**
+	 * Sets the number of items available for the item.
+	 * 
+	 * @param itemNum	item number to change the number available
+	 * @param num		available number of item
+	 */
+	public static void setItemCounter(int itemNum, int num) {
+		itemCounter[itemNum].setText(String.valueOf(num));
+		itemIconLis[itemNum].setDisable(num == 0);
+	}
+	
+	/**
 	 * Time remaining to finish the game.
 	 * @return time in seconds to finish game.
 	 */
@@ -587,12 +605,10 @@ public class GameGUI {
 		 */
 		itemCanvas.setOnDragOver(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
-				ImageView[] goodImages = new ImageView[] { draggableStop, draggableBomb, draggablePoison,
-						draggableSexToFemale, draggableSexToMale, draggableSterilise, draggableDeathRat, draggableGas };
 				// Mark the drag as acceptable if the source was the draggable image.
 				// (for example, we don't want to allow the user to drag things or files into
 				// our application)
-				for (ImageView i : goodImages) {
+				for (ImageView i : itemIconLis) {
 					if (event.getGestureSource() == i) {
 						// Mark the drag event as acceptable by the canvas.
 						event.acceptTransferModes(TransferMode.ANY);
@@ -620,8 +636,16 @@ public class GameGUI {
 	 * Initiliase draggleable images. Expand VBox.
 	 */
 	private static void setUpDraggleableImages(VBox root) {
-		for (ImageView iv : itemIconLis) {
-			root.getChildren().add(iv);
+		
+		for (int i = 0; i < itemIconLis.length; i++) {
+			StackPane sp = new StackPane();
+			sp.getChildren().add(itemIconLis[i]);
+			itemCounter[i] = new Label("0");
+			sp.getChildren().add(itemCounter[i]);
+			sp.setAlignment(Pos.BASELINE_RIGHT);
+			itemIconLis[i].setDisable(true);
+			
+			root.getChildren().add(sp);
 		}
 	}
 
@@ -830,6 +854,7 @@ public class GameGUI {
 		cycler.stop();
 		timeLimit.stop();
 		setRatIndicator();
+		Inventory.stopInv();
 	}
 	
 	/**
@@ -838,6 +863,7 @@ public class GameGUI {
 	private static void playGame() {
 		cycler.play();
 		timeLimit.play();
+		Inventory.startInv();
 	}
 
 	/**
