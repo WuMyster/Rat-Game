@@ -107,43 +107,49 @@ public class GameGUI {
 	/**
 	 * Draggable image for stop sign.
 	 */
-	private static ImageView draggableStop = new ImageView();
+	private final static ImageView draggableStop = new ImageView(StopSign.IMAGE);
 
 	/**
 	 * Draggable image for bomb.
 	 */
-	private static ImageView draggableBomb = new ImageView();
+	private final static ImageView draggableBomb = new ImageView(Bomb.IMAGE);
 
 	/**
-	 * Draggable image for sex change (Male to Female) item.
+	 * Draggable image for sex change (to Female) item.
 	 */
-	private static ImageView draggableSexToFemale = new ImageView();
+	private final static ImageView draggableSexToFemale = new ImageView(SexChangeToFemale.IMAGE);
 
 	/**
-	 * Draggable image for sex change (Female to Male) item.
+	 * Draggable image for sex change (to Male) item.
 	 */
-	private static ImageView draggableSexToMale = new ImageView();
+	private final static ImageView draggableSexToMale = new ImageView(SexChangeToMale.IMAGE);
 
 	/**
 	 * Draggable image for sterilise item.
 	 */
-	private static ImageView draggableSterilise = new ImageView();
+	private final static ImageView draggableSterilise = new ImageView(Sterilisation.IMAGE);
 
 	/**
 	 * Draggable image for death rat.
 	 */
-	private static ImageView draggableDeathRat = new ImageView();
+	private final static ImageView draggableDeathRat = new ImageView(DeathRat.IMAGE);
 
 	/**
 	 * Draggable image for poison.
 	 */
-	private static ImageView draggablePoison = new ImageView();
+	private final static ImageView draggablePoison = new ImageView(Poison.IMAGE);
 
 	/**
 	 * Draggable image for poison.
 	 */
-	private static ImageView draggableGas = new ImageView();
+	private final static ImageView draggableGas = new ImageView(Gas.IMAGE);
 
+	/**
+	 * List of all draggable images.
+	 */
+	private final static ImageView[] itemIconLis = new ImageView[] {draggableStop, draggableBomb,
+			draggableSexToFemale, draggableSexToMale, draggableSterilise, draggableDeathRat, draggablePoison};
+	
 	/**
 	 * Board of the game
 	 */
@@ -614,91 +620,24 @@ public class GameGUI {
 	 * Initiliase draggleable images. Expand VBox.
 	 */
 	private static void setUpDraggleableImages(VBox root) {
-		draggableStop.setImage(StopSign.IMAGE);
-		root.getChildren().add(draggableStop);
-
-		draggableBomb.setImage(Bomb.IMAGE);
-		root.getChildren().add(draggableBomb);
-
-		draggablePoison.setImage(Poison.IMAGE);
-		root.getChildren().add(draggablePoison);
-
-		draggableSexToFemale.setImage(SexChangeToFemale.IMAGE);
-		root.getChildren().add(draggableSexToFemale);
-
-		draggableSexToMale.setImage(SexChangeToMale.IMAGE);
-		root.getChildren().add(draggableSexToMale);
-
-		draggableSterilise.setImage(Sterilisation.IMAGE);
-		root.getChildren().add(draggableSterilise);
-
-		draggableDeathRat.setImage(DeathRat.IMAGE);
-		root.getChildren().add(draggableDeathRat);
-
-		draggableGas.setImage(Gas.IMAGE);
-		root.getChildren().add(draggableGas);
+		for (ImageView iv : itemIconLis) {
+			root.getChildren().add(iv);
+		}
 	}
 
 	private static void setUpHandling() {
 		ClipboardContent content = new ClipboardContent();
 		content.putString("Hello");
 
-		draggableStop.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableStop.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggableBomb.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableBomb.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggablePoison.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggablePoison.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggableSexToFemale.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableSexToFemale.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggableSexToMale.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableSexToMale.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggableSterilise.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableSterilise.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggableDeathRat.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableDeathRat.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
-		draggableGas.setOnDragDetected(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent event) {
-				Dragboard db = draggableGas.startDragAndDrop(TransferMode.ANY);
-				db.setContent(content);
-				event.consume();
-			}
-		});
+		for (ImageView iv : itemIconLis) {
+			iv.setOnDragDetected(new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent event) {
+					Dragboard db = iv.startDragAndDrop(TransferMode.ANY);
+					db.setContent(content);
+					event.consume();
+				}
+			});
+		}
 	}
 
 	/**
