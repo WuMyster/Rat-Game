@@ -25,6 +25,11 @@ public class Sterilisation extends Item {
         hp = 1;
     }
     
+    /**
+	 * Constructor for Sterilisation object setting hp of item.
+	 * 
+	 * @param hp	hp of item
+	 */
     public Sterilisation(int hp) {
     	this.hp = hp;
     }

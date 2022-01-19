@@ -45,7 +45,7 @@ public class PlayerScore implements Comparable<PlayerScore> {
 	
 	/**
 	 * Constructs a {@code PlayerScore} based on String input.
-	 * @param input
+	 * @param input		information about the player
 	 */
 	public PlayerScore(String input) {
 		String[] in = input.split(Main.FILE_SUB_SEPERATOR);

@@ -75,6 +75,7 @@ public class LeaderBoard {
 	
 	/**
 	 * Adds information from the game and put into leaderboard.
+	 * @return position of current player on leaderboard
 	 */
 	public static int addData() {
 		PlayerScore ps = new PlayerScore(

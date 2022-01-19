@@ -2,6 +2,13 @@ import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 
+/**
+ * Models a Death Rat. Is different from normal rat as it requires
+ * knowledge about its position.
+ * 
+ * @author J
+ *
+ */
 public class DeathRat {
 	
 	/**
@@ -86,6 +93,11 @@ public class DeathRat {
 		return false;
 	}
 	
+	/**
+	 * Returns {@code true} if death rat has hp.
+	 * 
+	 * @return boolean if death rat is alive
+	 */
 	public boolean isAlive() {
 		return hp > 0;
 	}
@@ -120,8 +132,9 @@ public class DeathRat {
 	
 	/**
 	 * Change it's move limit.
-	 * @param r rat to kill
-	 * @param move limit it's going forwards to
+	 * @param r 	rat to kill
+	 * @param move 	limit it's going forwards to
+	 * @return 		{@code true} if rat passed in is killed, false otherwise
 	 * @author J
 	 */
 	public boolean killRat(Rat r, int move) {

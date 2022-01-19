@@ -284,6 +284,9 @@ public abstract class Tile {
 		detontate = true;
 	}
 	
+	/**
+	 * Removes Gas item from tile.
+	 */
 	public void clearGas() {
 		if (itemOnTile instanceof Gas) {
 			removeItem();
@@ -312,6 +315,9 @@ public abstract class Tile {
 		nextDeath.get(d).add(r);
 	}
 
+	/**
+	 * Sets the movement of the death rat.
+	 */
 	protected void setDeathRat() {
 		// Ensures all Death Rats can move
 		for (Direction prevDirection : currDeath.keySet()) {

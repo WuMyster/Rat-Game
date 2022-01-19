@@ -26,6 +26,11 @@ public class SexChangeToMale extends Item {
 		hp = 1;
 	}
 	
+	/**
+	 * Constructor for SexChangeToMale object setting hp of item.
+	 * 
+	 * @param hp	hp of item
+	 */
 	public SexChangeToMale(int hp ) {
 		this.hp = hp;
 	}

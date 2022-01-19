@@ -38,6 +38,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
+/**
+ * Class for interaction for the game. Responsible for displaying map, 
+ * moving rats, number of rats in game, time left in game, ending game, 
+ * items being put onto the map and drawing items onto the map.
+ * Primarily responsible for output.
+ * 
+ * @author J
+ *
+ */
 public class GameGUI {
 	
 	/**
@@ -306,8 +315,8 @@ public class GameGUI {
 	/**
 	 * Removes items from board.
 	 * 
-	 * @param item the item to be removed
-	 * @param pos  x y coordinates of where item is located on board.
+	 * @param it 	the item to be removed
+	 * @param pos  	x y coordinates of where item is located on board.
 	 */
 	public static void removeItem(ItemType it, int[] pos) {
 		ArrayList<int[]> arr = itemPlace.get(it);
@@ -320,8 +329,6 @@ public class GameGUI {
 				}
 			}
 			arr.remove(a);
-		} else {
-			// System.err.println("Item cannot be removed\n" + it);
 		}
 	}
 
@@ -353,6 +360,12 @@ public class GameGUI {
 		}
 	}
 	
+	/**
+	 * From user input, have item be added to the specific tile to be added.
+	 * 
+	 * @param it		type of item
+	 * @param event		DragEvent information
+	 */
 	private static void placeItemOnMap(ItemType it, DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
@@ -369,12 +382,28 @@ public class GameGUI {
 		}
 	}
 	
+	/**
+	 * Adds item of enum it onto map, using xy coorindates, based on its state.
+	 * 
+	 * @param it		type of item
+	 * @param x			x pos on map
+	 * @param y			y pos on map
+	 * @param state		state of item
+	 */
 	public static void addItemToMap(ItemType it, int x, int y, int state) {
 		itemPlace.putIfAbsent(it, new ArrayList<>());
 		itemPlace.get(it).add(new int[] { y, x, state });
 		drawItemToMap(it, x, y, state);
 	}
 	
+	/**
+	 * Draws item of enum it onto map, using xy coordinates, based on its state.
+	 * 
+	 * @param it		type of item
+	 * @param x			x pos on map
+	 * @param y			y pos on map
+	 * @param state		state of item
+	 */
 	public static void drawItemToMap(ItemType it, int x, int y, int state) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(it.getImage(state), x * TILE_SIZE, y * TILE_SIZE);
@@ -407,7 +436,6 @@ public class GameGUI {
 	 * @param state the state it is in
 	 */
 	public static void damageStopSign(int[] pos, int state) {
-		// Will need to think about this Currently StopSign calls damage
 		ArrayList<int[]> stopSignPlace = itemPlace.get(ItemType.STOPSIGN);
 		if (state != 0) {
 			int[] xyPos = null;
@@ -460,6 +488,10 @@ public class GameGUI {
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
 	}
 	
+	/**
+	 * Time remaining to finish the game.
+	 * @return time in seconds to finish game.
+	 */
 	public static int getRemainingTime() {
 		return maxTime;
 	}

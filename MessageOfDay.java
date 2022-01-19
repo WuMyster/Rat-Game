@@ -3,6 +3,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+/**
+ * From a website lecturer has created, gets data from website, 
+ * create solution and ping back to website the answer to get quote
+ * of the day.
+ * 
+ * @author J
+ *
+ */
 public class MessageOfDay {
 	
 	/**
@@ -34,14 +42,6 @@ public class MessageOfDay {
 	 * The alphabet in a list.
 	 */
 	private static final char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-
-	/**
-	 * DEBUG Add static
-	 * @param args cli input
-	 */
-	public static void main(String[] args) {
-		System.out.println(getMsgDay());
-	}
 	
 	/**
 	 * Returns the message of the day.

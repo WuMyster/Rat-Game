@@ -13,6 +13,9 @@ public class SexChangeToFemale extends Item {
 	 */
 	public static final String NAME = "toFemale";
 	
+	/**
+	 * Image of the item.
+	 */
 	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "SexChangeToFemale.png");
 	
     /**
@@ -22,6 +25,10 @@ public class SexChangeToFemale extends Item {
 		hp = 1;
 	}
 	
+	/**
+	 * Set the hp of the item.
+	 * @param hp 	hp of item
+	 */
 	public SexChangeToFemale(int hp) {
 		this.hp = hp;
 	}

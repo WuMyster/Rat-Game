@@ -1,6 +1,16 @@
 import javafx.scene.image.Image;
 
+/**
+ * Different types of items. Most Item iteraction done through here.
+ * 
+ * @author J
+ *
+ */
 public enum ItemType {
+	
+	/**
+	 * Poison object.
+	 */
 	POISON {
 
 		@Override
@@ -8,6 +18,9 @@ public enum ItemType {
 			return Poison.IMAGE;
 		}
 	},
+	/**
+	 * StopSign object.
+	 */
 	STOPSIGN {
 
 		@Override
@@ -15,6 +28,9 @@ public enum ItemType {
 			return StopSign.getImageState(state);
 		}
 	},
+	/**
+	 * Sterilisation object.
+	 */
 	STERILISATION {
 
 		@Override
@@ -22,6 +38,9 @@ public enum ItemType {
 			return Sterilisation.IMAGE;
 		}
 	},
+	/**
+	 * Bomb object.
+	 */
 	BOMB {
 
 		@Override
@@ -29,6 +48,9 @@ public enum ItemType {
 			return Bomb.getImage(state);
 		}
 	},
+	/**
+	 * Sex change to male object.
+	 */
 	SEX_TO_MALE {
 
 		@Override
@@ -36,6 +58,9 @@ public enum ItemType {
 			return SexChangeToMale.IMAGE;
 		}
 	},
+	/**
+	 * Sex change to female object.
+	 */
 	SEX_TO_FEMALE {
 
 		@Override
@@ -43,6 +68,9 @@ public enum ItemType {
 			return SexChangeToFemale.IMAGE;
 		}
 	},
+	/**
+	 * Gas object.
+	 */
 	GAS {
 
 		@Override
@@ -72,6 +100,12 @@ public enum ItemType {
 		GameGUI.drawItemToMap(this, x, y, state);
 	}
 	
+	/**
+	 * Returns image, sometimes depending on state, of item.
+	 * 
+	 * @param state		different stage of the item
+	 * @return			Image of the item
+	 */
 	public abstract Image getImage(int state);
 	
 	/**

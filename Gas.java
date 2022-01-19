@@ -5,6 +5,12 @@ import java.util.TimerTask;
 
 import javafx.scene.image.Image;
 
+/**
+ * Models a gas item and can spread up to a radius of 3 tiles.
+ * 
+ * @author J
+ *
+ */
 public class Gas extends TimeItem {
 
 	/**

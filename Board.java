@@ -107,6 +107,15 @@ public class Board {
         return true;
     }
     
+    /**
+     * Checks if item can be added to this tile, if so, it will add item to tile
+     * and return true, if it cannot be added, it will return false.
+     * 
+     * @param it	item type to be added to tile
+     * @param x		x pos of the tile
+     * @param y		y pos of the tile
+     * @return		{@code true} if item can be added to tile
+     */
     public boolean addItemToTile(ItemType it, int x, int y) {
     	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (isPlaceableTile(t)) {
@@ -179,7 +188,8 @@ public class Board {
     /**
      * Removes item from tile. Should only be used to remove Gas.
      * 
-     * @param del list of positions of the item.
+     * @param x x position of gas
+     * @param y y position of gas
      */
     public static void clearGas(int x, int y) {
     	board[y * EXTRA_PADDING][x * EXTRA_PADDING].clearGas();

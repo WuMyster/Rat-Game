@@ -106,8 +106,7 @@ public class GameMaster {
     private final static String START_NAME = "lvl";
     
     /**
-     * Creates and returns a Game Master Scene
-     * @return Game Master Scene
+     * Creates and displays the GameMaster Login window.
      */
     public static void startGameMaster() {
     	
@@ -310,7 +309,7 @@ public class GameMaster {
     
     /**
      * Returns points earned in game so far.
-     * @return
+     * @return number of points earned in game so far
      */
     public static int getPoints() {
     	return pointsAccumulated;

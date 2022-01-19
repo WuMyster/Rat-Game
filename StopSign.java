@@ -57,7 +57,7 @@ public class StopSign extends Item {
 	/**
 	 * Constructs a {@code StopSign} which prevents rats from entering the
 	 * {@code Tile} that has this item. Has
-	 * @param xyPos
+	 * @param xyPos 	xyPos of the item.
 	 */
 	public StopSign(int[] xyPos) {
 		this.xyPos = xyPos;

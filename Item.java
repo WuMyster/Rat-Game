@@ -12,8 +12,9 @@ abstract class Item {
 	protected int hp;
 	
 	/**
-	 * Most items
-	 * @return
+	 * Returns the state of an object. Most objects do not require this.
+	 * 
+	 * @return 	state of object
 	 */
 	protected int getState() {
 		return -1;

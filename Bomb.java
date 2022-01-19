@@ -50,6 +50,7 @@ public class Bomb extends TimeItem {
 
 	/**
 	 * Sets the bomb with 1 health point.
+	 * @param xyPos		xy position of the bomb
 	 */
 	public Bomb(int[] xyPos) {
 		hp = START_COUNTDOWN; // is never used, only for constructor
@@ -61,7 +62,8 @@ public class Bomb extends TimeItem {
 	/**
 	 * Sets the bomb with the remaining health it has.
 	 * 
-	 * @param hp seconds left from the bomb before it blows up
+	 * @param xyPos		xy position of the bomb
+	 * @param hp 		seconds left from the bomb before it blows up
 	 */
 	public Bomb(int[] xyPos, int hp) {
 		this.x = xyPos[1];
