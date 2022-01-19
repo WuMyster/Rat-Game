@@ -1,6 +1,5 @@
 import javafx.scene.image.Image;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -110,7 +109,7 @@ public class Bomb extends TimeItem {
 					Board.detonate(x, y);
 				}
 			}
-		}, 0, 1000);
+		}, 1, 1000); //Delaying by 1 ms so GameGUI can add it 
 	}
 
 	@Override
