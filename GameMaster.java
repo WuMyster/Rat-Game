@@ -74,6 +74,11 @@ public class GameMaster {
      * x y size of the map.
      */
     private static int[] mapSize = null;
+    
+    /**
+     * Number of items in inventory.
+     */
+    private static String inventoryCounter = null;
 
     /**
      * Max level the player has achieved.
@@ -316,6 +321,14 @@ public class GameMaster {
     }
     
     /**
+     * Returns the inventory counter for items.
+     * @return string format of the items
+     */
+    public static String getInventory() {
+    	return inventoryCounter;
+    }
+    
+    /**
      * Gets the information of the level and set up values before calling
      * game window.
      * @param currLvl 	the level selected
@@ -345,8 +358,11 @@ public class GameMaster {
     	for (int i = 0; i < repeat; i++) {
     		rats.add(information.get(counter++));
     	}
-    	// For now assume no items on board of new game
-    	System.out.println("Finished reading file");
+    	inventoryCounter = "";
+    	for (int i = 0; i <= Inventory.MAX_NUM_ITEMS; i++) {
+        	inventoryCounter += "0" + Main.FILE_MAIN_SEPERATOR;
+    	}
+    	
     	Main.startGameGUI();
     }
     
@@ -373,6 +389,8 @@ public class GameMaster {
     	for (int i = 0; i < repeat; i++) {
     		items.add(playerInfo.get(counter++));
     	}
+    	
+    	inventoryCounter = playerInfo.get(counter++);
     	Main.startGameGUI();
     }
     

@@ -678,6 +678,7 @@ public class GameGUI {
 
 		GameGUI.maxTime = GameMaster.getMaxTime();
 		RatController.setRatController(GameMaster.getMaxRats(), GameMaster.getPoints());
+		Inventory.setInventory(GameMaster.getInventory());
 
 		BorderPane root = new BorderPane();
 		root.setCenter(createCenterMap());
@@ -870,7 +871,9 @@ public class GameGUI {
 	 * Saves the state of the game
 	 */
 	private static void saveState() {
-		m.saveState(Main.PLAYER_FILE_LOC + playerName + ".txt");
+		String saveLoc = Main.PLAYER_FILE_LOC + playerName + ".txt";
+		m.saveState(saveLoc);
+		Inventory.writeInventoryToFile(saveLoc);
 	}
 
 	/**
