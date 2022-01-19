@@ -163,6 +163,7 @@ public abstract class Tile {
 		
 		if (detontate) {
 			blowUpTile();
+			detontate = false;
 		} else {
 			giveRatItem();
 			getRatInteractions();
