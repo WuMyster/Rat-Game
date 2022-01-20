@@ -367,9 +367,10 @@ public class GameGUI {
 			placeItemOnMap(ItemType.STERILISATION, event);
 		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
-			Inventory.removeDeathRatCounter();
+			Inventory.removeDeathRatCounter(false);
 		} else if (event.getGestureSource() == draggableSuperDeath) {
 			placeSuperDeath(event);
+			Inventory.removeDeathRatCounter(true);
 		} else if (event.getGestureSource() == draggableGas) {
 			placeItemOnMap(ItemType.GAS, event);
 		} else {
@@ -492,23 +493,32 @@ public class GameGUI {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		Board.placeRat(new DeathRat(), Direction.NORTH, y, x);
+		drawDeathRat(x, y, RatType.DEATH);
 	}
 
 	/**
 	 * Draws a Death Rat onto screen. Initial drawing of the Death rat.
 	 * 
-	 * @param x x position of the DeathRat
-	 * @param y y position of the DeathRat
+	 * @param x 	x position of the DeathRat
+	 * @param y 	y position of the DeathRat
+	 * @param rt 	rat type (for death rat between death rat and super death rat)
 	 */
-	public static void drawDeathRat(int x, int y) {
+	public static void drawDeathRat(int x, int y, RatType rt) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
-		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+		gc.drawImage(rt.getImage()[2], x * TILE_SIZE + TILE_X_OFFSET, y * TILE_SIZE, 
+				RAT_WIDTH, RAT_HEIGHT);
 	}
 	
+	/**
+	 * Place a SuperDeathRat on the event.
+	 * 
+	 * @param event	drag event
+	 */
 	private static void placeSuperDeath(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 		Board.placeRat(new SuperDeathRat(), Direction.NORTH, y, x);
+		drawDeathRat(x, y, RatType.SUPERDEATH);
 	}
 	
 	/**
@@ -831,14 +841,6 @@ public class GameGUI {
 	 * from Game Master
 	 */
 	private static void runCycle() {
-		currMovement = new HashMap<>();
-		step = 0;
-		Board.runAllTiles();
-		ratMoveTimeline.play();
-		currPoints.setText(String.valueOf(RatController.getPoints()));
-		drawItems();
-		setRatIndicator();
-
 		// Stop conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			stopGame();
@@ -850,7 +852,16 @@ public class GameGUI {
 		} else if (playerStopGame) { // Player stops the game
 			stopGame();
 			saveState();
-		} // Otherwise keep going
+		} else {// Otherwise keep going
+			// This way so all rats are visibly killed before changing screen
+			currMovement = new HashMap<>();
+			step = 0;
+			Board.runAllTiles();
+			ratMoveTimeline.play();
+			currPoints.setText(String.valueOf(RatController.getPoints()));
+			drawItems();
+			setRatIndicator();
+		}
 	}
 
 	private static void decrementTimer() {

@@ -345,7 +345,11 @@ public class Board {
 
 		// Now adding in death rat movements
 		for (DeathRat dr : deathRatBuffer) {
-			GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
+			if (dr instanceof SuperDeathRat) {
+				GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.SUPERDEATH, dr.getMove());
+			} else {
+				GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
+			}
 		}
 	}
 

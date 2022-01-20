@@ -38,6 +38,6 @@ public class SuperDeathRat extends DeathRat {
 	 * @return	direction of the nearest rat
 	 */
 	public Direction chooseDirection(int x, int y) {		
-		return Board.findClosestRat(y, x);;
+		return Board.findClosestRat(y, x);
 	}
 }

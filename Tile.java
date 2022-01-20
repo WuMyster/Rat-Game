@@ -329,8 +329,15 @@ public abstract class Tile {
 				} else {
 					nextDeath.putIfAbsent(prevDirection, new ArrayList<>());
 					nextDeath.get(prevDirection).add(dr);
+					
+					RatType rt;
+					if (dr instanceof SuperDeathRat) {
+						rt = RatType.SUPERDEATH;
+					} else {
+						rt = RatType.DEATH;
+					}
 					GameGUI.addCurrMovement(X_Y_POS, prevDirection.opposite(), 
-							RatType.DEATH, 0);
+							rt, 0);
 				}
 			}
 			currDeath.put(prevDirection, moves);

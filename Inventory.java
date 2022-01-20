@@ -46,7 +46,7 @@ public class Inventory {
 	/**
 	 * Time in between each item being added on in miliseconds.
 	 */
-	private static final int TIME_STOP = 5000;
+	private static final int TIME_STOP = 1000;
 	
 	/**
 	 * Starts the inventory count down.
@@ -78,9 +78,10 @@ public class Inventory {
 	
 	/**
 	 * Removes a counter for death rat.
+	 * @param superDR 	boolean if DR used was superDR
 	 */
-	public static void removeDeathRatCounter() {
-		int n = MAX_NUM_ITEMS - 1;
+	public static void removeDeathRatCounter(boolean superDR) {
+		int n = MAX_NUM_ITEMS - (superDR ? 1 : 2);
 		itemCounter[n]--;
 		changeCounterNum(n, itemCounter[n]);
 	}
