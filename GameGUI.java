@@ -50,16 +50,6 @@ import javafx.util.Duration;
  *
  */
 public class GameGUI {
-	
-	/**
-	 * Width of the window in pixels.
-	 */
-	private static final int WINDOW_WIDTH = 1150;
-
-	/**
-	 * Height of the window in pixels.
-	 */
-	private static final int WINDOW_HEIGHT = 650;
 
 	/**
 	 * Width of the game canvas in pixels.
@@ -69,7 +59,17 @@ public class GameGUI {
 	/**
 	 * Height of the game canvas in pixels.
 	 */
-	private static final int CANVAS_HEIGHT = 600;
+	private static final int CANVAS_HEIGHT = 700;
+	
+	/**
+	 * Width of the window in pixels.
+	 */
+	private static final int WINDOW_WIDTH = CANVAS_WIDTH + 300;
+
+	/**
+	 * Height of the window in pixels.
+	 */
+	private static final int WINDOW_HEIGHT = CANVAS_HEIGHT + 70;
 
 	/**
 	 * Height and width of a Tile in pixels.
@@ -145,23 +145,23 @@ public class GameGUI {
 	 * Draggable image for poison.
 	 */
 	private final static ImageView draggableGas = new ImageView(Gas.IMAGE);
+	
+	/**
+	 * Draggable image for Super Death Rat.
+	 */
+	private final static ImageView draggableSuperDeath = new ImageView(SuperDeathRat.IMAGE);
 
 	/**
 	 * List of all draggable images. Ensure order of draggables is the same as ItemType.
 	 * DeathRat treated like normal item, but ain't in ItemType so be added at the end
 	 */
 	private final static ImageView[] itemIconLis = new ImageView[] {draggablePoison, draggableStop, draggableSterilise,
-			draggableBomb, draggableSexToMale, draggableSexToFemale, draggableGas, draggableDeathRat};
+			draggableBomb, draggableSexToMale, draggableSexToFemale, draggableGas, draggableDeathRat, draggableSuperDeath};
 	
 	/**
 	 * List of labels of number of how many items left.
 	 */
 	private static Label[] itemCounter = new Label[itemIconLis.length];
-	
-	/**
-	 * Board of the game
-	 */
-	private static Board m;
 
 	/**
 	 * Width of the rat in pixels.
@@ -368,6 +368,8 @@ public class GameGUI {
 		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
 			Inventory.removeDeathRatCounter();
+		} else if (event.getGestureSource() == draggableSuperDeath) {
+			placeSuperDeath(event);
 		} else if (event.getGestureSource() == draggableGas) {
 			placeItemOnMap(ItemType.GAS, event);
 		} else {
@@ -501,6 +503,12 @@ public class GameGUI {
 	public static void drawDeathRat(int x, int y) {
 		GraphicsContext gc = itemCanvas.getGraphicsContext2D();
 		gc.drawImage(DeathRat.IMAGE, x * TILE_SIZE, y * TILE_SIZE);
+	}
+	
+	private static void placeSuperDeath(DragEvent event) {
+		int x = (int) Math.floor(event.getX() / TILE_SIZE);
+		int y = (int) Math.floor(event.getY() / TILE_SIZE);
+		Board.placeRat(new SuperDeathRat(), Direction.NORTH, y, x);
 	}
 	
 	/**
@@ -693,7 +701,7 @@ public class GameGUI {
 		root.setBottom(createBottomDisplay());
 		root.setLeft(createLeftDisplay());
 
-		m = setUpBoard(GameMaster.getMap(), 17, 11);
+		Board.setUpBoard(GameMaster.getMap(), 17, 11);
 		Board.setUpRats(GameMaster.getRats());
 		Board.setUpItems(GameMaster.getItems());
 		drawMap();
@@ -814,7 +822,7 @@ public class GameGUI {
 	private static void drawMap() {
 		GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		m.drawBoard(gc);
+		Board.drawBoard(gc);
 	}
 
 	/**
@@ -825,7 +833,7 @@ public class GameGUI {
 	private static void runCycle() {
 		currMovement = new HashMap<>();
 		step = 0;
-		m.runAllTiles();
+		Board.runAllTiles();
 		ratMoveTimeline.play();
 		currPoints.setText(String.valueOf(RatController.getPoints()));
 		drawItems();
@@ -878,7 +886,7 @@ public class GameGUI {
 	 */
 	private static void saveState() {
 		String saveLoc = Main.PLAYER_FILE_LOC + playerName + ".txt";
-		m.saveState(saveLoc);
+		Board.saveState(saveLoc);
 		Inventory.writeInventoryToFile(saveLoc);
 	}
 

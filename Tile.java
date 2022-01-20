@@ -359,7 +359,7 @@ public abstract class Tile {
 	 * @return boolean if normal rat is coming to this tile
 	 */
 	public boolean hasRat() {
-		return !nextBlock.isEmpty();
+		return !currBlock.isEmpty();
 	}
 
 	/**

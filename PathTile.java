@@ -69,22 +69,28 @@ public class PathTile extends Tile {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
-
 					Tile t;
-					int i;
-					do {
-						t = neighbourTiles.get(goTo);
-						i = t.numsRatsCanEnter(this, 1);
+					if (dr instanceof SuperDeathRat) {
+						Direction d = ((SuperDeathRat) dr).chooseDirection(X_Y_POS[0], X_Y_POS[1]);
+						t = neighbourTiles.get(d);
+						t.moveDeathRat(dr, d.opposite());
+						dr.initalMove(X_Y_POS, d);
+					} else {
+						int i;
+						do {
+							t = neighbourTiles.get(goTo);
+							i = t.numsRatsCanEnter(this, 1);
 
-						Direction tmp = goTo;
-						goTo = prevDirection;
-						prevDirection = tmp;
-					} while (i == 0);
+							Direction tmp = goTo;
+							goTo = prevDirection;
+							prevDirection = tmp;
+						} while (i == 0);
 
-					// Need better logic for this
-					t.moveDeathRat(dr, prevDirection.opposite());
+						// Need better logic for this
+						t.moveDeathRat(dr, prevDirection.opposite());
+						dr.initalMove(X_Y_POS, prevDirection);
+					}
 					drs.add(dr);
-					dr.initalMove(X_Y_POS, prevDirection);
 				}
 			}
 		}

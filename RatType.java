@@ -6,6 +6,12 @@ import javafx.scene.image.Image;
  *
  */
 public enum RatType {
+	
+	/**
+	 * SuperDeath rat information.
+	 */
+	SUPERDEATH (1, 2, "SuperDeath"),
+	
 	/**
 	 * Death Rat information.
 	 */

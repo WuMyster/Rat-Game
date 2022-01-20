@@ -1,6 +1,9 @@
+import javafx.scene.image.Image;
 
 public class SuperDeathRat extends DeathRat {
 
+	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "ItemSuperDeathRat.png");
+	
 	public SuperDeathRat() {
 		super();
 	}
@@ -9,9 +12,10 @@ public class SuperDeathRat extends DeathRat {
 		super(hp);
 	}
 	
-	public Direction chooseDirection() {
+	public Direction chooseDirection(int x, int y) {
+		Direction d = Board.findClosestRat(y, x);
+		System.out.println("Find Direction: " + d);
 		
-		
-		return null;
+		return d;
 	}
 }
