@@ -139,6 +139,7 @@ public class GameGUI {
 				state = -1;
 				System.out.println("Checking tiles");
 				m.checkTiles(x, y);
+				System.out.println("Finished checking");
 			}
 			addItemToMap(it, x, y, state);
 		} else {

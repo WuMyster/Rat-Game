@@ -296,7 +296,6 @@ public class Board {
 
 //////////////////////////////////////////////////////////
 	
-	public static ArrayList<Tile> visitedTile = new ArrayList<>();
 	
 	public boolean addItemToTile(String it, int x, int y) {
 		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
@@ -313,34 +312,43 @@ public class Board {
 		return false;
 	}
 	
-	public void checkTileAndSurrounding(int pos) {
+	public static ArrayList<TileAndDir> visitedTile = new ArrayList<>();
+	
+	public Direction checkTileAndSurrounding(int pos) {
 		if (pos == visitedTile.size() - 1) {
-			System.out.println("No Stopsign found!");
+			return null;
 		}
-		 Tile t = visitedTile.get(pos);
-		 if (t.checkTile()) {
-			 System.out.println("Done at: " + t);
-			 return;
+		 TileAndDir t = visitedTile.get(pos);
+		 if (t.tile.checkTile()) {
+			 return t.dir;
 			 // Or set pos to be last
 		 } else {
-			 int x = t.X_Y_POS[1];
-			 int y = t.X_Y_POS[0];
+			 int x = t.tile.X_Y_POS[1];
+			 int y = t.tile.X_Y_POS[0];
 			 
-			 if (board[y - 1][x] != null && !visitedTile.contains(board[y - 1][x])) {
-				 visitedTile.add(board[y - 1][x]);
+			 if (board[y - 1][x] != null && !containsJ(board[y - 1][x])) {
+				 visitedTile.add(new TileAndDir(board[y - 1][x], t.dir));
 			 } 
-			 if (board[y + 1][x] != null && !visitedTile.contains(board[y + 1][x])) {
-				 visitedTile.add(board[y + 1][x]);
+			 if (board[y + 1][x] != null && !containsJ(board[y + 1][x])) {
+				 visitedTile.add(new TileAndDir(board[y + 1][x], t.dir));
 			 } 
-			 if (board[y][x - 1] != null && !visitedTile.contains(board[y][x - 1])) {
-				 visitedTile.add(board[y][x - 1]);
+			 if (board[y][x - 1] != null && !containsJ(board[y][x - 1])) {
+				 visitedTile.add(new TileAndDir(board[y][x - 1], t.dir));
 			 } 
-			 if (board[y][x + 1] != null && !visitedTile.contains(board[y][x + 1])) {
-				 visitedTile.add(board[y][x + 1]);
+			 if (board[y][x + 1] != null && !containsJ(board[y][x + 1])) {
+				 visitedTile.add(new TileAndDir(board[y][x + 1], t.dir));
 			 }
-			 checkTileAndSurrounding(pos + 1);
-		 }
-		 
+			 return checkTileAndSurrounding(pos + 1);
+		 } 
+	}
+	
+	public static boolean containsJ(Tile t) {
+		for (TileAndDir td : visitedTile) {
+			if (td.equals(t)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
     public void checkTiles(int x, int y) {
@@ -349,18 +357,19 @@ public class Board {
 
         // Ignore if they're on same tile...
         visitedTile = new ArrayList<>();
-        if (board[y - 1][x] != null && !visitedTile.contains(board[y - 1][x])) {
-			 visitedTile.add(board[y - 1][x]);
+        if (board[y - 1][x] != null) {
+			 visitedTile.add(new TileAndDir(board[y - 1][x], Direction.NORTH));
 		 } 
-        if (board[y + 1][x] != null && !visitedTile.contains(board[y + 1][x])) {
-			 visitedTile.add(board[y + 1][x]);
+        if (board[y + 1][x] != null) {
+			 visitedTile.add(new TileAndDir(board[y + 1][x], Direction.SOUTH));
 		 } 
-        if (board[y][x - 1] != null && !visitedTile.contains(board[y][x - 1])) {
-			 visitedTile.add(board[y][x - 1]);
+        if (board[y][x - 1] != null) {
+			 visitedTile.add(new TileAndDir(board[y][x - 1], Direction.WEST));
 		 } 
-        if (board[y][x + 1] != null && !visitedTile.contains(board[y][x + 1])) {
-			 visitedTile.add(board[y][x + 1]);
+        if (board[y][x + 1] != null) {
+			 visitedTile.add(new TileAndDir(board[y][x + 1], Direction.EAST));
 		 }
-        checkTileAndSurrounding(0);
+        Direction gotoDir = checkTileAndSurrounding(0);
+        System.out.println("Direction to head is: " + gotoDir);
     }
 }
