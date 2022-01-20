@@ -64,7 +64,7 @@ public class GameGUI {
 	/**
 	 * Width of the window in pixels.
 	 */
-	private static final int WINDOW_WIDTH = CANVAS_WIDTH + 300;
+	private static final int WINDOW_WIDTH = CANVAS_WIDTH + 275;
 
 	/**
 	 * Height of the window in pixels.
