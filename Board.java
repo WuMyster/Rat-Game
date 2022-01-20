@@ -458,10 +458,6 @@ public class Board {
 	 * @return direction towards closest rat
 	 */
 	public static Direction findClosestRat(int x, int y) {
-//		y *= EXTRA_PADDING;
-//		x *= EXTRA_PADDING;
-		System.out.println(y);
-		System.out.println(x);
 
 		// Ignore if they're on same tile...
 		visitedTile = new ArrayList<>();
@@ -479,7 +475,6 @@ public class Board {
 			visitedTile.add(new TileAndDir(board[y][x + 1], Direction.EAST));
 		}
 		Direction d = checkTileAndSurrounding(0);
-		System.out.println(visitedTile.size());
 		return d;
 	}
 
@@ -492,7 +487,7 @@ public class Board {
 	 */
 	private static Direction checkTileAndSurrounding(int pos) {
 		if (pos == visitedTile.size() - 1) {
-			System.out.println("Not found");
+			System.err.println("No rats were found");
 			return null;
 		}
 		TileAndDir t = visitedTile.get(pos);

@@ -425,7 +425,6 @@ public class GameMaster {
             while (in.hasNextLine()) {
             	out.add(in.nextLine());
             }
-            System.out.println("Success!");
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't access file... Except this is not caught...");
             e.printStackTrace();
@@ -448,7 +447,6 @@ public class GameMaster {
             while (in.hasNextLine()) {
             	out.add(in.nextLine());
             }
-            System.out.println("Success!");
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't access file... Except this is not caught...");
             e.printStackTrace();

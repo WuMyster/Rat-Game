@@ -31,7 +31,7 @@ public class Inventory {
 	/**
 	 * Max number of items.
 	 */
-	private static final int MAX_ITEM = 2;
+	private static final int MAX_ITEM = 5;
 
 	/**
 	 * Random number generator.
@@ -46,7 +46,7 @@ public class Inventory {
 	/**
 	 * Time in between each item being added on in miliseconds.
 	 */
-	private static final int TIME_STOP = 1000;
+	private static final int TIME_STOP = 5000;
 	
 	/**
 	 * Starts the inventory count down.
