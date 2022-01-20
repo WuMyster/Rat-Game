@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -465,17 +466,22 @@ public class GameMaster {
     	maxLevel = Integer.valueOf(playerInfo.get(0));
     	
     	GridPane grid = new GridPane();
+    	grid.setVgap(8);
+        grid.setHgap(10);
+
+    	int startX = 0;
+    	int maxX = startX + 4;
     	
-    	Label pageName = new Label("Select levels");
-    	int maxX = 2;
+    	Label pageName = new Label("Select level");
+    	pageName.setFont(new Font(20));
     	grid.getChildren().add(pageName);
     	GridPane.setConstraints(pageName, 0, 0, maxX, 1);
-    	
-    	// Should get max number of levels from somewhere
-    	int x = 0;
+
+    	int x = startX;
     	int y = 1;
     	for (int i = startNum; i < maxNumOfLevels - 1; i++) { // 4 is max number of levels
     		Button lvl = new Button(String.valueOf(i));
+    		
         	lvl.setOnAction(e ->  {
         		currLvl = Integer.valueOf(lvl.getText());
         		createNewGame();
@@ -484,20 +490,22 @@ public class GameMaster {
         	grid.getChildren().add(lvl);
         	GridPane.setConstraints(lvl, x++, y);
         	if (x == maxX) {
-        		x = 0;
+        		x = startX;
         		y++;
         	}
+        	
     	}
     	if (playerInfo.size() > 1) {
     		Button continuePrevGame = new Button("Load previous game");
+    		
     		continuePrevGame.setOnAction(e -> {
     			loadPrevGame();
     			});
-    		GridPane.setConstraints(continuePrevGame, x, y);
+    		GridPane.setConstraints(continuePrevGame, 0, y, 4, 1);
     		grid.getChildren().add(continuePrevGame);
     	}
-    	
-    	Scene scene = new Scene(grid, 300, 200);
+    	grid.setAlignment(Pos.CENTER);
+    	Scene scene = new Scene(grid, 175, 175);
 
     	Main.setWindow(scene);
     }
