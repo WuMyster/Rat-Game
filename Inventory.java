@@ -41,7 +41,7 @@ public class Inventory {
 	/**
 	 * Timer for each item being added on.
 	 */
-	private static final Timer timer = new Timer();
+	private static Timer timer = new Timer();
 	
 	/**
 	 * Time in between each item being added on in miliseconds.
@@ -64,6 +64,7 @@ public class Inventory {
 	 */
 	public static void stopInv() {
 		timer.cancel();
+		timer = new Timer();
 	}
 	
 	/**
