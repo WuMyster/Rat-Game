@@ -210,7 +210,7 @@ public abstract class Tile {
 				aliveRats.addAll(tmp);
 				currBlock.put(prevDirection, tmp);
 			} else {
-				System.out.println("NULL");
+				System.err.println("NULL");
 			}
 		}
 		

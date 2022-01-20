@@ -147,7 +147,7 @@ public class JunctionTile extends Tile {
 			}
 		}
 
-		// For now assign random directions to every rat
+		// For now assign random directions to every normal rat
 		createBuffer();
 		ArrayList<Rat> ratsToDoom = buffer.get(prevDirectionDR);
 		ArrayList<Rat> slowerRats = new ArrayList<>();
@@ -214,19 +214,26 @@ public class JunctionTile extends Tile {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				if (dr.isAlive()) {
 					Tile t;
-					int i;
+					if (dr instanceof SuperDeathRat) {
+						Direction d = ((SuperDeathRat) dr).chooseDirection(X_Y_POS[0], X_Y_POS[1]);
+						t = neighbourTiles.get(d);
+						t.moveDeathRat(dr, d.opposite());
+						dr.initalMove(X_Y_POS, d);
+					} else {
+						int i;
+						do {
+							t = neighbourTiles.get(goTo);
+							i = t.numsRatsCanEnter(this, 1);
 
-					do {
-						t = neighbourTiles.get(goTo);
-						i = t.numsRatsCanEnter(this, 1);
+							prevDirection = goTo;
+							goTo = getADirection(prevDirection);
+						} while (i == 0);
 
-						prevDirection = goTo;
-						goTo = getADirection(prevDirection);
-					} while (i == 0);
-
-					t.moveDeathRat(dr, prevDirection.opposite());
+						// Need better logic for this
+						t.moveDeathRat(dr, prevDirection.opposite());
+						dr.initalMove(X_Y_POS, prevDirection);
+					}
 					drs.add(dr);
-					dr.initalMove(X_Y_POS, prevDirection);
 				}
 			}
 		}
