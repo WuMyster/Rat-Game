@@ -1,3 +1,4 @@
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,7 +34,7 @@ public class Main extends Application {
 	/**
 	 * File location of information about the different images.
 	 */
-	public final static String IMAGE_FILE_LOC = "./img/";
+	public final static String IMAGE_FILE_LOC = "C:\\Users\\jsgu1\\eclipse-workspace\\JavaFX Practice 17\\img\\";
 	
 	/**
 	 * Main current window being displayed.
@@ -43,13 +44,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		currWindow = primaryStage;
-		GameMaster.startGameMaster();
-	}
-	
-	/**
-	 * Starts the Game Screen.
-	 */
-	public static void startGameGUI() {
 		GameGUI.startGameScreen();
 	}
 	
@@ -80,7 +74,6 @@ public class Main extends Application {
 				e.printStackTrace();
 			}
 		}
-		Inventory.stopInv();
 		System.out.println("End");
 	}
 

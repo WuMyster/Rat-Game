@@ -1,7 +1,0 @@
-Andrew - Item & subclasses
-Dylan - Game master + Player
-David - Game master + Player
-Mo - Rat + Rat Controller
-Ollie - Rat + Rat Controller
-Salim - Item & subclasses
-J and Henry -> Tile + Map

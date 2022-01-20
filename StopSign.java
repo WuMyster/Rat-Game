@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 
@@ -22,17 +21,6 @@ public class StopSign extends Item {
 	 * Max number of images - 1.
 	 */
 	public static final int MAX_STATES = 2;
-	
-	/**
-	 * Start health of all Stop Signs.
-	 */
-	private static final int START_HP = 9;
-	
-	/**
-	 * Number to show the different stages of the Stop Sign
-	 * breaking down.
-	 */
-	private static final int DIVIDER = 3;
 
 	/**
 	 * Images of the different states of the stop sign.
@@ -61,8 +49,7 @@ public class StopSign extends Item {
 	 */
 	public StopSign(int[] xyPos) {
 		this.xyPos = xyPos;
-		this.hp = START_HP;
-		currState = getState();
+		currState = 3;
 	}
 	
 	/**
@@ -72,28 +59,7 @@ public class StopSign extends Item {
 	 */
 	public StopSign(int[] xyPos, int hp) {
 		this.xyPos = xyPos;
-		this.hp = hp;
-		currState = getState();
-	}
-	
-	/**
-	 * Number of rats trying to access this tile against the stop sign.
-	 * @param n number of rats trying to get to this tile
-	 * @return number of rats that are able to get into this tile
-	 */
-	public int numsRatsCanEnter(int n) {
-		hp -= n;
-		int nextState = getState();
-		if (nextState == 0) {
-			// Still want tile to remove StopSign from itself
-		} else if (currState != nextState) {
-			currState = nextState;
-			GameGUI.damageStopSign(xyPos, currState);
-		}
-		if (isAlive()) {
-			return 0;
-		}
-		return Math.abs(hp);
+		currState = 3;
 	}
 	
 	/**
@@ -104,30 +70,13 @@ public class StopSign extends Item {
 	public static Image getImageState(int s) {
 		return STATES[s];
 	}
-	/**
-	 * Gets the current state
-	 * @return the current state
-	 */
-	public int getState() {
-		return hp / DIVIDER;
-	}
-
-	/**
-	 * Doesn't touch the rat.
-	 * @return a list of rats
-	 */
-	@Override
-	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
-		// Does nothing
-		return r;
-	}
 
 	/**
 	 * Translates the class to a string
 	 */
 	@Override
 	public String toString() {
-		String out = NAME + Main.FILE_SUB_SEPERATOR + hp;
+		String out = NAME + Main.FILE_SUB_SEPERATOR + 1;
 		return out;
 	}
 }
