@@ -80,6 +80,7 @@ public class Main extends Application {
 				e.printStackTrace();
 			}
 		}
+		Inventory.stopInv();
 		System.out.println("End");
 	}
 

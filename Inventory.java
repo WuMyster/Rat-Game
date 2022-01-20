@@ -80,7 +80,7 @@ public class Inventory {
 	 * Removes a counter for death rat.
 	 */
 	public static void removeDeathRatCounter() {
-		int n = MAX_NUM_ITEMS;
+		int n = MAX_NUM_ITEMS - 1;
 		itemCounter[n]--;
 		changeCounterNum(n, itemCounter[n]);
 	}

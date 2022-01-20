@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -366,6 +367,7 @@ public class GameGUI {
 			placeItemOnMap(ItemType.STERILISATION, event);
 		} else if (event.getGestureSource() == draggableDeathRat) {
 			placeDeathRat(event);
+			Inventory.removeDeathRatCounter();
 		} else if (event.getGestureSource() == draggableGas) {
 			placeItemOnMap(ItemType.GAS, event);
 		} else {
@@ -502,7 +504,7 @@ public class GameGUI {
 	}
 	
 	/**
-	 * Sets the number of items available for the item.
+	 * Sets the number of items available for the item and changes image accordingly.
 	 * 
 	 * @param itemNum	item number to change the number available
 	 * @param num		available number of item
@@ -510,6 +512,10 @@ public class GameGUI {
 	public static void setItemCounter(int itemNum, int num) {
 		itemCounter[itemNum].setText(String.valueOf(num));
 		itemIconLis[itemNum].setDisable(num == 0);
+
+		ColorAdjust desaturate = new ColorAdjust();
+		desaturate.setSaturation(num == 0 ? -0.5 : 0);
+		itemIconLis[itemNum].setEffect(desaturate);
 	}
 	
 	/**
