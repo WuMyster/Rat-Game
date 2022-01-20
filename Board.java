@@ -61,7 +61,6 @@ public class Board {
 	 */
 	private final static char TUNNEL_TILE = 'T';
 	
-	public static ArrayList<Tile> visitedTile = new ArrayList<>();
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -295,6 +294,10 @@ public class Board {
 		}
 	}
 
+//////////////////////////////////////////////////////////
+	
+	public static ArrayList<Tile> visitedTile = new ArrayList<>();
+	
 	public boolean addItemToTile(String it, int x, int y) {
 		Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (isPlaceableTile(t)) {
@@ -310,44 +313,54 @@ public class Board {
 		return false;
 	}
 	
+	public void checkTileAndSurrounding(int pos) {
+		if (pos == visitedTile.size() - 1) {
+			System.out.println("No Stopsign found!");
+		}
+		 Tile t = visitedTile.get(pos);
+		 if (t.checkTile()) {
+			 System.out.println("Done at: " + t);
+			 return;
+			 // Or set pos to be last
+		 } else {
+			 int x = t.X_Y_POS[1];
+			 int y = t.X_Y_POS[0];
+			 
+			 if (board[y - 1][x] != null && !visitedTile.contains(board[y - 1][x])) {
+				 visitedTile.add(board[y - 1][x]);
+			 } 
+			 if (board[y + 1][x] != null && !visitedTile.contains(board[y + 1][x])) {
+				 visitedTile.add(board[y + 1][x]);
+			 } 
+			 if (board[y][x - 1] != null && !visitedTile.contains(board[y][x - 1])) {
+				 visitedTile.add(board[y][x - 1]);
+			 } 
+			 if (board[y][x + 1] != null && !visitedTile.contains(board[y][x + 1])) {
+				 visitedTile.add(board[y][x + 1]);
+			 }
+			 checkTileAndSurrounding(pos + 1);
+		 }
+		 
+	}
+	
     public void checkTiles(int x, int y) {
         y *= EXTRA_PADDING;
         x *= EXTRA_PADDING;
-        int startY = y;
-        int startX = x;
 
-        while (board[y][x] != null) {
-        	if (board[y][x].checkTile()) {
-        		System.out.println(y + " : " + x + "found stop!");
-        	}
-            y--;
-        }
-
-        y = startY + 1;
-        x = startX;
-        while (board[y][x] != null) {
-        	if (board[y][x].checkTile()) {
-        		System.out.println(y + " : " + x + "found stop!");
-        	}
-            y++;
-        }
-
-        y = startY;
-        x = startX - 1;
-        while (board[y][x] != null) {
-        	if (board[y][x].checkTile()) {
-        		System.out.println(y + " : " + x + "found stop!");
-        	}
-            x--;
-        }
-
-        y = startY;
-        x = startX + 1;
-        while (board[y][x] != null) {
-        	if (board[y][x].checkTile()) {
-        		System.out.println(y + " : " + x + "found stop!");
-        	}
-            x++;
-        }
+        // Ignore if they're on same tile...
+        visitedTile = new ArrayList<>();
+        if (board[y - 1][x] != null && !visitedTile.contains(board[y - 1][x])) {
+			 visitedTile.add(board[y - 1][x]);
+		 } 
+        if (board[y + 1][x] != null && !visitedTile.contains(board[y + 1][x])) {
+			 visitedTile.add(board[y + 1][x]);
+		 } 
+        if (board[y][x - 1] != null && !visitedTile.contains(board[y][x - 1])) {
+			 visitedTile.add(board[y][x - 1]);
+		 } 
+        if (board[y][x + 1] != null && !visitedTile.contains(board[y][x + 1])) {
+			 visitedTile.add(board[y][x + 1]);
+		 }
+        checkTileAndSurrounding(0);
     }
 }

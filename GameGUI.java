@@ -133,13 +133,13 @@ public class GameGUI {
 			int state;
 			if (it.equals(StopSign.NAME)) {
 				state = StopSign.MAX_STATES;
-				System.out.println("StopSign added");
+				System.out.println(" > StopSign added");
 			} else {
+				System.out.println(" > Sterile added");
 				state = -1;
 				System.out.println("Checking tiles");
 				m.checkTiles(x, y);
 			}
-			
 			addItemToMap(it, x, y, state);
 		} else {
 			System.out.println("Fails");

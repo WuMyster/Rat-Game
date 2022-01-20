@@ -85,4 +85,9 @@ public abstract class Tile {
 	public boolean checkTile() {
 		return itemOnTile instanceof StopSign;
 	}
+	
+	@Override
+	public String toString() {
+		return X_Y_POS[0] + " : " + X_Y_POS[1];
+	}
 }
