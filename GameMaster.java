@@ -110,12 +110,14 @@ public class GameMaster {
      */
     private final static String START_NAME = "lvl";
     
+    private static int startNum = 0;
+    
     /**
      * Creates and displays the GameMaster Login window.
      */
     public static void startGameMaster() {
     	
-    	maxNumOfLevels = 1;
+    	maxNumOfLevels = startNum;
     	File f = new File(Main.MAP_FILE_LOC + START_NAME + maxNumOfLevels++ + ".txt");
     	while (f.exists()) {
     		f = new File(Main.MAP_FILE_LOC + START_NAME + maxNumOfLevels++ + ".txt");
@@ -472,7 +474,7 @@ public class GameMaster {
     	// Should get max number of levels from somewhere
     	int x = 0;
     	int y = 1;
-    	for (int i = 1; i < maxNumOfLevels - 1; i++) { // 4 is max number of levels
+    	for (int i = startNum; i < maxNumOfLevels - 1; i++) { // 4 is max number of levels
     		Button lvl = new Button(String.valueOf(i));
         	lvl.setOnAction(e ->  {
         		currLvl = Integer.valueOf(lvl.getText());

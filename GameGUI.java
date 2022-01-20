@@ -711,7 +711,8 @@ public class GameGUI {
 		root.setBottom(createBottomDisplay());
 		root.setLeft(createLeftDisplay());
 
-		Board.setUpBoard(GameMaster.getMap(), 17, 11);
+		int[] xy = GameMaster.getMapSize();
+		Board.setUpBoard(GameMaster.getMap(), xy[0], xy[1]);
 		Board.setUpRats(GameMaster.getRats());
 		Board.setUpItems(GameMaster.getItems());
 		drawMap();
