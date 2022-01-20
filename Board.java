@@ -21,17 +21,17 @@ public class Board {
 	/**
 	 * The map in string format.
 	 */
-	private String mapDesign;
+	private static String mapDesign;
 
 	/**
 	 * The width of the map.
 	 */
-	private int xHeight;
+	private static int xHeight;
 
 	/**
 	 * The height of the map
 	 */
-	private int yHeight;
+	private static int yHeight;
 
 	/**
 	 * The 2d array of the map. Static so other classes can access this
@@ -47,6 +47,11 @@ public class Board {
 	 * List of death rats.
 	 */
 	private static ArrayList<DeathRat> deathRatBuffer;
+	
+	/**
+	 * List of Tiles and Direction from a tile.
+	 */
+	public static ArrayList<TileAndDir> visitedTile = new ArrayList<>();
 
 	/**
 	 * Constants of Tile letters from string to Grass Tile, current implementation
@@ -68,18 +73,18 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile.
 	 */
 	private final static char TUNNEL_TILE = 'T';
-
+	
 	/**
-	 * Constructs a {@code Board} from input string.
+	 * Acts like a constructor and sets the board up.
 	 * 
-	 * @param mapDesign input string of board
-	 * @param xHeight   max width of board
-	 * @param yHeight   max height of board
+	 * @param mapDesign	string format of the map
+	 * @param xHeight	height of the board
+	 * @param yHeight	width of the board
 	 */
-	public Board(String mapDesign, int xHeight, int yHeight) {
-		this.mapDesign = mapDesign;
-		this.xHeight = xHeight;
-		this.yHeight = yHeight;
+	public static void setUpBoard(String mapDesign, int xHeight, int yHeight) {
+		Board.mapDesign = mapDesign;
+		Board.xHeight = xHeight;
+		Board.yHeight = yHeight;
 		try {
 			Board.board = new Tile[yHeight * EXTRA_PADDING][xHeight * EXTRA_PADDING];
 		} catch (Exception e) {
@@ -90,22 +95,6 @@ public class Board {
 		eliminateEmpties();
 		createGraph();
 	}
-
-    /**
-     * Checks if item can be placed on tile. Can be placed if tile is an instance of path but not
-     * a tunnel. Also if tile is a junction.
-     * @param x x-coordinate being checked.
-     * @param y y-coordinate being checked.
-     * @return boolean of if item can be placed on tile.
-     */
-    private static boolean isPlaceableTile(Tile t) {
-        if (t == null) {
-			return false;
-		}  else if (t instanceof TunnelTile) {
-			return false;
-		}
-        return true;
-    }
     
     /**
      * Checks if item can be added to this tile, if so, it will add item to tile
@@ -116,7 +105,7 @@ public class Board {
      * @param y		y pos of the tile
      * @return		{@code true} if item can be added to tile
      */
-    public boolean addItemToTile(ItemType it, int x, int y) {
+    public static boolean addItemToTile(ItemType it, int x, int y) {
     	Tile t = board[y * EXTRA_PADDING][x * EXTRA_PADDING];
 		if (isPlaceableTile(t)) {
 			Item i;
@@ -181,7 +170,7 @@ public class Board {
      * @param x x position of tile
      * @param y y position of tile
      */
-    public void addDeathRat(int x, int y) {
+    public static void addDeathRat(int x, int y) {
         placeRat(new DeathRat(), Direction.NORTH, y, x);
     }
     
@@ -242,7 +231,7 @@ public class Board {
 	 * 
 	 * @param gc Canvas to draw the board on
 	 */
-	public void drawBoard(GraphicsContext gc) {
+	public static void drawBoard(GraphicsContext gc) {
 		
 		Image grassImage = new Image(Main.IMAGE_FILE_LOC + "Grass.png");
 		Image[] tunnelImagesEntrance = new Image[4];
@@ -317,7 +306,7 @@ public class Board {
 	 * @param y    y start position of the rat
 	 * 
 	 */
-	public void placeRat(Rat rats, Direction dir, int x, int y) {
+	public static void placeRat(Rat rats, Direction dir, int x, int y) {
 		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rats, dir); 
 	}
 
@@ -329,7 +318,7 @@ public class Board {
 	 * @param x x start position of the death rat
 	 * @param y y start position of the death rat
 	 */
-	public void placeRat(DeathRat rat, Direction dir, int x, int y) {
+	public static void placeRat(DeathRat rat, Direction dir, int x, int y) {
 		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rat, dir);
 	}
 
@@ -337,7 +326,7 @@ public class Board {
 	 * Goes through each Tile and moves the rat to the next tile before getting the
 	 * tiles new list.
 	 */
-	public void runAllTiles() {
+	public static void runAllTiles() {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
 		deathRatBuffer = new ArrayList<>();
 		
@@ -368,7 +357,7 @@ public class Board {
 	 * Adds in rats from string format.
 	 * @param rats list of rats to be added in
 	 */
-	public void setUpRats(ArrayList<String> rats) {
+	public static void setUpRats(ArrayList<String> rats) {
 		for (String str : rats) {
 			Rat createR;
 			String[] spl = str.split(Main.FILE_MAIN_SEPERATOR);
@@ -403,7 +392,7 @@ public class Board {
 	 * Adds in items from string format.
 	 * @param items list of items to be added in
 	 */
-	public void setUpItems(ArrayList<String> items) {
+	public static void setUpItems(ArrayList<String> items) {
 		if (items != null) {
 			for (String i : items) {
 				String[] it = i.split(Main.FILE_MAIN_SEPERATOR);
@@ -430,7 +419,7 @@ public class Board {
 	 * Takes in a filename to save the board state to.
 	 * @param filename the file to save to
 	 */
-	public void saveState(String filename) {
+	public static void saveState(String filename) {
 		
 		// Should get # rats from RatController but RatController not keeping
 		// # rats correct atm
@@ -470,11 +459,105 @@ public class Board {
 			out.close();
 		}
 	}
+	
+	/**
+	 * Finds the closest rat and returns a direction to go towards it.
+	 * 
+	 * @param x		current x position
+	 * @param y		current y position
+	 * @return 		direction towards closest rat
+	 */
+    public static Direction findClosestRat(int x, int y) {
+        y *= EXTRA_PADDING;
+        x *= EXTRA_PADDING;
+
+        // Ignore if they're on same tile...
+        visitedTile.add(new TileAndDir(board[y][x], null));
+        visitedTile = new ArrayList<>();
+        if (board[y - 1][x] != null) {
+			 visitedTile.add(new TileAndDir(board[y - 1][x], Direction.NORTH));
+		 } 
+        if (board[y + 1][x] != null) {
+			 visitedTile.add(new TileAndDir(board[y + 1][x], Direction.SOUTH));
+		 } 
+        if (board[y][x - 1] != null) {
+			 visitedTile.add(new TileAndDir(board[y][x - 1], Direction.WEST));
+		 } 
+        if (board[y][x + 1] != null) {
+			 visitedTile.add(new TileAndDir(board[y][x + 1], Direction.EAST));
+		 }
+        return checkTileAndSurrounding(1);
+    }
+    
+	/**
+	 * Checks current tile to see if there is a rat on it, otherwise try to branch out 
+	 * to other tiles to find a rat.
+	 * 
+	 * @param pos	position in list for tile to check
+	 * @return		initial direction to travel in to get to closest rat
+	 */
+	private static Direction checkTileAndSurrounding(int pos) {
+		if (pos == visitedTile.size() - 1) {
+			return null;
+		}
+		 TileAndDir t = visitedTile.get(pos);
+		 if (t.tile.hasRat()) {
+			 return t.dir;
+		 } else {
+			 int x = t.tile.X_Y_POS[1];
+			 int y = t.tile.X_Y_POS[0];
+			 
+			 if (board[y - 1][x] != null && !containsJ(board[y - 1][x])) {
+				 visitedTile.add(new TileAndDir(board[y - 1][x], t.dir));
+			 } 
+			 if (board[y + 1][x] != null && !containsJ(board[y + 1][x])) {
+				 visitedTile.add(new TileAndDir(board[y + 1][x], t.dir));
+			 } 
+			 if (board[y][x - 1] != null && !containsJ(board[y][x - 1])) {
+				 visitedTile.add(new TileAndDir(board[y][x - 1], t.dir));
+			 } 
+			 if (board[y][x + 1] != null && !containsJ(board[y][x + 1])) {
+				 visitedTile.add(new TileAndDir(board[y][x + 1], t.dir));
+			 }
+			 return checkTileAndSurrounding(pos + 1);
+		 } 
+	}
+	
+	/**
+	 * Checks if tile is already in list.
+	 * 
+	 * @param t	tile to check
+	 * @return	boolean if tile is in list.
+	 */
+	private static boolean containsJ(Tile t) {
+		for (TileAndDir td : visitedTile) {
+			if (td.equals(t)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+    /**
+     * Checks if item can be placed on tile. Can be placed if tile is an instance of path but not
+     * a tunnel. Also if tile is a junction.
+     * @param x x-coordinate being checked.
+     * @param y y-coordinate being checked.
+     * @return boolean of if item can be placed on tile.
+     */
+    private static boolean isPlaceableTile(Tile t) {
+        if (t == null) {
+			return false;
+		}  else if (t instanceof TunnelTile) {
+			return false;
+		}
+        return true;
+    }
 
 	/**
 	 * Creates 2d array of the map.
 	 */
-	private void createBoard() {
+	private static void createBoard() {
 		int counter = 0;
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
@@ -500,7 +583,7 @@ public class Board {
 	/**
 	 * Eliminate LightTiles that aren't connected to enough good tiles.
 	 */
-	private void eliminateEmpties() {
+	private static void eliminateEmpties() {
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 				if (board[i][j] instanceof LightTile) {
@@ -534,7 +617,7 @@ public class Board {
 	 * @param t tile to check
 	 * @return {@code true} if item can be placed on this tile
 	 */
-	private boolean check(Tile t) {
+	private static boolean check(Tile t) {
 		if (t == null) {
 			return false;
 		} else if (t instanceof LightTile) {
@@ -546,7 +629,7 @@ public class Board {
 	/**
 	 * Converts the map into a graph.
 	 */
-	private void createGraph() {
+	private static void createGraph() {
 		for (int i = 0; i < yHeight * EXTRA_PADDING; i++) {
 			for (int j = 0; j < xHeight * EXTRA_PADDING; j++) {
 

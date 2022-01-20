@@ -385,7 +385,7 @@ public class GameGUI {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 
-		if (m.addItemToTile(it, x, y)) {
+		if (Board.addItemToTile(it, x, y)) {
 			int state;
 			switch (it) {
 			case STOPSIGN -> state = StopSign.MAX_STATES;
@@ -489,7 +489,7 @@ public class GameGUI {
 	private static void placeDeathRat(DragEvent event) {
 		int x = (int) Math.floor(event.getX() / TILE_SIZE);
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
-		m.placeRat(new DeathRat(), Direction.NORTH, y, x);
+		Board.placeRat(new DeathRat(), Direction.NORTH, y, x);
 	}
 
 	/**
@@ -693,9 +693,9 @@ public class GameGUI {
 		root.setBottom(createBottomDisplay());
 		root.setLeft(createLeftDisplay());
 
-		m = new Board(GameMaster.getMap(), 17, 11);
-		m.setUpRats(GameMaster.getRats());
-		m.setUpItems(GameMaster.getItems());
+		m = setUpBoard(GameMaster.getMap(), 17, 11);
+		Board.setUpRats(GameMaster.getRats());
+		Board.setUpItems(GameMaster.getItems());
 		drawMap();
 		setTimeLines();
 

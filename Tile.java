@@ -352,6 +352,15 @@ public abstract class Tile {
         }
         return true;
     }
+	
+	/**
+	 * Returns true if there is a rat that will be on this tile.
+	 * 
+	 * @return boolean if normal rat is coming to this tile
+	 */
+	public boolean hasRat() {
+		return !nextBlock.isEmpty();
+	}
 
 	/**
 	 * Empties tile of all attributes/ things on tile.
