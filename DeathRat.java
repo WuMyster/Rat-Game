@@ -24,7 +24,7 @@ public class DeathRat {
 	/**
 	 * XY position on the board the death rat starts from.
 	 */
-	private int[] xyPos;
+	protected int[] xyPos;
 	
 	/**
 	 * Direction the Death rat is facing and moving towards.

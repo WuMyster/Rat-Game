@@ -210,7 +210,7 @@ public abstract class Tile {
 				aliveRats.addAll(tmp);
 				currBlock.put(prevDirection, tmp);
 			} else {
-				System.out.println("NULL");
+				System.err.println("NULL");
 			}
 		}
 		
@@ -352,6 +352,15 @@ public abstract class Tile {
         }
         return true;
     }
+	
+	/**
+	 * Returns true if there is a rat that will be on this tile.
+	 * 
+	 * @return boolean if normal rat is coming to this tile
+	 */
+	public boolean hasRat() {
+		return !currBlock.isEmpty();
+	}
 
 	/**
 	 * Empties tile of all attributes/ things on tile.

@@ -21,7 +21,7 @@ public class Inventory {
 	 * Max number of items. #IDE complain that this variable must be before itemCounter.#
 	 * +1 due to DeathRat being treated like item but not in ItemType.
 	 */
-	public static final int MAX_NUM_ITEMS = ItemType.values().length + 1;
+	public static final int MAX_NUM_ITEMS = ItemType.values().length + 2;
 	
 	/**
 	 * Current number of items for each item.
@@ -54,7 +54,7 @@ public class Inventory {
 	public static void startInv() {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				addNext();
+				addNext(-1, 0);
 			}
 		}, 0, TIME_STOP);
 	}
@@ -123,10 +123,17 @@ public class Inventory {
 	 * Adds extra counter to number of items available.
 	 * ERROR -> all items are maxed out.
 	 */
-	private static void addNext() {
+	private static void addNext(int avoid, int count) {
+		if (count > 10) {
+			return;
+		}
+		// Trying to minimise chance of stack overflow
 		int itemNum = RAND.nextInt(MAX_NUM_ITEMS);
+		while (itemNum == avoid) {
+			itemNum = RAND.nextInt(MAX_NUM_ITEMS);
+		}
 		if (itemCounter[itemNum] == MAX_ITEM) {
-			addNext();
+			addNext(itemNum, count + 1);
 		} else {
 			itemCounter[itemNum]++;
 			changeCounterNum(itemNum, itemCounter[itemNum]);
