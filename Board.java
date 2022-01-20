@@ -465,7 +465,7 @@ public class Board {
 
 		// Ignore if they're on same tile...
 		visitedTile = new ArrayList<>();
-		// visitedTile.add(new TileAndDir(board[y][x], null));
+		visitedTile.add(new TileAndDir(board[y][x], null)); // Prevent looking at current tile
 		if (board[y - 1][x] != null) {
 			visitedTile.add(new TileAndDir(board[y - 1][x], Direction.NORTH));
 		}
@@ -478,7 +478,7 @@ public class Board {
 		if (board[y][x + 1] != null) {
 			visitedTile.add(new TileAndDir(board[y][x + 1], Direction.EAST));
 		}
-		Direction d = checkTileAndSurrounding(0);
+		Direction d = checkTileAndSurrounding(1);
 		return d;
 	}
 
