@@ -3,9 +3,6 @@ import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 /**
  *
  * @author Jing Shiang Gu
@@ -63,6 +60,8 @@ public class Board {
 	 * Constants of Tile letters from string to Tunnel Tile.
 	 */
 	private final static char TUNNEL_TILE = 'T';
+	
+	public static ArrayList<Tile> visitedTile = new ArrayList<>();
 
 	/**
 	 * Constructs a {@code Board} from input string.
@@ -310,4 +309,45 @@ public class Board {
 		}
 		return false;
 	}
+	
+    public void checkTiles(int x, int y) {
+        y *= EXTRA_PADDING;
+        x *= EXTRA_PADDING;
+        int startY = y;
+        int startX = x;
+
+        while (board[y][x] != null) {
+        	if (board[y][x].checkTile()) {
+        		System.out.println(y + " : " + x + "found stop!");
+        	}
+            y--;
+        }
+
+        y = startY + 1;
+        x = startX;
+        while (board[y][x] != null) {
+        	if (board[y][x].checkTile()) {
+        		System.out.println(y + " : " + x + "found stop!");
+        	}
+            y++;
+        }
+
+        y = startY;
+        x = startX - 1;
+        while (board[y][x] != null) {
+        	if (board[y][x].checkTile()) {
+        		System.out.println(y + " : " + x + "found stop!");
+        	}
+            x--;
+        }
+
+        y = startY;
+        x = startX + 1;
+        while (board[y][x] != null) {
+        	if (board[y][x].checkTile()) {
+        		System.out.println(y + " : " + x + "found stop!");
+        	}
+            x++;
+        }
+    }
 }

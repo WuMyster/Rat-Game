@@ -81,4 +81,8 @@ public abstract class Tile {
         itemOnTile = i;
         return true;
     }
+	
+	public boolean checkTile() {
+		return itemOnTile instanceof StopSign;
+	}
 }

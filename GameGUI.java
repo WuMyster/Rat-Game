@@ -100,7 +100,6 @@ public class GameGUI {
 		Main.setWindow(scene);
 	}
 
-
 	/**
 	 * Reacts to item that is dragged onto canvas.
 	 * 
@@ -108,6 +107,7 @@ public class GameGUI {
 	 *              occured.
 	 */
 	public static void itemCanvasDragDropOccurred(DragEvent event) {
+		System.out.println("Added");
 		if (event.getGestureSource() == draggableStop) {
 			placeItemOnMap(StopSign.NAME, event);
 		} else if (event.getGestureSource() == draggableSterilise) {
@@ -115,6 +115,7 @@ public class GameGUI {
 		} else {
 			System.err.println("Dragging fail!!");
 		}
+		
 	}
 	
 	/**
@@ -128,12 +129,15 @@ public class GameGUI {
 		int y = (int) Math.floor(event.getY() / TILE_SIZE);
 
 		if (m.addItemToTile(it, x, y)) {
-			System.out.println("Passes");
+			System.out.println("Passes 1");
 			int state;
 			if (it.equals(StopSign.NAME)) {
 				state = StopSign.MAX_STATES;
+				System.out.println("StopSign added");
 			} else {
 				state = -1;
+				System.out.println("Checking tiles");
+				m.checkTiles(x, y);
 			}
 			
 			addItemToMap(it, x, y, state);
