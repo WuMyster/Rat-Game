@@ -219,6 +219,7 @@ public class JunctionTile extends Tile {
 						t = neighbourTiles.get(d);
 						t.moveDeathRat(dr, d.opposite());
 						dr.initalMove(X_Y_POS, d);
+						removeItem();
 					} else {
 						int i;
 						do {

@@ -370,6 +370,17 @@ public abstract class Tile {
 	}
 
 	/**
+	 * Remove item from tile.
+	 */
+	protected void removeItem() {
+		if (itemOnTile instanceof TimeItem) {
+			((TimeItem) itemOnTile).timer.cancel();
+		}
+		GameGUI.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
+		itemOnTile = null;
+	}
+
+	/**
 	 * Empties tile of all attributes/ things on tile.
 	 */
 	private void resetTile() {
@@ -397,13 +408,4 @@ public abstract class Tile {
         }
 		resetTile();
 	}
-	
-	private void removeItem() {
-		if (itemOnTile instanceof TimeItem) {
-			((TimeItem) itemOnTile).timer.cancel();
-		}
-		GameGUI.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
-		itemOnTile = null;
-	}
-
 }
