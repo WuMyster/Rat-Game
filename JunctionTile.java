@@ -249,9 +249,6 @@ public class JunctionTile extends Tile {
 		} else if (aliveRats.size() == beforeDeath) {
 			// Interesting as to why there is no change...
 			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
-		} else {
-			// Will run correctList from Tile.java
-			correctList();
 		}
 		return drs;
 	}

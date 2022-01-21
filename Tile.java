@@ -149,24 +149,26 @@ public abstract class Tile {
 	 * Sets list of rats the tile is currently dealing with
 	 */
 	public void setCurrRat() {
-		currBlock = nextBlock;
-		nextBlock = new HashMap<>();
-
-		currDeath = nextDeath;
-		nextDeath = new HashMap<>();
-		
-        // Create list of rats
-        aliveRats = new ArrayList<>();
-        for (Direction dir : currBlock.keySet()) {
-            aliveRats.addAll(currBlock.get(dir));
-        }
 		
 		if (detontate) {
 			blowUpTile();
 			detontate = false;
 		} else {
+			currBlock = nextBlock;
+			nextBlock = new HashMap<>();
+
+			currDeath = nextDeath;
+			nextDeath = new HashMap<>();
+			
+	        // Create list of rats
+	        aliveRats = new ArrayList<>();
+	        for (Direction dir : currBlock.keySet()) {
+	            aliveRats.addAll(currBlock.get(dir));
+	        }
+	        
 			giveRatItem();
 			getRatInteractions();
+			correctList();
 		}
 	}
 	

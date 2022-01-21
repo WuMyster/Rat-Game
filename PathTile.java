@@ -52,8 +52,6 @@ public class PathTile extends Tile {
 			// Interesting as to why there is no change...
 			System.err.println("aliveRats list has not changed! "  + X_Y_POS[0] + " " +
 					X_Y_POS[1]);
-		} else {
-			correctList();
 		}
 		return drs;
 	}
