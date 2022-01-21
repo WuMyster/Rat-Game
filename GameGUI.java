@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javafx.animation.Animation;
@@ -475,12 +476,16 @@ public class GameGUI {
 	 */
 	public static void editBombCountdown(int x, int y, int state) {
 		ArrayList<int[]> bombPlace = itemPlace.get(ItemType.BOMB);
-		for (int[] i : bombPlace) {
-			if (i[0] == y && i[1] == x) {
-				i[2] = state;
+		if (bombPlace != null) {
+			for (int[] i : bombPlace) {
+				if (i[0] == y && i[1] == x) {
+					i[2] = state;
+				}
 			}
+			drawItemToMap(ItemType.BOMB, x, y, state);
+		} else {
+			bombPlace = new ArrayList<>(Arrays.asList(new int[] {y, x, state}));
 		}
-		drawItemToMap(ItemType.BOMB, x, y, state);
 	}
 
 	/**
