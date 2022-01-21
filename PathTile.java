@@ -53,7 +53,6 @@ public class PathTile extends Tile {
 			System.err.println("aliveRats list has not changed! "  + X_Y_POS[0] + " " +
 					X_Y_POS[1]);
 		} else {
-			// done by method correctList() in Tile.java
 			correctList();
 		}
 		return drs;
@@ -72,9 +71,11 @@ public class PathTile extends Tile {
 					Tile t;
 					if (dr instanceof SuperDeathRat) {
 						Direction d = ((SuperDeathRat) dr).chooseDirection(X_Y_POS[0], X_Y_POS[1]);
-						t = neighbourTiles.get(d);
-						t.moveDeathRat(dr, d.opposite());
-						dr.initalMove(X_Y_POS, d);
+						if (d != null) {
+							t = neighbourTiles.get(d);
+							t.moveDeathRat(dr, d.opposite());
+							dr.initalMove(X_Y_POS, d);
+						}
 						removeItem();
 					} else {
 						int i;
@@ -146,13 +147,12 @@ public class PathTile extends Tile {
 		int beforeDeath = 0;
 		if (dr.isAlive() && currList != null) {
 			beforeDeath = currList.size();
-			Tile tile = neighbourTiles.get(dirToDeath); //?
+			Tile tile = neighbourTiles.get(dirToDeath);
 			
 			// Number of rats towards death	after boucing off stop sign		
 			ratsGoToDeath = currList.size() - tile.numsRatsCanEnter(this, currList.size());
-			int i = 0;
 			// Let Death Rat first deal with Baby rats
-			for (; i < ratsGoToDeath && i < currList.size(); i++) {
+			for (int i = 0; i < ratsGoToDeath && i < currList.size(); i++) {
 				Rat r = currList.get(i);
 				if (r.getStatus() == RatType.BABY) {
 					if (dr.killRat(currList.get(i), 2)) {
@@ -168,6 +168,7 @@ public class PathTile extends Tile {
 			// Now deal with adult rats (using same list)
 			currList = escaped;
 			escaped = new ArrayList<>();
+			int i;
 			for (i = 0; i < currList.size(); i++) {
 				Rat r = currList.get(i);
 				if (dr.killRat(currList.get(i), 3)) {
