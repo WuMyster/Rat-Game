@@ -167,7 +167,6 @@ public abstract class Tile {
 		} else {
 			giveRatItem();
 			getRatInteractions();
-			correctList(); // Make sure only moving rats are considered
 		}
 	}
 	
@@ -374,7 +373,7 @@ public abstract class Tile {
 	 */
 	protected void removeItem() {
 		if (itemOnTile instanceof TimeItem) {
-			((TimeItem) itemOnTile).timer.cancel();
+			((TimeItem) itemOnTile).stopTimer();
 		}
 		GameGUI.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
 		itemOnTile = null;

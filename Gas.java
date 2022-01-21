@@ -68,6 +68,7 @@ public class Gas extends TimeItem {
 		this.hp = START_HP + EXTRA_HP  * RADIUS;
 		this.x = x;
 		this.y = y;
+		stopTimer = false;
 	}
 	
 	/**
@@ -102,6 +103,9 @@ public class Gas extends TimeItem {
     	
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
+				if (stopTimer) {
+					timer.cancel();
+				}
 				hp--;
 				
 				if (hp == 0) { // Clear gas

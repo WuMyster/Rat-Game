@@ -15,8 +15,20 @@ public abstract class TimeItem extends Item {
 	protected Timer timer = new Timer();
 
 	/**
+	 * Outside influence calling to stop
+	 */
+	protected boolean stopTimer;
+
+	/**
 	 * Specific timed event start for this item. Is called when 
 	 * item is first placed.
 	 */
 	public abstract void itemAction();
+	
+	/**
+	 * Stops the timer.
+	 */
+	public void stopTimer() {
+		stopTimer = true;
+	}
 }

@@ -56,6 +56,7 @@ public class Bomb extends TimeItem {
 		this.x = xyPos[1];
 		this.y = xyPos[0];
 		timer = new Timer();
+		stopTimer = false;
 	}
 
 	/**
@@ -96,15 +97,15 @@ public class Bomb extends TimeItem {
 	 * 0, will invoke a method to detonate.
 	 */
 	public void itemAction() {
-
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
+				if (stopTimer) {
+					timer.cancel();
+				} 
 				hp--;
 				if (hp >= 0) {
 					GameGUI.editBombCountdown(x, y, hp);
-				}
-
-				if (hp < 0) {
+				} else {
 					timer.cancel();
 					Board.detonate(x, y);
 				}
