@@ -536,9 +536,8 @@ public class Board {
 	 * Checks if item can be placed on tile. Can be placed if tile is an instance of
 	 * path but not a tunnel. Also if tile is a junction.
 	 * 
-	 * @param x x-coordinate being checked.
-	 * @param y y-coordinate being checked.
-	 * @return boolean of if item can be placed on tile.
+	 * @param t		tile to check
+	 * @return 		boolean of if item can be placed on tile.
 	 */
 	private static boolean isPlaceableTile(Tile t) {
 		if (t == null) {

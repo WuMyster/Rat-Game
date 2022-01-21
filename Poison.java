@@ -8,17 +8,28 @@ import javafx.scene.image.Image;
  */
 class Poison extends Item {
 
+	/**
+	 * Name of item.
+	 */
 	public static final String NAME = "Poison";
 	
+	/**
+	 * Icon image of the item.
+	 */
 	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "Poison.png");
 	
     /**
-     * Health point of item.
+     * Create and sets health point of item.
      */
     public Poison() {
     	hp = 1;
     }
     
+    /**
+     * Constructs Poison object with set health.
+     * 
+     * @param hp	health of item.
+     */
     public Poison(int hp) {
     	this.hp = hp;
     }

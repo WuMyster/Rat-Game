@@ -662,7 +662,8 @@ public class GameGUI {
 	}
 
 	/**
-	 * Initiliase draggleable images. Expand VBox.
+	 * Initiliase draggleable images.
+	 * @param root	root to add draggable images to
 	 */
 	private static void setUpDraggleableImages(VBox root) {
 		
@@ -678,6 +679,9 @@ public class GameGUI {
 		}
 	}
 
+	/**
+	 * Sets up the handling of the draggable images.
+	 */
 	private static void setUpHandling() {
 		ClipboardContent content = new ClipboardContent();
 		content.putString("Hello");
@@ -700,7 +704,9 @@ public class GameGUI {
 	 */
 	private static BorderPane createGameGUI() {
 
-		setInitialValues();
+		itemPlace = new HashMap<>();
+		playerStopGame = false;
+		
 		createRatIndicator();
 
 		GameGUI.playerName = GameMaster.getName();
@@ -726,13 +732,6 @@ public class GameGUI {
 		return root;
 	}
 
-	private static void setInitialValues() {
-
-		// These no choice
-		itemPlace = new HashMap<>();
-		playerStopGame = false;
-	}
-
 	/**
 	 * Creates the bottom display, used to display the message of the day.
 	 * 
@@ -751,7 +750,7 @@ public class GameGUI {
 	/**
 	 * Creates the left display, used to display the number of rat indicators.
 	 * 
-	 * @return
+	 * @return	left display
 	 */
 	private static Node createLeftDisplay() {
 		VBox root = new VBox();
@@ -870,6 +869,9 @@ public class GameGUI {
 		}
 	}
 
+	/**
+	 * Decrease the timer. Stopping game when time runs out.
+	 */
 	private static void decrementTimer() {
 		maxTime--;
 		currTime.setText(String.valueOf(maxTime));
@@ -930,8 +932,7 @@ public class GameGUI {
 	/**
 	 * Draws the rats onto the game canvas.
 	 * 
-	 * @param smallerList type of rat you're dealing with
-	 * @param ratImage    image of rat
+	 * @param rt	rat type to draw onto game canvas
 	 */
 	private static void drawRat(RatType rt) {
 		HashMap<Direction, ArrayList<int[]>> smallerList = currMovement.get(rt);

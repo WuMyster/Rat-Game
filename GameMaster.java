@@ -111,6 +111,9 @@ public class GameMaster {
      */
     private final static String START_NAME = "lvl";
     
+    /**
+     * Starting level number.
+     */
     private static int startNum = 0;
     
     /**
@@ -198,6 +201,9 @@ public class GameMaster {
     /**
      * End of game screen, allows user to choose menu level or
      * redo level/ next level depending on if they've finished the level.
+     * 
+     * @param msg	message to display to user
+     * @param good	boolean if the level was completed
      */
     private static void gameEnd(String msg, boolean good) {
     	
@@ -334,7 +340,6 @@ public class GameMaster {
     /**
      * Gets the information of the level and set up values before calling
      * game window.
-     * @param currLvl 	the level selected
      */
     private static void createNewGame() {
     	ArrayList<String> information = getInfoFromFile(Main.MAP_FILE_LOC + START_NAME + currLvl + ".txt");
@@ -512,7 +517,6 @@ public class GameMaster {
 
     /**
      * Attempts to get the information about the player.
-     * @param playerInput 	name of the player
      */
     private static void getPlayer() {
     	File f = new File(Main.PLAYER_FILE_LOC + playerName + ".txt");
@@ -579,7 +583,7 @@ public class GameMaster {
     
     /**
      * Creates a new player with default values.
-     * @param name	name of the player
+     * @param maxLvl	max level achieved by player
      */
     private static void writePlayerInfo(String maxLvl) {
     	File file = new File(Main.PLAYER_FILE_LOC + playerName + ".txt");

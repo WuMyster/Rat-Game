@@ -277,6 +277,9 @@ public class Rat {
 		return points;
 	}
 
+	/**
+	 * Sets the rat to base values. Stops breeding and pregnancy counter.
+	 */
 	private void resetRat() {
 		this.isBreeding = false;
 		this.pregnancyCounter = 0;

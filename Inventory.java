@@ -123,7 +123,8 @@ public class Inventory {
 	
 	/**
 	 * Adds extra counter to number of items available.
-	 * ERROR -> all items are maxed out.
+	 * @param avoid		number to avoid to reduce potential stack overflow issue
+	 * @param count		number of methods run, stop stack overflow issue
 	 */
 	private static void addNext(int avoid, int count) {
 		if (count > 10) {

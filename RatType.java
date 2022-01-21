@@ -59,8 +59,9 @@ public enum RatType {
 	
 	/**
 	 * Set values of each type of rat.
-	 * @param size how big rat is (bigger is smaller)
-	 * @param speed how fast rat can move (bigger is faster)
+	 * @param size 		how big rat is (bigger is smaller)
+	 * @param speed 	how fast rat can move (bigger is faster)
+	 * @param imagePic	filename of image
 	 */
 	private RatType(int size, int speed, String imagePic) {
 		this.size = size;

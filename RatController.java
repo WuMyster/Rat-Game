@@ -275,6 +275,11 @@ public class RatController {
 		}
 	}
 	
+	/**
+	 * Decrease the counter of the different gender of rats.
+	 * 
+	 * @param gender 	boolean if rat is male
+	 */
 	private static void decreaseRatCounter(boolean gender) {
 		if (gender) {
 			maleCounter--;

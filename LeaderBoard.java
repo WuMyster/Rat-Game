@@ -110,6 +110,11 @@ public class LeaderBoard {
 		}
 	}
 	
+	/**
+	 * Calculates the score achieved by player.
+	 * 
+	 * @return score achieved by player in this game
+	 */
 	private static int calculateScore() {
 		int out = 0;
 		out += RatController.getPoints() * 
