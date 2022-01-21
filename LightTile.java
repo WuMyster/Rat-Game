@@ -95,7 +95,7 @@ public class LightTile extends Tile {
 
 		ArrayList<ArrayList<Rat>> rs = RatController.ratInteractions(aliveRats);
 		for (Rat r : rs.get(0)) {
-			if (r.getPregCounter() > 7) {
+			if (r.getPregCounter() > 8) {
 				r.addPregStep();
 			}
 			Direction d;

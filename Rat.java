@@ -130,7 +130,7 @@ public class Rat {
 	 * @return {@code true} if rat is giving birth
 	 */
 	public boolean giveBirth() {
-		return pregnancyCounter == 6 || pregnancyCounter == 3;
+		return pregnancyCounter == 6 || pregnancyCounter == 2;
 	}
 
 	/**
