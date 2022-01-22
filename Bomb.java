@@ -104,13 +104,13 @@ public class Bomb extends TimeItem {
 				} 
 				hp--;
 				if (hp >= 0) {
-					GameGUI.editBombCountdown(x, y, hp);
+					GameGUI.editItemState(ItemType.BOMB, x, y, hp);
 				} else {
 					timer.cancel();
 					Board.detonate(x, y);
 				}
 			}
-		}, 1, 1000); //Delaying by 1 ms so GameGUI can add it 
+		}, 0, 1000);
 	}
 
 	@Override

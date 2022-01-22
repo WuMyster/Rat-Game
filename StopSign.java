@@ -88,7 +88,7 @@ public class StopSign extends Item {
 			// Still want tile to remove StopSign from itself
 		} else if (currState != nextState) {
 			currState = nextState;
-			GameGUI.damageStopSign(xyPos, currState);
+			GameGUI.editItemState(ItemType.STOPSIGN, xyPos[1], xyPos[0], currState);
 		}
 		if (isAlive()) {
 			return 0;

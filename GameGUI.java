@@ -449,42 +449,24 @@ public class GameGUI {
 	}
 
 	/**
-	 * Update the graphical state of the StopSign.
+	 * Changes the state of an item.
 	 * 
-	 * @param pos   xy position of the StopSign
-	 * @param state the state it is in
+	 * @param it		type of item to change state of
+	 * @param x			x position of item
+	 * @param y			y position of item
+	 * @param state		state of the item
 	 */
-	public static void damageStopSign(int[] pos, int state) {
-		ArrayList<int[]> stopSignPlace = itemPlace.get(ItemType.STOPSIGN);
-		if (state != 0) {
-			int[] xyPos = null;
-			for (int[] i : stopSignPlace) {
-				if (i[0] == pos[0] && i[1] == pos[1]) {
-					xyPos = i;
-				}
-			}
-			xyPos[2] = state;
-		}
-	}
-
-	/**
-	 * Updates value of bomb responsible for the remaining time till detonation.
-	 * 
-	 * @param x     x-coordinate of bomb placement
-	 * @param y     y-coordinate of bomb placement
-	 * @param state remaining time
-	 */
-	public static void editBombCountdown(int x, int y, int state) {
-		ArrayList<int[]> bombPlace = itemPlace.get(ItemType.BOMB);
-		if (bombPlace != null) {
-			for (int[] i : bombPlace) {
+	public static void editItemState(ItemType it, int x, int y, int state) {
+		ArrayList<int[]> itemList = itemPlace.get(it);
+		if (itemList != null) {
+			for (int[] i : itemList) {
 				if (i[0] == y && i[1] == x) {
 					i[2] = state;
 				}
 			}
-			drawItemToMap(ItemType.BOMB, x, y, state);
+			drawItemToMap(it, x, y, state);
 		} else {
-			bombPlace = new ArrayList<>(Arrays.asList(new int[] {y, x, state}));
+			itemList = new ArrayList<>(Arrays.asList(new int[] {y, x, state}));
 		}
 	}
 
