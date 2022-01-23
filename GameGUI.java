@@ -576,12 +576,6 @@ public class GameGUI {
 		menuBar.getMenus().addAll(menuFile, optionFile);
 		root.getChildren().addAll(menuBar);
 
-		Button stopGame = new Button("Stop and save game");
-		root.getChildren().addAll(stopGame);
-		stopGame.setOnAction(e -> {
-			playerStopGame = true;
-		});
-
 		currTime = new Label("Time xx");
 		root.getChildren().add(currTime);
 
