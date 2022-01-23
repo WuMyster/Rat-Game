@@ -19,11 +19,8 @@ public class PathTile extends Tile {
 		super(new int[] { x, y });
 	}
 
-	// Might need to split up this tile, giveItemsToRat should already have
-	// aliveRats list.
-	// Return list of death rats on this tile.
 	@Override
-	public ArrayList<DeathRat> getNextDeathRat() {
+	public ArrayList<DeathRat> getNextDeathRat() throws ForcedGameEnd {
 		// Check number of rats and number of lists of rats to just assign it if needed.
 		
 		if (currDeath.isEmpty()) {
@@ -54,7 +51,7 @@ public class PathTile extends Tile {
 	 * Move all alive Death Rats and return list of alive Death Rats
 	 * @return list of alive Death Rats
 	 */
-	private ArrayList<DeathRat> moveEachDeathRat() {
+	private ArrayList<DeathRat> moveEachDeathRat() throws ForcedGameEnd {
 		ArrayList<DeathRat> drs = new ArrayList<>();
 		for (Direction prevDirection : currDeath.keySet()) {
 			Direction goTo = directions[0] == prevDirection ? directions[1] : directions[0];
@@ -63,11 +60,9 @@ public class PathTile extends Tile {
 					Tile t;
 					if (dr instanceof SuperDeathRat) {
 						Direction d = ((SuperDeathRat) dr).chooseDirection(X_Y_POS[0], X_Y_POS[1]);
-						if (d != null) {
-							t = neighbourTiles.get(d);
-							t.moveDeathRat(dr, d.opposite());
-							dr.initalMove(X_Y_POS, d);
-						}
+						t = neighbourTiles.get(d);
+						t.moveDeathRat(dr, d.opposite());
+						dr.initalMove(X_Y_POS, d);
 						removeItem();
 					} else {
 						int i;

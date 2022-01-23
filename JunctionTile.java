@@ -215,11 +215,9 @@ public class JunctionTile extends Tile {
 					Tile t;
 					if (dr instanceof SuperDeathRat) {
 						Direction d = ((SuperDeathRat) dr).chooseDirection(X_Y_POS[0], X_Y_POS[1]);
-						if (d != null) {
-							t = neighbourTiles.get(d);
-							t.moveDeathRat(dr, d.opposite());
-							dr.initalMove(X_Y_POS, d);
-						}
+						t = neighbourTiles.get(d);
+						t.moveDeathRat(dr, d.opposite());
+						dr.initalMove(X_Y_POS, d);
 						removeItem();
 					} else {
 						int i;

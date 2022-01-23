@@ -339,8 +339,9 @@ public class Board {
 	/**
 	 * Goes through each Tile and moves the rat to the next tile before getting the
 	 * tiles new list.
+	 * @throws ForcedGameEnd	when game should be finished
 	 */
-	public static void runAllTiles() {
+	public static void runAllTiles() throws ForcedGameEnd {
 		// Send item to Rat make sure to have boolean to know if it is dead or not
 		deathRatBuffer = new ArrayList<>();
 
@@ -484,11 +485,12 @@ public class Board {
 	/**
 	 * Finds the closest rat and returns a direction to go towards it.
 	 * 
-	 * @param x current x position
-	 * @param y current y position
-	 * @return direction towards closest rat
+	 * @param x 				current x position
+	 * @param y 				current y position
+	 * @return 					direction towards closest rat
+	 * @throws ForcedGameEnd	when game should be finished
 	 */
-	public static Direction findClosestRat(int x, int y) {
+	public static Direction findClosestRat(int x, int y) throws ForcedGameEnd {
 
 		// Ignore if they're on same tile...
 		visitedTile = new ArrayList<>();
@@ -507,6 +509,40 @@ public class Board {
 		}
 		Direction d = checkTileAndSurrounding(1);
 		return d;
+	}
+
+	/**
+	 * Checks current tile to see if there is a rat on it, otherwise try to branch
+	 * out to other tiles to find a rat.
+	 * 
+	 * @param pos position in list for tile to check
+	 * @return initial direction to travel in to get to closest rat
+	 */
+	private static Direction checkTileAndSurrounding(int pos) throws ForcedGameEnd {
+		if (pos == visitedTile.size() - 1) {
+			throw new ForcedGameEnd("SuperDR found no Rats to target");
+		}
+		TileAndDir t = visitedTile.get(pos);
+		if (t.tile.hasRat()) {
+			return t.dir;
+		} else {
+			int x = t.tile.X_Y_POS[1];
+			int y = t.tile.X_Y_POS[0];
+
+			if (board[y - 1][x] != null && !containsJ(board[y - 1][x])) {
+				visitedTile.add(new TileAndDir(board[y - 1][x], t.dir));
+			}
+			if (board[y + 1][x] != null && !containsJ(board[y + 1][x])) {
+				visitedTile.add(new TileAndDir(board[y + 1][x], t.dir));
+			}
+			if (board[y][x - 1] != null && !containsJ(board[y][x - 1])) {
+				visitedTile.add(new TileAndDir(board[y][x - 1], t.dir));
+			}
+			if (board[y][x + 1] != null && !containsJ(board[y][x + 1])) {
+				visitedTile.add(new TileAndDir(board[y][x + 1], t.dir));
+			}
+			return checkTileAndSurrounding(pos + 1);
+		}
 	}
 	
 	/**
@@ -536,41 +572,6 @@ public class Board {
 			if (x + i < xHeight && board[y][x + i] != null) {
 				board[y][x + i].steriliseRats();
 			}
-		}
-	}
-
-	/**
-	 * Checks current tile to see if there is a rat on it, otherwise try to branch
-	 * out to other tiles to find a rat.
-	 * 
-	 * @param pos position in list for tile to check
-	 * @return initial direction to travel in to get to closest rat
-	 */
-	private static Direction checkTileAndSurrounding(int pos) {
-		if (pos == visitedTile.size() - 1) {
-			System.err.println("No rats were found");
-			return null;
-		}
-		TileAndDir t = visitedTile.get(pos);
-		if (t.tile.hasRat()) {
-			return t.dir;
-		} else {
-			int x = t.tile.X_Y_POS[1];
-			int y = t.tile.X_Y_POS[0];
-
-			if (board[y - 1][x] != null && !containsJ(board[y - 1][x])) {
-				visitedTile.add(new TileAndDir(board[y - 1][x], t.dir));
-			}
-			if (board[y + 1][x] != null && !containsJ(board[y + 1][x])) {
-				visitedTile.add(new TileAndDir(board[y + 1][x], t.dir));
-			}
-			if (board[y][x - 1] != null && !containsJ(board[y][x - 1])) {
-				visitedTile.add(new TileAndDir(board[y][x - 1], t.dir));
-			}
-			if (board[y][x + 1] != null && !containsJ(board[y][x + 1])) {
-				visitedTile.add(new TileAndDir(board[y][x + 1], t.dir));
-			}
-			return checkTileAndSurrounding(pos + 1);
 		}
 	}
 

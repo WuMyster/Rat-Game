@@ -43,7 +43,7 @@ public class SuperDeathRat extends DeathRat {
 	 * @param y	y pos of the SuperDR
 	 * @return	direction of the nearest rat
 	 */
-	public Direction chooseDirection(int x, int y) {
+	public Direction chooseDirection(int x, int y) throws ForcedGameEnd {
 		return Board.findClosestRat(y, x);
 	}
 	

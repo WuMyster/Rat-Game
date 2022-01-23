@@ -109,18 +109,20 @@ public abstract class Tile {
 	/**
 	 * Moves Death Rat allowing it to take down normal rats along the way.
 	 * 
-	 * @return returns list of alive Death Rats on this tile
+	 * @return 					returns list of alive Death Rats on this tile
+	 * @throws ForcedGameEnd	if a SuperDR determines game should end
 	 */
-	public abstract ArrayList<DeathRat> getNextDeathRat();
+	public abstract ArrayList<DeathRat> getNextDeathRat() throws ForcedGameEnd;
 
 	/**
 	 * Runs if Death Rat is coming to this tile, accelerates all processes. I.e.
 	 * item, rat interactions and movement.
 	 * 
-	 * @param dr            Death Rat class coming to this tile
-	 * @param prevDirection direction the Death Rat came from
+	 * @param dr            	Death Rat class coming to this tile
+	 * @param prevDirection 	direction the Death Rat came from
+	 * @throws ForcedGameEnd	if a SuperDR determines game should end
 	 */
-	public abstract void moveDeathRat(DeathRat dr, Direction prevDirection);
+	public abstract void moveDeathRat(DeathRat dr, Direction prevDirection) throws ForcedGameEnd;
 
 	/**
 	 * Constructor for tiles.
@@ -151,15 +153,17 @@ public abstract class Tile {
 	}
 
 	/**
-	 * Sets list of rats the tile is currently dealing with
+	 * Sets list of rats the tile is currently dealing with.
+	 * @return boolean if there were no normal rats on this tile
 	 */
-	public void setCurrRat() {
+	public boolean setCurrRat() {
 		
 		if (detontate) {
 			blowUpTile();
 			detontate = false;
+			return false;
 		} else {
-			currBlock = nextBlock;
+			currBlock = nextBlock;		
 			nextBlock = new HashMap<>();
 
 			currDeath = nextDeath;
@@ -184,6 +188,7 @@ public abstract class Tile {
 			getRatInteractions();
 			correctList();
 		}
+		return currBlock.isEmpty();
 	}
 	
 	/**

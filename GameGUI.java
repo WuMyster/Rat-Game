@@ -834,11 +834,15 @@ public class GameGUI {
 			// This way so all rats are visibly killed before changing screen
 			currMovement = new HashMap<>();
 			step = 0;
-			Board.runAllTiles();
-			ratMoveTimeline.play();
-			currPoints.setText(String.valueOf(RatController.getPoints()));
-			drawItems();
-			setRatIndicator();
+			try {
+				Board.runAllTiles();
+				ratMoveTimeline.play();
+				currPoints.setText(String.valueOf(RatController.getPoints()));
+				drawItems();
+				setRatIndicator();
+			} catch (ForcedGameEnd e) {
+				GameMaster.gameEndWin();
+			}
 		}
 	}
 
