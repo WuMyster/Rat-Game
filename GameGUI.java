@@ -429,7 +429,11 @@ public class GameGUI {
 				ArrayList<int[]> loc = itemPlace.get(it);
 				if (loc != null) {
 					for (int[] i : loc) {
-						it.draw(i[1], i[0], i[2]);
+						if (i == null) {
+							loc.remove(i);
+						} else {
+							it.draw(i[1], i[0], i[2]);
+						}
 					}
 				}
 			} catch (NullPointerException e) {
@@ -756,7 +760,7 @@ public class GameGUI {
 		sbcRatIndicator.getData().add(femaleNumber);
 		sbcRatIndicator.getData().add(rest);
 
-		sbcRatIndicator.setMaxWidth(20);
+		sbcRatIndicator.setMaxWidth(10);
 		sbcRatIndicator.setMinHeight(CANVAS_HEIGHT);
 		sbcRatIndicator.setLegendVisible(false);
 	}
@@ -821,7 +825,7 @@ public class GameGUI {
 		// Stop conditions
 		if (RatController.stopGame()) { // Bad number of rats
 			stopGame();
-			if (RatController.getFemaleCounter() + RatController.getMaleCounter() == 0) {
+			if (RatController.winGame()) {
 				GameMaster.gameEndWin();
 			} else {
 				GameMaster.gameEndTooManyRats();
@@ -841,6 +845,7 @@ public class GameGUI {
 				drawItems();
 				setRatIndicator();
 			} catch (ForcedGameEnd e) {
+				e.printStackTrace();
 				GameMaster.gameEndWin();
 			}
 		}

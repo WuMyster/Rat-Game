@@ -109,7 +109,7 @@ public class Rat {
 	 */
 	public void setIsMale(boolean newIsMale) {
 		if (isMale != newIsMale) {
-			RatController.changeValue(newIsMale);
+			RatController.changeGender(newIsMale);
 			isMale = newIsMale;
 			resetRat();
 		}

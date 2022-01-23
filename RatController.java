@@ -78,7 +78,7 @@ public class RatController {
 	 * Changes the counter of male and female rats.
 	 * @param gender {@code true} if the rat turned from female to male
 	 */
-	public static void changeValue(boolean gender) {
+	public static void changeGender(boolean gender) {
 		if (gender) {
 			maleCounter++;
 			femaleCounter--;
@@ -95,6 +95,15 @@ public class RatController {
 	 */
 	public static boolean stopGame() {
 		return ratList.isEmpty() || ratList.size() >= maxNumOfRats;
+	}
+	
+	/**
+	 * If game is won due to no rats.
+	 * 
+	 * @return boolean if game is won
+	 */
+	public static boolean winGame() {
+		return ratList.isEmpty();
 	}
 	
 	/**
