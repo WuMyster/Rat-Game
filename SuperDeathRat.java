@@ -9,6 +9,12 @@ import javafx.scene.image.Image;
  */
 public class SuperDeathRat extends DeathRat {
 
+
+	/**
+	 * Name of SuperDeathRat.
+	 */
+	public static final String NAME = "SD";
+	
 	/**
 	 * Icon image of the superDeath Rat.
 	 */
@@ -39,5 +45,9 @@ public class SuperDeathRat extends DeathRat {
 	 */
 	public Direction chooseDirection(int x, int y) {
 		return Board.findClosestRat(y, x);
+	}
+	
+	public String toString() {
+		return NAME + Main.FILE_SUB_SEPERATOR + String.valueOf(hp);
 	}
 }

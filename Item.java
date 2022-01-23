@@ -37,7 +37,7 @@ abstract class Item {
 		} else if (item.equals(SexChangeToMale.NAME)) {
 			return new SexChangeToMale(hp);
 		} else if (item.equals(Sterilisation.NAME)) {
-			return new Sterilisation(hp);
+			return new Sterilisation(xyPos, hp);
 		} else if (item.equals(StopSign.NAME)) {
 			return new StopSign(xyPos, hp);
 		} else if (item.equals(Gas.NAME)) {

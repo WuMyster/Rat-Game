@@ -27,6 +27,11 @@ public class DeathRat {
 	protected int[] xyPos;
 	
 	/**
+	 * Inital hp of the Death rat
+	 */
+	protected int hp;
+	
+	/**
 	 * Direction the Death rat is facing and moving towards.
 	 */
 	private Direction d;
@@ -35,11 +40,6 @@ public class DeathRat {
 	 * How far the Death Rat moves
 	 */
 	private int move;
-	
-	/**
-	 * Inital hp of the Death rat
-	 */
-	private int hp;
 	
 	/**
 	 * Start hp of all Death rats

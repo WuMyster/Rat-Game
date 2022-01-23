@@ -117,7 +117,7 @@ public class Board {
 			case POISON -> i = new Poison();
 			case SEX_TO_FEMALE -> i = new SexChangeToFemale();
 			case SEX_TO_MALE -> i = new SexChangeToMale();
-			case STERILISATION -> i = new Sterilisation();
+			case STERILISATION -> i = new Sterilisation(y, x);
 			default -> throw new IllegalArgumentException("Unexpected value: " + it);
 			}
 			return t.setTileItem(i);
@@ -345,10 +345,12 @@ public class Board {
 
 		// Now adding in death rat movements
 		for (DeathRat dr : deathRatBuffer) {
-			if (dr instanceof SuperDeathRat) {
-				GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.SUPERDEATH, dr.getMove());
-			} else {
-				GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
+			if (dr.getXyPos() != null && dr.getD() != null) {
+				if (dr instanceof SuperDeathRat) {
+					GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.SUPERDEATH, dr.getMove());
+				} else {
+					GameGUI.addCurrMovement(dr.getXyPos(), dr.getD(), RatType.DEATH, dr.getMove());
+				}
 			}
 		}
 	}
@@ -369,6 +371,13 @@ public class Board {
 					placeRat(new DeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 				} else {
 					placeRat(new DeathRat(Integer.parseInt(spl[0].split(Main.FILE_SUB_SEPERATOR)[1])), d,
+							Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				}
+			} else if (spl[0].split(Main.FILE_SUB_SEPERATOR)[0].equals(SuperDeathRat.NAME)) {
+				if (spl[0].length() == 1) {
+					placeRat(new SuperDeathRat(), d, Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
+				} else {
+					placeRat(new SuperDeathRat(Integer.parseInt(spl[0].split(Main.FILE_SUB_SEPERATOR)[1])), d,
 							Integer.parseInt(splD[1]), Integer.parseInt(splD[2]));
 				}
 			} else {
@@ -480,6 +489,36 @@ public class Board {
 		}
 		Direction d = checkTileAndSurrounding(1);
 		return d;
+	}
+	
+	/**
+	 * Within a set radius, set all rats on those tiles to be sterile from 
+	 * given x y pos.
+	 * 
+	 * @param x			x position of the center tile
+	 * @param y			y position of the center tile
+	 * @param range		range the sterile effects reaches.
+	 */
+	public static void steraliseRats(int x, int y, int range) {
+		range *= EXTRA_PADDING;
+		x *= EXTRA_PADDING;
+		y *= EXTRA_PADDING;
+		System.out.println(x);
+		System.out.println(y);
+		for (int i = 0; i < range; i++) {
+			if (y - i >= 0 && board[y - i][x] != null) {
+				board[y - i][x].steriliseRats();
+			}
+			if (y + i < yHeight && board[y + i][x] != null) {
+				board[y + i][x].steriliseRats();
+			}
+			if (x - i >= 0 && board[y][x - i] != null) {
+				board[y][x - i].steriliseRats();
+			}
+			if (x + i < xHeight && board[y][x + i] != null) {
+				board[y][x + i].steriliseRats();
+			}
+		}
 	}
 
 	/**

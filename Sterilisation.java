@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import javafx.scene.image.Image;
 
@@ -6,7 +7,7 @@ import javafx.scene.image.Image;
  * Class modelling a Sterilisation item.
  * @author Andrew Wu
  */
-public class Sterilisation extends Item {
+public class Sterilisation extends TimeItem {
 
 	/**
 	 * Name of the item.
@@ -18,32 +19,75 @@ public class Sterilisation extends Item {
 	 */
 	public static final Image IMAGE = new Image(Main.IMAGE_FILE_LOC + "/Sterilise.png");
 	
+	/**
+	 * Radius where the Sterile item will affect.
+	 */
+	private final static int RANGE = 3;
+	
+	/**
+	 * Time in seconds before item takes affect.
+	 */
+	private final static int START_HP = 5;
+	
+	/**
+	 * x position of the item.
+	 */
+	private final int x;
+	
+	/**
+	 * y position of the item.
+	 */
+	private final int y;
+	
     /**
-     * Health point of item.
+     * Sets x y position and health point of item.
+     * @param x 	x position of the item
+     * @param y		y position of the item
      */
-    public Sterilisation() {
-        hp = 1;
+    public Sterilisation(int x, int y) {
+    	this.x = x;
+    	this.y = y;
+        hp = START_HP;
     }
     
     /**
 	 * Constructor for Sterilisation object setting hp of item.
 	 * 
+	 * @param x 	x position of item
+	 * @param y 	y position of item
 	 * @param hp	hp of item
 	 */
-    public Sterilisation(int hp) {
+    public Sterilisation(int[] xyPos, int hp) {
+    	this.x = xyPos[0];
+    	this.y = xyPos[1];
     	this.hp = hp;
     }
 
     /**
-     * Sterilises rat so they can no longer get pregnant and give birth.
-     * @param r a rat Object.
-     * @return ArrayList of rats on the tile this item was invoked on.
+     * Does not directly interact with rats. 
+     * @param r 	list of rats
+     * @return 		same list of rats
      */
 	@Override
 	public ArrayList<Rat> itemAction(ArrayList<Rat> r) {
-		r.get(0).sterilise();
-        hp--;
+		// Does nothing directly to rats
 		return r;
+	}
+
+	@Override
+	public void itemAction() {
+		timer.scheduleAtFixedRate(new TimerTask() {
+			public void run() {
+				if (stopTimer) {
+					timer.cancel();
+				} 
+				hp--;
+				if (hp == 0) {
+					Board.steraliseRats(y, x, RANGE);
+					timer.cancel();
+				}
+			}
+		}, 0, 1000);
 	}
 	
 	@Override

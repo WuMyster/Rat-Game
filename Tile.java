@@ -83,6 +83,11 @@ public abstract class Tile {
 	 * Determines if this tile needs to be blown.
 	 */
 	protected boolean detontate = false;
+	
+	/**
+	 * Determines if this tile need to sterilise the rats on it.
+	 */
+	protected boolean sterileTile = false;
 
 	/**
 	 * Pick definition Will go through list of rats on tile and tell the rat class
@@ -167,6 +172,15 @@ public abstract class Tile {
 	        }
 	        
 			giveRatItem();
+			
+			if (sterileTile) {
+				for (Rat r : aliveRats) {
+					r.sterilise();
+				}
+				sterileTile = false;
+				removeItem();
+			}
+			
 			getRatInteractions();
 			correctList();
 		}
@@ -284,6 +298,13 @@ public abstract class Tile {
 	 */
 	public void blowUp() {
 		detontate = true;
+	}
+	
+	/**
+	 * Sets the tile to set all rats on it to be sterile.
+	 */
+	public void steriliseRats() {
+		sterileTile = true;
 	}
 	
 	/**
