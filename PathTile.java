@@ -182,14 +182,6 @@ public class PathTile extends Tile {
 		}
 	}
 
-	/**
-	 * Pick definition Will go through list of rats on tile and tell the rat class
-	 * where to go and tile class which rats are going to it and from what
-	 * direction.
-	 * 
-	 * Tells rats on this tile which direction to go and other tile class which rats
-	 * are going to it and from what direction.
-	 */
 	@Override
 	public void getNextDirection() {
 		// For moving rats
