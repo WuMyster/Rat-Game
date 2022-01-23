@@ -348,8 +348,14 @@ public class Board {
 		// Movement/ make sure it's interacting with correct Rats
 		// Give the rat item and keep alive rats
 		// Have the rats interact with each other
+		boolean ratsOnBoard = false;
 		for (Tile t : allTiles) {
-			t.setCurrRat();
+			ratsOnBoard = t.setCurrRat() || ratsOnBoard;
+		}
+		
+		if (!ratsOnBoard) {
+			System.out.println("Error");
+			throw new ForcedGameEnd("No rats on tiles - Board.runAllTiles()");
 		}
 
 		// Secondly move Death rats to kill any rats in its path
