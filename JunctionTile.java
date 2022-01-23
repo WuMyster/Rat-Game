@@ -200,7 +200,6 @@ public class JunctionTile extends Tile {
 			}
 		}
 
-		int beforeDeath = aliveRats.size();
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
 				aliveRats = dr.killRats(aliveRats, -1);
@@ -216,9 +215,11 @@ public class JunctionTile extends Tile {
 					Tile t;
 					if (dr instanceof SuperDeathRat) {
 						Direction d = ((SuperDeathRat) dr).chooseDirection(X_Y_POS[0], X_Y_POS[1]);
-						t = neighbourTiles.get(d);
-						t.moveDeathRat(dr, d.opposite());
-						dr.initalMove(X_Y_POS, d);
+						if (d != null) {
+							t = neighbourTiles.get(d);
+							t.moveDeathRat(dr, d.opposite());
+							dr.initalMove(X_Y_POS, d);
+						}
 						removeItem();
 					} else {
 						int i;
@@ -246,9 +247,6 @@ public class JunctionTile extends Tile {
 			currBlock = new HashMap<>();
 			buffer = new HashMap<>();
 			nextBlock = new HashMap<>();
-		} else if (aliveRats.size() == beforeDeath) {
-			// Interesting as to why there is no change...
-			System.err.println("aliveRats list has not changed! " + X_Y_POS[0] + " " + X_Y_POS[1]);
 		}
 		return drs;
 	}

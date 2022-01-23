@@ -32,8 +32,6 @@ public class PathTile extends Tile {
 		
 		setDeathRat(); // Ensures only moving death rats are considered
 		
-		int beforeDeathInter = aliveRats.size();
-		
 		// Pass in ArrayList of Moving Rats still alive to each DeathRat on the tile
 		for (Direction prevDirection : currDeath.keySet()) {
 			for (DeathRat dr : currDeath.get(prevDirection)) {
@@ -48,10 +46,6 @@ public class PathTile extends Tile {
 		// Will not automatically move the rats in case other death rats come here.
 		if (aliveRats.isEmpty()) {
 			currBlock = new HashMap<>();
-		} else if (aliveRats.size() == beforeDeathInter) {
-			// Interesting as to why there is no change...
-			System.err.println("aliveRats list has not changed! "  + X_Y_POS[0] + " " +
-					X_Y_POS[1]);
 		}
 		return drs;
 	}
