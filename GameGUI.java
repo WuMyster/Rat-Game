@@ -16,7 +16,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -27,8 +26,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
@@ -249,12 +246,18 @@ public class GameGUI {
 	 * Players name.
 	 */
 	private static String playerName;
-
+	
 	/**
 	 * If user themselves has told the game to stop.
 	 * True if game is stopped.
 	 */
 	private static boolean playerStopGame;
+	
+	
+	/**
+	 * If user wants to get out of the game.
+	 */
+	private static boolean playerQuitGame;
 
 	/**
 	 * Stacked barchart showing the number of male and female rats alive on the
@@ -269,20 +272,7 @@ public class GameGUI {
 	public static void startGameScreen() {
 		BorderPane gameRoot = createGameGUI();
 		Scene scene = new Scene(gameRoot, WINDOW_WIDTH, WINDOW_HEIGHT);
-		
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent ke) {
-	            if (ke.getCode() == KeyCode.ESCAPE) {
-	                if (playerStopGame) {
-	                	playGame();
-	                } else {
-	                	stopGame();
-	                }
-	                
-	            }
-			}
-	    });
-		
+				
 		Main.setWindow(scene);
 
 		cycler = new Timeline(new KeyFrame(Duration.millis(CYCLE_TIME), event -> runCycle()));
@@ -353,7 +343,7 @@ public class GameGUI {
 	 * @param event The drag event itself which contains data about the drag that
 	 *              occured.
 	 */
-	public static void itemCanvasDragDropOccurred(DragEvent event) {
+	private static void itemCanvasDragDropOccurred(DragEvent event) {
 		if (event.getGestureSource() == draggableStop) {
 			placeItemOnMap(ItemType.STOPSIGN, event);
 		} else if (event.getGestureSource() == draggableBomb) {
@@ -549,7 +539,14 @@ public class GameGUI {
 		MenuItem save = new MenuItem("Save");
 		save.setOnAction(e -> saveState());
 		
+		MenuItem exit = new MenuItem("Exit");
+		exit.setOnAction(e -> {
+			playerQuitGame = true;
+			GameMaster.quitGame();
+		});
+		
 		menuFile.getItems().add(save);
+		menuFile.getItems().add(exit);
 
 		Menu optionFile = new Menu("Option");
 		MenuItem play = new MenuItem("Play");
@@ -614,7 +611,7 @@ public class GameGUI {
 				// (for example, we don't want to allow the user to drag things or files into
 				// our application)
 				for (ImageView i : itemIconLis) {
-					if (event.getGestureSource() == i) {
+					if (event.getGestureSource() == i && !playerStopGame) {
 						// Mark the drag event as acceptable by the canvas.
 						event.acceptTransferModes(TransferMode.ANY);
 						// Consume the event. This means we mark it as dealt with.
@@ -633,7 +630,6 @@ public class GameGUI {
 				event.consume();
 			}
 		});
-
 		return root;
 	}
 
@@ -682,6 +678,7 @@ public class GameGUI {
 
 		itemPlace = new HashMap<>();
 		playerStopGame = false;
+		playerQuitGame = false;
 		
 		createRatIndicator();
 
@@ -818,8 +815,7 @@ public class GameGUI {
 
 	/**
 	 * IMPORTANT This method will run in a cycle indefinitely until stopped,
-	 * currently allows rats to move around. TODO Check if time is over TODO Level
-	 * from Game Master
+	 * currently allows rats to move around.
 	 */
 	private static void runCycle() {
 		// Stop conditions
@@ -830,9 +826,10 @@ public class GameGUI {
 			} else {
 				GameMaster.gameEndTooManyRats();
 			}
-		} else if (playerStopGame) { // Player stops the game
+		} else if (playerQuitGame) {
+			System.out.println("STOP GAME");
 			stopGame();
-			saveState();
+			GameMaster.quitGame();
 		} else {// Otherwise keep going
 			// This way so all rats are visibly killed before changing screen
 			currMovement = new HashMap<>();
@@ -861,19 +858,23 @@ public class GameGUI {
 	 * Stops the game.
 	 */
 	private static void stopGame() {
+		playerStopGame = true;
 		cycler.stop();
 		timeLimit.stop();
 		setRatIndicator();
 		Inventory.stopInv();
+		Board.stopAllTimers();
 	}
 	
 	/**
 	 * Starts/ continues the game.
 	 */
 	private static void playGame() {
+		playerStopGame = false;
 		cycler.play();
 		timeLimit.play();
 		Inventory.startInv();
+		Board.continueAllTimers(); 
 	}
 
 	/**
