@@ -44,6 +44,8 @@ public class RatController {
 	 * @param points 	points already earned from game
 	 */
 	public static void setRatController(int max, int points) {
+		maleCounter = 0;
+		femaleCounter = 0;
 		maxNumOfRats = max;
 		RatController.points = points;
 	}
