@@ -317,6 +317,24 @@ public class Board {
 	public static void placeRat(DeathRat rat, Direction dir, int x, int y) {
 		board[x * EXTRA_PADDING][y * EXTRA_PADDING].addRat(rat, dir);
 	}
+	
+	/**
+	 * Stops timers on all tiles.
+	 */
+	public static void stopAllTimers() {
+		for (Tile t : allTiles) {
+			t.stopTimer();
+		}
+	}
+	
+	/**
+	 * Continue all timers if any are paused.
+	 */
+	public static void continueAllTimers() {
+		for (Tile t : allTiles) {
+			t.continueTimer();
+		}
+	}
 
 	/**
 	 * Goes through each Tile and moves the rat to the next tile before getting the

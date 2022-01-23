@@ -31,4 +31,12 @@ public abstract class TimeItem extends Item {
 	public void stopTimer() {
 		stopTimer = true;
 	}
+	
+	/**
+	 * Continues the timer.
+	 */
+	public void continueTimer() {
+		stopTimer = false;
+		itemAction();
+	}
 }

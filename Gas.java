@@ -41,7 +41,7 @@ public class Gas extends TimeItem {
     /**
      * Number of tiles gas spread to in all possible directions.
      */
-    private static final int RADIUS = 3;
+    private static final int RADIUS = 4;
     
     /**
      * Extra hp for each Gas cloud radius.
@@ -99,20 +99,20 @@ public class Gas extends TimeItem {
 	 * Method to deal with spreading and clearing of this gas item.
 	 */
     public void itemAction() {
-    	this.timer = new Timer();
+    	timer = new Timer();
     	
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				if (stopTimer) {
 					timer.cancel();
-				}
-				hp--;
-				
-				if (hp == 0) { // Clear gas
-					timer.cancel();
-					Board.clearGas(x, y);
-				} else if (hp % EXTRA_HP == 0 && hp != START_HP) {
-					Board.spreadGas(x, y, hp);    
+				} else {
+					hp--;
+					if (hp == 0) { // Clear gas
+						timer.cancel();
+						Board.clearGas(x, y);
+					} else if (hp % EXTRA_HP == 0 && hp != START_HP) {
+						Board.spreadGas(x, y, hp);    
+					}
 				}
 			}
 		}, 0, GAS_EXPAND_TIME);

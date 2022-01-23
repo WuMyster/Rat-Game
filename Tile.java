@@ -401,6 +401,24 @@ public abstract class Tile {
 		GameGUI.removeItem(ItemType.fromItem(itemOnTile), ORIGINAL_X_Y_POS);
 		itemOnTile = null;
 	}
+	
+	/**
+	 * Pause item from countdown if it's on a timer.
+	 */
+	protected void stopTimer() {
+		if (itemOnTile instanceof TimeItem) {
+			((TimeItem) itemOnTile).stopTimer();;
+		}
+	}
+	
+	/**
+	 * Allow item to countdown if it's on a timer.
+	 */
+	protected void continueTimer() {
+		if (itemOnTile instanceof TimeItem) {
+			((TimeItem) itemOnTile).continueTimer();;
+		}
+	}
 
 	/**
 	 * Empties tile of all attributes/ things on tile.

@@ -55,7 +55,6 @@ public class Bomb extends TimeItem {
 		hp = START_COUNTDOWN; // is never used, only for constructor
 		this.x = xyPos[1];
 		this.y = xyPos[0];
-		timer = new Timer();
 		stopTimer = false;
 	}
 
@@ -97,17 +96,19 @@ public class Bomb extends TimeItem {
 	 * 0, will invoke a method to detonate.
 	 */
 	public void itemAction() {
+		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				if (stopTimer) {
 					timer.cancel();
-				} 
-				hp--;
-				if (hp >= 0) {
-					GameGUI.editItemState(ItemType.BOMB, x, y, hp);
 				} else {
-					timer.cancel();
-					Board.detonate(x, y);
+					hp--;
+					if (hp >= 0) {
+						GameGUI.editItemState(ItemType.BOMB, x, y, hp);
+					} else {
+						timer.cancel();
+						Board.detonate(x, y);
+					}
 				}
 			}
 		}, 0, 1000);
