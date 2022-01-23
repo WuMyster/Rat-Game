@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -224,7 +225,7 @@ public class GameMaster {
 
 		Button nextLevel;
 		if (good) {
-			if (currLvl < maxLevel) {
+			if (currLvl + 1 < maxLevel) {
 				nextLevel = new Button("Next level");
 				nextLevel.setOnAction(e -> {
 					currLvl++;
@@ -246,6 +247,15 @@ public class GameMaster {
 		Scene scene = new Scene(grid, 300, 200);
 
 		Main.setWindow(scene);
+	}
+	
+	/**
+	 * Stops game and goes to level page.
+	 */
+	public static void quitGame() {
+		playerInfo = new ArrayList<>();
+		playerInfo.add(String.valueOf(maxLevel));
+		lvlPage();
 	}
 
 	/**
